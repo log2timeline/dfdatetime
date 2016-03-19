@@ -29,6 +29,9 @@ override_dh_auto_install:
 	set -ex; for python in $(shell py3versions -r); do \
 		$$python setup.py install --root=$(CURDIR)/debian/python3-dfdatetime --install-layout=deb; \
 	done;
+	# The shared doc files are provided via python-dfdatetime.docs and python3-dfdatetime.docs 
+	rm -rf $(CURDIR)/debian/python-dfdatetime/usr/share/doc/dfdatetime
+	rm -rf $(CURDIR)/debian/python3-dfdatetime/usr/share/doc/dfdatetime
 
 .PHONY: override_dh_auto_test
 override_dh_auto_test:

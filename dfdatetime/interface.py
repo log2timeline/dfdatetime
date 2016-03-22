@@ -45,7 +45,7 @@ class DateTimeValues(object):
       raise ValueError(u'Unable to parse day of month.')
 
     days_per_month = self._GetDaysPerMonth(year, month)
-    if day_of_month not in range(1, days_per_month):
+    if day_of_month < 1 or day_of_month > days_per_month:
       raise ValueError(u'Day of month value out of bounds.')
 
     return year, month, day_of_month

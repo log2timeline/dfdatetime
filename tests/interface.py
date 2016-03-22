@@ -16,8 +16,24 @@ class DateTimeValuesTest(unittest.TestCase):
     """Tests the CopyDateFromString function."""
     date_time_values = interface.DateTimeValues()
 
+    expected_date_tuple = (2010, 1, 1)
+    date_tuple = date_time_values._CopyDateFromString(u'2010-01-01')
+    self.assertEqual(date_tuple, expected_date_tuple)
+
+    expected_date_tuple = (2010, 8, 1)
+    date_tuple = date_time_values._CopyDateFromString(u'2010-08-01')
+    self.assertEqual(date_tuple, expected_date_tuple)
+
     expected_date_tuple = (2010, 8, 12)
     date_tuple = date_time_values._CopyDateFromString(u'2010-08-12')
+    self.assertEqual(date_tuple, expected_date_tuple)
+
+    expected_date_tuple = (2010, 8, 31)
+    date_tuple = date_time_values._CopyDateFromString(u'2010-08-31')
+    self.assertEqual(date_tuple, expected_date_tuple)
+
+    expected_date_tuple = (2010, 12, 31)
+    date_tuple = date_time_values._CopyDateFromString(u'2010-12-31')
     self.assertEqual(date_tuple, expected_date_tuple)
 
     expected_date_tuple = (1601, 1, 2)
@@ -32,6 +48,12 @@ class DateTimeValuesTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       date_time_values._CopyDateFromString(u'10000-01-02')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyDateFromString(u'2010-09-00')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyDateFromString(u'2010-09-31')
 
     with self.assertRaises(ValueError):
       date_time_values._CopyDateFromString(u'1601-01-32')

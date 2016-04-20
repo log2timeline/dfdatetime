@@ -30,6 +30,15 @@ class PosixTime(interface.DateTimeValues):
     self.micro_seconds = micro_seconds
     self.timestamp = timestamp
 
+  def CopyToMicroPosixTimestamp(self):
+    """Copies the timestamp to a POSIX timestamps in microseconds.
+
+    Returns:
+      An integer containing a POSIX timestamp in microseconds or
+      None on error.
+    """
+    return (self.timestamp * 1000000) + self.micro_seconds
+
   def CopyToStatTimeTuple(self):
     """Copies the POSIX timestamp to a stat timestamp tuple.
 

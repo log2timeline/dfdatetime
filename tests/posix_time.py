@@ -10,6 +10,14 @@ from dfdatetime import posix_time
 class PosixTimeTest(unittest.TestCase):
   """Tests for the POSIX timestamp object."""
 
+  def testCopyToMicroPosixTimestamp(self):
+    """Tests the CopyToMicroPosixTimestamp function."""
+    posix_time_object = posix_time.PosixTime(1281643591, micro_seconds=546875)
+
+    expected_micro_posix_timestamp = 1281643591546875
+    micro_posix_timestamp = posix_time_object.CopyToMicroPosixTimestamp()
+    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     posix_time_object = posix_time.PosixTime(1281643591, micro_seconds=546875)

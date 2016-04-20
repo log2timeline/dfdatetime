@@ -78,6 +78,22 @@ class Filetime(interface.DateTimeValues):
     self.timestamp = (self.timestamp * 1000000) + micro_seconds
     self.timestamp *= 10
 
+  def CopyToMicroPosixTimestamp(self):
+    """Copies the timestamp to a POSIX timestamps in microseconds.
+
+    Returns:
+      An integer containing a POSIX timestamp in microseconds or
+      None on error.
+    """
+    if self.timestamp < 0:
+      return
+
+    timestamp, _ = divmod(self.timestamp, 10)
+    timestamp -= self._FILETIME_TO_POSIX_BASE * 1000000
+    if timestamp > self._INT64_MAX:
+      return
+    return timestamp
+
   def CopyToStatTimeTuple(self):
     """Copies the timestamp to a stat timestamp tuple.
 

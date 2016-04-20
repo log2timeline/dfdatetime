@@ -192,6 +192,15 @@ class DateTimeValues(object):
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 
   @abc.abstractmethod
+  def CopyToMicroPosixTimestamp(self):
+    """Copies the timestamp to a POSIX timestamps in microseconds.
+
+    Returns:
+      An integer containing a POSIX timestamp in microseconds or
+      None on error.
+    """
+
+  @abc.abstractmethod
   def CopyToStatTimeTuple(self):
     """Copies the timestamp to a stat timestamp tuple.
 

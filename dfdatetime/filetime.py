@@ -43,9 +43,6 @@ class Filetime(interface.DateTimeValues):
                    of day, seconds fraction and timezone offset are optional.
                    The default timezone is UTC.
 
-    Returns:
-      An integer containing the timestamp.
-
     Raises:
       ValueError: if the time string is invalid or not supported.
     """
@@ -79,7 +76,7 @@ class Filetime(interface.DateTimeValues):
     self.timestamp *= 10
 
   def CopyToMicroPosixTimestamp(self):
-    """Copies the timestamp to a POSIX timestamps in microseconds.
+    """Copies the FILETIME timestamp to a POSIX timestamps in microseconds.
 
     Returns:
       An integer containing a POSIX timestamp in microseconds or
@@ -95,7 +92,7 @@ class Filetime(interface.DateTimeValues):
     return timestamp
 
   def CopyToStatTimeTuple(self):
-    """Copies the timestamp to a stat timestamp tuple.
+    """Copies the FILETIME timestamp to a stat timestamp tuple.
 
     Returns:
       A tuple of an integer containing a POSIX timestamp in seconds

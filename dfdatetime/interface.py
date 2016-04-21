@@ -193,7 +193,7 @@ class DateTimeValues(object):
 
   @abc.abstractmethod
   def CopyToMicroPosixTimestamp(self):
-    """Copies the timestamp to a POSIX timestamps in microseconds.
+    """Copies the date time value to a POSIX timestamps in microseconds.
 
     Returns:
       An integer containing a POSIX timestamp in microseconds or
@@ -202,7 +202,7 @@ class DateTimeValues(object):
 
   @abc.abstractmethod
   def CopyToStatTimeTuple(self):
-    """Copies the timestamp to a stat timestamp tuple.
+    """Copies the date time value to a stat timestamp tuple.
 
     Returns:
       A tuple of an integer containing a POSIX timestamp in seconds

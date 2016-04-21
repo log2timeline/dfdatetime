@@ -17,7 +17,7 @@ class FakeTime(interface.DateTimeValues):
     self._timestamp = calendar.timegm(self._time_elements)
 
   def CopyToMicroPosixTimestamp(self):
-    """Copies the timestamp to a POSIX timestamps in microseconds.
+    """Copies the fake timestamp to a POSIX timestamps in microseconds.
 
     Returns:
       An integer containing a POSIX timestamp in microseconds or
@@ -26,7 +26,7 @@ class FakeTime(interface.DateTimeValues):
     return self._timestamp * 1000000
 
   def CopyToStatTimeTuple(self):
-    """Copies the timestamp to a stat timestamp tuple.
+    """Copies the fake timestamp to a stat timestamp tuple.
 
     Returns:
       A tuple of an integer containing a POSIX timestamp in seconds

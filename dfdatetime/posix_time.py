@@ -15,23 +15,23 @@ class PosixTime(interface.DateTimeValues):
   are known to be used.
 
   Attributes:
-    timestamp: the POSIX timestamp.
-    micro_seconds: the number of micro seconds
+    timestamp: an integer containing the POSIX timestamp.
+    micro_seconds: an integer containing the number of microseconds
   """
 
   def __init__(self, timestamp, micro_seconds=0):
     """Initializes the POSIX timestamp object.
 
     Args:
-      timestamp: the FILETIME timestamp.
-      micro_seconds: optional number of micro seconds.
+      timestamp: an integer containing the POSIX timestamp.
+      micro_seconds: optional integer containing the number of microseconds.
     """
     super(PosixTime, self).__init__()
     self.micro_seconds = micro_seconds
     self.timestamp = timestamp
 
   def CopyToMicroPosixTimestamp(self):
-    """Copies the timestamp to a POSIX timestamps in microseconds.
+    """Copies the POSIX timestamp to a POSIX timestamps in microseconds.
 
     Returns:
       An integer containing a POSIX timestamp in microseconds or
@@ -40,7 +40,7 @@ class PosixTime(interface.DateTimeValues):
     return (self.timestamp * 1000000) + self.micro_seconds
 
   def CopyToStatTimeTuple(self):
-    """Copies the timestamp to a stat timestamp tuple.
+    """Copies the POSIX timestamp to a stat timestamp tuple.
 
     Returns:
       A tuple of an integer containing a POSIX timestamp in seconds

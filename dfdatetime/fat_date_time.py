@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """FAT date time implementation."""
 
-import calendar
-
 from dfdatetime import interface
 
 
@@ -97,7 +95,7 @@ class FATDateTime(interface.DateTimeValues):
       raise ValueError(u'Invalid time string.')
 
     # TODO: implement.
-    raise NotImplemented()
+    raise NotImplementedError()
 
   def CopyToMicroPosixTimestamp(self):
     """Copies the FAT date time to a POSIX timestamps in microseconds.

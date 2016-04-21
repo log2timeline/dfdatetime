@@ -48,7 +48,7 @@ class PosixTime(interface.DateTimeValues):
       raise ValueError(u'Invalid time string.')
 
     # TODO: implement
-    raise NotImplemented()
+    raise NotImplementedError()
 
   def CopyToStatTimeTuple(self):
     """Copies the POSIX timestamp to a stat timestamp tuple.

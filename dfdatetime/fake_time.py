@@ -34,7 +34,7 @@ class FakeTime(interface.DateTimeValues):
       raise ValueError(u'Invalid time string.')
 
     # TODO: implement.
-    raise NotImplemented()
+    raise NotImplementedError()
 
   def CopyToStatTimeTuple(self):
     """Copies the fake timestamp to a stat timestamp tuple.

@@ -37,7 +37,7 @@ class TimeElements(interface.DateTimeValues):
       raise ValueError(u'Invalid time string.')
 
     # TODO: implement.
-    raise NotImplemented()
+    raise NotImplementedError()
 
   def CopyToStatTimeTuple(self):
     """Copies the time elements to a stat timestamp tuple.

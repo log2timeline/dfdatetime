@@ -132,6 +132,40 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._CopyTimeFromString(u'00:00:w0')
 
+  def testGetDayOfYear(self):
+    """Tests the GetDayOfYear function."""
+    date_time_values = interface.DateTimeValues()
+
+    day_of_year = date_time_values._GetDayOfYear(1999, 1, 1)
+    self.assertEqual(day_of_year, 1)
+
+    day_of_year = date_time_values._GetDayOfYear(1999, 4, 21)
+    self.assertEqual(day_of_year, 111)
+
+    day_of_year = date_time_values._GetDayOfYear(1999, 12, 31)
+    self.assertEqual(day_of_year, 365)
+
+    day_of_year = date_time_values._GetDayOfYear(2000, 1, 1)
+    self.assertEqual(day_of_year, 1)
+
+    day_of_year = date_time_values._GetDayOfYear(2000, 4, 21)
+    self.assertEqual(day_of_year, 112)
+
+    day_of_year = date_time_values._GetDayOfYear(2000, 12, 31)
+    self.assertEqual(day_of_year, 366)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDayOfYear(1999, 0, 1)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDayOfYear(1999, 13, 1)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDayOfYear(1999, 1, 0)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDayOfYear(1999, 1, 32)
+
   def testGetDaysPerMonth(self):
     """Tests the GetDaysPerMonth function."""
     date_time_values = interface.DateTimeValues()
@@ -159,6 +193,14 @@ class DateTimeValuesTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       date_time_values._GetDaysPerMonth(1999, 13)
+
+  def testGetDaysPerYear(self):
+    """Tests the GetDaysPerYear function."""
+    date_time_values = interface.DateTimeValues()
+
+    self.assertEqual(date_time_values._GetDaysPerYear(1999), 365)
+    self.assertEqual(date_time_values._GetDaysPerYear(2000), 366)
+    self.assertEqual(date_time_values._GetDaysPerYear(1996), 366)
 
   def testIsLeapYear(self):
     """Tests the IsLeapYear function."""

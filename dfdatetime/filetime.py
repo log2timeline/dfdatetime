@@ -16,7 +16,7 @@ class Filetime(interface.DateTimeValues):
   2 x 32-bit integers and is presumed to be unsigned.
 
   Attributes:
-    timestamp: the FILETIME timestamp.
+    timestamp: an integer containing the FILETIME timestamp.
   """
 
   # The difference between Jan 1, 1601 and Jan 1, 1970 in seconds.
@@ -27,7 +27,7 @@ class Filetime(interface.DateTimeValues):
     """Initializes a FILETIME object.
 
     Args:
-      timestamp: optional FILETIME timestamp.
+      timestamp: optional integer containing a FILETIME timestamp.
     """
     super(Filetime, self).__init__()
     self.timestamp = timestamp

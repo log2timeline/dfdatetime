@@ -9,6 +9,9 @@ class DateTimeValues(object):
 
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
+  # The number of seconds in a day
+  _SECONDS_PER_DAY = 24 * 60 * 60
+
   def _CopyDateFromString(self, date_string):
     """Copies a date from a string.
 
@@ -158,6 +161,34 @@ class DateTimeValues(object):
 
     return hours, minutes, seconds, micro_seconds, timezone_offset
 
+  def _GetDayOfYear(self, year, month, day_of_month):
+    """Retrieves the day of the year for a specific day of a month in a year.
+
+    Args:
+      year: an integer containing the year as in 1970.
+      month: an integer containing the month where 1 represents January.
+      day_of_month: an integer containing the day of the month where 1
+                    represents the first day.
+
+    Returns:
+      An integer containing the day of year.
+
+    Raises:
+      ValueError: if the month or day of month value is out of bounds.
+    """
+    if month not in range(1, 13):
+      raise ValueError(u'Month value out of bounds.')
+
+    days_per_month = self._GetDaysPerMonth(year, month)
+    if day_of_month < 1 or day_of_month > days_per_month:
+      raise ValueError(u'Day of month value out of bounds.')
+
+    day_of_year = day_of_month
+    for past_month in range(1, month):
+      day_of_year += self._GetDaysPerMonth(year, past_month)
+
+    return day_of_year
+
   def _GetDaysPerMonth(self, year, month):
     """Retrieves the number of days in a month of a specific year.
 
@@ -179,6 +210,19 @@ class DateTimeValues(object):
       days_per_month += 1
 
     return days_per_month
+
+  def _GetDaysPerYear(self, year):
+    """Retrieves the number of days in a specific year.
+
+    Args:
+      year: an integer containing the year as in 1970.
+
+    Returns:
+      An integer containing the number of days in the year.
+    """
+    if self._IsLeapYear(year):
+      return 366
+    return 365
 
   def _IsLeapYear(self, year):
     """Determines if a year is a leap year.

@@ -16,6 +16,26 @@ class FakeTime(interface.DateTimeValues):
     self._time_elements = time.gmtime()
     self._timestamp = calendar.timegm(self._time_elements)
 
+  def CopyFromString(self, time_string):
+    """Copies a fake timestamp from a string containing a date and time value.
+
+    Args:
+      time_string: a string containing a date and time value formatted as:
+                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
+                   Where # are numeric digits ranging from 0 to 9 and the
+                   seconds fraction can be either 3 or 6 digits. The time
+                   of day, seconds fraction and timezone offset are optional.
+                   The default timezone is UTC.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if not time_string:
+      raise ValueError(u'Invalid time string.')
+
+    # TODO: implement.
+    raise NotImplemented()
+
   def CopyToStatTimeTuple(self):
     """Copies the fake timestamp to a stat timestamp tuple.
 

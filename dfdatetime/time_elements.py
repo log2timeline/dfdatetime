@@ -19,6 +19,26 @@ class TimeElements(interface.DateTimeValues):
     self._time_elements_tuple = time_elements_tuple
     self._timestamp = calendar.timegm(self._time_elements_tuple)
 
+  def CopyFromString(self, time_string):
+    """Copies time elements from a string containing a date and time value.
+
+    Args:
+      time_string: a string containing a date and time value formatted as:
+                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
+                   Where # are numeric digits ranging from 0 to 9 and the
+                   seconds fraction can be either 3 or 6 digits. The time
+                   of day, seconds fraction and timezone offset are optional.
+                   The default timezone is UTC.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if not time_string:
+      raise ValueError(u'Invalid time string.')
+
+    # TODO: implement.
+    raise NotImplemented()
+
   def CopyToStatTimeTuple(self):
     """Copies the time elements to a stat timestamp tuple.
 

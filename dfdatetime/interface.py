@@ -236,6 +236,21 @@ class DateTimeValues(object):
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 
   @abc.abstractmethod
+  def CopyFromString(self, time_string):
+    """Copies a date time value from a string containing a date and time value.
+
+    Args:
+      time_string: a string containing a date and time value formatted as:
+                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
+                   Where # are numeric digits ranging from 0 to 9 and the
+                   seconds fraction can be either 3 or 6 digits. The time
+                   of day, seconds fraction and timezone offset are optional.
+                   The default timezone is UTC.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.
 

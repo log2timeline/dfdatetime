@@ -97,6 +97,7 @@ class FATDateTime(interface.DateTimeValues):
       raise ValueError(u'Invalid time string.')
 
     # TODO: implement.
+    raise NotImplemented()
 
   def CopyToMicroPosixTimestamp(self):
     """Copies the FAT date time to a POSIX timestamps in microseconds.

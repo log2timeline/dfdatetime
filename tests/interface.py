@@ -194,13 +194,13 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._GetDaysPerMonth(1999, 13)
 
-  def testGetDaysPerYear(self):
-    """Tests the GetDaysPerYear function."""
+  def testGetNumberOfDaysInYear(self):
+    """Tests the GetNumberOfDaysInYear function."""
     date_time_values = interface.DateTimeValues()
 
-    self.assertEqual(date_time_values._GetDaysPerYear(1999), 365)
-    self.assertEqual(date_time_values._GetDaysPerYear(2000), 366)
-    self.assertEqual(date_time_values._GetDaysPerYear(1996), 366)
+    self.assertEqual(date_time_values._GetNumberOfDaysInYear(1999), 365)
+    self.assertEqual(date_time_values._GetNumberOfDaysInYear(2000), 366)
+    self.assertEqual(date_time_values._GetNumberOfDaysInYear(1996), 366)
 
   def testIsLeapYear(self):
     """Tests the IsLeapYear function."""

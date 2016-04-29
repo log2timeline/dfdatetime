@@ -18,6 +18,9 @@ class FATDateTime(interface.DateTimeValues):
       * bits 0 - 4: seconds (in 2 second intervals)
       * bits 5 - 10: minutes
       * bits 11 - 15: hours
+
+  The FAT date time has no timei zone information and is typically stored
+  in the local time of the computer.
   """
 
   # The difference between Jan 1, 1980 and Jan 1, 1970 in seconds.
@@ -56,7 +59,7 @@ class FATDateTime(interface.DateTimeValues):
 
     number_of_days = self._GetDayOfYear(1980 + year, month, day_of_month)
     for past_year in range(0, year):
-      number_of_days += self._GetDaysPerYear(past_year)
+      number_of_days += self._GetNumberOfDaysInYear(past_year)
 
     fat_date_time >>= 16
 

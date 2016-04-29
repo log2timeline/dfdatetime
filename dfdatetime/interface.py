@@ -165,7 +165,7 @@ class DateTimeValues(object):
     """Retrieves the day of the year for a specific day of a month in a year.
 
     Args:
-      year: an integer containing the year as in 1970.
+      year: an integer containing the year e.g. 1970.
       month: an integer containing the month where 1 represents January.
       day_of_month: an integer containing the day of the month where 1
                     represents the first day.
@@ -211,11 +211,11 @@ class DateTimeValues(object):
 
     return days_per_month
 
-  def _GetDaysPerYear(self, year):
+  def _GetNumberOfDaysInYear(self, year):
     """Retrieves the number of days in a specific year.
 
     Args:
-      year: an integer containing the year as in 1970.
+      year: an integer containing the year e.g. 1970.
 
     Returns:
       An integer containing the number of days in the year.

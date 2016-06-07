@@ -38,15 +38,6 @@ class FiletimeTest(unittest.TestCase):
     filetime_object.CopyFromString(u'1601-01-02 00:00:00')
     self.assertEqual(filetime_object.timestamp, expected_timestamp)
 
-  def testCopyToMicroPosixTimestamp(self):
-    """Tests the CopyToMicroPosixTimestamp function."""
-    filetime_object = filetime.Filetime()
-    filetime_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
-
-    expected_micro_posix_timestamp = 1281643591546875
-    micro_posix_timestamp = filetime_object.CopyToMicroPosixTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
-
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     filetime_object = filetime.Filetime()

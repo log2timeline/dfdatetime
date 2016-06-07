@@ -100,18 +100,6 @@ class FATDateTime(interface.DateTimeValues):
     # TODO: implement.
     raise NotImplementedError()
 
-  def CopyToMicroPosixTimestamp(self):
-    """Copies the FAT date time to a POSIX timestamps in microseconds.
-
-    Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
-    """
-    if self._number_of_seconds < 0:
-      return
-
-    return (self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE) * 1000000
-
   def CopyToStatTimeTuple(self):
     """Copies the FAT date time to a stat timestamp tuple.
 
@@ -125,3 +113,15 @@ class FATDateTime(interface.DateTimeValues):
 
     timestamp = self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE
     return timestamp, 0
+
+  def GetPlasoTimestamp(self):
+    """Retrieves a timestamp that is compatible with plaso.
+
+    Returns:
+      An integer containing a POSIX timestamp in microseconds or
+      None on error.
+    """
+    if self._number_of_seconds < 0:
+      return
+
+    return (self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE) * 1000000

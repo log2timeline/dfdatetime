@@ -192,20 +192,21 @@ class DateTimeValues(object):
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 
   @abc.abstractmethod
-  def CopyToMicroPosixTimestamp(self):
-    """Copies the date time value to a POSIX timestamps in microseconds.
-
-    Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
-    """
-
-  @abc.abstractmethod
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.
 
     Returns:
       A tuple of an integer containing a POSIX timestamp in seconds
       and an integer containing the remainder in 100 nano seconds or
+      None on error.
+    """
+
+  # TODO: remove this method when there is no more need for it in plaso.
+  @abc.abstractmethod
+  def GetPlasoTimestamp(self):
+    """Retrieves a timestamp that is compatible with plaso.
+
+    Returns:
+      An integer containing a POSIX timestamp in microseconds or
       None on error.
     """

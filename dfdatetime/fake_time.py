@@ -16,15 +16,6 @@ class FakeTime(interface.DateTimeValues):
     self._time_elements = time.gmtime()
     self._timestamp = calendar.timegm(self._time_elements)
 
-  def CopyToMicroPosixTimestamp(self):
-    """Copies the fake timestamp to a POSIX timestamps in microseconds.
-
-    Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
-    """
-    return self._timestamp * 1000000
-
   def CopyToStatTimeTuple(self):
     """Copies the fake timestamp to a stat timestamp tuple.
 
@@ -34,3 +25,12 @@ class FakeTime(interface.DateTimeValues):
       Currently the remainder will always be 0.
     """
     return self._timestamp, 0
+
+  def GetPlasoTimestamp(self):
+    """Retrieves a timestamp that is compatible with plaso.
+
+    Returns:
+      An integer containing a POSIX timestamp in microseconds or
+      None on error.
+    """
+    return self._timestamp * 1000000

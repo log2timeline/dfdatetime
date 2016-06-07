@@ -19,7 +19,7 @@ class FATDateTime(interface.DateTimeValues):
       * bits 5 - 10: minutes
       * bits 11 - 15: hours
 
-  The FAT date time has no timei zone information and is typically stored
+  The FAT date time has no time zone information and is typically stored
   in the local time of the computer.
   """
 

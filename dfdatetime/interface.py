@@ -269,13 +269,3 @@ class DateTimeValues(object):
       An integer containing a POSIX timestamp in microseconds or
       None on error.
     """
-
-  # TODO: remove this method when there is no more need for it in plaso.
-  @abc.abstractmethod
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
-    """

@@ -30,7 +30,7 @@ class FATDateTime(interface.DateTimeValues):
     """Initializes a FAT date time object.
 
     Args:
-      fat_date_time: optional integer containing a FAT date time.
+      fat_date_time (Optional[int]): FAT date time.
     """
     super(FATDateTime, self).__init__()
     self._number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
@@ -39,15 +39,14 @@ class FATDateTime(interface.DateTimeValues):
     """Retrieves the number of seconds from a FAT date time.
 
     Args:
-      fat_date_time: an integer containing a FAT date time.
+      fat_date_time (int): FAT date time.
 
     Returns:
-      An integer containing the number of seconds since January 1, 1980
-      00:00:00.
+      int: number of seconds since January 1, 1980 00:00:00.
 
     Raises:
       ValueError: if the month, day of month, hours, minutes or seconds
-                  value is out of bounds.
+          value is out of bounds.
     """
     day_of_month = (fat_date_time & 0x1f)
     month = ((fat_date_time >> 5) & 0x0f)
@@ -84,12 +83,13 @@ class FATDateTime(interface.DateTimeValues):
     """Copies a FAT date time from a string containing a date and time value.
 
     Args:
-      time_string: a string containing a date and time value formatted as:
-                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
-                   Where # are numeric digits ranging from 0 to 9 and the
-                   seconds fraction can be either 3 or 6 digits. The time
-                   of day, seconds fraction and timezone offset are optional.
-                   The default timezone is UTC.
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and timezone offset are optional. The default timezone
+          is UTC.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -104,9 +104,8 @@ class FATDateTime(interface.DateTimeValues):
     """Copies the FAT date time to a stat timestamp tuple.
 
     Returns:
-      A tuple of an integer containing a POSIX timestamp in seconds
-      and an integer containing the remainder in 100 nano seconds or
-      None on error.
+      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
+          100 nano seconds or (None, None) on error.
     """
     if self._number_of_seconds < 0:
       return None, None
@@ -118,8 +117,7 @@ class FATDateTime(interface.DateTimeValues):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
+      int: a POSIX timestamp in microseconds or None on error.
     """
     if self._number_of_seconds < 0:
       return

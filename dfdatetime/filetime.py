@@ -16,7 +16,7 @@ class Filetime(interface.DateTimeValues):
   2 x 32-bit integers and is presumed to be unsigned.
 
   Attributes:
-    timestamp: an integer containing the FILETIME timestamp.
+    timestamp (int): FILETIME timestamp.
   """
 
   # The difference between Jan 1, 1601 and Jan 1, 1970 in seconds.
@@ -27,7 +27,7 @@ class Filetime(interface.DateTimeValues):
     """Initializes a FILETIME object.
 
     Args:
-      timestamp: optional integer containing a FILETIME timestamp.
+      timestamp (Optional[int]): FILETIME timestamp.
     """
     super(Filetime, self).__init__()
     self.timestamp = timestamp
@@ -36,12 +36,13 @@ class Filetime(interface.DateTimeValues):
     """Copies a FILETIME from a string containing a date and time value.
 
     Args:
-      time_string: a string containing a date and time value formatted as:
-                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
-                   Where # are numeric digits ranging from 0 to 9 and the
-                   seconds fraction can be either 3 or 6 digits. The time
-                   of day, seconds fraction and timezone offset are optional.
-                   The default timezone is UTC.
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and timezone offset are optional. The default timezone
+          is UTC.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -68,8 +69,9 @@ class Filetime(interface.DateTimeValues):
       hours, minutes, seconds, micro_seconds, timezone_offset = (
           self._CopyTimeFromString(time_string[11:]))
 
-    self.timestamp = int(calendar.timegm((
-        year, month, day_of_month, hours, minutes, seconds)))
+    time_tuple = (year, month, day_of_month, hours, minutes, seconds)
+    self.timestamp = calendar.timegm(time_tuple)
+    self.timestamp = int(self.timestamp)
 
     self.timestamp += timezone_offset + self._FILETIME_TO_POSIX_BASE
     self.timestamp = (self.timestamp * 1000000) + micro_seconds
@@ -79,9 +81,8 @@ class Filetime(interface.DateTimeValues):
     """Copies the FILETIME timestamp to a stat timestamp tuple.
 
     Returns:
-      A tuple of an integer containing a POSIX timestamp in seconds
-      and an integer containing the remainder in 100 nano seconds or
-      None on error.
+      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
+          100 nano seconds or (None, None) on error.
     """
     if self.timestamp < 0:
       return None, None
@@ -96,8 +97,7 @@ class Filetime(interface.DateTimeValues):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
+      int: a POSIX timestamp in microseconds or None on error.
     """
     if self.timestamp < 0:
       return

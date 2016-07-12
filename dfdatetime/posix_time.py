@@ -15,16 +15,16 @@ class PosixTime(interface.DateTimeValues):
   are known to be used.
 
   Attributes:
-    timestamp: an integer containing the POSIX timestamp.
-    micro_seconds: an integer containing the number of microseconds
+    timestamp (int): POSIX timestamp.
+    micro_seconds (int): number of microseconds
   """
 
   def __init__(self, timestamp, micro_seconds=0):
     """Initializes the POSIX timestamp object.
 
     Args:
-      timestamp: an integer containing the POSIX timestamp.
-      micro_seconds: optional integer containing the number of microseconds.
+      timestamp (int): POSIX timestamp.
+      micro_seconds (Optional[int]): number of microseconds.
     """
     super(PosixTime, self).__init__()
     self.micro_seconds = micro_seconds
@@ -34,12 +34,13 @@ class PosixTime(interface.DateTimeValues):
     """Copies a POSIX timestamp from a string containing a date and time value.
 
     Args:
-      time_string: a string containing a date and time value formatted as:
-                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
-                   Where # are numeric digits ranging from 0 to 9 and the
-                   seconds fraction can be either 3 or 6 digits. The time
-                   of day, seconds fraction and timezone offset are optional.
-                   The default timezone is UTC.
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and timezone offset are optional. The default timezone
+          is UTC.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -54,9 +55,8 @@ class PosixTime(interface.DateTimeValues):
     """Copies the POSIX timestamp to a stat timestamp tuple.
 
     Returns:
-      A tuple of an integer containing a POSIX timestamp in seconds
-      and an integer containing the remainder in 100 nano seconds or
-      None on error.
+      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
+          100 nano seconds or (None, None) on error.
     """
     return self.timestamp, self.micro_seconds * 10
 
@@ -64,7 +64,6 @@ class PosixTime(interface.DateTimeValues):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
+      int: a POSIX timestamp in microseconds or None on error.
     """
     return (self.timestamp * 1000000) + self.micro_seconds

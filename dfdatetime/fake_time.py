@@ -20,12 +20,13 @@ class FakeTime(interface.DateTimeValues):
     """Copies a fake timestamp from a string containing a date and time value.
 
     Args:
-      time_string: a string containing a date and time value formatted as:
-                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
-                   Where # are numeric digits ranging from 0 to 9 and the
-                   seconds fraction can be either 3 or 6 digits. The time
-                   of day, seconds fraction and timezone offset are optional.
-                   The default timezone is UTC.
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and timezone offset are optional. The default timezone
+          is UTC.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -40,9 +41,8 @@ class FakeTime(interface.DateTimeValues):
     """Copies the fake timestamp to a stat timestamp tuple.
 
     Returns:
-      A tuple of an integer containing a POSIX timestamp in seconds
-      and an integer containing the remainder in 100 nano seconds.
-      Currently the remainder will always be 0.
+      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
+          100 nano seconds or (None, None) on error.
     """
     return self._timestamp, 0
 
@@ -50,7 +50,6 @@ class FakeTime(interface.DateTimeValues):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
+      int: a POSIX timestamp in microseconds or None on error.
     """
     return self._timestamp * 1000000

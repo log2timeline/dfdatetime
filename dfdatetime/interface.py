@@ -16,11 +16,10 @@ class DateTimeValues(object):
     """Copies a date from a string.
 
     Args:
-      date_string: a string containing a date value formatted as:
-                   YYYY-MM-DD
+      date_string (str): date value formatted as: YYYY-MM-DD
 
     Returns:
-      A tuple of integers containing year, month, day of month.
+      tuple[int, int, int]: year, month, day of month.
 
     Raises:
       ValueError: if the date string is invalid or not supported.
@@ -28,8 +27,10 @@ class DateTimeValues(object):
     date_string_length = len(date_string)
 
     # The date string should at least contain 'YYYY-MM-DD'.
-    if (date_string_length < 10 or date_string[4] != u'-' or
-        date_string[7] != u'-'):
+    if date_string_length < 10:
+      raise ValueError(u'Date string too short.')
+
+    if date_string[4] != u'-' or date_string[7] != u'-':
       raise ValueError(u'Invalid date string.')
 
     try:
@@ -57,24 +58,27 @@ class DateTimeValues(object):
     """Copies a time from a string.
 
     Args:
-      time_string: a string containing a time value formatted as:
-                   hh:mm:ss.######[+-]##:##
-                   Where # are numeric digits ranging from 0 to 9 and the
-                   seconds fraction can be either 3 or 6 digits. The seconds
-                   fraction and timezone offset are optional.
+      time_string (str): time value formatted as:
+          hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The seconds fraction and
+          timezone offset are optional.
 
     Returns:
-      A tuple of integers containing hours, minutes, seconds, microseconds,
-      timezone offset in seconds.
+      tuple[int, int, int, int, int]: hours, minutes, seconds, microseconds,
+          timezone offset in seconds.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
     """
     time_string_length = len(time_string)
 
+    if time_string_length < 8:
+      raise ValueError(u'Time string too short.')
+
     # The time string should at least contain 'hh:mm:ss'.
-    if (time_string_length < 8 or time_string[2] != u':' or
-        time_string[5] != u':'):
+    if time_string[2] != u':' or time_string[5] != u':':
       raise ValueError(u'Invalid time string.')
 
     try:
@@ -131,7 +135,8 @@ class DateTimeValues(object):
           micro_seconds *= 1000
 
       if timezone_index < time_string_length:
-        if (time_string_length - timezone_index != 6 or
+        if (
+            time_string_length - timezone_index != 6 or
             time_string[timezone_index + 3] != u':'):
           raise ValueError(u'Invalid time string.')
 
@@ -165,13 +170,12 @@ class DateTimeValues(object):
     """Retrieves the day of the year for a specific day of a month in a year.
 
     Args:
-      year: an integer containing the year e.g. 1970.
-      month: an integer containing the month where 1 represents January.
-      day_of_month: an integer containing the day of the month where 1
-                    represents the first day.
+      year (int): year e.g. 1970.
+      month (int): month where 1 represents January.
+      day_of_month (int): day of the month where 1 represents the first day.
 
     Returns:
-      An integer containing the day of year.
+      int: day of year.
 
     Raises:
       ValueError: if the month or day of month value is out of bounds.
@@ -193,11 +197,11 @@ class DateTimeValues(object):
     """Retrieves the number of days in a month of a specific year.
 
     Args:
-      year: an integer containing the year.
-      month: an integer containing the month ranging from 1 to 12.
+      year (int): year e.g. 1970.
+      month (int): month ranging from 1 to 12.
 
     Returns:
-      An integer containing the number of days in the month.
+      int: number of days in the month.
 
     Raises:
       ValueError: if the month value is out of bounds.
@@ -215,10 +219,10 @@ class DateTimeValues(object):
     """Retrieves the number of days in a specific year.
 
     Args:
-      year: an integer containing the year e.g. 1970.
+      year (int): year e.g. 1970.
 
     Returns:
-      An integer containing the number of days in the year.
+      int: number of days in the year.
     """
     if self._IsLeapYear(year):
       return 366
@@ -228,7 +232,7 @@ class DateTimeValues(object):
     """Determines if a year is a leap year.
 
     Args:
-      year: an integer containing the year.
+      year (int): year e.g. 1970.
 
     Returns:
       A boolean value indicating if the year is a leap year.
@@ -240,12 +244,13 @@ class DateTimeValues(object):
     """Copies a date time value from a string containing a date and time value.
 
     Args:
-      time_string: a string containing a date and time value formatted as:
-                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
-                   Where # are numeric digits ranging from 0 to 9 and the
-                   seconds fraction can be either 3 or 6 digits. The time
-                   of day, seconds fraction and timezone offset are optional.
-                   The default timezone is UTC.
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and timezone offset are optional. The default timezone
+          is UTC.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -255,9 +260,8 @@ class DateTimeValues(object):
     """Copies the date time value to a stat timestamp tuple.
 
     Returns:
-      A tuple of an integer containing a POSIX timestamp in seconds
-      and an integer containing the remainder in 100 nano seconds or
-      None on error.
+      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
+          100 nano seconds or (None, None) on error.
     """
 
   # TODO: remove this method when there is no more need for it in plaso.
@@ -266,6 +270,5 @@ class DateTimeValues(object):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
-      An integer containing a POSIX timestamp in microseconds or
-      None on error.
+      int: a POSIX timestamp in microseconds or None on error.
     """

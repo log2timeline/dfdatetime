@@ -174,8 +174,7 @@ class DateTimeValuesTest(unittest.TestCase):
 
     days_per_month = []
     for month in range(1, 13):
-      days_per_month.append(
-          date_time_values._GetDaysPerMonth(1999, month))
+      days_per_month.append(date_time_values._GetDaysPerMonth(1999, month))
 
     self.assertEqual(days_per_month, expected_days_per_month)
 
@@ -183,8 +182,7 @@ class DateTimeValuesTest(unittest.TestCase):
 
     days_per_month = []
     for month in range(1, 13):
-      days_per_month.append(
-          date_time_values._GetDaysPerMonth(2000, month))
+      days_per_month.append(date_time_values._GetDaysPerMonth(2000, month))
 
     self.assertEqual(days_per_month, expected_days_per_month)
 

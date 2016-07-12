@@ -12,8 +12,7 @@ class PosixTimeTest(unittest.TestCase):
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
-    time_elements_object = time_elements.TimeElements(
-        (2010, 8, 12, 20, 6, 31))
+    time_elements_object = time_elements.TimeElements((2010, 8, 12, 20, 6, 31))
 
     expected_stat_time_tuple = (1281643591, 0)
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
@@ -21,8 +20,7 @@ class PosixTimeTest(unittest.TestCase):
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
-    time_elements_object = time_elements.TimeElements(
-        (2010, 8, 12, 20, 6, 31))
+    time_elements_object = time_elements.TimeElements((2010, 8, 12, 20, 6, 31))
 
     expected_micro_posix_timestamp = 1281643591000000
     micro_posix_timestamp = time_elements_object.GetPlasoTimestamp()

@@ -135,8 +135,7 @@ class DateTimeValues(object):
           micro_seconds *= 1000
 
       if timezone_index < time_string_length:
-        if (
-            time_string_length - timezone_index != 6 or
+        if (time_string_length - timezone_index != 6 or
             time_string[timezone_index + 3] != u':'):
           raise ValueError(u'Invalid time string.')
 

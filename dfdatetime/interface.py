@@ -5,12 +5,24 @@ import abc
 
 
 class DateTimeValues(object):
-  """Class that defines the date time values interface."""
+  """Class that defines the date time values interface.
+
+  Args:
+    precision (str): precision of the date and time value, which should
+        be one the PRECISION_VALUES in defintions.
+    time_zone (str): time zone the date and time values are in.
+  """
 
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
   # The number of seconds in a day
   _SECONDS_PER_DAY = 24 * 60 * 60
+
+  def __init__(self):
+    """Initializes a date time values object."""
+    super(DateTimeValues, self).__init__()
+    self.precision = None
+    self.time_zone = u'UTC'
 
   def _CopyDateFromString(self, date_string):
     """Copies a date from a string.
@@ -63,12 +75,12 @@ class DateTimeValues(object):
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and timezone offset are optional. The default timezone
+          fraction and time zone offset are optional. The default time zone
           is UTC.
 
     Returns:
       dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds, microseconds, timezone offset in seconds.
+          hours, minutes, seconds, microseconds.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -91,8 +103,46 @@ class DateTimeValues(object):
     if time_string[10] != u' ':
       raise ValueError(u'Invalid time string.')
 
-    hours, minutes, seconds, microseconds, timezone_offset = (
+    hours, minutes, seconds, microseconds, time_zone_offset = (
         self._CopyTimeFromString(time_string[11:]))
+
+    if time_zone_offset:
+      time_zone_hours, time_zone_minutes = divmod(time_zone_offset, 60)
+
+      minutes += time_zone_minutes
+      if minutes < 0:
+        minutes += 60
+        hours -= 1
+
+      elif minutes >= 60:
+        minutes -= 60
+        hours += 1
+
+      hours += time_zone_hours
+      if hours < 0:
+        hours += 24
+        day_of_month -= 1
+
+      elif hours >= 24:
+        hours -= 24
+        day_of_month += 1
+
+      days_per_month = self._GetDaysPerMonth(year, month)
+      if day_of_month < 1:
+        month -= 1
+        if month < 1:
+          month = 12
+          year -= 1
+
+        day_of_month += self._GetDaysPerMonth(year, month)
+
+      elif day_of_month > days_per_month:
+        month += 1
+        if month > 12:
+          month = 1
+          year += 1
+
+        day_of_month -= days_per_month
 
     date_time_values = {
         u'year': year,
@@ -104,8 +154,6 @@ class DateTimeValues(object):
 
     if microseconds is not None:
       date_time_values[u'microseconds'] = microseconds
-    if timezone_offset is not None:
-      date_time_values[u'timezone_offset'] = timezone_offset
     return date_time_values
 
   def _CopyTimeFromString(self, time_string):
@@ -117,11 +165,11 @@ class DateTimeValues(object):
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction can be either 3 or 6 digits. The seconds fraction and
-          timezone offset are optional.
+          time zone offset are optional.
 
     Returns:
       tuple[int, int, int, int, int]: hours, minutes, seconds, microseconds,
-          timezone offset in seconds.
+          time zone offset in minutes.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -160,64 +208,62 @@ class DateTimeValues(object):
       raise ValueError(u'Seconds value out of bounds.')
 
     microseconds = None
-    timezone_offset = None
+    time_zone_offset = None
 
     if time_string_length > 8:
       if time_string[8] != u'.':
-        timezone_index = 8
+        time_zone_index = 8
       else:
-        for timezone_index in range(8, time_string_length):
-          if time_string[timezone_index] in (u'+', u'-'):
+        for time_zone_index in range(8, time_string_length):
+          if time_string[time_zone_index] in (u'+', u'-'):
             break
 
-          # The calculation that follow rely on the timezone index to point
-          # beyond the string in case no timezone offset was defined.
-          if timezone_index == time_string_length - 1:
-            timezone_index += 1
+          # The calculation that follow rely on the time zone index to point
+          # beyond the string in case no time zone offset was defined.
+          if time_zone_index == time_string_length - 1:
+            time_zone_index += 1
 
-      if timezone_index > 8:
-        fraction_of_seconds_length = timezone_index - 9
+      if time_zone_index > 8:
+        fraction_of_seconds_length = time_zone_index - 9
         if fraction_of_seconds_length not in (3, 6):
           raise ValueError(u'Invalid time string.')
 
         try:
-          microseconds = int(time_string[9:timezone_index], 10)
+          microseconds = int(time_string[9:time_zone_index], 10)
         except ValueError:
           raise ValueError(u'Unable to parse fraction of seconds.')
 
         if fraction_of_seconds_length == 3:
           microseconds *= 1000
 
-      if timezone_index < time_string_length:
-        if (time_string_length - timezone_index != 6 or
-            time_string[timezone_index + 3] != u':'):
+      if time_zone_index < time_string_length:
+        if (time_string_length - time_zone_index != 6 or
+            time_string[time_zone_index + 3] != u':'):
           raise ValueError(u'Invalid time string.')
 
         try:
-          timezone_offset = int(
-              time_string[timezone_index + 1:timezone_index + 3])
+          time_zone_offset = int(
+              time_string[time_zone_index + 1:time_zone_index + 3])
         except ValueError:
-          raise ValueError(u'Unable to parse timezone hours offset.')
+          raise ValueError(u'Unable to parse time zone hours offset.')
 
-        if timezone_offset not in range(0, 24):
+        if time_zone_offset not in range(0, 24):
           raise ValueError(u'Timezone hours offset value out of bounds.')
 
-        timezone_offset *= 60
+        time_zone_offset *= 60
 
         try:
-          timezone_offset += int(
-              time_string[timezone_index + 4:timezone_index + 6])
+          time_zone_offset += int(
+              time_string[time_zone_index + 4:time_zone_index + 6])
         except ValueError:
-          raise ValueError(u'Unable to parse timezone minutes offset.')
+          raise ValueError(u'Unable to parse time zone minutes offset.')
 
-        # Note that when the sign of the timezone offset is negative
+        # Note that when the sign of the time zone offset is negative
         # the difference needs to be added. We do so by flipping the sign.
-        if time_string[timezone_index] == u'-':
-          timezone_offset *= 60
-        else:
-          timezone_offset *= -60
+        if time_string[time_zone_index] != u'-':
+          time_zone_offset *= -1
 
-    return hours, minutes, seconds, microseconds, timezone_offset
+    return hours, minutes, seconds, microseconds, time_zone_offset
 
   def _GetDayOfYear(self, year, month, day_of_month):
     """Retrieves the day of the year for a specific day of a month in a year.
@@ -302,7 +348,7 @@ class DateTimeValues(object):
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and timezone offset are optional. The default timezone
+          fraction and time zone offset are optional. The default time zone
           is UTC.
 
     Raises:

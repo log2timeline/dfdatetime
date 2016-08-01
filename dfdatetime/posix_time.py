@@ -3,6 +3,7 @@
 
 import calendar
 
+from dfdatetime import definitions
 from dfdatetime import interface
 
 
@@ -30,6 +31,10 @@ class PosixTime(interface.DateTimeValues):
     """
     super(PosixTime, self).__init__()
     self.microseconds = microseconds
+    if microseconds is not None:
+      self.precision = definitions.PRECISION_1_MICROSECOND
+    else:
+      self.precision = definitions.PRECISION_1_SECOND
     self.timestamp = timestamp
 
   def CopyFromString(self, time_string):
@@ -41,11 +46,8 @@ class PosixTime(interface.DateTimeValues):
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and timezone offset are optional. The default timezone
+          fraction and time zone offset are optional. The default time zone
           is UTC.
-
-    Raises:
-      ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
@@ -57,11 +59,14 @@ class PosixTime(interface.DateTimeValues):
         date_time_values.get(u'minutes', 0),
         date_time_values.get(u'seconds', 0))))
 
-    timezone_offset = date_time_values.get(u'timezone_offset', None)
-    if timezone_offset:
-      self.timestamp += timezone_offset
-
     self.microseconds = date_time_values.get(u'microseconds', None)
+
+    if self.microseconds is not None:
+      self.precision = definitions.PRECISION_1_MICROSECOND
+    else:
+      self.precision = definitions.PRECISION_1_SECOND
+
+    self.time_zone = u'UTC'
 
   def CopyToStatTimeTuple(self):
     """Copies the POSIX timestamp to a stat timestamp tuple.

@@ -3,6 +3,7 @@
 
 import calendar
 
+from dfdatetime import definitions
 from dfdatetime import interface
 
 
@@ -18,6 +19,8 @@ class TimeElements(interface.DateTimeValues):
     super(TimeElements, self).__init__()
     self._time_elements_tuple = time_elements_tuple
     self._timestamp = calendar.timegm(self._time_elements_tuple)
+    self._timestamp = int(self._timestamp)
+    self.precision = definitions.PRECISION_1_SECOND
 
   def CopyFromString(self, time_string):
     """Copies time elements from a string containing a date and time value.
@@ -28,17 +31,24 @@ class TimeElements(interface.DateTimeValues):
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and timezone offset are optional. The default timezone
+          fraction and time zone offset are optional. The default time zone
           is UTC.
-
-    Raises:
-      ValueError: if the time string is invalid or not supported.
     """
-    if not time_string:
-      raise ValueError(u'Invalid time string.')
+    date_time_values = self._CopyDateTimeFromString(time_string)
 
-    # TODO: implement.
-    raise NotImplementedError()
+    year = date_time_values.get(u'year', 0)
+    month = date_time_values.get(u'month', 0)
+    day_of_month = date_time_values.get(u'day_of_month', 0)
+    hours = date_time_values.get(u'hours', 0)
+    minutes = date_time_values.get(u'minutes', 0)
+    seconds = date_time_values.get(u'seconds', 0)
+
+    self._time_elements_tuple = (
+        year, month, day_of_month, hours, minutes, seconds)
+    self._timestamp = calendar.timegm(self._time_elements_tuple)
+    self._timestamp = int(self._timestamp)
+
+    self.time_zone = u'UTC'
 
   def CopyToStatTimeTuple(self):
     """Copies the time elements to a stat timestamp tuple.

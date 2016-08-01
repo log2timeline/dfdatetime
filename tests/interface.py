@@ -91,24 +91,21 @@ class DateTimeValuesTest(unittest.TestCase):
 
     expected_date_dict = {
         u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 21, u'minutes': 6, u'seconds': 31,
-        u'microseconds': 546875}
+        u'hours': 21, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
     date_dict = date_time_values._CopyDateTimeFromString(
         u'2010-08-12 21:06:31.546875')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
         u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 21, u'minutes': 6, u'seconds': 31,
-        u'microseconds': 546875, u'timezone_offset': 3600}
+        u'hours': 22, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
     date_dict = date_time_values._CopyDateTimeFromString(
         u'2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
         u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 21, u'minutes': 6, u'seconds': 31,
-        u'microseconds': 546875, u'timezone_offset': -3600}
+        u'hours': 20, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
     date_dict = date_time_values._CopyDateTimeFromString(
         u'2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(date_dict, expected_date_dict)
@@ -129,7 +126,7 @@ class DateTimeValuesTest(unittest.TestCase):
     time_tuple = date_time_values._CopyTimeFromString(u'20:23:56')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, None, -19800)
+    expected_time_tuple = (20, 23, 56, None, -330)
     time_tuple = date_time_values._CopyTimeFromString(u'20:23:56+05:30')
     self.assertEqual(time_tuple, expected_time_tuple)
 
@@ -137,7 +134,7 @@ class DateTimeValuesTest(unittest.TestCase):
     time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327000, -3600)
+    expected_time_tuple = (20, 23, 56, 327000, -60)
     time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327+01:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 
@@ -145,7 +142,7 @@ class DateTimeValuesTest(unittest.TestCase):
     time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327124')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327124, 18000)
+    expected_time_tuple = (20, 23, 56, 327124, 300)
     time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327124-05:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 

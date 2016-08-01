@@ -4,6 +4,7 @@
 import calendar
 import time
 
+from dfdatetime import definitions
 from dfdatetime import interface
 
 
@@ -17,6 +18,7 @@ class FakeTime(interface.DateTimeValues):
     timestamp, fraction_of_seconds = divmod(time.time(), 1)
     self._microseconds = int(fraction_of_seconds * 1000000)
     self._timestamp = int(timestamp)
+    self.precision = definitions.PRECISION_1_MICROSECOND
 
   def CopyFromString(self, time_string):
     """Copies a fake timestamp from a string containing a date and time value.
@@ -27,11 +29,8 @@ class FakeTime(interface.DateTimeValues):
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and timezone offset are optional. The default timezone
+          fraction and time zone offset are optional. The default time zone
           is UTC.
-
-    Raises:
-      ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
@@ -46,11 +45,9 @@ class FakeTime(interface.DateTimeValues):
     self._timestamp = calendar.timegm(time_tuple)
     self._timestamp = int(self._timestamp)
 
-    timezone_offset = date_time_values.get(u'timezone_offset', None)
-    if timezone_offset:
-      self._timestamp += timezone_offset
-
     self._microseconds = date_time_values.get(u'microseconds', None)
+
+    self.time_zone = u'UTC'
 
   def CopyToStatTimeTuple(self):
     """Copies the fake timestamp to a stat timestamp tuple.

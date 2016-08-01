@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """FAT date time implementation."""
 
+from dfdatetime import definitions
 from dfdatetime import interface
 
 
@@ -34,6 +35,7 @@ class FATDateTime(interface.DateTimeValues):
     """
     super(FATDateTime, self).__init__()
     self._number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
+    self.precision = definitions.PRECISION_2_SECONDS
 
   def _GetNumberOfSeconds(self, fat_date_time):
     """Retrieves the number of seconds from a FAT date time.
@@ -88,17 +90,32 @@ class FATDateTime(interface.DateTimeValues):
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and timezone offset are optional. The default timezone
+          fraction and time zone offset are optional. The default time zone
           is UTC.
 
     Raises:
-      ValueError: if the time string is invalid or not supported.
+      ValueError: if the date string is invalid or not supported.
     """
-    if not time_string:
-      raise ValueError(u'Invalid time string.')
+    date_time_values = self._CopyDateTimeFromString(time_string)
 
-    # TODO: implement.
-    raise NotImplementedError()
+    year = date_time_values.get(u'year', 0)
+    month = date_time_values.get(u'month', 0)
+    day_of_month = date_time_values.get(u'day_of_month', 0)
+    hours = date_time_values.get(u'hours', 0)
+    minutes = date_time_values.get(u'minutes', 0)
+    seconds = date_time_values.get(u'seconds', 0)
+
+    if year < 1980 or year > (1980 + 0x7f):
+      raise ValueError(u'Year value not supported.')
+
+    fat_date_time = day_of_month & 0x1f
+    fat_date_time |= (month & 0x0f) << 5
+    fat_date_time |= ((year - 1980) & 0x7f) << 9
+    fat_date_time |= (hours & 0x1f) << 37
+    fat_date_time |= (minutes & 0x3f) << 21
+    fat_date_time |= (seconds / 2) << 16
+
+    self.time_zone = u'UTC'
 
   def CopyToStatTimeTuple(self):
     """Copies the FAT date time to a stat timestamp tuple.

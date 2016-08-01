@@ -35,13 +35,16 @@ class FakeTime(interface.DateTimeValues):
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
-    self._timestamp = int(calendar.timegm((
-        date_time_values.get(u'year', 0),
-        date_time_values.get(u'month', 0),
-        date_time_values.get(u'day_of_month', 0),
-        date_time_values.get(u'hours', 0),
-        date_time_values.get(u'minutes', 0),
-        date_time_values.get(u'seconds', 0))))
+    year = date_time_values.get(u'year', 0)
+    month = date_time_values.get(u'month', 0)
+    day_of_month = date_time_values.get(u'day_of_month', 0)
+    hours = date_time_values.get(u'hours', 0)
+    minutes = date_time_values.get(u'minutes', 0)
+    seconds = date_time_values.get(u'seconds', 0)
+
+    time_tuple = (year, month, day_of_month, hours, minutes, seconds)
+    self.timestamp = calendar.timegm(time_tuple)
+    self.timestamp = int(self.timestamp)
 
     timezone_offset = date_time_values.get(u'timezone_offset', None)
     if timezone_offset:

@@ -15,28 +15,29 @@ class FATDateTime(unittest.TestCase):
     fat_date_time.FATDateTime(0xa8d03d0c)
 
     # Invalid number of seconds.
+    test_fat_date_time = (0xa8d03d0c & ~(0x1f << 16)) | ((30 & 0x1f) << 16)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(
-          (0xa8d03d0c & ~(0x1f << 16)) | ((30 & 0x1f) << 16))
+      fat_date_time.FATDateTime(test_fat_date_time)
 
     # Invalid number of minutes.
+    test_fat_date_time = (0xa8d03d0c & ~(0x3f << 21)) | ((60 & 0x3f) << 21)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(
-          (0xa8d03d0c & ~(0x3f << 21)) | ((60 & 0x3f) << 21))
+      fat_date_time.FATDateTime(test_fat_date_time)
 
     # Invalid number of hours.
+    test_fat_date_time = (0xa8d03d0c & ~(0x1f << 27)) | ((24 & 0x1f) << 27)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(
-          (0xa8d03d0c & ~(0x1f << 27)) | ((24 & 0x1f) << 27))
+      fat_date_time.FATDateTime(test_fat_date_time)
 
     # Invalid day of month.
+    test_fat_date_time = (0xa8d03d0c & ~0x1f) | (32 & 0x1f)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime((0xa8d03d0c & ~0x1f) | (32 & 0x1f))
+      fat_date_time.FATDateTime(test_fat_date_time)
 
     # Invalid month.
+    test_fat_date_time = (0xa8d03d0c & ~(0x0f << 5)) | ((13 & 0x0f) << 5)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(
-          (0xa8d03d0c & ~(0x0f << 5)) | ((13 & 0x0f) << 5))
+      fat_date_time.FATDateTime(test_fat_date_time)
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

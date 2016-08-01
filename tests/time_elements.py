@@ -12,7 +12,7 @@ class TimeElementsTimeTest(unittest.TestCase):
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
-    time_elements_object = time_elements.TimeElements((2010, 8, 12, 20, 6, 31))
+    time_elements.TimeElements((2010, 8, 12, 20, 6, 31))
 
     # TODO: implement tests.
 

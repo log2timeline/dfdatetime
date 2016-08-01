@@ -43,8 +43,8 @@ class FakeTime(interface.DateTimeValues):
     seconds = date_time_values.get(u'seconds', 0)
 
     time_tuple = (year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp = calendar.timegm(time_tuple)
-    self.timestamp = int(self.timestamp)
+    self._timestamp = calendar.timegm(time_tuple)
+    self._timestamp = int(self._timestamp)
 
     timezone_offset = date_time_values.get(u'timezone_offset', None)
     if timezone_offset:

@@ -10,6 +10,12 @@ from dfdatetime import time_elements
 class TimeElementsTimeTest(unittest.TestCase):
   """Tests for the time elements object."""
 
+  def testCopyFromString(self):
+    """Tests the CopyFromString function."""
+    time_elements_object = time_elements.TimeElements((2010, 8, 12, 20, 6, 31))
+
+    # TODO: implement tests.
+
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     time_elements_object = time_elements.TimeElements((2010, 8, 12, 20, 6, 31))

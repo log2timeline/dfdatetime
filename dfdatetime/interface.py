@@ -58,17 +58,17 @@ class DateTimeValues(object):
     """Copies a date and time from a string.
 
     Args:
-      time_string: a string containing a date and time value formatted as:
-                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
-                   Where # are numeric digits ranging from 0 to 9 and the
-                   seconds fraction can be either 3 or 6 digits. The time
-                   of day, seconds fraction and timezone offset are optional.
-                   The default timezone is UTC.
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and timezone offset are optional. The default timezone
+          is UTC.
 
     Returns:
-      A dicionary containing year, month, day of month, hours, minutes,
-      seconds, microseconds, timezone offset in seconds if the value was
-      provided.
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds, microseconds, timezone offset in seconds.
 
     Raises:
       ValueError: if the time string is invalid or not supported.

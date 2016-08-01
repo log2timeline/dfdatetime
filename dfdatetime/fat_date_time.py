@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """FAT date time implementation."""
 
+import calendar
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -33,8 +35,12 @@ class FATDateTime(interface.DateTimeValues):
     Args:
       fat_date_time (Optional[int]): FAT date time.
     """
+    number_of_seconds = None
+    if fat_date_time is not None:
+      number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
+
     super(FATDateTime, self).__init__()
-    self._number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
+    self._number_of_seconds = number_of_seconds
     self.precision = definitions.PRECISION_2_SECONDS
 
   def _GetNumberOfSeconds(self, fat_date_time):
@@ -50,6 +56,9 @@ class FATDateTime(interface.DateTimeValues):
       ValueError: if the month, day of month, hours, minutes or seconds
           value is out of bounds.
     """
+    if fat_date_time is None:
+      raise ValueError(u'Unusupported FAT date time.')
+
     day_of_month = (fat_date_time & 0x1f)
     month = ((fat_date_time >> 5) & 0x0f)
     year = (fat_date_time >> 9) & 0x7f
@@ -108,12 +117,11 @@ class FATDateTime(interface.DateTimeValues):
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError(u'Year value not supported.')
 
-    fat_date_time = day_of_month & 0x1f
-    fat_date_time |= (month & 0x0f) << 5
-    fat_date_time |= ((year - 1980) & 0x7f) << 9
-    fat_date_time |= (hours & 0x1f) << 37
-    fat_date_time |= (minutes & 0x3f) << 21
-    fat_date_time |= (seconds / 2) << 16
+    time_tuple = (year, month, day_of_month, hours, minutes, seconds)
+    timestamp = calendar.timegm(time_tuple)
+    timestamp = int(timestamp)
+
+    self._number_of_seconds = timestamp - self._FAT_DATE_TO_POSIX_BASE
 
     self.time_zone = u'UTC'
 
@@ -124,7 +132,7 @@ class FATDateTime(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
-    if self._number_of_seconds < 0:
+    if self._number_of_seconds is None or self._number_of_seconds < 0:
       return None, None
 
     timestamp = self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE
@@ -136,7 +144,7 @@ class FATDateTime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
-    if self._number_of_seconds < 0:
+    if self._number_of_seconds is None or self._number_of_seconds < 0:
       return
 
     return (self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE) * 1000000

@@ -7,8 +7,8 @@ import unittest
 from dfdatetime import time_elements
 
 
-class PosixTimeTest(unittest.TestCase):
-  """Tests for the POSIX timestamp object."""
+class TimeElementsTimeTest(unittest.TestCase):
+  """Tests for the time elements object."""
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

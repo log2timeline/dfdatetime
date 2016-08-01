@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """POSIX timestamp implementation."""
 
+import calendar
+
 from dfdatetime import interface
 
 
@@ -15,19 +17,19 @@ class PosixTime(interface.DateTimeValues):
   are known to be used.
 
   Attributes:
-    timestamp (int): POSIX timestamp.
     micro_seconds (int): number of microseconds
+    timestamp (int): POSIX timestamp.
   """
 
-  def __init__(self, timestamp, micro_seconds=0):
+  def __init__(self, microseconds=None, timestamp=None):
     """Initializes the POSIX timestamp object.
 
     Args:
-      timestamp (int): POSIX timestamp.
       micro_seconds (Optional[int]): number of microseconds.
+      timestamp (Optional[int]): POSIX timestamp.
     """
     super(PosixTime, self).__init__()
-    self.micro_seconds = micro_seconds
+    self.microseconds = microseconds
     self.timestamp = timestamp
 
   def CopyFromString(self, time_string):
@@ -45,11 +47,21 @@ class PosixTime(interface.DateTimeValues):
     Raises:
       ValueError: if the time string is invalid or not supported.
     """
-    if not time_string:
-      raise ValueError(u'Invalid time string.')
+    date_time_values = self._CopyDateTimeFromString(time_string)
 
-    # TODO: implement
-    raise NotImplementedError()
+    self.timestamp = int(calendar.timegm((
+        date_time_values.get(u'year', 0),
+        date_time_values.get(u'month', 0),
+        date_time_values.get(u'day_of_month', 0),
+        date_time_values.get(u'hours', 0),
+        date_time_values.get(u'minutes', 0),
+        date_time_values.get(u'seconds', 0))))
+
+    timezone_offset = date_time_values.get(u'timezone_offset', None)
+    if timezone_offset:
+      self.timestamp += timezone_offset
+
+    self.microseconds = date_time_values.get(u'microseconds', None)
 
   def CopyToStatTimeTuple(self):
     """Copies the POSIX timestamp to a stat timestamp tuple.
@@ -58,7 +70,13 @@ class PosixTime(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
-    return self.timestamp, self.micro_seconds * 10
+    if self.timestamp is None:
+      return None, None
+
+    if self.microseconds is not None:
+      return self.timestamp, self.microseconds * 10
+
+    return self.timestamp, 0
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -66,4 +84,6 @@ class PosixTime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
-    return (self.timestamp * 1000000) + self.micro_seconds
+    if self.microseconds is not None:
+      return (self.timestamp * 1000000) + self.microseconds
+    return self.timestamp * 1000000

@@ -54,6 +54,60 @@ class DateTimeValues(object):
 
     return year, month, day_of_month
 
+  def _CopyDateTimeFromString(self, time_string):
+    """Copies a date and time from a string.
+
+    Args:
+      time_string: a string containing a date and time value formatted as:
+                   YYYY-MM-DD hh:mm:ss.######[+-]##:##
+                   Where # are numeric digits ranging from 0 to 9 and the
+                   seconds fraction can be either 3 or 6 digits. The time
+                   of day, seconds fraction and timezone offset are optional.
+                   The default timezone is UTC.
+
+    Returns:
+      A dicionary containing year, month, day of month, hours, minutes,
+      seconds, microseconds, timezone offset in seconds if the value was
+      provided.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if not time_string:
+      raise ValueError(u'Invalid time string.')
+
+    time_string_length = len(time_string)
+
+    year, month, day_of_month = self._CopyDateFromString(time_string)
+
+    if time_string_length <= 10:
+      return {
+          u'year': year,
+          u'month': month,
+          u'day_of_month': day_of_month}
+
+    # If a time of day is specified the time string it should at least
+    # contain 'YYYY-MM-DD hh:mm:ss'.
+    if time_string[10] != u' ':
+      raise ValueError(u'Invalid time string.')
+
+    hours, minutes, seconds, microseconds, timezone_offset = (
+        self._CopyTimeFromString(time_string[11:]))
+
+    date_time_values = {
+        u'year': year,
+        u'month': month,
+        u'day_of_month': day_of_month,
+        u'hours': hours,
+        u'minutes': minutes,
+        u'seconds': seconds}
+
+    if microseconds is not None:
+      date_time_values[u'microseconds'] = microseconds
+    if timezone_offset is not None:
+      date_time_values[u'timezone_offset'] = timezone_offset
+    return date_time_values
+
   def _CopyTimeFromString(self, time_string):
     """Copies a time from a string.
 
@@ -105,8 +159,8 @@ class DateTimeValues(object):
     if seconds not in range(0, 60):
       raise ValueError(u'Seconds value out of bounds.')
 
-    micro_seconds = 0
-    timezone_offset = 0
+    microseconds = None
+    timezone_offset = None
 
     if time_string_length > 8:
       if time_string[8] != u'.':
@@ -127,12 +181,12 @@ class DateTimeValues(object):
           raise ValueError(u'Invalid time string.')
 
         try:
-          micro_seconds = int(time_string[9:timezone_index], 10)
+          microseconds = int(time_string[9:timezone_index], 10)
         except ValueError:
           raise ValueError(u'Unable to parse fraction of seconds.')
 
         if fraction_of_seconds_length == 3:
-          micro_seconds *= 1000
+          microseconds *= 1000
 
       if timezone_index < time_string_length:
         if (time_string_length - timezone_index != 6 or
@@ -163,7 +217,7 @@ class DateTimeValues(object):
         else:
           timezone_offset *= -60
 
-    return hours, minutes, seconds, micro_seconds, timezone_offset
+    return hours, minutes, seconds, microseconds, timezone_offset
 
   def _GetDayOfYear(self, year, month, day_of_month):
     """Retrieves the day of the year for a specific day of a month in a year.

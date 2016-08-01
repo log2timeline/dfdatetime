@@ -47,34 +47,26 @@ class Filetime(interface.DateTimeValues):
     Raises:
       ValueError: if the time string is invalid or not supported.
     """
-    if not time_string:
-      raise ValueError(u'Invalid time string.')
+    date_time_values = self._CopyDateTimeFromString(time_string)
 
-    time_string_length = len(time_string)
-
-    year, month, day_of_month = self._CopyDateFromString(time_string)
-
-    hours = 0
-    minutes = 0
-    seconds = 0
-    micro_seconds = 0
-    timezone_offset = 0
-
-    if time_string_length > 10:
-      # If a time of day is specified the time string it should at least
-      # contain 'YYYY-MM-DD hh:mm:ss'.
-      if time_string[10] != u' ':
-        raise ValueError(u'Invalid time string.')
-
-      hours, minutes, seconds, micro_seconds, timezone_offset = (
-          self._CopyTimeFromString(time_string[11:]))
+    year = date_time_values.get(u'year', 0)
+    month = date_time_values.get(u'month', 0)
+    day_of_month = date_time_values.get(u'day_of_month', 0)
+    hours = date_time_values.get(u'hours', 0)
+    minutes = date_time_values.get(u'minutes', 0)
+    seconds = date_time_values.get(u'seconds', 0)
 
     time_tuple = (year, month, day_of_month, hours, minutes, seconds)
     self.timestamp = calendar.timegm(time_tuple)
     self.timestamp = int(self.timestamp)
 
-    self.timestamp += timezone_offset + self._FILETIME_TO_POSIX_BASE
-    self.timestamp = (self.timestamp * 1000000) + micro_seconds
+    timezone_offset = date_time_values.get(u'timezone_offset', None)
+    if timezone_offset:
+      self.timestamp += timezone_offset
+
+    self.timestamp += self._FILETIME_TO_POSIX_BASE
+    self.timestamp *= 1000000
+    self.timestamp += date_time_values.get(u'microseconds', 0)
     self.timestamp *= 10
 
   def CopyToStatTimeTuple(self):
@@ -84,7 +76,7 @@ class Filetime(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
-    if self.timestamp < 0:
+    if self.timestamp is None or self.timestamp < 0:
       return None, None
 
     timestamp, remainder = divmod(self.timestamp, 10000000)

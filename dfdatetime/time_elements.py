@@ -10,16 +10,20 @@ from dfdatetime import interface
 class TimeElements(interface.DateTimeValues):
   """Class that implements time elements."""
 
-  def __init__(self, time_elements_tuple):
+  def __init__(self, time_elements_tuple=None):
     """Initializes a time elements object.
 
     Args:
-      time_elements_tuple (tuple): time elements.
+      time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
+          time elements, contains year, month, day of month, hours, minutes, seconds
     """
     super(TimeElements, self).__init__()
     self._time_elements_tuple = time_elements_tuple
-    self._timestamp = calendar.timegm(self._time_elements_tuple)
-    self._timestamp = int(self._timestamp)
+    if time_elements_tuple is None:
+      self._timestamp = None
+    else:
+      self._timestamp = calendar.timegm(self._time_elements_tuple)
+      self._timestamp = int(self._timestamp)
     self.precision = definitions.PRECISION_1_SECOND
 
   def CopyFromString(self, time_string):
@@ -57,6 +61,8 @@ class TimeElements(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
+    if self._timestamp is None:
+      return None, None
     return self._timestamp, 0
 
   def GetPlasoTimestamp(self):
@@ -65,4 +71,6 @@ class TimeElements(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
+    if self._timestamp is None:
+      return
     return self._timestamp * 1000000

@@ -92,8 +92,10 @@ class PosixTime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
-    if self._timestamp is None:
+    if self.timestamp is None:
       return
+
     if self.microseconds is not None:
       return (self.timestamp * 1000000) + self.microseconds
+
     return self.timestamp * 1000000

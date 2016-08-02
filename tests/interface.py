@@ -141,7 +141,7 @@ class DateTimeValuesTest(unittest.TestCase):
           u'2010-08-12T21:06:31.546875+01:00')
 
   def testCopyTimeFromString(self):
-    """Tests the CopyTimeFromString function."""
+    """Tests the _CopyTimeFromString function."""
     date_time_values = interface.DateTimeValues()
 
     expected_time_tuple = (8, 4, 32, None, None)
@@ -185,6 +185,12 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._CopyTimeFromString(u'24:00:00')
 
     with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12b00:00')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00b00')
+
+    with self.assertRaises(ValueError):
       date_time_values._CopyTimeFromString(u'1s:00:00')
 
     with self.assertRaises(ValueError):
@@ -198,6 +204,24 @@ class DateTimeValuesTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       date_time_values._CopyTimeFromString(u'00:00:w0')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00.00')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00.0000')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00.00w')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00+01b00')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00+01:0w')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00+30:00')
 
   def testGetDayOfYear(self):
     """Tests the GetDayOfYear function."""

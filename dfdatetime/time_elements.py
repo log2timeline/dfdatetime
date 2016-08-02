@@ -15,7 +15,8 @@ class TimeElements(interface.DateTimeValues):
 
     Args:
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
-          time elements, contains year, month, day of month, hours, minutes, seconds
+          time elements, contains year, month, day of month, hours, minutes and
+          seconds
     """
     super(TimeElements, self).__init__()
     self._time_elements_tuple = time_elements_tuple

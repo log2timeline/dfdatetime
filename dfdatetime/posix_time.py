@@ -84,7 +84,7 @@ class PosixTime(interface.DateTimeValues):
     if self.microseconds is not None:
       return self.timestamp, self.microseconds * 10
 
-    return self.timestamp, 0
+    return self.timestamp, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -92,6 +92,8 @@ class PosixTime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
+    if self._timestamp is None:
+      return
     if self.microseconds is not None:
       return (self.timestamp * 1000000) + self.microseconds
     return self.timestamp * 1000000

@@ -221,6 +221,9 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._CopyTimeFromString(u'12:00:00+01:0w')
 
     with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00+0w:00')
+
+    with self.assertRaises(ValueError):
       date_time_values._CopyTimeFromString(u'12:00:00+30:00')
 
   def testGetDayOfYear(self):

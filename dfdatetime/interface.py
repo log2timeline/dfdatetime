@@ -110,11 +110,11 @@ class DateTimeValues(object):
       time_zone_hours, time_zone_minutes = divmod(time_zone_offset, 60)
 
       minutes += time_zone_minutes
-      if minutes < 0:
-        minutes += 60
-        hours -= 1
 
-      elif minutes >= 60:
+      # Since divmod makes sure the sign of time_zone_minutes is positive
+      # we only need to check the upper bound here, because time_zone_hours
+      # remains signed it is corrected accordingly.
+      if minutes >= 60:
         minutes -= 60
         hours += 1
 

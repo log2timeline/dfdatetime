@@ -64,7 +64,7 @@ class TimeElements(interface.DateTimeValues):
     """
     if self._timestamp is None:
       return None, None
-    return self._timestamp, 0
+    return self._timestamp, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

@@ -13,7 +13,7 @@ class DateTimeValuesTest(unittest.TestCase):
   # pylint: disable=protected-access
 
   def testCopyDateFromString(self):
-    """Tests the CopyDateFromString function."""
+    """Tests the _CopyDateFromString function."""
     date_time_values = interface.DateTimeValues()
 
     expected_date_tuple = (2010, 1, 1)
@@ -74,7 +74,7 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._CopyDateFromString(u'2010-04-31')
 
   def testCopyDateTimeFromString(self):
-    """Tests the CopyDateTimeFromString function."""
+    """Tests the _CopyDateTimeFromString function."""
     date_time_values = interface.DateTimeValues()
 
     expected_date_dict = {
@@ -109,6 +109,32 @@ class DateTimeValuesTest(unittest.TestCase):
     date_dict = date_time_values._CopyDateTimeFromString(
         u'2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        u'year': 2010, u'month': 8, u'day_of_month': 12,
+        u'hours': 20, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
+    date_dict = date_time_values._CopyDateTimeFromString(
+        u'2010-08-12 21:06:31.546875+01:00')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    # Test backwards date correction.
+    expected_date_dict = {
+        u'year': 2009, u'month': 12, u'day_of_month': 31,
+        u'hours': 23, u'minutes': 45, u'seconds': 0, u'microseconds': 123456}
+    date_dict = date_time_values._CopyDateTimeFromString(
+        u'2010-01-01 00:15:00.123456+00:30')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    # Test forward date correction.
+    expected_date_dict = {
+        u'year': 2010, u'month': 1, u'day_of_month': 1,
+        u'hours': 1, u'minutes': 15, u'seconds': 0, u'microseconds': 123456}
+    date_dict = date_time_values._CopyDateTimeFromString(
+        u'2009-12-31 23:45:00.123456-01:30')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyDateTimeFromString(u'')
 
     with self.assertRaises(ValueError):
       date_time_values._CopyDateTimeFromString(

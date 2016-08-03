@@ -38,23 +38,46 @@ class FiletimeTest(unittest.TestCase):
     filetime_object.CopyFromString(u'1601-01-02 00:00:00')
     self.assertEqual(filetime_object.timestamp, expected_timestamp)
 
+    with self.assertRaises(ValueError):
+      filetime_object.CopyFromString(u'1500-01-02 00:00:00')
+
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
-    filetime_object = filetime.Filetime()
-    filetime_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
 
-    expected_stat_time_tuple = (1281643591, 5468750)
+    expected_stat_time_tuple = (1281647191, 5468750)
+    stat_time_tuple = filetime_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+    filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
+
+    expected_stat_time_tuple = (None, None)
+    stat_time_tuple = filetime_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+    filetime_object = filetime.Filetime()
+
+    expected_stat_time_tuple = (None, None)
     stat_time_tuple = filetime_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
-    filetime_object = filetime.Filetime()
-    filetime_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
 
-    expected_micro_posix_timestamp = 1281643591546875
+    expected_micro_posix_timestamp = 1281647191546875
     micro_posix_timestamp = filetime_object.GetPlasoTimestamp()
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+
+    filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
+
+    micro_posix_timestamp = filetime_object.GetPlasoTimestamp()
+    self.assertIsNone(micro_posix_timestamp)
+
+    filetime_object = filetime.Filetime()
+
+    micro_posix_timestamp = filetime_object.GetPlasoTimestamp()
+    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

@@ -48,31 +48,45 @@ class FakeTimeTest(unittest.TestCase):
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
-    fake_time_object = fake_time.FakeTime()
-
-    expected_stat_time_tuple = (0, 0)
-    stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
-    self.assertNotEqual(stat_time_tuple, expected_stat_time_tuple)
-
     fake_time_object.CopyFromString(u'2010-08-12 21:06:31.546875')
 
     expected_stat_time_tuple = (1281647191, 5468750)
     stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+    fake_time_object.CopyFromString(u'2010-08-12 21:06:31')
+
+    expected_stat_time_tuple = (1281647191, None)
+    stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+    fake_time_object = fake_time.FakeTime()
+
+    expected_stat_time_tuple = (None, None)
+    stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
+    self.assertNotEqual(stat_time_tuple, expected_stat_time_tuple)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     fake_time_object = fake_time.FakeTime()
-
-    expected_micro_posix_timestamp = 0
-    micro_posix_timestamp = fake_time_object.GetPlasoTimestamp()
-    self.assertNotEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
-
     fake_time_object.CopyFromString(u'2010-08-12 21:06:31.546875')
 
     expected_micro_posix_timestamp = 1281647191546875
     micro_posix_timestamp = fake_time_object.GetPlasoTimestamp()
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object.CopyFromString(u'2010-08-12 21:06:31')
+
+    expected_micro_posix_timestamp = 1281647191000000
+    micro_posix_timestamp = fake_time_object.GetPlasoTimestamp()
+    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+
+    fake_time_object = fake_time.FakeTime()
+
+    micro_posix_timestamp = fake_time_object.GetPlasoTimestamp()
+    self.assertIsNone(micro_posix_timestamp)
+
 
 
 if __name__ == '__main__':

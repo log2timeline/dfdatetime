@@ -136,7 +136,7 @@ class FATDateTime(interface.DateTimeValues):
       return None, None
 
     timestamp = self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE
-    return timestamp, 0
+    return timestamp, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

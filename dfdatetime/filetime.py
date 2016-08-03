@@ -22,7 +22,7 @@ class Filetime(interface.DateTimeValues):
 
   # The difference between Jan 1, 1601 and Jan 1, 1970 in seconds.
   _FILETIME_TO_POSIX_BASE = 11644473600
-  _INT64_MAX = (1 << 63) - 1
+  _UINT64_MAX = (1 << 64) - 1
 
   def __init__(self, timestamp=None):
     """Initializes a FILETIME object.
@@ -79,13 +79,12 @@ class Filetime(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
-    if self.timestamp is None or self.timestamp < 0:
+    if (self.timestamp is None or self.timestamp < 0 or
+        self.timestamp > self._UINT64_MAX):
       return None, None
 
     timestamp, remainder = divmod(self.timestamp, 10000000)
     timestamp -= self._FILETIME_TO_POSIX_BASE
-    if timestamp > self._INT64_MAX:
-      return None, None
     return timestamp, remainder
 
   def GetPlasoTimestamp(self):
@@ -94,11 +93,9 @@ class Filetime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
-    if self.timestamp < 0:
+    if (self.timestamp is None or self.timestamp < 0 or
+        self.timestamp > self._UINT64_MAX):
       return
 
     timestamp, _ = divmod(self.timestamp, 10)
-    timestamp -= self._FILETIME_TO_POSIX_BASE * 1000000
-    if timestamp > self._INT64_MAX:
-      return
-    return timestamp
+    return timestamp - (self._FILETIME_TO_POSIX_BASE * 1000000)

@@ -74,6 +74,12 @@ class PosixTimeTest(unittest.TestCase):
     micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
 
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+    expected_micro_posix_timestamp = 1281643591000000
+    micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
+    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+
     posix_time_object = posix_time.PosixTime()
 
     micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()

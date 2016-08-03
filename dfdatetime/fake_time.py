@@ -62,7 +62,7 @@ class FakeTime(interface.DateTimeValues):
     if self._microseconds is not None:
       return self._timestamp, self._microseconds * 10
 
-    return self._timestamp, 0
+    return self._timestamp, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -70,6 +70,10 @@ class FakeTime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
+    if self._timestamp is None:
+      return
+
     if self._microseconds is not None:
       return (self._timestamp * 1000000) + self._microseconds
+
     return self._timestamp * 1000000

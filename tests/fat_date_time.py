@@ -46,6 +46,9 @@ class FATDateTime(unittest.TestCase):
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
+    with self.assertRaises(ValueError):
+      fat_date_time_object.CopyFromString(u'2200-01-02 00:00:00')
+
   def testGetNumberOfSeconds(self):
     """Tests the GetNumberOfSeconds function."""
     fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
@@ -79,18 +82,28 @@ class FATDateTime(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
-    expected_stat_time_tuple = (1281733592, 0)
+    expected_stat_time_tuple = (1281733592, None)
+    stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    expected_stat_time_tuple = (None, None)
     stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
-    fat_date_time_object = fat_date_time.FATDateTime()
-    fat_date_time_object.CopyFromString(u'2010-08-13 22:06:32.546875+01:00')
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
     expected_micro_posix_timestamp = 1281733592000000
     micro_posix_timestamp = fat_date_time_object.GetPlasoTimestamp()
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    micro_posix_timestamp = fat_date_time_object.GetPlasoTimestamp()
+    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

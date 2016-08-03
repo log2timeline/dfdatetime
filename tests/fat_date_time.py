@@ -47,39 +47,41 @@ class FATDateTime(unittest.TestCase):
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     with self.assertRaises(ValueError):
-      fat_date_time_object.CopyFromString(None)
-
-    with self.assertRaises(ValueError):
       fat_date_time_object.CopyFromString(u'2200-01-02 00:00:00')
 
   def testGetNumberOfSeconds(self):
-    """Tests the GetNumberOfSeconds function."""
-    fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+    """Tests the _GetNumberOfSeconds function."""
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    fat_date_time_object._GetNumberOfSeconds(0xa8d03d0c)
 
     # Invalid number of seconds.
     test_fat_date_time = (0xa8d03d0c & ~(0x1f << 16)) | ((30 & 0x1f) << 16)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(fat_date_time=test_fat_date_time)
+      fat_date_time_object._GetNumberOfSeconds(test_fat_date_time)
 
     # Invalid number of minutes.
     test_fat_date_time = (0xa8d03d0c & ~(0x3f << 21)) | ((60 & 0x3f) << 21)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(fat_date_time=test_fat_date_time)
+      fat_date_time_object._GetNumberOfSeconds(test_fat_date_time)
 
     # Invalid number of hours.
     test_fat_date_time = (0xa8d03d0c & ~(0x1f << 27)) | ((24 & 0x1f) << 27)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(fat_date_time=test_fat_date_time)
+      fat_date_time_object._GetNumberOfSeconds(test_fat_date_time)
 
     # Invalid day of month.
     test_fat_date_time = (0xa8d03d0c & ~0x1f) | (32 & 0x1f)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(fat_date_time=test_fat_date_time)
+      fat_date_time_object._GetNumberOfSeconds(test_fat_date_time)
 
     # Invalid month.
     test_fat_date_time = (0xa8d03d0c & ~(0x0f << 5)) | ((13 & 0x0f) << 5)
     with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(fat_date_time=test_fat_date_time)
+      fat_date_time_object._GetNumberOfSeconds(test_fat_date_time)
+
+    with self.assertRaises(ValueError):
+      fat_date_time_object._GetNumberOfSeconds(None)
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

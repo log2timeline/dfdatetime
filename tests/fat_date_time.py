@@ -47,6 +47,9 @@ class FATDateTime(unittest.TestCase):
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     with self.assertRaises(ValueError):
+      fat_date_time_object.CopyFromString(None)
+
+    with self.assertRaises(ValueError):
       fat_date_time_object.CopyFromString(u'2200-01-02 00:00:00')
 
   def testGetNumberOfSeconds(self):
@@ -77,9 +80,6 @@ class FATDateTime(unittest.TestCase):
     test_fat_date_time = (0xa8d03d0c & ~(0x0f << 5)) | ((13 & 0x0f) << 5)
     with self.assertRaises(ValueError):
       fat_date_time.FATDateTime(fat_date_time=test_fat_date_time)
-
-    with self.assertRaises(ValueError):
-      fat_date_time.FATDateTime(fat_date_time=0)
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

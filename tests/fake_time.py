@@ -48,12 +48,14 @@ class FakeTimeTest(unittest.TestCase):
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
+    fake_time_object = fake_time.FakeTime()
     fake_time_object.CopyFromString(u'2010-08-12 21:06:31.546875')
 
     expected_stat_time_tuple = (1281647191, 5468750)
     stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+    fake_time_object = fake_time.FakeTime()
     fake_time_object.CopyFromString(u'2010-08-12 21:06:31')
 
     expected_stat_time_tuple = (1281647191, None)
@@ -85,7 +87,7 @@ class FakeTimeTest(unittest.TestCase):
     fake_time_object = fake_time.FakeTime()
 
     micro_posix_timestamp = fake_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
+    self.assertIsNotNone(micro_posix_timestamp)
 
 
 

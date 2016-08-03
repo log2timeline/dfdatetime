@@ -63,10 +63,11 @@ class FakeTimeTest(unittest.TestCase):
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
     fake_time_object = fake_time.FakeTime()
+    fake_time_object._timestamp = None
 
     expected_stat_time_tuple = (None, None)
     stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
-    self.assertNotEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
@@ -85,10 +86,10 @@ class FakeTimeTest(unittest.TestCase):
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
 
     fake_time_object = fake_time.FakeTime()
+    fake_time_object._timestamp = None
 
     micro_posix_timestamp = fake_time_object.GetPlasoTimestamp()
-    self.assertIsNotNone(micro_posix_timestamp)
-
+    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

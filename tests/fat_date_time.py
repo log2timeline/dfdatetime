@@ -78,6 +78,9 @@ class FATDateTime(unittest.TestCase):
     with self.assertRaises(ValueError):
       fat_date_time.FATDateTime(fat_date_time=test_fat_date_time)
 
+    with self.assertRaises(ValueError):
+      fat_date_time.FATDateTime(fat_date_time=0)
+
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)

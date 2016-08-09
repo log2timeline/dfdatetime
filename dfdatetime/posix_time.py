@@ -23,7 +23,7 @@ class PosixTime(interface.DateTimeValues):
   """
 
   def __init__(self, microseconds=None, timestamp=None):
-    """Initializes the POSIX timestamp object.
+    """Initializes a POSIX timestamp object.
 
     Args:
       micro_seconds (Optional[int]): number of microseconds.

@@ -57,7 +57,7 @@ class FATDateTime(interface.DateTimeValues):
           value is out of bounds.
     """
     if fat_date_time is None:
-      raise ValueError(u'Unusupported FAT date time.')
+      raise ValueError(u'Unsupported FAT date time.')
 
     day_of_month = (fat_date_time & 0x1f)
     month = ((fat_date_time >> 5) & 0x0f)

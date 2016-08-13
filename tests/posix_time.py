@@ -8,7 +8,7 @@ from dfdatetime import posix_time
 
 
 class PosixTimeTest(unittest.TestCase):
-  """Tests for the POSIX timestamp object."""
+  """Tests for the POSIX timestamp."""
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""

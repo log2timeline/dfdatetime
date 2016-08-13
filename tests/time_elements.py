@@ -8,7 +8,7 @@ from dfdatetime import time_elements
 
 
 class TimeElementsTimeTest(unittest.TestCase):
-  """Tests for the time elements object."""
+  """Tests for the time elements."""
 
   # pylint: disable=protected-access
 

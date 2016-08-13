@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Tests for the fake timestamp implementation."""
+"""Tests for the fake time implementation."""
 
 import unittest
 
@@ -8,7 +8,7 @@ from dfdatetime import fake_time
 
 
 class FakeTimeTest(unittest.TestCase):
-  """Tests for the fake timestamp object."""
+  """Tests for the fake time."""
 
   # pylint: disable=protected-access
 

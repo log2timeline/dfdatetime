@@ -35,7 +35,7 @@ class FATDateTime(interface.DateTimeValues):
   _FAT_DATE_TO_POSIX_BASE = 315532800
 
   def __init__(self, fat_date_time=None):
-    """Initializes a FAT date time object.
+    """Initializes a FAT date time.
 
     Args:
       fat_date_time (Optional[int]): FAT date time.

@@ -21,7 +21,7 @@ class FakeTime(interface.DateTimeValues):
   """
 
   def __init__(self):
-    """Initializes the fake timestamp object."""
+    """Initializes a fake timestamp."""
     super(FakeTime, self).__init__()
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)

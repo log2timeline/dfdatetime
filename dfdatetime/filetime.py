@@ -28,7 +28,7 @@ class Filetime(interface.DateTimeValues):
   _UINT64_MAX = (1 << 64) - 1
 
   def __init__(self, timestamp=None):
-    """Initializes a FILETIME object.
+    """Initializes a FILETIME timestamp.
 
     Args:
       timestamp (Optional[int]): FILETIME timestamp.

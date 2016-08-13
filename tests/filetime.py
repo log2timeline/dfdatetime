@@ -8,7 +8,7 @@ from dfdatetime import filetime
 
 
 class FiletimeTest(unittest.TestCase):
-  """Tests for the FILETIME timestamp object."""
+  """Tests for the FILETIME timestamp."""
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""

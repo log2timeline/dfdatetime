@@ -21,7 +21,7 @@ class DateTimeValues(object):
   _SECONDS_PER_DAY = 24 * 60 * 60
 
   def __init__(self):
-    """Initializes a date time values object."""
+    """Initializes date time values."""
     super(DateTimeValues, self).__init__()
     self.precision = None
     self.time_zone = u'UTC'

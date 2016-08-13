@@ -8,7 +8,7 @@ from dfdatetime import fat_date_time
 
 
 class FATDateTime(unittest.TestCase):
-  """Tests for the FAT date time object."""
+  """Tests for the FAT date time."""
 
   # pylint: disable=protected-access
 

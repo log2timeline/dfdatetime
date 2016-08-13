@@ -14,8 +14,8 @@ class FATDateTime(interface.DateTimeValues):
 
   The FAT date and time is a 32-bit value containing two 16-bit values:
     * The date (lower 16-bit).
-      * bits 0 - 4:  day of month, where 1 represents the first day
-      * bits 5 - 8:  month of year, where 1 represent January
+      * bits 0 - 4: day of month, where 1 represents the first day
+      * bits 5 - 8: month of year, where 1 represent January
       * bits 9 - 15: year since 1980
     * The time of day (upper 16-bit).
       * bits 0 - 4: seconds (in 2 second intervals)
@@ -70,6 +70,7 @@ class FATDateTime(interface.DateTimeValues):
       raise ValueError(u'Day of month value out of bounds.')
 
     number_of_days = self._GetDayOfYear(1980 + year, month, day_of_month)
+    number_of_days -= 1
     for past_year in range(0, year):
       number_of_days += self._GetNumberOfDaysInYear(past_year)
 

@@ -84,7 +84,7 @@ class FATDateTime(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
-    expected_stat_time_tuple = (1281733592, None)
+    expected_stat_time_tuple = (1281647192, None)
     stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
@@ -98,7 +98,7 @@ class FATDateTime(unittest.TestCase):
     """Tests the GetPlasoTimestamp function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
-    expected_micro_posix_timestamp = 1281733592000000
+    expected_micro_posix_timestamp = 1281647192000000
     micro_posix_timestamp = fat_date_time_object.GetPlasoTimestamp()
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
 

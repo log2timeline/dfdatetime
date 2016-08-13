@@ -12,10 +12,15 @@ class SemanticTime(interface.DateTimeValues):
         "Never", "Not set".
   """
 
-  def __init__(self):
-    """Initializes a semantic time."""
+  def __init__(self, string=None):
+    """Initializes a semantic time.
+
+    Args:
+      string (str): semantic representation of the time, such as:
+          "Never", "Not set".
+    """
     super(SemanticTime, self).__init__()
-    self.string = None
+    self.string = string
 
   def CopyFromString(self, time_string):
     """Copies semantic time from a string containing a date and time value.

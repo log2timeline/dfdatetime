@@ -7,6 +7,9 @@ from dfdatetime import interface
 class SemanticTime(interface.DateTimeValues):
   """Class that implements semantic time.
 
+  Semantic time is term to describe date and time values that have specific
+  meaning such as: "Never", "Yesterday", "Not set".
+
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
@@ -38,7 +41,7 @@ class SemanticTime(interface.DateTimeValues):
     self.string = time_string
 
   def CopyToStatTimeTuple(self):
-    """Copies the fake timestamp to a stat timestamp tuple.
+    """Copies the semantic timestamp to a stat timestamp tuple.
 
     Returns:
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in

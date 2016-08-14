@@ -8,6 +8,9 @@ class SemanticTime(interface.DateTimeValues):
   """Class that implements semantic time.
 
   Attributes:
+    is_local_time (bool): True if the date and time value is in local time.
+    precision (str): precision of the date and time value, which should
+        be one of the PRECISION_VALUES in definitions.
     string (str): semantic representation of the time, such as:
         "Never", "Not set".
   """

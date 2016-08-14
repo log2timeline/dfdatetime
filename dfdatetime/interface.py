@@ -10,9 +10,9 @@ class DateTimeValues(object):
   This is the super class of different date and time representations.
 
   Attributes:
+    is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    time_zone (str): time zone the date and time values are in.
   """
 
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
@@ -23,8 +23,8 @@ class DateTimeValues(object):
   def __init__(self):
     """Initializes date time values."""
     super(DateTimeValues, self).__init__()
+    self.is_local_time = False
     self.precision = None
-    self.time_zone = u'UTC'
 
   def _CopyDateFromString(self, date_string):
     """Copies a date from a string.

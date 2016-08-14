@@ -18,11 +18,11 @@ class PosixTime(interface.DateTimeValues):
   are known to be used.
 
   Attributes:
+    is_local_time (bool): True if the date and time value is in local time.
     micro_seconds (int): number of microseconds
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): POSIX timestamp.
-    time_zone (str): time zone the date and time values are in.
   """
 
   def __init__(self, microseconds=None, timestamp=None):
@@ -72,7 +72,7 @@ class PosixTime(interface.DateTimeValues):
     else:
       self.precision = definitions.PRECISION_1_SECOND
 
-    self.time_zone = u'UTC'
+    self.is_local_time = False
 
   def CopyToStatTimeTuple(self):
     """Copies the POSIX timestamp to a stat timestamp tuple.

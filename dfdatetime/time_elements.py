@@ -14,9 +14,9 @@ class TimeElements(interface.DateTimeValues):
   hours, minutes and seconds.
 
   Attributes:
+    is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    time_zone (str): time zone the date and time values are in.
   """
 
   def __init__(self, time_elements_tuple=None):
@@ -62,7 +62,7 @@ class TimeElements(interface.DateTimeValues):
     self._timestamp = calendar.timegm(self._time_elements_tuple)
     self._timestamp = int(self._timestamp)
 
-    self.time_zone = u'UTC'
+    self.is_local_time = False
 
   def CopyToStatTimeTuple(self):
     """Copies the time elements to a stat timestamp tuple.

@@ -15,9 +15,9 @@ class FakeTime(interface.DateTimeValues):
   it contains the current time in UTC in microsecond precision.
 
   Attributes:
+    is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    time_zone (str): time zone the date and time values are in.
   """
 
   def __init__(self):
@@ -56,7 +56,7 @@ class FakeTime(interface.DateTimeValues):
 
     self._microseconds = date_time_values.get(u'microseconds', None)
 
-    self.time_zone = u'UTC'
+    self.is_local_time = False
 
   def CopyToStatTimeTuple(self):
     """Copies the fake timestamp to a stat timestamp tuple.

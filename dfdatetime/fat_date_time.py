@@ -26,9 +26,9 @@ class FATDateTime(interface.DateTimeValues):
   in the local time of the computer.
 
   Attributes:
+    is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    time_zone (str): time zone the date and time values are in.
   """
 
   # The difference between Jan 1, 1980 and Jan 1, 1970 in seconds.
@@ -126,7 +126,7 @@ class FATDateTime(interface.DateTimeValues):
 
     self._number_of_seconds = timestamp - self._FAT_DATE_TO_POSIX_BASE
 
-    self.time_zone = u'UTC'
+    self.is_local_time = False
 
   def CopyToStatTimeTuple(self):
     """Copies the FAT date time to a stat timestamp tuple.

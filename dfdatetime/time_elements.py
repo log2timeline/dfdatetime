@@ -62,6 +62,49 @@ class TimeElements(interface.DateTimeValues):
 
     self.is_local_time = False
 
+  def CopyFromStringISO8601(self, time_string):
+    """Copies time elements from a ISO 8601 date and time string.
+
+    Currently not supported:
+    * Duration notation: "P..."
+    * Week notation "2016-W33"
+    * Date with week number notation "2016-W33-3"
+    * Date without year notation "--08-17"
+    * Ordinal date notation "2016-230"
+    * Seconds fraction of a size other than 3 or 6
+
+    Args:
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DDThh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and time zone offset are optional. The default time zone
+          is UTC.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if not time_string:
+      raise ValueError(u'Invalid time string.')
+
+    time_string_length = len(time_string)
+    if time_string_length >= 11:
+      if time_string[10] != u'T':
+        raise ValueError(u'Invalid time string.')
+
+      # Replace "T" by " ".
+      time_string = u'{0:s} {1:s}'.format(time_string[:10], time_string[11:])
+
+    if time_string_length >= 20 and time_string[19] == u',':
+      # Replace "," by ".".
+      time_string = u'{0:s}.{1:s}'.format(time_string[:19], time_string[20:])
+
+    if time_string.endswith(u'Z'):
+      time_string = time_string[:-1]
+
+    self.CopyFromString(time_string)
+
   def CopyToStatTimeTuple(self):
     """Copies the time elements to a stat timestamp tuple.
 

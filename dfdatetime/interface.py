@@ -9,7 +9,7 @@ class DateTimeValues(object):
 
   Attributes:
     precision (str): precision of the date and time value, which should
-        be one the PRECISION_VALUES in definitions.
+        be one of the PRECISION_VALUES in definitions.
     time_zone (str): time zone the date and time values are in.
   """
 
@@ -102,7 +102,7 @@ class DateTimeValues(object):
     # contain 'YYYY-MM-DD hh:mm:ss'.
     if time_string[10] != u' ':
       raise ValueError(
-          u'Invalid time string - unsupported date and time separator.')
+          u'Invalid time string - space missing as date and time separator.')
 
     hours, minutes, seconds, microseconds, time_zone_offset = (
         self._CopyTimeFromString(time_string[11:]))

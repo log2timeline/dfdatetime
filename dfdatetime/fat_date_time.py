@@ -27,7 +27,7 @@ class FATDateTime(interface.DateTimeValues):
 
   Attributes:
     precision (str): precision of the date and time value, which should
-        be one the PRECISION_VALUES in defintions.
+        be one of the PRECISION_VALUES in definitions.
     time_zone (str): time zone the date and time values are in.
   """
 

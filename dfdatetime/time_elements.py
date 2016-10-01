@@ -10,12 +10,12 @@ from dfdatetime import interface
 class TimeElements(interface.DateTimeValues):
   """Class that implements time elements.
 
-  Time elements contain seperate values for year, month, day of month,
-  hours, minutes an seconds.
+  Time elements contain separate values for year, month, day of month,
+  hours, minutes and seconds.
 
   Attributes:
     precision (str): precision of the date and time value, which should
-        be one the PRECISION_VALUES in defintions.
+        be one of the PRECISION_VALUES in definitions.
     time_zone (str): time zone the date and time values are in.
   """
 

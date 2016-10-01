@@ -7,6 +7,8 @@ import abc
 class DateTimeValues(object):
   """Defines the date time values interface.
 
+  This is the super class of different date and time representations.
+
   Attributes:
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.

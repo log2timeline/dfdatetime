@@ -8,15 +8,24 @@ from dfdatetime import interface
 
 
 class TimeElements(interface.DateTimeValues):
-  """Class that implements time elements."""
+  """Class that implements time elements.
+
+  Time elements contain seperate values for year, month, day of month,
+  hours, minutes an seconds.
+
+  Attributes:
+    precision (str): precision of the date and time value, which should
+        be one the PRECISION_VALUES in defintions.
+    time_zone (str): time zone the date and time values are in.
+  """
 
   def __init__(self, time_elements_tuple=None):
-    """Initializes a time elements object.
+    """Initializes time elements.
 
     Args:
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
-          seconds
+          seconds.
     """
     super(TimeElements, self).__init__()
     self._time_elements_tuple = time_elements_tuple

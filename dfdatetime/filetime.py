@@ -17,7 +17,10 @@ class Filetime(interface.DateTimeValues):
   2 x 32-bit integers and is presumed to be unsigned.
 
   Attributes:
+    precision (str): precision of the date and time value, which should
+        be one the PRECISION_VALUES in defintions.
     timestamp (int): FILETIME timestamp.
+    time_zone (str): time zone the date and time values are in.
   """
 
   # The difference between Jan 1, 1601 and Jan 1, 1970 in seconds.
@@ -47,7 +50,7 @@ class Filetime(interface.DateTimeValues):
           is UTC.
 
     Raises:
-      ValueError: if the date string is invalid or not supported.
+      ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
@@ -59,7 +62,7 @@ class Filetime(interface.DateTimeValues):
     seconds = date_time_values.get(u'seconds', 0)
 
     if year < 1601:
-      raise ValueError(u'Year value not supported.')
+      raise ValueError(u'Year value not supported: {0!s}.'.format(year))
 
     time_tuple = (year, month, day_of_month, hours, minutes, seconds)
     self.timestamp = calendar.timegm(time_tuple)

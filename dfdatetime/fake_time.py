@@ -9,14 +9,23 @@ from dfdatetime import interface
 
 
 class FakeTime(interface.DateTimeValues):
-  """Class that implements a fake timestamp."""
+  """Class that implements a fake timestamp.
+
+  The fake timestamp is intended for testing purposes. On initialization
+  it contains the current time in UTC in microsecond precision.
+
+  Attributes:
+    precision (str): precision of the date and time value, which should
+        be one the PRECISION_VALUES in defintions.
+    time_zone (str): time zone the date and time values are in.
+  """
 
   def __init__(self):
     """Initializes the fake timestamp object."""
     super(FakeTime, self).__init__()
     # Note that time.time() and divmod return floating point values.
-    timestamp, fraction_of_seconds = divmod(time.time(), 1)
-    self._microseconds = int(fraction_of_seconds * 1000000)
+    timestamp, fraction_of_second = divmod(time.time(), 1)
+    self._microseconds = int(fraction_of_second * 1000000)
     self._timestamp = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
 

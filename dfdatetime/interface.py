@@ -5,11 +5,11 @@ import abc
 
 
 class DateTimeValues(object):
-  """Class that defines the date time values interface.
+  """Defines the date time values interface.
 
-  Args:
+  Attributes:
     precision (str): precision of the date and time value, which should
-        be one the PRECISION_VALUES in defintions.
+        be one the PRECISION_VALUES in definitions.
     time_zone (str): time zone the date and time values are in.
   """
 
@@ -101,7 +101,8 @@ class DateTimeValues(object):
     # If a time of day is specified the time string it should at least
     # contain 'YYYY-MM-DD hh:mm:ss'.
     if time_string[10] != u' ':
-      raise ValueError(u'Invalid time string.')
+      raise ValueError(
+          u'Invalid time string - unsupported date and time separator.')
 
     hours, minutes, seconds, microseconds, time_zone_offset = (
         self._CopyTimeFromString(time_string[11:]))
@@ -212,38 +213,38 @@ class DateTimeValues(object):
 
     if time_string_length > 8:
       if time_string[8] != u'.':
-        time_zone_index = 8
+        time_zone_string_index = 8
       else:
-        for time_zone_index in range(8, time_string_length):
-          if time_string[time_zone_index] in (u'+', u'-'):
+        for time_zone_string_index in range(8, time_string_length):
+          if time_string[time_zone_string_index] in (u'+', u'-'):
             break
 
-          # The calculation that follow rely on the time zone index to point
-          # beyond the string in case no time zone offset was defined.
-          if time_zone_index == time_string_length - 1:
-            time_zone_index += 1
+          # The calculations that follow rely on the time zone string index
+          # to point beyond the string in case no time zone offset was defined.
+          if time_zone_string_index == time_string_length - 1:
+            time_zone_string_index += 1
 
-      if time_zone_index > 8:
-        fraction_of_seconds_length = time_zone_index - 9
+      if time_zone_string_index > 8:
+        fraction_of_seconds_length = time_zone_string_index - 9
         if fraction_of_seconds_length not in (3, 6):
           raise ValueError(u'Invalid time string.')
 
         try:
-          microseconds = int(time_string[9:time_zone_index], 10)
+          microseconds = int(time_string[9:time_zone_string_index], 10)
         except ValueError:
           raise ValueError(u'Unable to parse fraction of seconds.')
 
         if fraction_of_seconds_length == 3:
           microseconds *= 1000
 
-      if time_zone_index < time_string_length:
-        if (time_string_length - time_zone_index != 6 or
-            time_string[time_zone_index + 3] != u':'):
+      if time_zone_string_index < time_string_length:
+        if (time_string_length - time_zone_string_index != 6 or
+            time_string[time_zone_string_index + 3] != u':'):
           raise ValueError(u'Invalid time string.')
 
         try:
-          time_zone_offset = int(
-              time_string[time_zone_index + 1:time_zone_index + 3])
+          time_zone_offset = int(time_string[
+              time_zone_string_index + 1:time_zone_string_index + 3])
         except ValueError:
           raise ValueError(u'Unable to parse time zone hours offset.')
 
@@ -253,14 +254,14 @@ class DateTimeValues(object):
         time_zone_offset *= 60
 
         try:
-          time_zone_offset += int(
-              time_string[time_zone_index + 4:time_zone_index + 6])
+          time_zone_offset += int(time_string[
+              time_zone_string_index + 4:time_zone_string_index + 6])
         except ValueError:
           raise ValueError(u'Unable to parse time zone minutes offset.')
 
         # Note that when the sign of the time zone offset is negative
         # the difference needs to be added. We do so by flipping the sign.
-        if time_string[time_zone_index] != u'-':
+        if time_string[time_zone_string_index] != u'-':
           time_zone_offset *= -1
 
     return hours, minutes, seconds, microseconds, time_zone_offset

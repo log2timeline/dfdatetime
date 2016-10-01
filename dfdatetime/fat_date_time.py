@@ -24,6 +24,11 @@ class FATDateTime(interface.DateTimeValues):
 
   The FAT date time has no time zone information and is typically stored
   in the local time of the computer.
+
+  Attributes:
+    precision (str): precision of the date and time value, which should
+        be one the PRECISION_VALUES in defintions.
+    time_zone (str): time zone the date and time values are in.
   """
 
   # The difference between Jan 1, 1980 and Jan 1, 1970 in seconds.
@@ -56,9 +61,6 @@ class FATDateTime(interface.DateTimeValues):
       ValueError: if the month, day of month, hours, minutes or seconds
           value is out of bounds.
     """
-    if fat_date_time is None:
-      raise ValueError(u'Unsupported FAT date time.')
-
     day_of_month = (fat_date_time & 0x1f)
     month = ((fat_date_time >> 5) & 0x0f)
     year = (fat_date_time >> 9) & 0x7f
@@ -103,7 +105,7 @@ class FATDateTime(interface.DateTimeValues):
           is UTC.
 
     Raises:
-      ValueError: if the date string is invalid or not supported.
+      ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
@@ -115,7 +117,7 @@ class FATDateTime(interface.DateTimeValues):
     seconds = date_time_values.get(u'seconds', 0)
 
     if year < 1980 or year > (1980 + 0x7f):
-      raise ValueError(u'Year value not supported.')
+      raise ValueError(u'Year value not supported: {0!s}.'.format(year))
 
     time_tuple = (year, month, day_of_month, hours, minutes, seconds)
     timestamp = calendar.timegm(time_tuple)

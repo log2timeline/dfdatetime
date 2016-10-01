@@ -19,7 +19,10 @@ class PosixTime(interface.DateTimeValues):
 
   Attributes:
     micro_seconds (int): number of microseconds
+    precision (str): precision of the date and time value, which should
+        be one the PRECISION_VALUES in defintions.
     timestamp (int): POSIX timestamp.
+    time_zone (str): time zone the date and time values are in.
   """
 
   def __init__(self, microseconds=None, timestamp=None):

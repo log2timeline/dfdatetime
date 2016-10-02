@@ -10,6 +10,8 @@ from dfdatetime import fat_date_time
 class FATDateTime(unittest.TestCase):
   """Tests for the FAT date time."""
 
+  # pylint: disable=protected-access
+
   def testGetNumberOfSeconds(self):
     """Tests the _GetNumberOfSeconds function."""
     fat_date_time_object = fat_date_time.FATDateTime()

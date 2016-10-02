@@ -17,46 +17,52 @@ class TimeElementsTimeTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElements()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_timestamp = 1281571200
+    expected_number_of_seconds = 1281571200
     time_elements_object.CopyFromString(u'2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._timestamp, expected_timestamp)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_timestamp = 1281647191
+    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromString(u'2010-08-12 21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._timestamp, expected_timestamp)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_timestamp = 1281647191
+    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromString(u'2010-08-12 21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._timestamp, expected_timestamp)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31)
-    expected_timestamp = 1281650791
+    expected_number_of_seconds = 1281650791
     time_elements_object.CopyFromString(u'2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._timestamp, expected_timestamp)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
-    expected_timestamp = 1281643591
+    expected_number_of_seconds = 1281643591
     time_elements_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._timestamp, expected_timestamp)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0)
-    expected_timestamp = -11644387200
+    expected_number_of_seconds = -11644387200
     time_elements_object.CopyFromString(u'1601-01-02 00:00:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._timestamp, expected_timestamp)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
@@ -78,14 +84,15 @@ class TimeElementsTimeTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElements(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
-    expected_micro_posix_timestamp = 1281643591000000
-    micro_posix_timestamp = time_elements_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    expected_micro_posix_number_of_seconds = 1281643591000000
+    micro_posix_number_of_seconds = time_elements_object.GetPlasoTimestamp()
+    self.assertEqual(
+        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
 
     time_elements_object = time_elements.TimeElements()
 
-    micro_posix_timestamp = time_elements_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
+    micro_posix_number_of_seconds = time_elements_object.GetPlasoTimestamp()
+    self.assertIsNone(micro_posix_number_of_seconds)
 
 
 if __name__ == '__main__':

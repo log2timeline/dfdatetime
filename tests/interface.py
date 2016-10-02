@@ -227,7 +227,7 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._CopyTimeFromString(u'12:00:00+30:00')
 
   def testGetDayOfYear(self):
-    """Tests the GetDayOfYear function."""
+    """Tests the _GetDayOfYear function."""
     date_time_values = interface.DateTimeValues()
 
     day_of_year = date_time_values._GetDayOfYear(1999, 1, 1)
@@ -261,7 +261,7 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._GetDayOfYear(1999, 1, 32)
 
   def testGetDaysPerMonth(self):
-    """Tests the GetDaysPerMonth function."""
+    """Tests the _GetDaysPerMonth function."""
     date_time_values = interface.DateTimeValues()
 
     expected_days_per_month = list(interface.DateTimeValues._DAYS_PER_MONTH)
@@ -287,15 +287,43 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._GetDaysPerMonth(1999, 13)
 
   def testGetNumberOfDaysInYear(self):
-    """Tests the GetNumberOfDaysInYear function."""
+    """Tests the _GetNumberOfDaysInYear function."""
     date_time_values = interface.DateTimeValues()
 
     self.assertEqual(date_time_values._GetNumberOfDaysInYear(1999), 365)
     self.assertEqual(date_time_values._GetNumberOfDaysInYear(2000), 366)
     self.assertEqual(date_time_values._GetNumberOfDaysInYear(1996), 366)
 
+  def testGetNumberOfSecondsFromElements(self):
+    """Tests the _GetNumberOfSecondsFromElements function."""
+    date_time_values = interface.DateTimeValues()
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        2010, 8, 12, 0, 0, 0)
+    self.assertEqual(number_of_seconds, 1281571200)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        2010, 8, 12, None, None, None)
+    self.assertEqual(number_of_seconds, 1281571200)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        2010, 8, 12, 21, 6, 31)
+    self.assertEqual(number_of_seconds, 1281647191)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        1601, 1, 2, 0, 0, 0)
+    self.assertEqual(number_of_seconds, -11644387200)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        0, 1, 2, 0, 0, 0)
+    self.assertIsNone(number_of_seconds)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        2010, 13, 12, 21, 6, 31)
+    self.assertIsNone(number_of_seconds)
+
   def testIsLeapYear(self):
-    """Tests the IsLeapYear function."""
+    """Tests the _IsLeapYear function."""
     date_time_values = interface.DateTimeValues()
 
     self.assertFalse(date_time_values._IsLeapYear(1999))

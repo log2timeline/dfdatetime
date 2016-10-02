@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Fake timestamp implementation."""
 
-import calendar
 import time
 
 from dfdatetime import definitions
@@ -26,7 +25,7 @@ class FakeTime(interface.DateTimeValues):
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
     self._microseconds = int(fraction_of_second * 1000000)
-    self._timestamp = int(timestamp)
+    self._number_of_seconds = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
 
   def CopyFromString(self, time_string):
@@ -50,9 +49,8 @@ class FakeTime(interface.DateTimeValues):
     minutes = date_time_values.get(u'minutes', 0)
     seconds = date_time_values.get(u'seconds', 0)
 
-    time_tuple = (year, month, day_of_month, hours, minutes, seconds)
-    self._timestamp = calendar.timegm(time_tuple)
-    self._timestamp = int(self._timestamp)
+    self._number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds)
 
     self._microseconds = date_time_values.get(u'microseconds', None)
 
@@ -65,13 +63,13 @@ class FakeTime(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
-    if self._timestamp is None:
+    if self._number_of_seconds is None:
       return None, None
 
     if self._microseconds is not None:
-      return self._timestamp, self._microseconds * 10
+      return self._number_of_seconds, self._microseconds * 10
 
-    return self._timestamp, None
+    return self._number_of_seconds, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -79,10 +77,10 @@ class FakeTime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
-    if self._timestamp is None:
+    if self._number_of_seconds is None:
       return
 
     if self._microseconds is not None:
-      return (self._timestamp * 1000000) + self._microseconds
+      return (self._number_of_seconds * 1000000) + self._microseconds
 
-    return self._timestamp * 1000000
+    return self._number_of_seconds * 1000000

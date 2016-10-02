@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Time elements implementation."""
 
-import calendar
-
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -28,12 +26,12 @@ class TimeElements(interface.DateTimeValues):
           seconds.
     """
     super(TimeElements, self).__init__()
-    self._time_elements_tuple = time_elements_tuple
     if time_elements_tuple is None:
-      self._timestamp = None
+      self._number_of_seconds = None
     else:
-      self._timestamp = calendar.timegm(self._time_elements_tuple)
-      self._timestamp = int(self._timestamp)
+      self._number_of_seconds = self._GetNumberOfSecondsFromElements(
+          *time_elements_tuple)
+    self._time_elements_tuple = time_elements_tuple
     self.precision = definitions.PRECISION_1_SECOND
 
   def CopyFromString(self, time_string):
@@ -59,8 +57,8 @@ class TimeElements(interface.DateTimeValues):
 
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
-    self._timestamp = calendar.timegm(self._time_elements_tuple)
-    self._timestamp = int(self._timestamp)
+    self._number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds)
 
     self.is_local_time = False
 
@@ -71,9 +69,9 @@ class TimeElements(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
-    if self._timestamp is None:
+    if self._number_of_seconds is None:
       return None, None
-    return self._timestamp, None
+    return self._number_of_seconds, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -81,6 +79,6 @@ class TimeElements(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
-    if self._timestamp is None:
+    if self._number_of_seconds is None:
       return
-    return self._timestamp * 1000000
+    return self._number_of_seconds * 1000000

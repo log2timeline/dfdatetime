@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """FAT date time implementation."""
 
-import calendar
-
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -120,11 +118,10 @@ class FATDateTime(interface.DateTimeValues):
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError(u'Year value not supported: {0!s}.'.format(year))
 
-    time_tuple = (year, month, day_of_month, hours, minutes, seconds)
-    timestamp = calendar.timegm(time_tuple)
-    timestamp = int(timestamp)
+    self._number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds)
 
-    self._number_of_seconds = timestamp - self._FAT_DATE_TO_POSIX_BASE
+    self._number_of_seconds -= self._FAT_DATE_TO_POSIX_BASE
 
     self.is_local_time = False
 

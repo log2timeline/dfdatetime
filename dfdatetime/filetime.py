@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """FILETIME timestamp implementation."""
 
-import calendar
-
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -64,9 +62,8 @@ class Filetime(interface.DateTimeValues):
     if year < 1601:
       raise ValueError(u'Year value not supported: {0!s}.'.format(year))
 
-    time_tuple = (year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp = calendar.timegm(time_tuple)
-    self.timestamp = int(self.timestamp)
+    self.timestamp = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds)
 
     self.timestamp += self._FILETIME_TO_POSIX_BASE
     self.timestamp *= 1000000

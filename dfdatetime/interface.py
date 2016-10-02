@@ -2,6 +2,7 @@
 """Date and time values interface."""
 
 import abc
+import calendar
 
 
 class DateTimeValues(object):
@@ -329,6 +330,34 @@ class DateTimeValues(object):
     if self._IsLeapYear(year):
       return 366
     return 365
+
+  def _GetNumberOfSecondsFromElements(
+      self, year, month, day, hours, minutes, seconds):
+    """Retrieves the number of seconds from the data and time elements.
+
+    Args:
+      year (int): year e.g. 1970.
+      month (int): month of year.
+      day(int): day of month.
+      hours (int): hours.
+      minutes (int): minutes.
+      seconds (int): seconds.
+
+    Returns:
+      int: number of seconds since January 1, 1970 00:00:00 or None.
+    """
+    if not year or not month or not day:
+      return
+
+    time_elements_tuple = (
+        year, month, day, hours or 0, minutes or 0, seconds or 0)
+
+    try:
+      number_of_seconds = calendar.timegm(time_elements_tuple)
+    except ValueError:
+      return
+
+    return int(number_of_seconds)
 
   def _IsLeapYear(self, year):
     """Determines if a year is a leap year.

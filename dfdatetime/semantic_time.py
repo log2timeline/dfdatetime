@@ -45,7 +45,7 @@ class SemanticTime(interface.DateTimeValues):
 
     Returns:
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds.
+          100 nano seconds, which will always be 0, 0.
     """
     return 0, 0
 
@@ -53,6 +53,6 @@ class SemanticTime(interface.DateTimeValues):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
-      int: a POSIX timestamp in microseconds.
+      int: a POSIX timestamp in microseconds, which will always be 0.
     """
     return 0

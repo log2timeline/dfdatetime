@@ -51,7 +51,6 @@ class FakeTime(interface.DateTimeValues):
 
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-
     self._microseconds = date_time_values.get(u'microseconds', None)
 
     self.is_local_time = False

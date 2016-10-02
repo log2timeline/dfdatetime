@@ -120,7 +120,6 @@ class FATDateTime(interface.DateTimeValues):
 
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-
     self._number_of_seconds -= self._FAT_DATE_TO_POSIX_BASE
 
     self.is_local_time = False

@@ -61,7 +61,6 @@ class PosixTime(interface.DateTimeValues):
 
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-
     self.microseconds = date_time_values.get(u'microseconds', None)
 
     if self.microseconds is not None:

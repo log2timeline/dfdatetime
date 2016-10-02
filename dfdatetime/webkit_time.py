@@ -42,6 +42,9 @@ class WebKitTime(interface.DateTimeValues):
           fraction can be either 3 or 6 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 

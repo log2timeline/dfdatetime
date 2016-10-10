@@ -8,8 +8,8 @@ from dfdatetime import interface
 class Systemtime(interface.DateTimeValues):
   """Class that implements a SYSTEMTIME structure.
 
-  The SYSTEMTIME structure is a 128-bit struct containing 8 little-endian
-  16-bit integers in the followin order:
+  The SYSTEMTIME structure is 16 bytes of size and contains:
+
   struct {
       WORD year,
       WORD month,

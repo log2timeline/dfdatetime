@@ -2,15 +2,30 @@ language: python
 matrix:
   include:
   - os: linux
-    dist:
-      - trusty
-      - xenial
-      - jessie
-      - sid
+    dist: trusty
     sudo: required
-    python:
-      - 2.7
-      - 3.4
+    python: 2.7
+    evn: TRAVIS_DIST="trusty"
+  - os: linux
+    dist: trusty
+    sudo: required
+    python: 3.4
+  - os: linux
+    dist: xenial
+    sudo: required
+    python: 2.7
+  - os: linux
+    dist: xenial
+    sudo: required
+    python: 3.5
+  - os: linux
+    dist: jessie
+    sudo: required
+    python: 2.7
+  - os: linux
+    dist: sid
+    sudo: required
+    python: 2.7
   - os: osx
     language: generic
 install:

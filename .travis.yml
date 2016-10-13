@@ -11,26 +11,6 @@ matrix:
     sudo: required
     python: 3.4
     env: TEST_ENV="trusty-py3.4"
-  - os: linux
-    dist: xenial
-    sudo: required
-    python: 2.7
-    env: TEST_ENV="xenail-py2.7"
-  - os: linux
-    dist: xenial
-    sudo: required
-    python: 3.5
-    env: TEST_ENV="xenial-py3.5"
-  - os: linux
-    dist: jessie
-    sudo: required
-    python: 2.7
-    env: TEST_ENV="jessie-py2.7"
-  - os: linux
-    dist: sid
-    sudo: required
-    python: 2.7
-    env: TEST_ENV="sid-py2.7"
   - os: osx
     language: generic
     env: TEST_ENV="macosx-py2.7"

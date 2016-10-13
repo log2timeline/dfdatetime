@@ -5,38 +5,42 @@ matrix:
     dist: trusty
     sudo: required
     python: 2.7
-    evn: TRAVIS_DIST="trusty"
+    env: TEST_ENV="trusty-py2.7"
   - os: linux
     dist: trusty
     sudo: required
     python: 3.4
+    env: TEST_ENV="trusty-py3.4"
   - os: linux
     dist: xenial
     sudo: required
     python: 2.7
+    env: TEST_ENV="xenail-py2.7"
   - os: linux
     dist: xenial
     sudo: required
     python: 3.5
+    env: TEST_ENV="xenial-py3.5"
   - os: linux
     dist: jessie
     sudo: required
     python: 2.7
+    env: TEST_ENV="jessie-py2.7"
   - os: linux
     dist: sid
     sudo: required
     python: 2.7
+    env: TEST_ENV="sid-py2.7"
   - os: osx
     language: generic
+    env: TEST_ENV="macosx-py2.7"
 install:
   - ./config/travis/install.sh
 script:
-  - if test `uname -s` = 'Linux' && test ${TRAVIS_PYTHON_VERSION} = "2.7"; then coverage run --source=dfdatetime --omit="*_test*,*__init__*,*test_lib*" ./run_tests.py; else ./run_tests.py; fi
+  - if test ${TEST_ENV} = "trusty-py2.7"; then coverage run --source=dfdatetime --omit="*_test*,*__init__*,*test_lib*" ./run_tests.py; else ./run_tests.py; fi
   - python setup.py build
   - python setup.py sdist
   - python setup.py bdist
   - if test `uname -s` = 'Linux'; then mkdir -p ${PWD}/tmp/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/ && PYTHONPATH=${PWD}/tmp/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/ python setup.py install --prefix=${PWD}/tmp/; fi
 after_success:
-  - if test `uname -s` = 'Linux' && test ${TRAVIS_DIST} = "trusty" && test ${TRAVIS_PYTHON_VERSION} = "2.7"; then coveralls --verbose; fi
-  - echo "OS: ${OS}"
-  - echo "DIST: ${DIST}"
+  - if test ${TEST_ENV} = "trusty-py2.7"; then coveralls --verbose; fi

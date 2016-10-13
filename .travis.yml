@@ -2,25 +2,15 @@ language: python
 matrix:
   include:
   - os: linux
-    dist: trusty
+    dist:
+      - trusty
+      - xenial
+      - jessie
+      - sid
     sudo: required
-    python: 2.7
-    evn: TRAVIS_DIST="trusty"
-  - os: linux
-    dist: trusty
-    sudo: required
-    python: 3.4
-    env: TRAVIS_DIST="trusty"
-  - os: linux
-    dist: xenial
-    sudo: required
-    python: 2.7
-    env: TRAVIS_DIST="xenial"
-  - os: linux
-    dist: xenial
-    sudo: required
-    python: 3.4
-    env: TRAVIS_DIST="xenial"
+    python:
+      - 2.7
+      - 3.4
   - os: osx
     language: generic
 install:
@@ -33,3 +23,5 @@ script:
   - if test `uname -s` = 'Linux'; then mkdir -p ${PWD}/tmp/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/ && PYTHONPATH=${PWD}/tmp/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/ python setup.py install --prefix=${PWD}/tmp/; fi
 after_success:
   - if test `uname -s` = 'Linux' && test ${TRAVIS_DIST} = "trusty" && test ${TRAVIS_PYTHON_VERSION} = "2.7"; then coveralls --verbose; fi
+  - echo "OS: ${OS}"
+  - echo "DIST: ${DIST}"

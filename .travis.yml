@@ -5,22 +5,22 @@ matrix:
     dist: trusty
     sudo: required
     python: 2.7
-    TRAVIS_DIST="trusty"
+    evn: TRAVIS_DIST="trusty"
   - os: linux
     dist: trusty
     sudo: required
     python: 3.4
-    TRAVIS_DIST="trusty"
+    env: TRAVIS_DIST="trusty"
   - os: linux
     dist: xenial
     sudo: required
     python: 2.7
-    TRAVIS_DIST="xenial"
+    env: TRAVIS_DIST="xenial"
   - os: linux
     dist: xenial
     sudo: required
     python: 3.4
-    TRAVIS_DIST="xenial"
+    env: TRAVIS_DIST="xenial"
   - os: osx
     language: generic
 install:
@@ -32,4 +32,4 @@ script:
   - python setup.py bdist
   - if test `uname -s` = 'Linux'; then mkdir -p ${PWD}/tmp/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/ && PYTHONPATH=${PWD}/tmp/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/ python setup.py install --prefix=${PWD}/tmp/; fi
 after_success:
-  - if test `uname -s` = 'Linux' && tess ${TRAVIS_DIST} = "trusty" && test ${TRAVIS_PYTHON_VERSION} = "2.7"; then coveralls --verbose; fi
+  - if test `uname -s` = 'Linux' && test ${TRAVIS_DIST} = "trusty" && test ${TRAVIS_PYTHON_VERSION} = "2.7"; then coveralls --verbose; fi

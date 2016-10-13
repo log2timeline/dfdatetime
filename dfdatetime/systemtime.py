@@ -88,7 +88,7 @@ class Systemtime(interface.DateTimeValues):
     milliseconds, _ = divmod(microseconds, 1000)
 
     if year < 1601 or year > 30827:
-      raise ValueError(u'Year value not supported.')
+      raise ValueError(u'Unsupported year value: {0:d}.'.format(year))
 
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
@@ -96,6 +96,7 @@ class Systemtime(interface.DateTimeValues):
     self.year = year
     self.month = month
     self.day_of_month = day_of_month
+    # TODO: calculate day of week on demand.
     self.day_of_week = None
     self.hours = hours
     self.minutes = minutes

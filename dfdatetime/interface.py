@@ -349,6 +349,8 @@ class DateTimeValues(object):
     if not year or not month or not day:
       return
 
+    # calendar.timegm requires the time tuple to contain at least
+    # 6 integer values.
     time_elements_tuple = (
         year, month, day, hours or 0, minutes or 0, seconds or 0)
 

@@ -127,6 +127,9 @@ class TimeElementsTimeTest(unittest.TestCase):
         time_elements_object._number_of_seconds, expected_number_of_seconds)
 
     with self.assertRaises(ValueError):
+      time_elements_object.CopyFromStringISO8601(None)
+
+    with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringISO8601(
           u'2010-08-12 21:06:31.546875+01:00')
 

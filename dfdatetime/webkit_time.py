@@ -8,7 +8,7 @@ from dfdatetime import interface
 class WebKitTime(interface.DateTimeValues):
   """Class that implements a WebKit timestamp.
 
-  The WebKit timestamp is a unsigned 64-bit integer that contains the number of
+  The WebKit timestamp is a signed 64-bit integer that contains the number of
   micro seconds since 1601-01-01 00:00:00.
 
   Attributes:

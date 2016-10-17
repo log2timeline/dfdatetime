@@ -39,7 +39,7 @@ class HFSTimeTest(unittest.TestCase):
     self.assertEqual(hfs_time_object.timestamp, expected_timestamp)
 
     with self.assertRaises(ValueError):
-      systemtime_object.CopyFromString(u'1600-01-02 00:00:00')
+      hfs_time_object.CopyFromString(u'1600-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

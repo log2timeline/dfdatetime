@@ -38,6 +38,9 @@ class DelphiDateTimeTest(unittest.TestCase):
     delphi_date_time_object.CopyFromString(u'1899-12-31 00:00:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
+    with self.assertRaises(ValueError):
+      systemtime_object.CopyFromString(u'10000-01-01 00:00:00')
+
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime(

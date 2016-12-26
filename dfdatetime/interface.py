@@ -333,7 +333,7 @@ class DateTimeValues(object):
 
   def _GetNumberOfSecondsFromElements(
       self, year, month, day, hours, minutes, seconds):
-    """Retrieves the number of seconds from the data and time elements.
+    """Retrieves the number of seconds from the date and time elements.
 
     Args:
       year (int): year e.g. 1970.
@@ -368,7 +368,7 @@ class DateTimeValues(object):
       year (int): year e.g. 1970.
 
     Returns:
-      A boolean value indicating if the year is a leap year.
+      bool: True if the year is a leap year.
     """
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 

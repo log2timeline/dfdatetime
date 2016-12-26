@@ -38,9 +38,6 @@ class WebKitTimeTest(unittest.TestCase):
     webkit_time_object.CopyFromString(u'1601-01-02 00:00:00')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
-    with self.assertRaises(ValueError):
-      webkit_time_object.CopyFromString(u'1500-01-02 00:00:00')
-
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)

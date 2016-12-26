@@ -19,7 +19,8 @@ class WebKitTime(interface.DateTimeValues):
 
   # The difference between Jan 1, 1601 and Jan 1, 1970 in seconds.
   _WEBKIT_TO_POSIX_BASE = 11644473600
-  _UINT64_MAX = (1 << 64) - 1
+  _INT64_MIN = -(1 << 63)
+  _INT64_MAX = (1 << 63) - 1
 
   def __init__(self, timestamp=None):
     """Initializes a WebKit timestamp.
@@ -55,16 +56,12 @@ class WebKitTime(interface.DateTimeValues):
     minutes = date_time_values.get(u'minutes', 0)
     seconds = date_time_values.get(u'seconds', 0)
 
-    if year < 1601:
-      raise ValueError(u'Year value not supported: {0!s}.'.format(year))
-
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self.timestamp += self._WEBKIT_TO_POSIX_BASE
     self.timestamp *= 1000000
     self.timestamp += date_time_values.get(u'microseconds', 0)
 
-    self.precision = definitions.PRECISION_1_MICROSECOND
     self.is_local_time = False
 
   def CopyToStatTimeTuple(self):
@@ -74,8 +71,8 @@ class WebKitTime(interface.DateTimeValues):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT64_MAX):
+    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
+        self.timestamp > self._INT64_MAX):
       return None, None
 
     timestamp, remainder = divmod(self.timestamp, 1000000)
@@ -88,8 +85,8 @@ class WebKitTime(interface.DateTimeValues):
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT64_MAX):
+    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
+        self.timestamp > self._INT64_MAX):
       return
 
     return self.timestamp - (self._WEBKIT_TO_POSIX_BASE * 1000000)

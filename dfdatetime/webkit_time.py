@@ -75,9 +75,9 @@ class WebKitTime(interface.DateTimeValues):
         self.timestamp > self._INT64_MAX):
       return None, None
 
-    timestamp, remainder = divmod(self.timestamp, 1000000)
+    timestamp, microseconds = divmod(self.timestamp, 1000000)
     timestamp -= self._WEBKIT_TO_POSIX_BASE
-    return timestamp, remainder * 10
+    return timestamp, microseconds * 10
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

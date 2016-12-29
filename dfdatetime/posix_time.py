@@ -17,7 +17,6 @@ class PosixTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    micro_seconds (int): number of microseconds
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): POSIX timestamp.
@@ -90,7 +89,6 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    micro_seconds (int): number of microseconds
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): POSIX timestamp in microseconds.

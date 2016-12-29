@@ -26,6 +26,9 @@ class TimeElements(interface.DateTimeValues):
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid.
     """
     super(TimeElements, self).__init__()
     self._number_of_seconds = None
@@ -146,12 +149,17 @@ class TimeElementsInMilliseconds(TimeElements):
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes,
           seconds and milliseconds.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid.
     """
+    milliseconds = None
     if time_elements_tuple:
       milliseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
-    else:
-      milliseconds = None
+
+      if milliseconds < 0 or milliseconds > 999:
+        raise ValueError(u'Invalid number of milliseconds.')
 
     super(TimeElementsInMilliseconds, self).__init__(
         time_elements_tuple=time_elements_tuple)

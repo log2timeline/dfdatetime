@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Time elements implementation."""
 
+import calendar
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -26,13 +28,14 @@ class TimeElements(interface.DateTimeValues):
           seconds.
     """
     super(TimeElements, self).__init__()
-    if time_elements_tuple is None:
-      self._number_of_seconds = None
-    else:
-      self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-          *time_elements_tuple)
+    self._number_of_seconds = None
     self._time_elements_tuple = time_elements_tuple
     self.precision = definitions.PRECISION_1_SECOND
+
+    if time_elements_tuple:
+      # Using calendar.timegm here since we want it to raise ValueError
+      # on error.
+      self._number_of_seconds = calendar.timegm(time_elements_tuple)
 
   def CopyFromString(self, time_string):
     """Copies time elements from a string containing a date and time value.

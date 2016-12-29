@@ -141,8 +141,8 @@ class TimeElementsInMilliseconds(TimeElements):
 
     Args:
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
-          time elements, contains year, month, day of month, hours, minutes, 
-          seconds, milliseconds.
+          time elements, contains year, month, day of month, hours, minutes,
+          seconds and milliseconds.
     """
     if time_elements_tuple:
       milliseconds = time_elements_tuple[6]

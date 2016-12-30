@@ -318,9 +318,17 @@ class DateTimeValuesTest(unittest.TestCase):
         0, 1, 2, 0, 0, 0)
     self.assertIsNone(number_of_seconds)
 
-    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 13, 12, 21, 6, 31)
-    self.assertIsNone(number_of_seconds)
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 6, 31)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 24, 6, 31)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 99, 31)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 6, 65)
 
   def testIsLeapYear(self):
     """Tests the _IsLeapYear function."""

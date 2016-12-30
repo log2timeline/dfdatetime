@@ -23,6 +23,10 @@ class TimeElementsTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       time_elements.TimeElements(
+          time_elements_tuple=(2010, 8, 12, 20, 6))
+
+    with self.assertRaises(ValueError):
+      time_elements.TimeElements(
           time_elements_tuple=(2010, 13, 12, 20, 6, 31))
 
   def testCopyFromString(self):
@@ -203,16 +207,16 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElements()
     self.assertIsNotNone(time_elements_object)
 
-    time_elements_object = time_elements.TimeElements(
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 864))
     self.assertIsNotNone(time_elements_object)
 
     with self.assertRaises(ValueError):
-      time_elements.TimeElements(
+      time_elements.TimeElementsInMilliseconds(
           time_elements_tuple=(2010, 13, 12, 20, 6, 31))
 
     with self.assertRaises(ValueError):
-      time_elements.TimeElements(
+      time_elements.TimeElementsInMilliseconds(
           time_elements_tuple=(2010, 13, 12, 20, 6, 31, 1001))
 
   def testCopyFromString(self):

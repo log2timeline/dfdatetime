@@ -345,19 +345,35 @@ class DateTimeValues(object):
 
     Returns:
       int: number of seconds since January 1, 1970 00:00:00 or None.
+
+    Raises:
+      ValueError: if the time elements are invalid.
     """
     if not year or not month or not day:
       return
 
+    # calendar.timegm does not sanity check the time elements.
+    if hours is None:
+      hours = 0
+    elif hours not in range(0, 24):
+      raise ValueError(u'Hours value out of bounds.')
+
+    if minutes is None:
+      minutes = 0
+    elif minutes not in range(0, 60):
+      raise ValueError(u'Minutes value out of bounds.')
+
+    # TODO: support a leap second?
+    if seconds is None:
+      seconds = 0
+    elif seconds not in range(0, 60):
+      raise ValueError(u'Seconds value out of bounds.')
+
     # calendar.timegm requires the time tuple to contain at least
     # 6 integer values.
-    time_elements_tuple = (
-        year, month, day, hours or 0, minutes or 0, seconds or 0)
+    time_elements_tuple = (year, month, day, hours, minutes, seconds)
 
-    try:
-      number_of_seconds = calendar.timegm(time_elements_tuple)
-    except ValueError:
-      return
+    number_of_seconds = calendar.timegm(time_elements_tuple)
 
     return int(number_of_seconds)
 

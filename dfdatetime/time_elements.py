@@ -36,9 +36,11 @@ class TimeElements(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_SECOND
 
     if time_elements_tuple:
-      # Using calendar.timegm here since we want it to raise ValueError
-      # on error.
-      self._number_of_seconds = calendar.timegm(time_elements_tuple)
+      if len(time_elements_tuple) < 6:
+        raise ValueError(u'Invalid time elements tuple 6 elements required.')
+
+      self._number_of_seconds = self._GetNumberOfSecondsFromElements(
+          *time_elements_tuple)
 
   def CopyFromString(self, time_string):
     """Copies time elements from a string containing a date and time value.
@@ -155,6 +157,9 @@ class TimeElementsInMilliseconds(TimeElements):
     """
     milliseconds = None
     if time_elements_tuple:
+      if len(time_elements_tuple) < 7:
+        raise ValueError(u'Invalid time elements tuple 7 elements required.')
+
       milliseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
 

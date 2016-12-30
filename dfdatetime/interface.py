@@ -208,6 +208,7 @@ class DateTimeValues(object):
     except ValueError:
       raise ValueError(u'Unable to parse day of seconds.')
 
+    # TODO: support a leap second?
     if seconds not in range(0, 60):
       raise ValueError(u'Seconds value out of bounds.')
 

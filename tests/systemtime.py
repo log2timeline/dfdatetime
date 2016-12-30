@@ -12,6 +12,58 @@ class FiletimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testInitialize(self):
+    """Tests the initialization function."""
+    systemtime_object = systemtime.Systemtime()
+    self.assertIsNotNone(systemtime_object)
+
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
+    self.assertIsNotNone(systemtime_object)
+    self.assertEqual(systemtime_object.year, 2010)
+    self.assertEqual(systemtime_object.month, 8)
+    self.assertEqual(systemtime_object.day_of_month, 12)
+    self.assertEqual(systemtime_object.hours, 20)
+    self.assertEqual(systemtime_object.minutes, 6)
+    self.assertEqual(systemtime_object.seconds, 31)
+    self.assertEqual(systemtime_object.milliseconds, 142)
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 8, 4, 12, 20, 6, 31))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(1500, 8, 4, 12, 20, 6, 31, 142))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 13, 4, 12, 20, 6, 31, 142))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 8, 7, 12, 20, 6, 31, 142))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 8, 4, 32, 20, 6, 31, 142))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 8, 4, 12, 24, 6, 31, 142))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 8, 4, 12, 20, 61, 31, 142))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 8, 4, 12, 20, 6, 61, 142))
+
+    with self.assertRaises(ValueError):
+      systemtime.Systemtime(
+          system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 1001))
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     systemtime_object = systemtime.Systemtime()
@@ -94,9 +146,9 @@ class FiletimeTest(unittest.TestCase):
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     systemtime_object = systemtime.Systemtime(
-        year=2010, month=8, day_of_month=12, hours=20, minutes=6, seconds=31)
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
-    expected_stat_time_tuple = (1281643591, 0)
+    expected_stat_time_tuple = (1281643591, 1420000)
     stat_time_tuple = systemtime_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
@@ -109,9 +161,9 @@ class FiletimeTest(unittest.TestCase):
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     systemtime_object = systemtime.Systemtime(
-        year=2010, month=8, day_of_month=12, hours=20, minutes=6, seconds=31)
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
-    expected_micro_posix_number_of_seconds = 1281643591000000
+    expected_micro_posix_number_of_seconds = 1281643591142000
     micro_posix_number_of_seconds = systemtime_object.GetPlasoTimestamp()
     self.assertEqual(
         micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)

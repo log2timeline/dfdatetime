@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Time elements implementation."""
 
-import calendar
-
 from dfdatetime import definitions
 from dfdatetime import interface
 

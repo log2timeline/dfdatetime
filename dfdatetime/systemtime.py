@@ -66,7 +66,7 @@ class Systemtime(interface.DateTimeValues):
       if system_time_tuple[1] not in range(1, 13):
         raise ValueError(u'Month value out of bounds.')
 
-      if system_time_tuple[2] not in range(0, 6):
+      if system_time_tuple[2] not in range(0, 7):
         raise ValueError(u'Day of week value out of bounds.')
 
       days_per_month = self._GetDaysPerMonth(

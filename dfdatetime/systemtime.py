@@ -36,7 +36,7 @@ class Systemtime(interface.DateTimeValues):
     """Initializes a SYSTEMTIME structure.
 
     Args:
-      system_time_tuple 
+      system_time_tuple
           (Optional[tuple[int, int, int, int, int, int, int, int]]):
           system time, contains year, month, day of week, day of month,
           hours, minutes, seconds and milliseconds.

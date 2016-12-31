@@ -69,7 +69,7 @@ class UUIDTimeTest(unittest.TestCase):
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
     uuid_time_object = uuid_time.UUIDTime()
-    uuid_time_object.timestamp=0x1fffffffffffffff
+    uuid_time_object.timestamp = 0x1fffffffffffffff
 
     expected_stat_time_tuple = (None, None)
     stat_time_tuple = uuid_time_object.CopyToStatTimeTuple()
@@ -98,7 +98,7 @@ class UUIDTimeTest(unittest.TestCase):
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
 
     uuid_time_object = uuid_time.UUIDTime()
-    uuid_time_object.timestamp=0x1fffffffffffffff
+    uuid_time_object.timestamp = 0x1fffffffffffffff
 
     micro_posix_timestamp = uuid_time_object.GetPlasoTimestamp()
     self.assertIsNone(micro_posix_timestamp)

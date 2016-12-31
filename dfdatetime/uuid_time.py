@@ -89,8 +89,6 @@ class UUIDTime(interface.DateTimeValues):
 
     timestamp, remainder = divmod(self.timestamp, 10000000)
     timestamp -= self._UUID_TO_POSIX_BASE
-
-    timestamp -- self._UUID_TO_POSIX_BASE
     return timestamp, remainder
 
   def GetPlasoTimestamp(self):

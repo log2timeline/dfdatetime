@@ -247,11 +247,11 @@ class TimeElementsInMilliseconds(TimeElements):
     microseconds = date_time_values.get(u'microseconds', 0)
     milliseconds, _ = divmod(microseconds, 1000)
 
-    self._time_elements_tuple = (
-        year, month, day_of_month, hours, minutes, seconds, milliseconds)
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._milliseconds = milliseconds
+    self._time_elements_tuple = (
+        year, month, day_of_month, hours, minutes, seconds, milliseconds)
 
     self.is_local_time = False
 

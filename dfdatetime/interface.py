@@ -356,18 +356,18 @@ class DateTimeValues(object):
     if hours is None:
       hours = 0
     elif hours not in range(0, 24):
-      raise ValueError(u'Hours value out of bounds.')
+      raise ValueError(u'Hours value: {0!s} out of bounds.'.format(hours))
 
     if minutes is None:
       minutes = 0
     elif minutes not in range(0, 60):
-      raise ValueError(u'Minutes value out of bounds.')
+      raise ValueError(u'Minutes value: {0!s} out of bounds.'.format(minutes))
 
     # TODO: support a leap second?
     if seconds is None:
       seconds = 0
     elif seconds not in range(0, 60):
-      raise ValueError(u'Seconds value out of bounds.')
+      raise ValueError(u'Seconds value: {0!s} out of bounds.'.format(seconds))
 
     # calendar.timegm requires the time tuple to contain at least
     # 6 integer values.

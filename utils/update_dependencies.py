@@ -3,7 +3,6 @@
 """Script to update the dependencies in various configuration files."""
 
 import os
-import sys
 
 
 class AppveyorYmlWriter(object):

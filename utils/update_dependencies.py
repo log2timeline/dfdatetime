@@ -51,7 +51,7 @@ class AppveyorYmlWriter(object):
       u'']
 
   def Write(self):
-    """Writes a setup.cfg file."""
+    """Writes an appveyor.yml file."""
     file_content = []
     file_content.extend(self._FILE_HEADER)
 
@@ -108,7 +108,7 @@ class DPKGControlWriter(object):
       u'']
 
   def Write(self):
-    """Writes a setup.cfg file."""
+    """Writes a dpkg control file."""
     file_content = []
     file_content.extend(self._FILE_HEADER)
     file_content.extend(self._PYTHON2_PACKAGE_HEADER)
@@ -239,7 +239,7 @@ class TravisBeforeInstallScriptWriter(object):
       u'']
 
   def Write(self):
-    """Writes a setup.cfg file."""
+    """Writes an install.sh file."""
     file_content = []
     file_content.extend(self._FILE_HEADER)
 

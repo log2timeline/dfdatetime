@@ -117,7 +117,7 @@ setup(
     maintainer='dfDateTime development team',
     maintainer_email='log2timeline-dev@googlegroups.com',
     cmdclass={
-        'bdist_rpm': BdistRPMCommand}
+        'bdist_rpm': BdistRPMCommand},
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',

@@ -329,10 +329,10 @@ class TravisBeforeInstallScriptWriter(DependencyFileWriter):
 
 
 if __name__ == u'__main__':
-  dependency_helper = utils.dependencies.DependencyHelper()
+  helper = utils.dependencies.DependencyHelper()
 
   for writer_class in (
       AppveyorYmlWriter, DPKGControlWriter, RequirementsWriter, SetupCfgWriter,
       TravisBeforeInstallScriptWriter):
-    writer = writer_class(dependency_helper)
+    writer = writer_class(helper)
     writer.Write()

@@ -236,7 +236,7 @@ class DependencyHelper(object):
     print(u'Checking availability and versions of dependencies.')
     check_result = True
 
-    for module_name, dependency in sorted(self._dependencies.items()):
+    for dependency in sorted(self._dependencies.values()):
       result, status_message = self._CheckPythonModule(dependency)
       if not result:
         check_result = False
@@ -265,7 +265,7 @@ class DependencyHelper(object):
     print(u'Checking availability and versions of test dependencies.')
     check_result = True
 
-    for module_name, dependency in sorted(self._test_dependencies.items()):
+    for dependency in sorted(self._test_dependencies.values()):
       result, status_message = self._CheckPythonModule(dependency)
       if not result:
         check_result = False

@@ -12,7 +12,6 @@ PYTHON2_DEPENDENCIES="";
 
 PYTHON2_TEST_DEPENDENCIES="python-mock";
 
-
 # Exit on error.
 set -e;
 

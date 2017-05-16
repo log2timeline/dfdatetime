@@ -311,8 +311,6 @@ class TravisBeforeInstallScriptWriter(DependencyFileWriter):
     file_content.append(u'')
     file_content.append(u'PYTHON2_TEST_DEPENDENCIES="python-mock";')
 
-    file_content.append(u'')
-
     file_content.extend(self._FILE_FOOTER)
 
     file_content = u'\n'.join(file_content)

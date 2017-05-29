@@ -33,7 +33,7 @@ class PosixTime(interface.DateTimeValues):
     self.timestamp = timestamp
 
   def CopyFromString(self, time_string):
-    """Copies a POSIX timestamp from a string containing a date and time value.
+    """Copies a POSIX timestamp from a date and time string.
 
     Args:
       time_string (str): date and time value formatted as:
@@ -105,7 +105,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     self.timestamp = timestamp
 
   def CopyFromString(self, time_string):
-    """Copies a POSIX timestamp from a string containing a date and time value.
+    """Copies a POSIX timestamp from a date and time string.
 
     Args:
       time_string (str): date and time value formatted as:

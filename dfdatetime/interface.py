@@ -415,7 +415,7 @@ class DateTimeValues(object):
 
   @abc.abstractmethod
   def CopyFromString(self, time_string):
-    """Copies a date time value from a string containing a date and time value.
+    """Copies a date time value from a date and time string.
 
     Args:
       time_string (str): date and time value formatted as:

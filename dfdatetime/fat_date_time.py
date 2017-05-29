@@ -92,7 +92,7 @@ class FATDateTime(interface.DateTimeValues):
     return number_of_seconds
 
   def CopyFromString(self, time_string):
-    """Copies a FAT date time from a string containing a date and time value.
+    """Copies a FAT date time from a date and time string.
 
     Args:
       time_string (str): date and time value formatted as:

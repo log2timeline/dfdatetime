@@ -41,7 +41,7 @@ class TimeElements(interface.DateTimeValues):
           *time_elements_tuple)
 
   def CopyFromString(self, time_string):
-    """Copies time elements from a string containing a date and time value.
+    """Copies time elements from a date and time string.
 
     Args:
       time_string (str): date and time value formatted as:
@@ -225,7 +225,7 @@ class TimeElementsInMilliseconds(TimeElements):
     self.precision = definitions.PRECISION_1_MILLISECOND
 
   def CopyFromString(self, time_string):
-    """Copies time elements from a string containing a date and time value.
+    """Copies time elements from a date and time string.
 
     Args:
       time_string (str): date and time value formatted as:

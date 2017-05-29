@@ -121,7 +121,7 @@ class RFC2579DateTime(interface.DateTimeValues):
           self.seconds)
 
   def CopyFromString(self, time_string):
-    """Copies a SYSTEMTIME from a string containing a date and time value.
+    """Copies a RFC2579 date-time from a date and time string.
 
     Args:
       time_string (str): date and time value formatted as:
@@ -164,7 +164,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     self.is_local_time = False
 
   def CopyToStatTimeTuple(self):
-    """Copies the SYSTEMTIME structure to a stat timestamp tuple.
+    """Copies the RFC2579 date-time to a stat timestamp tuple.
 
     Returns:
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in

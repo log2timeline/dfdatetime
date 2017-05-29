@@ -27,6 +27,61 @@ class DateTimeValues(object):
     self.is_local_time = False
     self.precision = None
 
+  def _AdjustForTimeZoneOffset(
+      self, year, month, day_of_month, hours, minutes, time_zone_offset):
+    """Adjusts the date and time values for a time zone offset.
+
+    Args:
+      year (int): year.
+      month (int): month.
+      day_of_month (int): day of month.
+      hours (int): hours.
+      minutes (int): minutes.
+      time_zone_offset (int): time zone offset in number of minutes from UTC.
+
+    Returns:
+      tuple[int, int, int, int, int, int]: time zone correct year, month,
+         day_of_month, hours and minutes values.
+    """
+    hours_from_utc, minutes_from_utc = divmod(time_zone_offset, 60)
+
+    minutes += minutes_from_utc
+
+    # Since divmod makes sure the sign of minutes_from_utc is positive
+    # we only need to check the upper bound here, because hours_from_utc
+    # remains signed it is corrected accordingly.
+    if minutes >= 60:
+      minutes -= 60
+      hours += 1
+
+    hours += hours_from_utc
+    if hours < 0:
+      hours += 24
+      day_of_month -= 1
+
+    elif hours >= 24:
+      hours -= 24
+      day_of_month += 1
+
+    days_per_month = self._GetDaysPerMonth(year, month)
+    if day_of_month < 1:
+      month -= 1
+      if month < 1:
+        month = 12
+        year -= 1
+
+      day_of_month += self._GetDaysPerMonth(year, month)
+
+    elif day_of_month > days_per_month:
+      month += 1
+      if month > 12:
+        month = 1
+        year += 1
+
+      day_of_month -= days_per_month
+
+    return year, month, day_of_month, hours, minutes
+
   def _CopyDateFromString(self, date_string):
     """Copies a date from a string.
 
@@ -111,42 +166,8 @@ class DateTimeValues(object):
         self._CopyTimeFromString(time_string[11:]))
 
     if time_zone_offset:
-      time_zone_hours, time_zone_minutes = divmod(time_zone_offset, 60)
-
-      minutes += time_zone_minutes
-
-      # Since divmod makes sure the sign of time_zone_minutes is positive
-      # we only need to check the upper bound here, because time_zone_hours
-      # remains signed it is corrected accordingly.
-      if minutes >= 60:
-        minutes -= 60
-        hours += 1
-
-      hours += time_zone_hours
-      if hours < 0:
-        hours += 24
-        day_of_month -= 1
-
-      elif hours >= 24:
-        hours -= 24
-        day_of_month += 1
-
-      days_per_month = self._GetDaysPerMonth(year, month)
-      if day_of_month < 1:
-        month -= 1
-        if month < 1:
-          month = 12
-          year -= 1
-
-        day_of_month += self._GetDaysPerMonth(year, month)
-
-      elif day_of_month > days_per_month:
-        month += 1
-        if month > 12:
-          month = 1
-          year += 1
-
-        day_of_month -= days_per_month
+      year, month, day_of_month, hours, minutes = self._AdjustForTimeZoneOffset(
+          year, month, day_of_month, hours, minutes, time_zone_offset)
 
     date_time_values = {
         u'year': year,
@@ -247,26 +268,29 @@ class DateTimeValues(object):
           raise ValueError(u'Invalid time string.')
 
         try:
-          time_zone_offset = int(time_string[
+          hours_from_utc = int(time_string[
               time_zone_string_index + 1:time_zone_string_index + 3])
         except ValueError:
           raise ValueError(u'Unable to parse time zone hours offset.')
 
-        if time_zone_offset not in range(0, 24):
-          raise ValueError(u'Timezone hours offset value out of bounds.')
-
-        time_zone_offset *= 60
+        if hours_from_utc not in range(0, 15):
+          raise ValueError(u'Time zone hours offset value out of bounds.')
 
         try:
-          time_zone_offset += int(time_string[
+          minutes_from_utc = int(time_string[
               time_zone_string_index + 4:time_zone_string_index + 6])
         except ValueError:
           raise ValueError(u'Unable to parse time zone minutes offset.')
 
+        if minutes_from_utc not in range(0, 60):
+          raise ValueError(u'Time zone minutes offset value out of bounds.')
+
+        time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
+
         # Note that when the sign of the time zone offset is negative
         # the difference needs to be added. We do so by flipping the sign.
         if time_string[time_zone_string_index] != u'-':
-          time_zone_offset *= -1
+          time_zone_offset = -time_zone_offset
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 

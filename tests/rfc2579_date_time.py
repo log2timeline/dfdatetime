@@ -18,12 +18,12 @@ class FiletimeTest(unittest.TestCase):
     self.assertIsNotNone(rfc2579_date_time_object)
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6))
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 2, 0))
     self.assertIsNotNone(rfc2579_date_time_object)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
-    self.assertEqual(rfc2579_date_time_object.hours, 20)
+    self.assertEqual(rfc2579_date_time_object.hours, 18)
     self.assertEqual(rfc2579_date_time_object.minutes, 6)
     self.assertEqual(rfc2579_date_time_object.seconds, 31)
     self.assertEqual(rfc2579_date_time_object.deciseconds, 6)
@@ -34,31 +34,43 @@ class FiletimeTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(65537, 8, 12, 20, 6, 31, 6))
+          rfc2579_date_time_tuple=(65537, 8, 12, 20, 6, 31, 6, u'+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 13, 12, 20, 6, 31, 6))
+          rfc2579_date_time_tuple=(2010, 13, 12, 20, 6, 31, 6, u'+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 32, 20, 6, 31, 6))
+          rfc2579_date_time_tuple=(2010, 8, 32, 20, 6, 31, 6, u'+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 24, 6, 31, 6))
+          rfc2579_date_time_tuple=(2010, 8, 12, 24, 6, 31, 6, u'+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 61, 31, 6))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 61, 31, 6, u'+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 61, 6))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 61, 6, u'+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 11))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 11, u'+', 2, 0))
+
+    with self.assertRaises(ValueError):
+      rfc2579_date_time.RFC2579DateTime(
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'#', 2, 0))
+
+    with self.assertRaises(ValueError):
+      rfc2579_date_time.RFC2579DateTime(
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 14, 0))
+
+    with self.assertRaises(ValueError):
+      rfc2579_date_time.RFC2579DateTime(
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 2, 60))
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
@@ -137,12 +149,12 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 0)
 
     with self.assertRaises(ValueError):
-      rfc2579_date_time_object.CopyFromString(u'1600-01-02 00:00:00')
+      rfc2579_date_time_object.CopyFromString(u'65537-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6))
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 0, 0))
 
     expected_stat_time_tuple = (1281643591, 6000000)
     stat_time_tuple = rfc2579_date_time_object.CopyToStatTimeTuple()
@@ -157,7 +169,7 @@ class FiletimeTest(unittest.TestCase):
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6))
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 0, 0))
 
     expected_micro_posix_number_of_seconds = 1281643591600000
     micro_posix_number_of_seconds = rfc2579_date_time_object.GetPlasoTimestamp()

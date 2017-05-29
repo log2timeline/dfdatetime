@@ -12,6 +12,8 @@ class DateTimeValuesTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  # TODO: add tests for _AdjustForTimeZoneOffset.
+
   def testCopyDateFromString(self):
     """Tests the _CopyDateFromString function."""
     date_time_values = interface.DateTimeValues()
@@ -218,13 +220,16 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._CopyTimeFromString(u'12:00:00+01b00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00+01:0w')
-
-    with self.assertRaises(ValueError):
       date_time_values._CopyTimeFromString(u'12:00:00+0w:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00+30:00')
+      date_time_values._CopyTimeFromString(u'12:00:00+20:00')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00+01:0w')
+
+    with self.assertRaises(ValueError):
+      date_time_values._CopyTimeFromString(u'12:00:00+01:60')
 
   def testGetDayOfYear(self):
     """Tests the _GetDayOfYear function."""

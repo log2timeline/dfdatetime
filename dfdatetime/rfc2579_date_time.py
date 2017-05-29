@@ -8,7 +8,7 @@ from dfdatetime import interface
 class RFC2579DateTime(interface.DateTimeValues):
   """RFC2579 date-time.
 
-  The RFC2579 date-time structure is 12 bytes of size and contains:
+  The RFC2579 date-time structure is 11 bytes of size and contains:
 
   struct {
       uin16_t year,
@@ -17,7 +17,7 @@ class RFC2579DateTime(interface.DateTimeValues):
       uint8_t hours,
       uint8_t minutes,
       uint8_t seconds,
-      uint8_t deci-seconds,
+      uint8_t deciseconds,
       char direction_from_utc,
       uint8_t hours_from_utc,
       uint8_t minuted_from_utc
@@ -67,9 +67,9 @@ class RFC2579DateTime(interface.DateTimeValues):
     self.year = None
 
     if rfc2579_date_time_tuple:
-      if len(rfc2579_date_time_tuple) < 7:
+      if len(rfc2579_date_time_tuple) < 10:
         raise ValueError(
-            u'Invalid RFC2579 date-time tuple 7 elements required.')
+            u'Invalid RFC2579 date-time tuple 10 elements required.')
 
       if rfc2579_date_time_tuple[0] < 0 or rfc2579_date_time_tuple[0] > 65536:
         raise ValueError(u'Year value out of bounds.')
@@ -96,15 +96,31 @@ class RFC2579DateTime(interface.DateTimeValues):
       if rfc2579_date_time_tuple[6] < 0 or rfc2579_date_time_tuple[6] > 9:
         raise ValueError(u'Deciseconds value out of bounds.')
 
-      # TODO: add UTC offset support.
+      if rfc2579_date_time_tuple[7] not in (u'+', u'-'):
+        raise ValueError(u'Direction from UTC value out of bounds.')
 
-      self.day_of_month = rfc2579_date_time_tuple[2]
+      if rfc2579_date_time_tuple[8] not in range(0, 14):
+        raise ValueError(u'Hours from UTC value out of bounds.')
+
+      if rfc2579_date_time_tuple[9] not in range(0, 60):
+        raise ValueError(u'Minutes from UTC value out of bounds.')
+
+      time_zone_offset = (
+          (rfc2579_date_time_tuple[8] * 60) + rfc2579_date_time_tuple[9])
+
+      # Note that when the sign of the time zone offset is negative
+      # the difference needs to be added. We do so by flipping the sign.
+      if rfc2579_date_time_tuple[7] != u'-':
+        time_zone_offset = -time_zone_offset
+
+      self.year, self.month, self.day_of_month, self.hours, self.minutes = (
+          self._AdjustForTimeZoneOffset(
+              rfc2579_date_time_tuple[0], rfc2579_date_time_tuple[1],
+              rfc2579_date_time_tuple[2], rfc2579_date_time_tuple[3],
+              rfc2579_date_time_tuple[4], time_zone_offset))
+
       self.deciseconds = rfc2579_date_time_tuple[6]
-      self.hours = rfc2579_date_time_tuple[3]
-      self.minutes = rfc2579_date_time_tuple[4]
-      self.month = rfc2579_date_time_tuple[1]
       self.seconds = rfc2579_date_time_tuple[5]
-      self.year = rfc2579_date_time_tuple[0]
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
@@ -137,7 +153,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     microseconds = date_time_values.get(u'microseconds', 0)
     deciseconds, _ = divmod(microseconds, 100000)
 
-    if year < 1601 or year > 30827:
+    if year < 0 or year > 65536:
       raise ValueError(u'Unsupported year value: {0:d}.'.format(year))
 
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(

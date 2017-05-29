@@ -23,12 +23,6 @@ class RFC2579DateTime(interface.DateTimeValues):
       uint8_t minuted_from_utc
   }
 
-            field  octets  contents                  range
-            -----  ------  --------                  -----
-              8       9    direction from UTC        '+' / '-'
-              9      10    hours from UTC*           0..13
-             10      11    minutes from UTC          0..59
-
   Also see:
     https://tools.ietf.org/html/rfc2579
 

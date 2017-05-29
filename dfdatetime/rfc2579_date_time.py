@@ -1,100 +1,110 @@
 # -*- coding: utf-8 -*-
-"""SYSTEMTIME structure implementation."""
+"""RFC2579 date-time implementation."""
 
 from dfdatetime import definitions
 from dfdatetime import interface
 
 
-class Systemtime(interface.DateTimeValues):
-  """SYSTEMTIME structure.
+class RFC2579DateTime(interface.DateTimeValues):
+  """RFC2579 date-time.
 
-  The SYSTEMTIME structure is 16 bytes of size and contains:
+  The RFC2579 date-time structure is 12 bytes of size and contains:
 
   struct {
-      WORD year,
-      WORD month,
-      WORD day_of_week,
-      WORD day_of_month,
-      WORD hour,
-      WORD minute,
-      WORD second,
-      WORD millisecond
+      uin16_t year,
+      uint8_t month,
+      uint8_t day_of_month,
+      uint8_t hours,
+      uint8_t minutes,
+      uint8_t seconds,
+      uint8_t deci-seconds,
+      char direction_from_utc,
+      uint8_t hours_from_utc,
+      uint8_t minuted_from_utc
   }
 
+            field  octets  contents                  range
+            -----  ------  --------                  -----
+              8       9    direction from UTC        '+' / '-'
+              9      10    hours from UTC*           0..13
+             10      11    minutes from UTC          0..59
+
+  Also see:
+    https://tools.ietf.org/html/rfc2579
+
   Attributes:
-    year (int): year, 1601 through 30827.
+    year (int): year, 0 through 65536.
     month (int): month of year, 1 through 12.
-    day_of_week (int): day of week, 0 through 6.
     day_of_month (int): day of month, 1 through 31.
     hours (int): hours, 0 through 23.
     minutes (int): minutes, 0 through 59.
-    seconds (int): seconds, 0 through 59.
-    milliseconds (int): milliseconds, 0 through 999.
+    seconds (int): seconds, 0 through 59, where 60 is used to represent
+        a leap-second.
+    deciseconds (int): deciseconds, 0 through 9.
   """
 
-  def __init__(self, system_time_tuple=None):
-    """Initializes a SYSTEMTIME structure.
+  def __init__(self, rfc2579_date_time_tuple=None):
+    """Initializes a RFC2579 date-time.
 
     Args:
-      system_time_tuple
-          (Optional[tuple[int, int, int, int, int, int, int, int]]):
-          system time, contains year, month, day of week, day of month,
-          hours, minutes, seconds and milliseconds.
+      rfc2579_date_time_tuple:
+          (Optional[tuple[int, int, int, int, int, int, int]]):
+          RFC2579 date-time time, contains year, month, day of month, hours,
+          minutes, seconds and deciseconds.
 
     Raises:
       ValueError: if the system time is invalid.
     """
-    super(Systemtime, self).__init__()
+    super(RFC2579DateTime, self).__init__()
     self._number_of_seconds = None
     self.day_of_month = None
-    self.day_of_week = None
     self.hours = None
-    self.milliseconds = None
+    self.deciseconds = None
     self.minutes = None
     self.month = None
-    self.precision = definitions.PRECISION_1_MILLISECOND
+    self.precision = definitions.PRECISION_100_MILLISECONDS
     self.seconds = None
     self.year = None
 
-    if system_time_tuple:
-      if len(system_time_tuple) < 8:
-        raise ValueError(u'Invalid system time tuple 8 elements required.')
+    if rfc2579_date_time_tuple:
+      if len(rfc2579_date_time_tuple) < 7:
+        raise ValueError(
+            u'Invalid RFC2579 date-time tuple 7 elements required.')
 
-      if system_time_tuple[0] < 1601 or system_time_tuple[0] > 30827:
+      if rfc2579_date_time_tuple[0] < 0 or rfc2579_date_time_tuple[0] > 65536:
         raise ValueError(u'Year value out of bounds.')
 
-      if system_time_tuple[1] not in range(1, 13):
+      if rfc2579_date_time_tuple[1] not in range(1, 13):
         raise ValueError(u'Month value out of bounds.')
 
-      if system_time_tuple[2] not in range(0, 7):
-        raise ValueError(u'Day of week value out of bounds.')
-
       days_per_month = self._GetDaysPerMonth(
-          system_time_tuple[0], system_time_tuple[1])
-      if system_time_tuple[3] < 1 or system_time_tuple[3] > days_per_month:
+          rfc2579_date_time_tuple[0], rfc2579_date_time_tuple[1])
+      if (rfc2579_date_time_tuple[2] < 1 or
+          rfc2579_date_time_tuple[2] > days_per_month):
         raise ValueError(u'Day of month value out of bounds.')
 
-      if system_time_tuple[4] not in range(0, 24):
+      if rfc2579_date_time_tuple[3] not in range(0, 24):
         raise ValueError(u'Hours value out of bounds.')
 
-      if system_time_tuple[5] not in range(0, 60):
+      if rfc2579_date_time_tuple[4] not in range(0, 60):
         raise ValueError(u'Minutes value out of bounds.')
 
       # TODO: support a leap second?
-      if system_time_tuple[6] not in range(0, 60):
+      if rfc2579_date_time_tuple[5] not in range(0, 60):
         raise ValueError(u'Seconds value out of bounds.')
 
-      if system_time_tuple[7] < 0 or system_time_tuple[7] > 999:
-        raise ValueError(u'Milliseconds value out of bounds.')
+      if rfc2579_date_time_tuple[6] < 0 or rfc2579_date_time_tuple[6] > 9:
+        raise ValueError(u'Deciseconds value out of bounds.')
 
-      self.day_of_month = system_time_tuple[3]
-      self.day_of_week = system_time_tuple[2]
-      self.hours = system_time_tuple[4]
-      self.milliseconds = system_time_tuple[7]
-      self.minutes = system_time_tuple[5]
-      self.month = system_time_tuple[1]
-      self.seconds = system_time_tuple[6]
-      self.year = system_time_tuple[0]
+      # TODO: add UTC offset support.
+
+      self.day_of_month = rfc2579_date_time_tuple[2]
+      self.deciseconds = rfc2579_date_time_tuple[6]
+      self.hours = rfc2579_date_time_tuple[3]
+      self.minutes = rfc2579_date_time_tuple[4]
+      self.month = rfc2579_date_time_tuple[1]
+      self.seconds = rfc2579_date_time_tuple[5]
+      self.year = rfc2579_date_time_tuple[0]
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
@@ -125,7 +135,7 @@ class Systemtime(interface.DateTimeValues):
     seconds = date_time_values.get(u'seconds', 0)
 
     microseconds = date_time_values.get(u'microseconds', 0)
-    milliseconds, _ = divmod(microseconds, 1000)
+    deciseconds, _ = divmod(microseconds, 100000)
 
     if year < 1601 or year > 30827:
       raise ValueError(u'Unsupported year value: {0:d}.'.format(year))
@@ -136,12 +146,10 @@ class Systemtime(interface.DateTimeValues):
     self.year = year
     self.month = month
     self.day_of_month = day_of_month
-    # TODO: calculate day of week on demand.
-    self.day_of_week = None
     self.hours = hours
     self.minutes = minutes
     self.seconds = seconds
-    self.milliseconds = milliseconds
+    self.deciseconds = deciseconds
 
     self.is_local_time = False
 
@@ -155,7 +163,7 @@ class Systemtime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return None, None
 
-    return self._number_of_seconds, self.milliseconds * 10000
+    return self._number_of_seconds, self.deciseconds * 1000000
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -166,4 +174,4 @@ class Systemtime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return
 
-    return ((self._number_of_seconds * 1000) + self.milliseconds) * 1000
+    return ((self._number_of_seconds * 10) + self.deciseconds) * 100000

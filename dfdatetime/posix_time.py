@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class PosixTime(interface.DateTimeValues):
-  """Class that implements a POSIX timestamp.
+  """POSIX timestamp.
 
   The POSIX timestamp is a signed integer that contains the number of
   seconds since 1970-01-01 00:00:00 (also known as the POSIX epoch).
@@ -83,7 +83,7 @@ class PosixTime(interface.DateTimeValues):
 
 
 class PosixTimeInMicroseconds(interface.DateTimeValues):
-  """Class that implements a POSIX timestamp in microseconds.
+  """POSIX timestamp in microseconds.
 
   Variant of the POSIX timestamp in microseconds.
 

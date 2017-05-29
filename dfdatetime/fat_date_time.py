@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class FATDateTime(interface.DateTimeValues):
-  """Class that implements a FAT date time.
+  """FAT date time.
 
   The FAT date time is mainly used in DOS/Windows file formats and FAT.
 

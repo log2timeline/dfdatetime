@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class JavaTime(interface.DateTimeValues):
-  """Class that implements a Java java.util.Date timestamp.
+  """Java java.util.Date timestamp.
 
   The Java java.util.Date timestamp is a signed integer that contains the
   number of milliseconds since 1970-01-01 00:00:00 (also known as the POSIX

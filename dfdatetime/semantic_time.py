@@ -5,7 +5,7 @@ from dfdatetime import interface
 
 
 class SemanticTime(interface.DateTimeValues):
-  """Class that implements semantic time.
+  """Semantic time.
 
   Semantic time is term to describe date and time values that have specific
   meaning such as: "Never", "Yesterday", "Not set".

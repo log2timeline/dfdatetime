@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class UUIDTime(interface.DateTimeValues):
-  """Class that implements an UUID version 1 timestamp.
+  """UUID version 1 timestamp.
 
   The UUID version 1 timestamp is an unsigned 60-bit value that contains
   the number of 100th nano seconds intervals since 1582-10-15 00:00:00.

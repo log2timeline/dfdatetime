@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class Filetime(interface.DateTimeValues):
-  """Class that implements a FILETIME timestamp.
+  """FILETIME timestamp.
 
   The FILETIME timestamp is a 64-bit integer that contains the number
   of 100th nano seconds since 1601-01-01 00:00:00.

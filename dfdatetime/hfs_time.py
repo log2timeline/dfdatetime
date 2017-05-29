@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class HFSTime(interface.DateTimeValues):
-  """Class that implements a HFS timestamp.
+  """HFS timestamp.
 
   The HFS timestamp is an unsigned 32-bit integer that contains the number of
   seconds since 1904-01-01 00:00:00. Where in HFS the timestamp is typically

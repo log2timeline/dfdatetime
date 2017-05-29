@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class TimeElements(interface.DateTimeValues):
-  """Class that implements time elements.
+  """Time elements.
 
   Time elements contain separate values for year, month, day of month,
   hours, minutes and seconds.
@@ -189,7 +189,7 @@ class TimeElements(interface.DateTimeValues):
 
 
 class TimeElementsInMilliseconds(TimeElements):
-  """Class that implements time elements in milliseconds.
+  """Time elements in milliseconds.
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.

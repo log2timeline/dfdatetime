@@ -6,7 +6,7 @@ from dfdatetime import interface
 
 
 class DelphiDateTime(interface.DateTimeValues):
-  """Class that implements a Delphi TDateTime timestamp.
+  """Delphi TDateTime timestamp.
 
   The Delphi TDateTime timestamp is a floating point value that contains
   the number of days since 1899-12-30 00:00:00 (also known as the epoch).

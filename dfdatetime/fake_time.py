@@ -8,7 +8,7 @@ from dfdatetime import interface
 
 
 class FakeTime(interface.DateTimeValues):
-  """Class that implements a fake timestamp.
+  """Fake timestamp.
 
   The fake timestamp is intended for testing purposes. On initialization
   it contains the current time in UTC in microsecond precision.

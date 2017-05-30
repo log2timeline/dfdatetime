@@ -30,7 +30,7 @@ class RFC2579DateTimeInvalidYear(rfc2579_date_time.RFC2579DateTime):
       ValueError: if the time string is invalid or not supported.
     """
     return {
-        u'year': 10000,
+        u'year': 70000,
         u'month': 1,
         u'day_of_month': 2,
         u'hours': 0,

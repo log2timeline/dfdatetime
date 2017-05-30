@@ -7,6 +7,37 @@ import unittest
 from dfdatetime import delphi_date_time
 
 
+class DelphiDateTimeInvalidYear(delphi_date_time.DelphiDateTime):
+  """Delphi TDateTime timestamp for testing invalid year in CopyFromString."""
+
+  def _CopyDateTimeFromString(self, unused_time_string):
+    """Copies a date and time from a string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and time zone offset are optional. The default time zone
+          is UTC.
+
+    Returns:
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds, microseconds.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    return {
+        u'year': 10000,
+        u'month': 1,
+        u'day_of_month': 2,
+        u'hours': 0,
+        u'minutes': 0,
+        u'seconds': 0}
+
+
 class DelphiDateTimeTest(unittest.TestCase):
   """Tests for the Delphi TDateTime timestamp."""
 
@@ -38,8 +69,10 @@ class DelphiDateTimeTest(unittest.TestCase):
     delphi_date_time_object.CopyFromString(u'1899-12-31 00:00:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
+    delphi_date_time_object = DelphiDateTimeInvalidYear()
+
     with self.assertRaises(ValueError):
-      delphi_date_time_object.CopyFromString(u'10000-01-01 00:00:00')
+      delphi_date_time_object.CopyFromString(u'10000-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

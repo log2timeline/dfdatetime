@@ -182,7 +182,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
     rfc2579_date_time_object = RFC2579DateTimeInvalidYear()
 
     with self.assertRaises(ValueError):
-      rfc2579_date_time_object.CopyFromString(u'10000-01-02 00:00:00')
+      rfc2579_date_time_object.CopyFromString(u'9999-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

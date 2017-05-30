@@ -72,7 +72,7 @@ class DelphiDateTimeTest(unittest.TestCase):
     delphi_date_time_object = DelphiDateTimeInvalidYear()
 
     with self.assertRaises(ValueError):
-      delphi_date_time_object.CopyFromString(u'10000-01-02 00:00:00')
+      delphi_date_time_object.CopyFromString(u'9999-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

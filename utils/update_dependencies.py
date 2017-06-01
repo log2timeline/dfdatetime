@@ -5,23 +5,29 @@
 import os
 import sys
 
-# Change PYTHONPATH to include dependencies.
+# Change PYTHONPATH to include dependencies and projects.
 sys.path.insert(0, u'.')
 
 import utils.dependencies  # pylint: disable=wrong-import-position
+import utils.projects  # pylint: disable=wrong-import-position
+
+
+# pylint: disable=redefined-outer-name
 
 
 class DependencyFileWriter(object):
   """Dependency file writer."""
 
-  def __init__(self, dependency_helper):
+  def __init__(self, project_definition, dependency_helper):
     """Initializes a dependency file writer.
 
     Args:
+      project_definition (ProjectDefinition): project definition.
       dependency_helper (DependencyHelper): dependency helper.
     """
     super(DependencyFileWriter, self).__init__()
     self._dependency_helper = dependency_helper
+    self._project_definition = project_definition
 
 
 class AppveyorYmlWriter(DependencyFileWriter):
@@ -122,61 +128,60 @@ class DPKGControlWriter(DependencyFileWriter):
 
   _PATH = os.path.join(u'config', u'dpkg', u'control')
 
-  _PROJECT_NAME = u'dfdatetime'
-
-  _MAINTAINER = (
-      u'Log2Timeline maintainers <log2timeline-maintainers@googlegroups.com>')
-
-  _FILE_HEADER = [
-      u'Source: {0:s}'.format(_PROJECT_NAME),
+  _FILE_CONTENT = u'\n'.join([
+      u'Source: {project_name:s}',
       u'Section: python',
       u'Priority: extra',
-      u'Maintainer: {0:s}'.format(_MAINTAINER),
+      u'Maintainer: {maintainer:s}',
       (u'Build-Depends: debhelper (>= 7), python-all (>= 2.7~), '
        u'python-setuptools, python3-all (>= 3.4~), python3-setuptools'),
       u'Standards-Version: 3.9.5',
       u'X-Python-Version: >= 2.7',
       u'X-Python3-Version: >= 3.4',
-      u'Homepage: https://github.com/log2timeline/dfdatetime',
-      u'']
-
-  _PYTHON2_PACKAGE_HEADER = [
-      u'Package: python-{0:s}'.format(_PROJECT_NAME),
-      u'Architecture: all']
-
-  _PYTHON3_PACKAGE_HEADER = [
-      u'Package: python3-{0:s}'.format(_PROJECT_NAME),
-      u'Architecture: all']
-
-  _PYTHON_PACKAGE_FOOTER = [
-      u'Description: Digital Forensics date and time (dfDateTime).',
-      (u' dfDateTime, or Digital Forensics date and time, provides date and '
-       u'time objects'),
-      u' to preserve accuracy and precision.',
-      u'']
+      u'Homepage: {homepage_url:s}',
+      u'',
+      u'Package: python-{project_name:s}',
+      u'Architecture: all',
+      (u'Depends: {python2_dependencies:s}${{python:Depends}}, '
+       u'${{misc:Depends}}'),
+      u'Description: {description_short:s}',
+      u'{description_long:s}',
+      u'',
+      u'Package: python3-{project_name:s}',
+      u'Architecture: all',
+      (u'Depends: {python3_dependencies:s}${{python3:Depends}}, '
+       u'${{misc:Depends}}'),
+      u'Description: {description_short:s}',
+      u'{description_long:s}',
+      u''])
 
   def Write(self):
     """Writes a dpkg control file."""
-    file_content = []
-    file_content.extend(self._FILE_HEADER)
-    file_content.extend(self._PYTHON2_PACKAGE_HEADER)
-
     dependencies = self._dependency_helper.GetDPKGDepends()
-    dependencies.extend([u'${python:Depends}', u'${misc:Depends}'])
-    dependencies = u', '.join(dependencies)
 
-    file_content.append(u'Depends: {0:s}'.format(dependencies))
+    description_long = self._project_definition.description_long
+    description_long = u'\n'.join([
+        u' {0:s}'.format(line) for line in description_long.split(u'\n')])
 
-    file_content.extend(self._PYTHON_PACKAGE_FOOTER)
-    file_content.extend(self._PYTHON3_PACKAGE_HEADER)
+    python2_dependencies = u', '.join(dependencies)
+    if python2_dependencies:
+      python2_dependencies = u'{0:s}, '.format(python2_dependencies)
 
-    dependencies = dependencies.replace(u'python', u'python3')
+    python3_dependencies = u', '.join(dependencies).replace(
+        u'python', u'python3')
+    if python3_dependencies:
+      python3_dependencies = u'{0:s}, '.format(python3_dependencies)
 
-    file_content.append(u'Depends: {0:s}'.format(dependencies))
+    kwargs = {
+        u'description_long': description_long,
+        u'description_short': self._project_definition.description_short,
+        u'homepage_url': self._project_definition.homepage_url,
+        u'maintainer': self._project_definition.maintainer,
+        u'project_name': self._project_definition.name,
+        u'python2_dependencies': python2_dependencies,
+        u'python3_dependencies': python3_dependencies}
+    file_content = self._FILE_CONTENT.format(**kwargs)
 
-    file_content.extend(self._PYTHON_PACKAGE_FOOTER)
-
-    file_content = u'\n'.join(file_content)
     file_content = file_content.encode(u'utf-8')
 
     with open(self._PATH, 'wb') as file_object:
@@ -211,23 +216,22 @@ class SetupCfgWriter(DependencyFileWriter):
 
   _PATH = u'setup.cfg'
 
-  _MAINTAINER = (
-      u'Log2Timeline maintainers <log2timeline-maintainers@googlegroups.com>')
-
-  _FILE_HEADER = [
+  _FILE_HEADER = u'\n'.join([
       u'[bdist_rpm]',
       u'release = 1',
-      u'packager = {0:s}'.format(_MAINTAINER),
+      u'packager = {maintainer:s}',
       u'doc_files = ACKNOWLEDGEMENTS',
       u'            AUTHORS',
       u'            LICENSE',
       u'            README',
-      u'build_requires = python-setuptools']
+      u'build_requires = python-setuptools'])
 
   def Write(self):
     """Writes a setup.cfg file."""
-    file_content = []
-    file_content.extend(self._FILE_HEADER)
+    kwargs = {u'maintainer': self._project_definition.maintainer}
+    file_header = self._FILE_HEADER.format(**kwargs)
+
+    file_content = [file_header]
 
     dependencies = self._dependency_helper.GetRPMRequires()
     for index, dependency in enumerate(dependencies):
@@ -324,16 +328,14 @@ class ToxIniWriter(DependencyFileWriter):
 
   _PATH = u'tox.ini'
 
-  _PROJECT_NAME = u'dfdatetime'
-
-  _FILE_CONTENT = [
+  _FILE_CONTENT = u'\n'.join([
       u'[tox]',
       u'envlist = py2, py3',
       u'',
       u'[testenv]',
       u'pip_pre = True',
       u'setenv =',
-      u'    PYTHONPATH = {toxinidir}',
+      u'    PYTHONPATH = {{toxinidir}}',
       u'deps =',
       u'    coverage',
       u'    mock',
@@ -341,14 +343,15 @@ class ToxIniWriter(DependencyFileWriter):
       u'    -rrequirements.txt',
       u'commands =',
       u'    coverage erase',
-      (u'    coverage run --source={0:s} '
-       u'--omit="*_test*,*__init__*,*test_lib*" run_tests.py').format(
-           _PROJECT_NAME),
-      u'']
+      (u'    coverage run --source={project_name:s} '
+       u'--omit="*_test*,*__init__*,*test_lib*" run_tests.py'),
+      u''])
 
   def Write(self):
     """Writes a setup.cfg file."""
-    file_content = u'\n'.join(self._FILE_CONTENT)
+    kwargs = {u'project_name': self._project_definition.name}
+    file_content = self._FILE_CONTENT.format(**kwargs)
+
     file_content = file_content.encode(u'utf-8')
 
     with open(self._PATH, 'wb') as file_object:
@@ -356,10 +359,20 @@ class ToxIniWriter(DependencyFileWriter):
 
 
 if __name__ == u'__main__':
+  project_file = os.path.abspath(__file__)
+  project_file = os.path.dirname(project_file)
+  project_file = os.path.dirname(project_file)
+  project_file = os.path.basename(project_file)
+  project_file = u'{0:s}.ini'.format(project_file)
+
+  project_reader = utils.projects.ProjectDefinitionReader()
+  with open(project_file, 'rb') as file_object:
+    project_definition = project_reader.Read(file_object)
+
   helper = utils.dependencies.DependencyHelper()
 
   for writer_class in (
       AppveyorYmlWriter, DPKGControlWriter, RequirementsWriter, SetupCfgWriter,
       TravisBeforeInstallScriptWriter, ToxIniWriter):
-    writer = writer_class(helper)
+    writer = writer_class(project_definition, helper)
     writer.Write()

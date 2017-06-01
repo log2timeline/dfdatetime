@@ -10,7 +10,7 @@ L2TBINARIES_TEST_DEPENDENCIES="funcsigs mock pbr six";
 
 PYTHON2_DEPENDENCIES="";
 
-PYTHON2_TEST_DEPENDENCIES="python-mock";
+PYTHON2_TEST_DEPENDENCIES="python-mock python-tox";
 
 # Exit on error.
 set -e;

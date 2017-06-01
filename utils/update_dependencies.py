@@ -188,10 +188,7 @@ class RequirementsWriter(DependencyFileWriter):
 
   _PATH = u'requirements.txt'
 
-  _FILE_HEADER = [
-      u'pip >= 7.0.0',
-      u'pytest',
-      u'mock']
+  _FILE_HEADER = [u'pip >= 7.0.0']
 
   def Write(self):
     """Writes a requirements.txt file."""
@@ -238,6 +235,8 @@ class SetupCfgWriter(DependencyFileWriter):
         file_content.append(u'requires = {0:s}'.format(dependency))
       else:
         file_content.append(u'           {0:s}'.format(dependency))
+
+    file_content.append(u'')
 
     file_content = u'\n'.join(file_content)
     file_content = file_content.encode(u'utf-8')
@@ -309,11 +308,47 @@ class TravisBeforeInstallScriptWriter(DependencyFileWriter):
     file_content.append(u'PYTHON2_DEPENDENCIES="{0:s}";'.format(dependencies))
 
     file_content.append(u'')
-    file_content.append(u'PYTHON2_TEST_DEPENDENCIES="python-mock";')
+    file_content.append(u'PYTHON2_TEST_DEPENDENCIES="python-mock python-tox";')
 
     file_content.extend(self._FILE_FOOTER)
 
     file_content = u'\n'.join(file_content)
+    file_content = file_content.encode(u'utf-8')
+
+    with open(self._PATH, 'wb') as file_object:
+      file_object.write(file_content)
+
+
+class ToxIniWriter(DependencyFileWriter):
+  """Tox.ini file writer."""
+
+  _PATH = u'tox.ini'
+
+  _PROJECT_NAME = u'dfdatetime'
+
+  _FILE_CONTENT = [
+      u'[tox]',
+      u'envlist = py2, py3',
+      u'',
+      u'[testenv]',
+      u'pip_pre = True',
+      u'setenv =',
+      u'    PYTHONPATH = {toxinidir}',
+      u'deps =',
+      u'    coverage',
+      u'    mock',
+      u'    pytest',
+      u'    -rrequirements.txt',
+      u'commands =',
+      u'    coverage erase',
+      (u'    coverage run --source={0:s} '
+       u'--omit="*_test*,*__init__*,*test_lib*" run_tests.py').format(
+          _PROJECT_NAME),
+      u'']
+
+  def Write(self):
+    """Writes a setup.cfg file."""
+    file_content = u'\n'.join(self._FILE_CONTENT)
     file_content = file_content.encode(u'utf-8')
 
     with open(self._PATH, 'wb') as file_object:
@@ -325,6 +360,6 @@ if __name__ == u'__main__':
 
   for writer_class in (
       AppveyorYmlWriter, DPKGControlWriter, RequirementsWriter, SetupCfgWriter,
-      TravisBeforeInstallScriptWriter):
+      TravisBeforeInstallScriptWriter, ToxIniWriter):
     writer = writer_class(helper)
     writer.Write()

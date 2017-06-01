@@ -343,7 +343,7 @@ class ToxIniWriter(DependencyFileWriter):
       u'    coverage erase',
       (u'    coverage run --source={0:s} '
        u'--omit="*_test*,*__init__*,*test_lib*" run_tests.py').format(
-          _PROJECT_NAME),
+           _PROJECT_NAME),
       u'']
 
   def Write(self):

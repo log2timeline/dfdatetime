@@ -3,11 +3,11 @@ Upstream-Name: dfdatetime
 Source: https://github.com/log2timeline/dfdatetime/
 
 Files: *
-Copyright: 2016 The dfWinReg project authors.
+Copyright: 2016 The dfDateTime project authors.
 License: Apache-2.0
 
 Files: debian/*
-Copyright: 2016 The dfWinReg project authors.
+Copyright: 2016 The dfDateTime project authors.
 License: Apache-2.0
 
 License: Apache-2.0

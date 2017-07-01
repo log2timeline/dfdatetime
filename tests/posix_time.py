@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the POSIX timestamp implementation."""
 
+from __future__ import unicode_literals
+
 import unittest
 
 from dfdatetime import posix_time
@@ -15,27 +17,27 @@ class PosixTimeTest(unittest.TestCase):
     posix_time_object = posix_time.PosixTime()
 
     expected_timestamp = 1281571200
-    posix_time_object.CopyFromString(u'2010-08-12')
+    posix_time_object.CopyFromString('2010-08-12')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281647191
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281647191
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31.546875')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31.546875')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281650791
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31.546875-01:00')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281643591
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = -11644387200
-    posix_time_object.CopyFromString(u'1601-01-02 00:00:00')
+    posix_time_object.CopyFromString('1601-01-02 00:00:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
   def testCopyToStatTimeTuple(self):
@@ -74,27 +76,27 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     posix_time_object = posix_time.PosixTimeInMicroseconds()
 
     expected_timestamp = 1281571200000000
-    posix_time_object.CopyFromString(u'2010-08-12')
+    posix_time_object.CopyFromString('2010-08-12')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281647191000000
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281647191546875
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31.546875')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31.546875')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281650791546875
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31.546875-01:00')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281643591546875
-    posix_time_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
+    posix_time_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = -11644387200000000
-    posix_time_object.CopyFromString(u'1601-01-02 00:00:00')
+    posix_time_object.CopyFromString('1601-01-02 00:00:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
   def testCopyToStatTimeTuple(self):

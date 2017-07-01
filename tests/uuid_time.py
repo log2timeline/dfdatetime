@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the UUID version 1 timestamp implementation."""
 
+from __future__ import unicode_literals
+
 import uuid
 import unittest
 
@@ -16,7 +18,7 @@ class UUIDTimeTest(unittest.TestCase):
     uuid_time_object = uuid_time.UUIDTime()
     self.assertIsNotNone(uuid_time_object)
 
-    uuid_object = uuid.UUID(u'00911b54-9ef4-11e1-be53-525400123456')
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
     uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
     self.assertIsNotNone(uuid_time_object)
     expected_timestamp = 135564234616544084
@@ -33,35 +35,35 @@ class UUIDTimeTest(unittest.TestCase):
     uuid_time_object = uuid_time.UUIDTime()
 
     expected_timestamp = 135946080000000000
-    uuid_time_object.CopyFromString(u'2013-08-01')
+    uuid_time_object.CopyFromString('2013-08-01')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946635280000000
-    uuid_time_object.CopyFromString(u'2013-08-01 15:25:28')
+    uuid_time_object.CopyFromString('2013-08-01 15:25:28')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946635285468750
-    uuid_time_object.CopyFromString(u'2013-08-01 15:25:28.546875')
+    uuid_time_object.CopyFromString('2013-08-01 15:25:28.546875')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946671285468750
-    uuid_time_object.CopyFromString(u'2013-08-01 15:25:28.546875-01:00')
+    uuid_time_object.CopyFromString('2013-08-01 15:25:28.546875-01:00')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946599285468750
-    uuid_time_object.CopyFromString(u'2013-08-01 15:25:28.546875+01:00')
+    uuid_time_object.CopyFromString('2013-08-01 15:25:28.546875+01:00')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 864000000000
-    uuid_time_object.CopyFromString(u'1582-10-16 00:00:00')
+    uuid_time_object.CopyFromString('1582-10-16 00:00:00')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     with self.assertRaises(ValueError):
-      uuid_time_object.CopyFromString(u'1570-01-02 00:00:00')
+      uuid_time_object.CopyFromString('1570-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
-    uuid_object = uuid.UUID(u'00911b54-9ef4-11e1-be53-525400123456')
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
     uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
 
     expected_stat_time_tuple = (1337130661, 6544084)
@@ -90,7 +92,7 @@ class UUIDTimeTest(unittest.TestCase):
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
-    uuid_object = uuid.UUID(u'00911b54-9ef4-11e1-be53-525400123456')
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
     uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
 
     expected_micro_posix_timestamp = 1337130661654408

@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the Delphi TDateTime timestamp implementation."""
 
+from __future__ import unicode_literals
+
 import unittest
 
 from dfdatetime import delphi_date_time
@@ -30,12 +32,12 @@ class DelphiDateTimeInvalidYear(delphi_date_time.DelphiDateTime):
       ValueError: if the time string is invalid or not supported.
     """
     return {
-        u'year': 10000,
-        u'month': 1,
-        u'day_of_month': 2,
-        u'hours': 0,
-        u'minutes': 0,
-        u'seconds': 0}
+        'year': 10000,
+        'month': 1,
+        'day_of_month': 2,
+        'hours': 0,
+        'minutes': 0,
+        'seconds': 0}
 
 
 class DelphiDateTimeTest(unittest.TestCase):
@@ -46,33 +48,33 @@ class DelphiDateTimeTest(unittest.TestCase):
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 
     expected_timestamp = 41443.0
-    delphi_date_time_object.CopyFromString(u'2013-06-18')
+    delphi_date_time_object.CopyFromString('2013-06-18')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 41443.82638888889
-    delphi_date_time_object.CopyFromString(u'2013-06-18 19:50:00')
+    delphi_date_time_object.CopyFromString('2013-06-18 19:50:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 41443.826395218464
-    delphi_date_time_object.CopyFromString(u'2013-06-18 19:50:00.546875')
+    delphi_date_time_object.CopyFromString('2013-06-18 19:50:00.546875')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 41443.86806188513
-    delphi_date_time_object.CopyFromString(u'2013-06-18 19:50:00.546875-01:00')
+    delphi_date_time_object.CopyFromString('2013-06-18 19:50:00.546875-01:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 41443.78472855179
-    delphi_date_time_object.CopyFromString(u'2013-06-18 19:50:00.546875+01:00')
+    delphi_date_time_object.CopyFromString('2013-06-18 19:50:00.546875+01:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1.0
-    delphi_date_time_object.CopyFromString(u'1899-12-31 00:00:00')
+    delphi_date_time_object.CopyFromString('1899-12-31 00:00:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     delphi_date_time_object = DelphiDateTimeInvalidYear()
 
     with self.assertRaises(ValueError):
-      delphi_date_time_object.CopyFromString(u'9999-01-02 00:00:00')
+      delphi_date_time_object.CopyFromString('9999-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the SYSTEMTIME structure implementation."""
 
+from __future__ import unicode_literals
+
 import unittest
 
 from dfdatetime import systemtime
@@ -69,7 +71,7 @@ class FiletimeTest(unittest.TestCase):
     systemtime_object = systemtime.Systemtime()
 
     expected_number_of_seconds = 1281571200
-    systemtime_object.CopyFromString(u'2010-08-12')
+    systemtime_object.CopyFromString('2010-08-12')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -81,7 +83,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 0)
 
     expected_number_of_seconds = 1281647191
-    systemtime_object.CopyFromString(u'2010-08-12 21:06:31')
+    systemtime_object.CopyFromString('2010-08-12 21:06:31')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -93,7 +95,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 0)
 
     expected_number_of_seconds = 1281647191
-    systemtime_object.CopyFromString(u'2010-08-12 21:06:31.546875')
+    systemtime_object.CopyFromString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -105,7 +107,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
 
     expected_number_of_seconds = 1281650791
-    systemtime_object.CopyFromString(u'2010-08-12 21:06:31.546875-01:00')
+    systemtime_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -117,7 +119,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
 
     expected_number_of_seconds = 1281643591
-    systemtime_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
+    systemtime_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -129,7 +131,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
 
     expected_number_of_seconds = -11644387200
-    systemtime_object.CopyFromString(u'1601-01-02 00:00:00')
+    systemtime_object.CopyFromString('1601-01-02 00:00:00')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 1601)
@@ -141,7 +143,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 0)
 
     with self.assertRaises(ValueError):
-      systemtime_object.CopyFromString(u'1600-01-02 00:00:00')
+      systemtime_object.CopyFromString('1600-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

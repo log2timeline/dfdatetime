@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Date and time values interface."""
 
+from __future__ import unicode_literals
+
 import abc
 import calendar
 
@@ -98,29 +100,29 @@ class DateTimeValues(object):
 
     # The date string should at least contain 'YYYY-MM-DD'.
     if date_string_length < 10:
-      raise ValueError(u'Date string too short.')
+      raise ValueError('Date string too short.')
 
-    if date_string[4] != u'-' or date_string[7] != u'-':
-      raise ValueError(u'Invalid date string.')
+    if date_string[4] != '-' or date_string[7] != '-':
+      raise ValueError('Invalid date string.')
 
     try:
       year = int(date_string[0:4], 10)
     except ValueError:
-      raise ValueError(u'Unable to parse year.')
+      raise ValueError('Unable to parse year.')
 
     try:
       month = int(date_string[5:7], 10)
     except ValueError:
-      raise ValueError(u'Unable to parse month.')
+      raise ValueError('Unable to parse month.')
 
     try:
       day_of_month = int(date_string[8:10], 10)
     except ValueError:
-      raise ValueError(u'Unable to parse day of month.')
+      raise ValueError('Unable to parse day of month.')
 
     days_per_month = self._GetDaysPerMonth(year, month)
     if day_of_month < 1 or day_of_month > days_per_month:
-      raise ValueError(u'Day of month value out of bounds.')
+      raise ValueError('Day of month value out of bounds.')
 
     return year, month, day_of_month
 
@@ -144,7 +146,7 @@ class DateTimeValues(object):
       ValueError: if the time string is invalid or not supported.
     """
     if not time_string:
-      raise ValueError(u'Invalid time string.')
+      raise ValueError('Invalid time string.')
 
     time_string_length = len(time_string)
 
@@ -152,15 +154,15 @@ class DateTimeValues(object):
 
     if time_string_length <= 10:
       return {
-          u'year': year,
-          u'month': month,
-          u'day_of_month': day_of_month}
+          'year': year,
+          'month': month,
+          'day_of_month': day_of_month}
 
     # If a time of day is specified the time string it should at least
     # contain 'YYYY-MM-DD hh:mm:ss'.
-    if time_string[10] != u' ':
+    if time_string[10] != ' ':
       raise ValueError(
-          u'Invalid time string - space missing as date and time separator.')
+          'Invalid time string - space missing as date and time separator.')
 
     hours, minutes, seconds, microseconds, time_zone_offset = (
         self._CopyTimeFromString(time_string[11:]))
@@ -170,15 +172,15 @@ class DateTimeValues(object):
           year, month, day_of_month, hours, minutes, time_zone_offset)
 
     date_time_values = {
-        u'year': year,
-        u'month': month,
-        u'day_of_month': day_of_month,
-        u'hours': hours,
-        u'minutes': minutes,
-        u'seconds': seconds}
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds}
 
     if microseconds is not None:
-      date_time_values[u'microseconds'] = microseconds
+      date_time_values['microseconds'] = microseconds
     return date_time_values
 
   def _CopyTimeFromString(self, time_string):
@@ -202,46 +204,46 @@ class DateTimeValues(object):
     time_string_length = len(time_string)
 
     if time_string_length < 8:
-      raise ValueError(u'Time string too short.')
+      raise ValueError('Time string too short.')
 
     # The time string should at least contain 'hh:mm:ss'.
-    if time_string[2] != u':' or time_string[5] != u':':
-      raise ValueError(u'Invalid time string.')
+    if time_string[2] != ':' or time_string[5] != ':':
+      raise ValueError('Invalid time string.')
 
     try:
       hours = int(time_string[0:2], 10)
     except ValueError:
-      raise ValueError(u'Unable to parse hours.')
+      raise ValueError('Unable to parse hours.')
 
     if hours not in range(0, 24):
-      raise ValueError(u'Hours value out of bounds.')
+      raise ValueError('Hours value out of bounds.')
 
     try:
       minutes = int(time_string[3:5], 10)
     except ValueError:
-      raise ValueError(u'Unable to parse minutes.')
+      raise ValueError('Unable to parse minutes.')
 
     if minutes not in range(0, 60):
-      raise ValueError(u'Minutes value out of bounds.')
+      raise ValueError('Minutes value out of bounds.')
 
     try:
       seconds = int(time_string[6:8], 10)
     except ValueError:
-      raise ValueError(u'Unable to parse day of seconds.')
+      raise ValueError('Unable to parse day of seconds.')
 
     # TODO: support a leap second?
     if seconds not in range(0, 60):
-      raise ValueError(u'Seconds value out of bounds.')
+      raise ValueError('Seconds value out of bounds.')
 
     microseconds = None
     time_zone_offset = None
 
     if time_string_length > 8:
-      if time_string[8] != u'.':
+      if time_string[8] != '.':
         time_zone_string_index = 8
       else:
         for time_zone_string_index in range(8, time_string_length):
-          if time_string[time_zone_string_index] in (u'+', u'-'):
+          if time_string[time_zone_string_index] in ('+', '-'):
             break
 
           # The calculations that follow rely on the time zone string index
@@ -252,44 +254,44 @@ class DateTimeValues(object):
       if time_zone_string_index > 8:
         fraction_of_seconds_length = time_zone_string_index - 9
         if fraction_of_seconds_length not in (3, 6):
-          raise ValueError(u'Invalid time string.')
+          raise ValueError('Invalid time string.')
 
         try:
           microseconds = int(time_string[9:time_zone_string_index], 10)
         except ValueError:
-          raise ValueError(u'Unable to parse fraction of seconds.')
+          raise ValueError('Unable to parse fraction of seconds.')
 
         if fraction_of_seconds_length == 3:
           microseconds *= 1000
 
       if time_zone_string_index < time_string_length:
         if (time_string_length - time_zone_string_index != 6 or
-            time_string[time_zone_string_index + 3] != u':'):
-          raise ValueError(u'Invalid time string.')
+            time_string[time_zone_string_index + 3] != ':'):
+          raise ValueError('Invalid time string.')
 
         try:
           hours_from_utc = int(time_string[
               time_zone_string_index + 1:time_zone_string_index + 3])
         except ValueError:
-          raise ValueError(u'Unable to parse time zone hours offset.')
+          raise ValueError('Unable to parse time zone hours offset.')
 
         if hours_from_utc not in range(0, 15):
-          raise ValueError(u'Time zone hours offset value out of bounds.')
+          raise ValueError('Time zone hours offset value out of bounds.')
 
         try:
           minutes_from_utc = int(time_string[
               time_zone_string_index + 4:time_zone_string_index + 6])
         except ValueError:
-          raise ValueError(u'Unable to parse time zone minutes offset.')
+          raise ValueError('Unable to parse time zone minutes offset.')
 
         if minutes_from_utc not in range(0, 60):
-          raise ValueError(u'Time zone minutes offset value out of bounds.')
+          raise ValueError('Time zone minutes offset value out of bounds.')
 
         time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
 
         # Note that when the sign of the time zone offset is negative
         # the difference needs to be added. We do so by flipping the sign.
-        if time_string[time_zone_string_index] != u'-':
+        if time_string[time_zone_string_index] != '-':
           time_zone_offset = -time_zone_offset
 
     return hours, minutes, seconds, microseconds, time_zone_offset
@@ -309,11 +311,11 @@ class DateTimeValues(object):
       ValueError: if the month or day of month value is out of bounds.
     """
     if month not in range(1, 13):
-      raise ValueError(u'Month value out of bounds.')
+      raise ValueError('Month value out of bounds.')
 
     days_per_month = self._GetDaysPerMonth(year, month)
     if day_of_month < 1 or day_of_month > days_per_month:
-      raise ValueError(u'Day of month value out of bounds.')
+      raise ValueError('Day of month value out of bounds.')
 
     day_of_year = day_of_month
     for past_month in range(1, month):
@@ -335,7 +337,7 @@ class DateTimeValues(object):
       ValueError: if the month value is out of bounds.
     """
     if month not in range(1, 13):
-      raise ValueError(u'Month value out of bounds.')
+      raise ValueError('Month value out of bounds.')
 
     days_per_month = self._DAYS_PER_MONTH[month - 1]
     if month == 2 and self._IsLeapYear(year):
@@ -381,18 +383,18 @@ class DateTimeValues(object):
     if hours is None:
       hours = 0
     elif hours not in range(0, 24):
-      raise ValueError(u'Hours value: {0!s} out of bounds.'.format(hours))
+      raise ValueError('Hours value: {0!s} out of bounds.'.format(hours))
 
     if minutes is None:
       minutes = 0
     elif minutes not in range(0, 60):
-      raise ValueError(u'Minutes value: {0!s} out of bounds.'.format(minutes))
+      raise ValueError('Minutes value: {0!s} out of bounds.'.format(minutes))
 
     # TODO: support a leap second?
     if seconds is None:
       seconds = 0
     elif seconds not in range(0, 60):
-      raise ValueError(u'Seconds value: {0!s} out of bounds.'.format(seconds))
+      raise ValueError('Seconds value: {0!s} out of bounds.'.format(seconds))
 
     # calendar.timegm requires the time tuple to contain at least
     # 6 integer values.

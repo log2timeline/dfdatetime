@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the date and time values interface."""
 
+from __future__ import unicode_literals
+
 import unittest
 
 from dfdatetime import interface
@@ -19,217 +21,217 @@ class DateTimeValuesTest(unittest.TestCase):
     date_time_values = interface.DateTimeValues()
 
     expected_date_tuple = (2010, 1, 1)
-    date_tuple = date_time_values._CopyDateFromString(u'2010-01-01')
+    date_tuple = date_time_values._CopyDateFromString('2010-01-01')
     self.assertEqual(date_tuple, expected_date_tuple)
 
     expected_date_tuple = (2010, 8, 1)
-    date_tuple = date_time_values._CopyDateFromString(u'2010-08-01')
+    date_tuple = date_time_values._CopyDateFromString('2010-08-01')
     self.assertEqual(date_tuple, expected_date_tuple)
 
     expected_date_tuple = (2010, 8, 12)
-    date_tuple = date_time_values._CopyDateFromString(u'2010-08-12')
+    date_tuple = date_time_values._CopyDateFromString('2010-08-12')
     self.assertEqual(date_tuple, expected_date_tuple)
 
     expected_date_tuple = (2010, 8, 31)
-    date_tuple = date_time_values._CopyDateFromString(u'2010-08-31')
+    date_tuple = date_time_values._CopyDateFromString('2010-08-31')
     self.assertEqual(date_tuple, expected_date_tuple)
 
     expected_date_tuple = (2010, 12, 31)
-    date_tuple = date_time_values._CopyDateFromString(u'2010-12-31')
+    date_tuple = date_time_values._CopyDateFromString('2010-12-31')
     self.assertEqual(date_tuple, expected_date_tuple)
 
     expected_date_tuple = (1601, 1, 2)
-    date_tuple = date_time_values._CopyDateFromString(u'1601-01-02')
+    date_tuple = date_time_values._CopyDateFromString('1601-01-02')
     self.assertEqual(date_tuple, expected_date_tuple)
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'')
+      date_time_values._CopyDateFromString('')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'195a-01-02')
+      date_time_values._CopyDateFromString('195a-01-02')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'10000-01-02')
+      date_time_values._CopyDateFromString('10000-01-02')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'2010-09-00')
+      date_time_values._CopyDateFromString('2010-09-00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'2010-09-31')
+      date_time_values._CopyDateFromString('2010-09-31')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'1601-01-32')
+      date_time_values._CopyDateFromString('1601-01-32')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'1601-01-b2')
+      date_time_values._CopyDateFromString('1601-01-b2')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'1601-13-02')
+      date_time_values._CopyDateFromString('1601-13-02')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'1601-a1-02')
+      date_time_values._CopyDateFromString('1601-a1-02')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'2010-02-29')
+      date_time_values._CopyDateFromString('2010-02-29')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateFromString(u'2010-04-31')
+      date_time_values._CopyDateFromString('2010-04-31')
 
   def testCopyDateTimeFromString(self):
     """Tests the _CopyDateTimeFromString function."""
     date_time_values = interface.DateTimeValues()
 
     expected_date_dict = {
-        u'year': 2010, u'month': 8, u'day_of_month': 12}
-    date_dict = date_time_values._CopyDateTimeFromString(u'2010-08-12')
+        'year': 2010, 'month': 8, 'day_of_month': 12}
+    date_dict = date_time_values._CopyDateTimeFromString('2010-08-12')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
-        u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 21, u'minutes': 6, u'seconds': 31}
+        'year': 2010, 'month': 8, 'day_of_month': 12,
+        'hours': 21, 'minutes': 6, 'seconds': 31}
     date_dict = date_time_values._CopyDateTimeFromString(
-        u'2010-08-12 21:06:31')
+        '2010-08-12 21:06:31')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
-        u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 21, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
+        'year': 2010, 'month': 8, 'day_of_month': 12,
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
     date_dict = date_time_values._CopyDateTimeFromString(
-        u'2010-08-12 21:06:31.546875')
+        '2010-08-12 21:06:31.546875')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
-        u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 22, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
+        'year': 2010, 'month': 8, 'day_of_month': 12,
+        'hours': 22, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
     date_dict = date_time_values._CopyDateTimeFromString(
-        u'2010-08-12 21:06:31.546875-01:00')
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
-        u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 20, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
+        'year': 2010, 'month': 8, 'day_of_month': 12,
+        'hours': 20, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
     date_dict = date_time_values._CopyDateTimeFromString(
-        u'2010-08-12 21:06:31.546875+01:00')
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
-        u'year': 2010, u'month': 8, u'day_of_month': 12,
-        u'hours': 20, u'minutes': 6, u'seconds': 31, u'microseconds': 546875}
+        'year': 2010, 'month': 8, 'day_of_month': 12,
+        'hours': 20, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
     date_dict = date_time_values._CopyDateTimeFromString(
-        u'2010-08-12 21:06:31.546875+01:00')
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(date_dict, expected_date_dict)
 
     # Test backwards date correction.
     expected_date_dict = {
-        u'year': 2009, u'month': 12, u'day_of_month': 31,
-        u'hours': 23, u'minutes': 45, u'seconds': 0, u'microseconds': 123456}
+        'year': 2009, 'month': 12, 'day_of_month': 31,
+        'hours': 23, 'minutes': 45, 'seconds': 0, 'microseconds': 123456}
     date_dict = date_time_values._CopyDateTimeFromString(
-        u'2010-01-01 00:15:00.123456+00:30')
+        '2010-01-01 00:15:00.123456+00:30')
     self.assertEqual(date_dict, expected_date_dict)
 
     # Test forward date correction.
     expected_date_dict = {
-        u'year': 2010, u'month': 1, u'day_of_month': 1,
-        u'hours': 1, u'minutes': 15, u'seconds': 0, u'microseconds': 123456}
+        'year': 2010, 'month': 1, 'day_of_month': 1,
+        'hours': 1, 'minutes': 15, 'seconds': 0, 'microseconds': 123456}
     date_dict = date_time_values._CopyDateTimeFromString(
-        u'2009-12-31 23:45:00.123456-01:30')
+        '2009-12-31 23:45:00.123456-01:30')
     self.assertEqual(date_dict, expected_date_dict)
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyDateTimeFromString(u'')
+      date_time_values._CopyDateTimeFromString('')
 
     with self.assertRaises(ValueError):
       date_time_values._CopyDateTimeFromString(
-          u'2010-08-12T21:06:31.546875+01:00')
+          '2010-08-12T21:06:31.546875+01:00')
 
   def testCopyTimeFromString(self):
     """Tests the _CopyTimeFromString function."""
     date_time_values = interface.DateTimeValues()
 
     expected_time_tuple = (8, 4, 32, None, None)
-    time_tuple = date_time_values._CopyTimeFromString(u'08:04:32')
+    time_tuple = date_time_values._CopyTimeFromString('08:04:32')
     self.assertEqual(time_tuple, expected_time_tuple)
 
     expected_time_tuple = (20, 23, 56, None, None)
-    time_tuple = date_time_values._CopyTimeFromString(u'20:23:56')
+    time_tuple = date_time_values._CopyTimeFromString('20:23:56')
     self.assertEqual(time_tuple, expected_time_tuple)
 
     expected_time_tuple = (20, 23, 56, None, -330)
-    time_tuple = date_time_values._CopyTimeFromString(u'20:23:56+05:30')
+    time_tuple = date_time_values._CopyTimeFromString('20:23:56+05:30')
     self.assertEqual(time_tuple, expected_time_tuple)
 
     expected_time_tuple = (20, 23, 56, 327000, None)
-    time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327')
+    time_tuple = date_time_values._CopyTimeFromString('20:23:56.327')
     self.assertEqual(time_tuple, expected_time_tuple)
 
     expected_time_tuple = (20, 23, 56, 327000, -60)
-    time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327+01:00')
+    time_tuple = date_time_values._CopyTimeFromString('20:23:56.327+01:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 
     expected_time_tuple = (20, 23, 56, 327124, None)
-    time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327124')
+    time_tuple = date_time_values._CopyTimeFromString('20:23:56.327124')
     self.assertEqual(time_tuple, expected_time_tuple)
 
     expected_time_tuple = (20, 23, 56, 327124, 300)
-    time_tuple = date_time_values._CopyTimeFromString(u'20:23:56.327124-05:00')
+    time_tuple = date_time_values._CopyTimeFromString('20:23:56.327124-05:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'')
+      date_time_values._CopyTimeFromString('')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'14')
+      date_time_values._CopyTimeFromString('14')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'14:00')
+      date_time_values._CopyTimeFromString('14:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'24:00:00')
+      date_time_values._CopyTimeFromString('24:00:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12b00:00')
+      date_time_values._CopyTimeFromString('12b00:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00b00')
+      date_time_values._CopyTimeFromString('12:00b00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'1s:00:00')
+      date_time_values._CopyTimeFromString('1s:00:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'00:60:00')
+      date_time_values._CopyTimeFromString('00:60:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'00:e0:00')
+      date_time_values._CopyTimeFromString('00:e0:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'00:00:60')
+      date_time_values._CopyTimeFromString('00:00:60')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'00:00:w0')
+      date_time_values._CopyTimeFromString('00:00:w0')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00.00')
+      date_time_values._CopyTimeFromString('12:00:00.00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00.0000')
+      date_time_values._CopyTimeFromString('12:00:00.0000')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00.00w')
+      date_time_values._CopyTimeFromString('12:00:00.00w')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00+01b00')
+      date_time_values._CopyTimeFromString('12:00:00+01b00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00+0w:00')
+      date_time_values._CopyTimeFromString('12:00:00+0w:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00+20:00')
+      date_time_values._CopyTimeFromString('12:00:00+20:00')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00+01:0w')
+      date_time_values._CopyTimeFromString('12:00:00+01:0w')
 
     with self.assertRaises(ValueError):
-      date_time_values._CopyTimeFromString(u'12:00:00+01:60')
+      date_time_values._CopyTimeFromString('12:00:00+01:60')
 
   def testGetDayOfYear(self):
     """Tests the _GetDayOfYear function."""

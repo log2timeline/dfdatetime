@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """SYSTEMTIME structure implementation."""
 
+from __future__ import unicode_literals
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -58,34 +60,34 @@ class Systemtime(interface.DateTimeValues):
 
     if system_time_tuple:
       if len(system_time_tuple) < 8:
-        raise ValueError(u'Invalid system time tuple 8 elements required.')
+        raise ValueError('Invalid system time tuple 8 elements required.')
 
       if system_time_tuple[0] < 1601 or system_time_tuple[0] > 30827:
-        raise ValueError(u'Year value out of bounds.')
+        raise ValueError('Year value out of bounds.')
 
       if system_time_tuple[1] not in range(1, 13):
-        raise ValueError(u'Month value out of bounds.')
+        raise ValueError('Month value out of bounds.')
 
       if system_time_tuple[2] not in range(0, 7):
-        raise ValueError(u'Day of week value out of bounds.')
+        raise ValueError('Day of week value out of bounds.')
 
       days_per_month = self._GetDaysPerMonth(
           system_time_tuple[0], system_time_tuple[1])
       if system_time_tuple[3] < 1 or system_time_tuple[3] > days_per_month:
-        raise ValueError(u'Day of month value out of bounds.')
+        raise ValueError('Day of month value out of bounds.')
 
       if system_time_tuple[4] not in range(0, 24):
-        raise ValueError(u'Hours value out of bounds.')
+        raise ValueError('Hours value out of bounds.')
 
       if system_time_tuple[5] not in range(0, 60):
-        raise ValueError(u'Minutes value out of bounds.')
+        raise ValueError('Minutes value out of bounds.')
 
       # TODO: support a leap second?
       if system_time_tuple[6] not in range(0, 60):
-        raise ValueError(u'Seconds value out of bounds.')
+        raise ValueError('Seconds value out of bounds.')
 
       if system_time_tuple[7] < 0 or system_time_tuple[7] > 999:
-        raise ValueError(u'Milliseconds value out of bounds.')
+        raise ValueError('Milliseconds value out of bounds.')
 
       self.day_of_month = system_time_tuple[3]
       self.day_of_week = system_time_tuple[2]
@@ -117,18 +119,18 @@ class Systemtime(interface.DateTimeValues):
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
-    year = date_time_values.get(u'year', 0)
-    month = date_time_values.get(u'month', 0)
-    day_of_month = date_time_values.get(u'day_of_month', 0)
-    hours = date_time_values.get(u'hours', 0)
-    minutes = date_time_values.get(u'minutes', 0)
-    seconds = date_time_values.get(u'seconds', 0)
+    year = date_time_values.get('year', 0)
+    month = date_time_values.get('month', 0)
+    day_of_month = date_time_values.get('day_of_month', 0)
+    hours = date_time_values.get('hours', 0)
+    minutes = date_time_values.get('minutes', 0)
+    seconds = date_time_values.get('seconds', 0)
 
-    microseconds = date_time_values.get(u'microseconds', 0)
+    microseconds = date_time_values.get('microseconds', 0)
     milliseconds, _ = divmod(microseconds, 1000)
 
     if year < 1601 or year > 30827:
-      raise ValueError(u'Unsupported year value: {0:d}.'.format(year))
+      raise ValueError('Unsupported year value: {0:d}.'.format(year))
 
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)

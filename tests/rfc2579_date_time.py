@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the RFC2579 date-time implementation."""
 
+from __future__ import unicode_literals
+
 import unittest
 
 from dfdatetime import rfc2579_date_time
@@ -30,12 +32,12 @@ class RFC2579DateTimeInvalidYear(rfc2579_date_time.RFC2579DateTime):
       ValueError: if the time string is invalid or not supported.
     """
     return {
-        u'year': 70000,
-        u'month': 1,
-        u'day_of_month': 2,
-        u'hours': 0,
-        u'minutes': 0,
-        u'seconds': 0}
+        'year': 70000,
+        'month': 1,
+        'day_of_month': 2,
+        'hours': 0,
+        'minutes': 0,
+        'seconds': 0}
 
 
 class RFC2579DateTimeTest(unittest.TestCase):
@@ -49,7 +51,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertIsNotNone(rfc2579_date_time_object)
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 2, 0))
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 2, 0))
     self.assertIsNotNone(rfc2579_date_time_object)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
@@ -65,50 +67,50 @@ class RFC2579DateTimeTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(65537, 8, 12, 20, 6, 31, 6, u'+', 2, 0))
+          rfc2579_date_time_tuple=(65537, 8, 12, 20, 6, 31, 6, '+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 13, 12, 20, 6, 31, 6, u'+', 2, 0))
+          rfc2579_date_time_tuple=(2010, 13, 12, 20, 6, 31, 6, '+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 32, 20, 6, 31, 6, u'+', 2, 0))
+          rfc2579_date_time_tuple=(2010, 8, 32, 20, 6, 31, 6, '+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 24, 6, 31, 6, u'+', 2, 0))
+          rfc2579_date_time_tuple=(2010, 8, 12, 24, 6, 31, 6, '+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 61, 31, 6, u'+', 2, 0))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 61, 31, 6, '+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 61, 6, u'+', 2, 0))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 61, 6, '+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 11, u'+', 2, 0))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 11, '+', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'#', 2, 0))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '#', 2, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 14, 0))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 14, 0))
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
-          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 2, 60))
+          rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 2, 60))
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 
     expected_number_of_seconds = 1281571200
-    rfc2579_date_time_object.CopyFromString(u'2010-08-12')
+    rfc2579_date_time_object.CopyFromString('2010-08-12')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
@@ -120,7 +122,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 0)
 
     expected_number_of_seconds = 1281647191
-    rfc2579_date_time_object.CopyFromString(u'2010-08-12 21:06:31')
+    rfc2579_date_time_object.CopyFromString('2010-08-12 21:06:31')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
@@ -132,7 +134,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 0)
 
     expected_number_of_seconds = 1281647191
-    rfc2579_date_time_object.CopyFromString(u'2010-08-12 21:06:31.546875')
+    rfc2579_date_time_object.CopyFromString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
@@ -144,7 +146,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
 
     expected_number_of_seconds = 1281650791
-    rfc2579_date_time_object.CopyFromString(u'2010-08-12 21:06:31.546875-01:00')
+    rfc2579_date_time_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
@@ -156,7 +158,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
 
     expected_number_of_seconds = 1281643591
-    rfc2579_date_time_object.CopyFromString(u'2010-08-12 21:06:31.546875+01:00')
+    rfc2579_date_time_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
@@ -168,7 +170,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
 
     expected_number_of_seconds = -11644387200
-    rfc2579_date_time_object.CopyFromString(u'1601-01-02 00:00:00')
+    rfc2579_date_time_object.CopyFromString('1601-01-02 00:00:00')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 1601)
@@ -182,12 +184,12 @@ class RFC2579DateTimeTest(unittest.TestCase):
     rfc2579_date_time_object = RFC2579DateTimeInvalidYear()
 
     with self.assertRaises(ValueError):
-      rfc2579_date_time_object.CopyFromString(u'9999-01-02 00:00:00')
+      rfc2579_date_time_object.CopyFromString('9999-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 0, 0))
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
 
     expected_stat_time_tuple = (1281643591, 6000000)
     stat_time_tuple = rfc2579_date_time_object.CopyToStatTimeTuple()
@@ -202,7 +204,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, u'+', 0, 0))
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
 
     expected_micro_posix_number_of_seconds = 1281643591600000
     micro_posix_number_of_seconds = rfc2579_date_time_object.GetPlasoTimestamp()

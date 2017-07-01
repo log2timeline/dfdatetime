@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the semantic time implementation."""
 
+from __future__ import unicode_literals
+
 import unittest
 
 from dfdatetime import semantic_time
@@ -16,8 +18,8 @@ class SemanticTimeTest(unittest.TestCase):
     """Tests the CopyFromString function."""
     semantic_time_object = semantic_time.SemanticTime()
 
-    semantic_time_object.CopyFromString(u'Never')
-    self.assertEqual(semantic_time_object.string, u'Never')
+    semantic_time_object.CopyFromString('Never')
+    self.assertEqual(semantic_time_object.string, 'Never')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

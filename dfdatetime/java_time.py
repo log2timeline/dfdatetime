@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Java java.util.Date timestamp implementation."""
 
+from __future__ import unicode_literals
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -48,13 +50,13 @@ class JavaTime(interface.DateTimeValues):
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
-    year = date_time_values.get(u'year', 0)
-    month = date_time_values.get(u'month', 0)
-    day_of_month = date_time_values.get(u'day_of_month', 0)
-    hours = date_time_values.get(u'hours', 0)
-    minutes = date_time_values.get(u'minutes', 0)
-    seconds = date_time_values.get(u'seconds', 0)
-    microseconds = date_time_values.get(u'microseconds', None)
+    year = date_time_values.get('year', 0)
+    month = date_time_values.get('month', 0)
+    day_of_month = date_time_values.get('day_of_month', 0)
+    hours = date_time_values.get('hours', 0)
+    minutes = date_time_values.get('minutes', 0)
+    seconds = date_time_values.get('seconds', 0)
+    microseconds = date_time_values.get('microseconds', None)
 
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)

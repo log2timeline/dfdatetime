@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """FAT date time implementation."""
 
+from __future__ import unicode_literals
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -65,7 +67,7 @@ class FATDateTime(interface.DateTimeValues):
 
     days_per_month = self._GetDaysPerMonth(year, month)
     if day_of_month < 1 or day_of_month > days_per_month:
-      raise ValueError(u'Day of month value out of bounds.')
+      raise ValueError('Day of month value out of bounds.')
 
     number_of_days = self._GetDayOfYear(1980 + year, month, day_of_month)
     number_of_days -= 1
@@ -79,13 +81,13 @@ class FATDateTime(interface.DateTimeValues):
     hours = (fat_date_time >> 11) & 0x1f
 
     if hours not in range(0, 24):
-      raise ValueError(u'Hours value out of bounds.')
+      raise ValueError('Hours value out of bounds.')
 
     if minutes not in range(0, 60):
-      raise ValueError(u'Minutes value out of bounds.')
+      raise ValueError('Minutes value out of bounds.')
 
     if seconds not in range(0, 60):
-      raise ValueError(u'Seconds value out of bounds.')
+      raise ValueError('Seconds value out of bounds.')
 
     number_of_seconds = (((hours * 60) + minutes) * 60) + seconds
     number_of_seconds += number_of_days * self._SECONDS_PER_DAY
@@ -108,15 +110,15 @@ class FATDateTime(interface.DateTimeValues):
     """
     date_time_values = self._CopyDateTimeFromString(time_string)
 
-    year = date_time_values.get(u'year', 0)
-    month = date_time_values.get(u'month', 0)
-    day_of_month = date_time_values.get(u'day_of_month', 0)
-    hours = date_time_values.get(u'hours', 0)
-    minutes = date_time_values.get(u'minutes', 0)
-    seconds = date_time_values.get(u'seconds', 0)
+    year = date_time_values.get('year', 0)
+    month = date_time_values.get('month', 0)
+    day_of_month = date_time_values.get('day_of_month', 0)
+    hours = date_time_values.get('hours', 0)
+    minutes = date_time_values.get('minutes', 0)
+    seconds = date_time_values.get('seconds', 0)
 
     if year < 1980 or year > (1980 + 0x7f):
-      raise ValueError(u'Year value not supported: {0!s}.'.format(year))
+      raise ValueError('Year value not supported: {0!s}.'.format(year))
 
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)

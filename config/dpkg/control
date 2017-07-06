@@ -11,13 +11,13 @@ Homepage: https://github.com/log2timeline/dfdatetime
 Package: python-dfdatetime
 Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}
-Description: Digital Forensics date and time (dfDateTime).
+Description: Python 2 module of dfDateTime
  dfDateTime, or Digital Forensics date and time, provides date and time objects
  to preserve accuracy and precision.
 
 Package: python3-dfdatetime
 Architecture: all
 Depends: ${python3:Depends}, ${misc:Depends}
-Description: Digital Forensics date and time (dfDateTime).
+Description: Python 3 module of dfDateTime
  dfDateTime, or Digital Forensics date and time, provides date and time objects
  to preserve accuracy and precision.

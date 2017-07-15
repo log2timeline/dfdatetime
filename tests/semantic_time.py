@@ -38,5 +38,32 @@ class SemanticTimeTest(unittest.TestCase):
     self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
 
 
+class InvalidSemanticTimeTest(unittest.TestCase):
+  """Tests for semantic time that represents invalid.."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    semantic_time_object = semantic_time.InvalidSemanticTime()
+    self.assertEqual(semantic_time_object.string, 'Invalid')
+
+
+class NeverSemanticTimeTest(unittest.TestCase):
+  """Tests for semantic time that represents never."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    semantic_time_object = semantic_time.NeverSemanticTime()
+    self.assertEqual(semantic_time_object.string, 'Never')
+
+
+class NotSetSemanticTimeTest(unittest.TestCase):
+  """Tests for semantic time that represents not set."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    semantic_time_object = semantic_time.NotSetSemanticTime()
+    self.assertEqual(semantic_time_object.string, 'Not set')
+
+
 if __name__ == '__main__':
   unittest.main()

@@ -60,25 +60,25 @@ class SemanticTime(interface.DateTimeValues):
     return 0
 
 
-class InvalidSemanticTime(SemanticTime):
+class InvalidTime(SemanticTime):
   """Semantic time that represents invalid."""
 
   def __init__(self):
     """Initializes a semantic time that represents invalid."""
-    super(InvalidSemanticTime, self).__init__(string='Invalid')
+    super(InvalidTime, self).__init__(string='Invalid')
 
 
-class NeverSemanticTime(SemanticTime):
+class Never(SemanticTime):
   """Semantic time that represents never."""
 
   def __init__(self):
     """Initializes a semantic time that represents never."""
-    super(NeverSemanticTime, self).__init__(string='Never')
+    super(Never, self).__init__(string='Never')
 
 
-class NotSetSemanticTime(SemanticTime):
+class NotSet(SemanticTime):
   """Semantic time that represents not set."""
 
   def __init__(self):
     """Initializes a semantic time that represents not set."""
-    super(NotSetSemanticTime, self).__init__(string='Not set')
+    super(NotSet, self).__init__(string='Not set')

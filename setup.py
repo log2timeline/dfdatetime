@@ -89,8 +89,19 @@ else:
           in_description = True
 
         elif line.startswith('%files'):
-          line = '%files -f INSTALLED_FILES -n {0:s}-%{{name}}'.format(
-              python_package)
+          # Cannot use %{_libdir} here since it can expand to "lib64".
+          lines = [
+              '%files',
+              '%defattr(644,root,root,755)',
+              '%doc ACKNOWLEDGEMENTS AUTHORS LICENSE README',
+              '%{_prefix}/lib/python*/site-packages/dfdatetime/*.py',
+              '%{_prefix}/lib/python*/site-packages/dfdatetime*.egg-info/*',
+              '%exclude %{_prefix}/lib/python*/site-packages/dfdatetime/*.pyc',
+              '%exclude %{_prefix}/lib/python*/site-packages/dfdatetime/*.pyo',
+              '%exclude %{_prefix}/lib/python*/site-packages/dfdatetime/__pycache__/*']
+
+          python_spec_file.extend(lines)
+          break
 
         elif line.startswith('%prep'):
           in_description = False

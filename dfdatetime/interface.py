@@ -287,6 +287,7 @@ class DateTimeValues(object):
         if minutes_from_utc not in range(0, 60):
           raise ValueError('Time zone minutes offset value out of bounds.')
 
+        # pylint: disable=invalid-unary-operand-type
         time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
 
         # Note that when the sign of the time zone offset is negative
@@ -413,6 +414,7 @@ class DateTimeValues(object):
     Returns:
       bool: True if the year is a leap year.
     """
+    # pylint: disable=consider-using-ternary
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 
   @abc.abstractmethod

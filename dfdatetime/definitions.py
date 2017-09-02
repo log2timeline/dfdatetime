@@ -9,6 +9,7 @@ Also see:
 
 from __future__ import unicode_literals
 
+
 PRECISION_1_DAY = '1d'
 PRECISION_1_HOUR = '1h'
 PRECISION_1_NANOSECOND = '1ns'

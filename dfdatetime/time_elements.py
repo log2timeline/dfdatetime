@@ -45,15 +45,6 @@ class TimeElements(interface.DateTimeValues):
   def _CopyDateTimeFromStringISO8601(self, time_string):
     """Copies a date and time from an ISO 8601 date and time string.
 
-    Currently not supported:
-    * Duration notation: "P..."
-    * Week notation "2016-W33"
-    * Date with week number notation "2016-W33-3"
-    * Date without year notation "--08-17"
-    * Ordinal date notation "2016-230"
-    * Hour and minutes fractions
-    * Seconds fraction of a size other than 3 or 6
-
     Args:
       time_string (str): time value formatted as:
           hh:mm:ss.######[+-]##:##

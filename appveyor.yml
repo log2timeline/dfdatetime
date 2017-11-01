@@ -1,8 +1,8 @@
 environment:
   matrix:
-  - TARGET: "python27"
+  - TARGET: python27
     PYTHON: "C:\\Python27"
-  - TARGET: "python36"
+  - TARGET: python36
     PYTHON: "C:\\Python36"
 
 install:

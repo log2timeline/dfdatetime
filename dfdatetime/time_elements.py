@@ -42,20 +42,69 @@ class TimeElements(interface.DateTimeValues):
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           *time_elements_tuple)
 
-  def CopyFromString(self, time_string):
-    """Copies time elements from a date and time string.
+  def _CopyDateTimeFromStringISO8601(self, time_string):
+    """Copies a date and time from an ISO 8601 date and time string.
 
     Args:
-      time_string (str): date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+      time_string (str): time value formatted as:
+          hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and time zone offset are optional. The default time zone
-          is UTC.
-    """
-    date_time_values = self._CopyDateTimeFromString(time_string)
+          fraction can be either 3 or 6 digits. The seconds fraction and
+          time zone offset are optional.
 
+    Returns:
+      tuple[int, int, int, int, int]: hours, minutes, seconds, microseconds,
+          time zone offset in minutes.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if not time_string:
+      raise ValueError('Invalid time string.')
+
+    time_string_length = len(time_string)
+
+    year, month, day_of_month = self._CopyDateFromString(time_string)
+
+    if time_string_length <= 10:
+      return {
+          'year': year,
+          'month': month,
+          'day_of_month': day_of_month}
+
+    # If a time of day is specified the time string it should at least
+    # contain 'YYYY-MM-DDThh'.
+    if time_string[10] != 'T':
+      raise ValueError(
+          'Invalid time string - missing as date and time separator.')
+
+    hours, minutes, seconds, microseconds, time_zone_offset = (
+        self._CopyTimeFromStringISO8601(time_string[11:]))
+
+    if time_zone_offset:
+      year, month, day_of_month, hours, minutes = self._AdjustForTimeZoneOffset(
+          year, month, day_of_month, hours, minutes, time_zone_offset)
+
+    date_time_values = {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds}
+
+    if microseconds is not None:
+      date_time_values['microseconds'] = microseconds
+    return date_time_values
+
+  def _CopyFromDateTimeValues(self, date_time_values):
+    """Copies time elements from date and time values.
+
+    Args:
+      date_time_values  (dict[str, int]): date and time values, such as year,
+          month, day of month, hours, minutes, seconds, microseconds.
+    """
     year = date_time_values.get('year', 0)
     month = date_time_values.get('month', 0)
     day_of_month = date_time_values.get('day_of_month', 0)
@@ -70,8 +119,179 @@ class TimeElements(interface.DateTimeValues):
 
     self.is_local_time = False
 
+  def _CopyTimeFromStringISO8601(self, time_string):
+    """Copies a time from an ISO 8601 date and time string.
+
+    Args:
+      time_string (str): time value formatted as:
+          hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The seconds fraction and
+          time zone offset are optional.
+
+    Returns:
+      tuple[int, int, int, int, int]: hours, minutes, seconds, microseconds,
+          time zone offset in minutes.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if time_string.endswith('Z'):
+      time_string = time_string[:-1]
+
+    time_string_length = len(time_string)
+
+    # The time string should at least contain 'hh'.
+    if time_string_length < 2:
+      raise ValueError('Time string too short.')
+
+    try:
+      hours = int(time_string[0:2], 10)
+    except ValueError:
+      raise ValueError('Unable to parse hours.')
+
+    if hours not in range(0, 24):
+      raise ValueError('Hours value: {0:d} out of bounds.'.format(hours))
+
+    minutes = None
+    seconds = None
+    microseconds = None
+    time_zone_offset = None
+
+    time_string_index = 2
+
+    # Minutes are either specified as 'hhmm', 'hh:mm' or as a fractional part
+    # 'hh[.,]###'.
+    if (time_string_index + 1 < time_string_length and
+        time_string[time_string_index] not in ('.', ',')):
+      if time_string[time_string_index] == ':':
+        time_string_index += 1
+
+      if time_string_index + 2 > time_string_length:
+        raise ValueError('Time string too short.')
+
+      try:
+        minutes = time_string[time_string_index:time_string_index + 2]
+        minutes = int(minutes, 10)
+      except ValueError:
+        raise ValueError('Unable to parse minutes.')
+
+      time_string_index += 2
+
+    # Seconds are either specified as 'hhmmss', 'hh:mm:ss' or as a fractional
+    # part 'hh:mm[.,]###' or 'hhmm[.,]###'.
+    if (time_string_index + 1 < time_string_length and
+        time_string[time_string_index] not in ('.', ',')):
+      if time_string[time_string_index] == ':':
+        time_string_index += 1
+
+      if time_string_index + 2 > time_string_length:
+        raise ValueError('Time string too short.')
+
+      try:
+        seconds = time_string[time_string_index:time_string_index + 2]
+        seconds = int(seconds, 10)
+      except ValueError:
+        raise ValueError('Unable to parse day of seconds.')
+
+      time_string_index += 2
+
+    time_zone_string_index = time_string_index
+    while time_zone_string_index < time_string_length:
+      if time_string[time_zone_string_index] in ('+', '-'):
+        break
+
+      time_zone_string_index += 1
+
+    # The calculations that follow rely on the time zone string index
+    # to point beyond the string in case no time zone offset was defined.
+    if time_zone_string_index == time_string_length - 1:
+      time_zone_string_index += 1
+
+    if (time_string_length > time_string_index and
+        time_string[time_string_index] in ('.', ',')):
+      time_string_index += 1
+      time_fraction_length = time_zone_string_index - time_string_index
+
+      try:
+        time_fraction = time_string[time_string_index:time_zone_string_index]
+        time_fraction = int(time_fraction, 10)
+        time_fraction = float(time_fraction) / float(10 ** time_fraction_length)
+      except ValueError:
+        raise ValueError('Unable to parse time fraction.')
+
+      if minutes is None:
+        time_fraction *= 60
+        minutes = int(time_fraction)
+        time_fraction -= minutes
+
+      if seconds is None:
+        time_fraction *= 60
+        seconds = int(time_fraction)
+        time_fraction -= seconds
+
+      time_fraction *= 1000000
+      microseconds = int(time_fraction)
+
+    if minutes is not None and minutes not in range(0, 60):
+      raise ValueError('Minutes value: {0:d} out of bounds.'.format(minutes))
+
+    # TODO: support a leap second?
+    if seconds is not None and seconds not in range(0, 60):
+      raise ValueError('Seconds value: {0:d} out of bounds.'.format(seconds))
+
+    if time_zone_string_index < time_string_length:
+      if (time_string_length - time_zone_string_index != 6 or
+          time_string[time_zone_string_index + 3] != ':'):
+        raise ValueError('Invalid time string.')
+
+      try:
+        hours_from_utc = int(time_string[
+            time_zone_string_index + 1:time_zone_string_index + 3])
+      except ValueError:
+        raise ValueError('Unable to parse time zone hours offset.')
+
+      if hours_from_utc not in range(0, 15):
+        raise ValueError('Time zone hours offset value out of bounds.')
+
+      try:
+        minutes_from_utc = int(time_string[
+            time_zone_string_index + 4:time_zone_string_index + 6])
+      except ValueError:
+        raise ValueError('Unable to parse time zone minutes offset.')
+
+      if minutes_from_utc not in range(0, 60):
+        raise ValueError('Time zone minutes offset value out of bounds.')
+
+      # pylint: disable=invalid-unary-operand-type
+      time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
+
+      # Note that when the sign of the time zone offset is negative
+      # the difference needs to be added. We do so by flipping the sign.
+      if time_string[time_zone_string_index] != '-':
+        time_zone_offset = -time_zone_offset
+
+    return hours, minutes, seconds, microseconds, time_zone_offset
+
+  def CopyFromString(self, time_string):
+    """Copies time elements from a date and time string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and time zone offset are optional. The default time zone
+          is UTC.
+    """
+    date_time_values = self._CopyDateTimeFromString(time_string)
+
+    self._CopyFromDateTimeValues(date_time_values)
+
   def CopyFromStringISO8601(self, time_string):
-    """Copies time elements from a ISO 8601 date and time string.
+    """Copies time elements from an ISO 8601 date and time string.
 
     Currently not supported:
     * Duration notation: "P..."
@@ -79,7 +299,6 @@ class TimeElements(interface.DateTimeValues):
     * Date with week number notation "2016-W33-3"
     * Date without year notation "--08-17"
     * Ordinal date notation "2016-230"
-    * Seconds fraction of a size other than 3 or 6
 
     Args:
       time_string (str): date and time value formatted as:
@@ -93,25 +312,9 @@ class TimeElements(interface.DateTimeValues):
     Raises:
       ValueError: if the time string is invalid or not supported.
     """
-    if not time_string:
-      raise ValueError('Invalid time string.')
+    date_time_values = self._CopyDateTimeFromStringISO8601(time_string)
 
-    time_string_length = len(time_string)
-    if time_string_length >= 11:
-      if time_string[10] != 'T':
-        raise ValueError('Invalid time string.')
-
-      # Replace "T" by " ".
-      time_string = '{0:s} {1:s}'.format(time_string[:10], time_string[11:])
-
-    if time_string_length >= 20 and time_string[19] == ',':
-      # Replace "," by ".".
-      time_string = '{0:s}.{1:s}'.format(time_string[:19], time_string[20:])
-
-    if time_string.endswith('Z'):
-      time_string = time_string[:-1]
-
-    self.CopyFromString(time_string)
+    self._CopyFromDateTimeValues(date_time_values)
 
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
@@ -226,20 +429,13 @@ class TimeElementsInMilliseconds(TimeElements):
     self._milliseconds = milliseconds
     self.precision = definitions.PRECISION_1_MILLISECOND
 
-  def CopyFromString(self, time_string):
-    """Copies time elements from a date and time string.
+  def _CopyFromDateTimeValues(self, date_time_values):
+    """Copies time elements from date and time values.
 
     Args:
-      time_string (str): date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######[+-]##:##
-
-          Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and time zone offset are optional. The default time zone
-          is UTC.
+      date_time_values  (dict[str, int]): date and time values, such as year,
+          month, day of month, hours, minutes, seconds, microseconds.
     """
-    date_time_values = self._CopyDateTimeFromString(time_string)
-
     year = date_time_values.get('year', 0)
     month = date_time_values.get('month', 0)
     day_of_month = date_time_values.get('day_of_month', 0)

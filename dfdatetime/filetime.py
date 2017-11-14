@@ -93,7 +93,7 @@ class Filetime(interface.DateTimeValues):
 
     Returns:
       str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.###
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
     """
     if (self.timestamp is None or self.timestamp < 0 or
         self.timestamp > self._UINT64_MAX):

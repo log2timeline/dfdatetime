@@ -12,25 +12,6 @@ from dfdatetime import hfs_time
 class HFSTimeTest(unittest.TestCase):
   """Tests for the HFS timestamp."""
 
-  def testCopyToDateTimeValues(self):
-    """Tests the _CopyToDateTimeValues function."""
-    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
-
-    expected_date_time_values = {
-        'year': 2013,
-        'month': 8,
-        'day_of_month': 1,
-        'hours': 15,
-        'minutes': 25,
-        'seconds': 28}
-    date_time_values = hfs_time_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, expected_date_time_values)
-
-    hfs_time_object = hfs_time.HFSTime()
-
-    date_time_values = hfs_time_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, {})
-
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     hfs_time_object = hfs_time.HFSTime()
@@ -87,6 +68,18 @@ class HFSTimeTest(unittest.TestCase):
     expected_stat_time_tuple = (None, None)
     stat_time_tuple = hfs_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+  def testCopyToString(self):
+    """Tests the CopyToString function."""
+    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
+
+    date_time_string = hfs_time_object.CopyToString()
+    self.assertEqual(date_time_string, '2013-08-01 15:25:28')
+
+    hfs_time_object = hfs_time.HFSTime()
+
+    date_time_string = hfs_time_object.CopyToString()
+    self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""

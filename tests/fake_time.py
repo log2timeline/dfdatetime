@@ -14,28 +14,6 @@ class FakeTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
-  def testCopyToDateTimeValues(self):
-    """Tests the _CopyToDateTimeValues function."""
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object.CopyFromString('2010-08-12 21:06:31.546875')
-
-    expected_date_time_values = {
-        'year': 2010,
-        'month': 8,
-        'day_of_month': 12,
-        'hours': 21,
-        'minutes': 6,
-        'seconds': 31,
-        'microseconds': 546875}
-    date_time_values = fake_time_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, expected_date_time_values)
-
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object._number_of_seconds = None
-
-    date_time_values = fake_time_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, {})
-
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     fake_time_object = fake_time.FakeTime()
@@ -98,6 +76,20 @@ class FakeTimeTest(unittest.TestCase):
     expected_stat_time_tuple = (None, None)
     stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+  def testCopyToString(self):
+    """Tests the CopyToString function."""
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object.CopyFromString('2010-08-12 21:06:31.546875')
+
+    date_time_string = fake_time_object.CopyToString()
+    self.assertEqual(date_time_string, '2010-08-12 21:06:31.546875')
+
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object._number_of_seconds = None
+
+    date_time_string = fake_time_object.CopyToString()
+    self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""

@@ -12,26 +12,6 @@ from dfdatetime import filetime
 class FiletimeTest(unittest.TestCase):
   """Tests for the FILETIME timestamp."""
 
-  def testCopyToDateTimeValues(self):
-    """Tests the _CopyToDateTimeValues function."""
-    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
-
-    expected_date_time_values = {
-        'year': 2010,
-        'month': 8,
-        'day_of_month': 12,
-        'hours': 21,
-        'minutes': 6,
-        'seconds': 31,
-        'microseconds': 546875}
-    date_time_values = filetime_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, expected_date_time_values)
-
-    filetime_object = filetime.Filetime()
-
-    date_time_values = filetime_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, {})
-
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     filetime_object = filetime.Filetime()
@@ -82,6 +62,18 @@ class FiletimeTest(unittest.TestCase):
     expected_stat_time_tuple = (None, None)
     stat_time_tuple = filetime_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+  def testCopyToString(self):
+    """Tests the CopyToString function."""
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+
+    date_time_string = filetime_object.CopyToString()
+    self.assertEqual(date_time_string, '2010-08-12 21:06:31.5468750')
+
+    filetime_object = filetime.Filetime()
+
+    date_time_string = filetime_object.CopyToString()
+    self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""

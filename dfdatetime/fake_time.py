@@ -30,35 +30,6 @@ class FakeTime(interface.DateTimeValues):
     self._number_of_seconds = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
 
-  def _CopyToDateTimeValues(self):
-    """Copies a fake timestamp to date and time values.
-
-    Return:
-       dict[str, int]: date and time values, such as year, month, day of month,
-           hours, minutes, seconds, microseconds.
-    """
-    if self._number_of_seconds is None:
-      return {}
-
-    number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        self._number_of_seconds)
-
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1970, 1, 1)
-
-    date_time_values = {
-        'year': year,
-        'month': month,
-        'day_of_month': day_of_month,
-        'hours': hours,
-        'minutes': minutes,
-        'seconds': seconds}
-
-    if self._microseconds is not None:
-      date_time_values['microseconds'] = self._microseconds
-
-    return date_time_values
-
   def CopyFromString(self, time_string):
     """Copies a fake timestamp from a date and time string.
 
@@ -100,6 +71,30 @@ class FakeTime(interface.DateTimeValues):
       return self._number_of_seconds, self._microseconds * 10
 
     return self._number_of_seconds, None
+
+  def CopyToString(self):
+    """Copies the fake timestamp to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.###
+    """
+    if self._number_of_seconds is None:
+      return
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self._number_of_seconds)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1970, 1, 1)
+
+    if self._microseconds is None:
+      return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+          year, month, day_of_month, hours, minutes, seconds)
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
+        year, month, day_of_month, hours, minutes, seconds,
+        self._microseconds)
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

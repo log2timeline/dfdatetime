@@ -88,7 +88,7 @@ class CocoaTime(interface.DateTimeValues):
     return int(timestamp), remainder
 
   def CopyToString(self):
-    """Copies the date time value to a date and time string.
+    """Copies the Cocoa timestamp to a date and time string.
 
     Returns:
       str: date and time value formatted as:

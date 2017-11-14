@@ -59,7 +59,7 @@ class CocoaTimeTest(unittest.TestCase):
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
 
     date_time_string = cocoa_time_object.CopyToString()
-    self.assertEqual(date_time_string, '2013-97-08 21:30:45.546875')
+    self.assertEqual(date_time_string, '2013-07-08 21:30:45.546875')
 
     cocoa_time_object = cocoa_time.CocoaTime()
 

@@ -54,6 +54,19 @@ class CocoaTimeTest(unittest.TestCase):
     stat_time_tuple = cocoa_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+  def testCopyToString(self):
+    """Tests the CopyToString function."""
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
+
+    expected_string = '2013-07-08 21:30:45.546875'
+    string = cocoa_time_object.CopyToString()
+    self.assertEqual(string, expected_string)
+
+    cocoa_time_object = cocoa_time.CocoaTime()
+
+    string = cocoa_time_object.CopyToString()
+    self.assertIsNone(string)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)

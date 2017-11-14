@@ -274,6 +274,24 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
+  def _CopyToDateTimeValues(self):
+    """Copies time elements to date and time values.
+
+    Return:
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds, milliseconds or microseconds.
+    """
+    if self._number_of_seconds is None:
+      return {}
+
+    return {
+        'year': self._time_elements_tuple[0],
+        'month': self._time_elements_tuple[1],
+        'day_of_month': self._time_elements_tuple[2],
+        'hours': self._time_elements_tuple[3],
+        'minutes': self._time_elements_tuple[4],
+        'seconds': self._time_elements_tuple[5]}
+
   def CopyFromString(self, time_string):
     """Copies time elements from a date and time string.
 
@@ -452,6 +470,25 @@ class TimeElementsInMilliseconds(TimeElements):
         year, month, day_of_month, hours, minutes, seconds, milliseconds)
 
     self.is_local_time = False
+
+  def _CopyToDateTimeValues(self):
+    """Copies time elements to date and time values.
+
+    Return:
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds, milliseconds or microseconds.
+    """
+    if self._number_of_seconds is None or self._milliseconds is None:
+      return {}
+
+    return {
+        'year': self._time_elements_tuple[0],
+        'month': self._time_elements_tuple[1],
+        'day_of_month': self._time_elements_tuple[2],
+        'hours': self._time_elements_tuple[3],
+        'minutes': self._time_elements_tuple[4],
+        'seconds': self._time_elements_tuple[5],
+        'milliseconds': self._milliseconds}
 
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.

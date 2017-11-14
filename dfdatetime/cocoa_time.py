@@ -37,6 +37,29 @@ class CocoaTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_SECOND
     self.timestamp = timestamp
 
+  def _CopyToDateTimeValues(self):
+    """Copies a Cocoa timestamp to date and time values.
+
+    Return:
+       dict[str, int]: date and time values, such as year, month, day of month,
+           hours, minutes, seconds, microseconds.
+    """
+    # TODO: add support for fraction.
+    number_of_seconds = int(self.timestamp)
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        number_of_seconds)
+
+    year, month, day_of_month = self._GetDateValues(number_of_days, 2001)
+
+    return {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds}
+
   def CopyFromString(self, time_string):
     """Copies a Cocoa timestamp from a date and time string.
 
@@ -86,6 +109,19 @@ class CocoaTime(interface.DateTimeValues):
     timestamp = self.timestamp - self._COCOA_TO_POSIX_BASE
     remainder = int((timestamp % 1) * 10000000)
     return int(timestamp), remainder
+
+  def CopyToString(self):
+    """Copies the date time value to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.###
+    """
+    if self.timestamp is None:
+      return
+
+    date_time_values = self._CopyToDateTimeValues()
+    return self._CopyDateTimeToString(date_time_values)
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

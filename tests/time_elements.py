@@ -229,6 +229,26 @@ class TimeElementsTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringISO8601('12:00:00+01:60')
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 20,
+        'minutes': 6,
+        'seconds': 31}
+    date_time_values = time_elements_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    time_elements_object = time_elements.TimeElements()
+
+    date_time_values = time_elements_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     time_elements_object = time_elements.TimeElements()
@@ -476,6 +496,27 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
           time_elements_tuple=(2010, 13, 12, 20, 6, 31, 1001))
 
   # TODO: add tests for _CopyFromDateTimeValues
+
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 20,
+        'minutes': 6,
+        'seconds': 31,
+        'milliseconds': 429}
+    date_time_values = time_elements_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    time_elements_object = time_elements.TimeElementsInMilliseconds()
+
+    date_time_values = time_elements_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""

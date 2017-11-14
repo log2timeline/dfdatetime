@@ -144,6 +144,8 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._CopyDateTimeFromString(
           '2010-08-12T21:06:31.546875+01:00')
 
+  # TODO: add tests for _CopyDateTimeToString.
+
   def testCopyTimeFromString(self):
     """Tests the _CopyTimeFromString function."""
     date_time_values = interface.DateTimeValues()
@@ -233,6 +235,43 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._CopyTimeFromString('12:00:00+01:60')
 
+  def testGetDateValues(self):
+    """Tests the _GetDateValues function."""
+    date_time_values = interface.DateTimeValues()
+
+    year, month, day_of_month = date_time_values._GetDateValues(0, 2000)
+    self.assertEqual(year, 2000)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 1)
+
+    year, month, day_of_month = date_time_values._GetDateValues(10, 2000)
+    self.assertEqual(year, 2000)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 11)
+
+    year, month, day_of_month = date_time_values._GetDateValues(100, 2000)
+    self.assertEqual(year, 2000)
+    self.assertEqual(month, 4)
+    self.assertEqual(day_of_month, 10)
+
+    year, month, day_of_month = date_time_values._GetDateValues(100, 1999)
+    self.assertEqual(year, 1999)
+    self.assertEqual(month, 4)
+    self.assertEqual(day_of_month, 11)
+
+    year, month, day_of_month = date_time_values._GetDateValues(-10, 2000)
+    self.assertEqual(year, 1999)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 22)
+
+    year, month, day_of_month = date_time_values._GetDateValues(-100, 2000)
+    self.assertEqual(year, 1999)
+    self.assertEqual(month, 9)
+    self.assertEqual(day_of_month, 23)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDateValues(10, -1)
+
   def testGetDayOfYear(self):
     """Tests the _GetDayOfYear function."""
     date_time_values = interface.DateTimeValues()
@@ -293,6 +332,16 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._GetDaysPerMonth(1999, 13)
 
+  def testGetNumberOfDaysInCentury(self):
+    """Tests the _GetNumberOfDaysInCentury function."""
+    date_time_values = interface.DateTimeValues()
+
+    self.assertEqual(date_time_values._GetNumberOfDaysInCentury(1700), 36524)
+    self.assertEqual(date_time_values._GetNumberOfDaysInCentury(2000), 36525)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfDaysInCentury(-1)
+
   def testGetNumberOfDaysInYear(self):
     """Tests the _GetNumberOfDaysInYear function."""
     date_time_values = interface.DateTimeValues()
@@ -337,6 +386,58 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 6, 65)
 
+  def testGetTimeValues(self):
+    """Tests the _GetTimeValues function."""
+    date_time_values = interface.DateTimeValues()
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(10)
+    self.assertEqual(days, 0)
+    self.assertEqual(hours, 0)
+    self.assertEqual(minutes, 0)
+    self.assertEqual(seconds, 10)
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(190)
+    self.assertEqual(days, 0)
+    self.assertEqual(hours, 0)
+    self.assertEqual(minutes, 3)
+    self.assertEqual(seconds, 10)
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(18190)
+    self.assertEqual(days, 0)
+    self.assertEqual(hours, 5)
+    self.assertEqual(minutes, 3)
+    self.assertEqual(seconds, 10)
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(190990)
+    self.assertEqual(days, 2)
+    self.assertEqual(hours, 5)
+    self.assertEqual(minutes, 3)
+    self.assertEqual(seconds, 10)
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(-10)
+    self.assertEqual(days, -1)
+    self.assertEqual(hours, 23)
+    self.assertEqual(minutes, 59)
+    self.assertEqual(seconds, 50)
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(-190)
+    self.assertEqual(days, -1)
+    self.assertEqual(hours, 23)
+    self.assertEqual(minutes, 56)
+    self.assertEqual(seconds, 50)
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(-18190)
+    self.assertEqual(days, -1)
+    self.assertEqual(hours, 18)
+    self.assertEqual(minutes, 56)
+    self.assertEqual(seconds, 50)
+
+    days, hours, minutes, seconds = date_time_values._GetTimeValues(-190990)
+    self.assertEqual(days, -3)
+    self.assertEqual(hours, 18)
+    self.assertEqual(minutes, 56)
+    self.assertEqual(seconds, 50)
+
   def testIsLeapYear(self):
     """Tests the _IsLeapYear function."""
     date_time_values = interface.DateTimeValues()
@@ -344,6 +445,8 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertFalse(date_time_values._IsLeapYear(1999))
     self.assertTrue(date_time_values._IsLeapYear(2000))
     self.assertTrue(date_time_values._IsLeapYear(1996))
+
+  # TODO: add tests for CopyToString.
 
 
 if __name__ == '__main__':

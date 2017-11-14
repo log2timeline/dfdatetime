@@ -299,15 +299,6 @@ class DateTimeValues(object):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
-  @abc.abstractmethod
-  def _CopyToDateTimeValues(self):
-    """Copies to date and time values.
-
-    Return:
-       dict[str, int]: date and time values, such as year, month, day of month,
-           hours, minutes, seconds, milliseconds or microseconds.
-    """
-
   def _GetDateValues(
       self, number_of_days, epoch_year, epoch_month, epoch_day_of_month):
     """Determines date values.

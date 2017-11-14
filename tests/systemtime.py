@@ -66,27 +66,6 @@ class FiletimeTest(unittest.TestCase):
       systemtime.Systemtime(
           system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 1001))
 
-  def testCopyToDateTimeValues(self):
-    """Tests the _CopyToDateTimeValues function."""
-    systemtime_object = systemtime.Systemtime(
-        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
-
-    expected_date_time_values = {
-        'year': 2010,
-        'month': 8,
-        'day_of_month': 12,
-        'hours': 20,
-        'minutes': 6,
-        'seconds': 31,
-        'milliseconds': 142}
-    date_time_values = systemtime_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, expected_date_time_values)
-
-    systemtime_object = systemtime.Systemtime()
-
-    date_time_values = systemtime_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, {})
-
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     systemtime_object = systemtime.Systemtime()
@@ -180,6 +159,19 @@ class FiletimeTest(unittest.TestCase):
     expected_stat_time_tuple = (None, None)
     stat_time_tuple = systemtime_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+  def testCopyToString(self):
+    """Tests the CopyToString function."""
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
+
+    date_time_string = systemtime_object.CopyToString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.142')
+
+    systemtime_object = systemtime.Systemtime()
+
+    date_time_string = systemtime_object.CopyToString()
+    self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""

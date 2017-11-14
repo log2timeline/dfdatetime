@@ -122,24 +122,6 @@ class RFC2579DateTime(interface.DateTimeValues):
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
           self.seconds)
 
-  def _CopyToDateTimeValues(self):
-    """Copies a RFC2579 date-time to date and time values.
-
-    Return:
-      dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds.
-    """
-    if self._number_of_seconds is None:
-      return {}
-
-    return {
-        'year': self.year,
-        'month': self.month,
-        'day_of_month': self.day_of_month,
-        'hours': self.hours,
-        'minutes': self.minutes,
-        'seconds': self.seconds}
-
   def CopyFromString(self, time_string):
     """Copies a RFC2579 date-time from a date and time string.
 
@@ -194,6 +176,20 @@ class RFC2579DateTime(interface.DateTimeValues):
       return None, None
 
     return self._number_of_seconds, self.deciseconds * 1000000
+
+  def CopyToString(self):
+    """Copies the RFC2579 date-time to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+    """
+    if self._number_of_seconds is None:
+      return
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+        self.year, self.month, self.day_of_month, self.hours, self.minutes,
+        self.seconds)
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

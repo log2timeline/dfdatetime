@@ -42,34 +42,6 @@ class UUIDTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_100_NANOSECONDS
     self.timestamp = timestamp
 
-  def _CopyToDateTimeValues(self):
-    """Copies an UUID timestamp to date and time values.
-
-    Return:
-       dict[str, int]: date and time values, such as year, month, day of month,
-           hours, minutes, seconds, microseconds.
-    """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT60_MAX):
-      return {}
-
-    timestamp, remainder = divmod(self.timestamp, 10000000)
-    number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
-
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1582, 10, 15)
-
-    microseconds, _ = divmod(remainder, 10)
-
-    return {
-        'year': year,
-        'month': month,
-        'day_of_month': day_of_month,
-        'hours': hours,
-        'minutes': minutes,
-        'seconds': seconds,
-        'microseconds': microseconds}
-
   def CopyFromString(self, time_string):
     """Copies an UUID timestamp from a date and time string.
 
@@ -120,6 +92,26 @@ class UUIDTime(interface.DateTimeValues):
     timestamp, remainder = divmod(self.timestamp, 10000000)
     timestamp -= self._UUID_TO_POSIX_BASE
     return timestamp, remainder
+
+  def CopyToString(self):
+    """Copies the UUID timestamp to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+    """
+    if (self.timestamp is None or self.timestamp < 0 or
+        self.timestamp > self._UINT60_MAX):
+      return
+
+    timestamp, remainder = divmod(self.timestamp, 10000000)
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1582, 10, 15)
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:07d}'.format(
+        year, month, day_of_month, hours, minutes, seconds, remainder)
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

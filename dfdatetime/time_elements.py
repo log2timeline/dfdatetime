@@ -274,24 +274,6 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
-  def _CopyToDateTimeValues(self):
-    """Copies time elements to date and time values.
-
-    Return:
-      dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds.
-    """
-    if self._number_of_seconds is None:
-      return {}
-
-    return {
-        'year': self._time_elements_tuple[0],
-        'month': self._time_elements_tuple[1],
-        'day_of_month': self._time_elements_tuple[2],
-        'hours': self._time_elements_tuple[3],
-        'minutes': self._time_elements_tuple[4],
-        'seconds': self._time_elements_tuple[5]}
-
   def CopyFromString(self, time_string):
     """Copies time elements from a date and time string.
 
@@ -400,6 +382,21 @@ class TimeElements(interface.DateTimeValues):
       return None, None
     return self._number_of_seconds, None
 
+  def CopyToString(self):
+    """Copies the time elements to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+    """
+    if self._number_of_seconds is None:
+      return
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+        self._time_elements_tuple[0], self._time_elements_tuple[1],
+        self._time_elements_tuple[2], self._time_elements_tuple[3],
+        self._time_elements_tuple[4], self._time_elements_tuple[5])
+
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 
@@ -471,25 +468,6 @@ class TimeElementsInMilliseconds(TimeElements):
 
     self.is_local_time = False
 
-  def _CopyToDateTimeValues(self):
-    """Copies time elements to date and time values.
-
-    Return:
-      dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds, milliseconds.
-    """
-    if self._number_of_seconds is None or self._milliseconds is None:
-      return {}
-
-    return {
-        'year': self._time_elements_tuple[0],
-        'month': self._time_elements_tuple[1],
-        'day_of_month': self._time_elements_tuple[2],
-        'hours': self._time_elements_tuple[3],
-        'minutes': self._time_elements_tuple[4],
-        'seconds': self._time_elements_tuple[5],
-        'milliseconds': self._milliseconds}
-
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
 
@@ -523,6 +501,22 @@ class TimeElementsInMilliseconds(TimeElements):
       return None, None
 
     return self._number_of_seconds, self._milliseconds * 10000
+
+  def CopyToString(self):
+    """Copies the time elements to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+    """
+    if self._number_of_seconds is None or self._milliseconds is None:
+      return
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:03d}'.format(
+        self._time_elements_tuple[0], self._time_elements_tuple[1],
+        self._time_elements_tuple[2], self._time_elements_tuple[3],
+        self._time_elements_tuple[4], self._time_elements_tuple[5],
+        self._milliseconds)
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

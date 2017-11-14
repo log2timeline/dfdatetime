@@ -34,6 +34,32 @@ class WebKitTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_MICROSECOND
     self.timestamp = timestamp
 
+  def _CopyToDateTimeValues(self):
+    """Copies a WebKit timestamp to date and time values.
+
+    Return:
+       dict[str, int]: date and time values, such as year, month, day of month,
+           hours, minutes, seconds, microseconds.
+    """
+    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
+        self.timestamp > self._INT64_MAX):
+      return {}
+
+    timestamp, microseconds = divmod(self.timestamp, 1000000)
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1601, 1, 1)
+
+    return {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds,
+        'microseconds': microseconds}
+
   def CopyFromString(self, time_string):
     """Copies a WebKit timestamp from a date and time string.
 

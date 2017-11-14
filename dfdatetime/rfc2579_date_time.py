@@ -122,6 +122,24 @@ class RFC2579DateTime(interface.DateTimeValues):
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
           self.seconds)
 
+  def _CopyToDateTimeValues(self):
+    """Copies a RFC2579 date-time to date and time values.
+
+    Return:
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds.
+    """
+    if self._number_of_seconds is None:
+      return {}
+
+    return {
+        'year': self.year,
+        'month': self.month,
+        'day_of_month': self.day_of_month,
+        'hours': self.hours,
+        'minutes': self.minutes,
+        'seconds': self.seconds}
+
   def CopyFromString(self, time_string):
     """Copies a RFC2579 date-time from a date and time string.
 

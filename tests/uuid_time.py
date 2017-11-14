@@ -13,6 +13,27 @@ from dfdatetime import uuid_time
 class UUIDTimeTest(unittest.TestCase):
   """Tests for the UUID version 1 timestamp."""
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
+    uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
+
+    expected_date_time_values = {
+        'year': 2012,
+        'month': 5,
+        'day_of_month': 16,
+        'hours': 1,
+        'minutes': 11,
+        'seconds': 1,
+        'microseconds': 654408}
+    date_time_values = uuid_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    uuid_time_object = uuid_time.UUIDTime()
+
+    date_time_values = uuid_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testInitialize(self):
     """Tests the initialization function."""
     uuid_time_object = uuid_time.UUIDTime()

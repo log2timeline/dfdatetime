@@ -12,6 +12,26 @@ from dfdatetime import webkit_time
 class WebKitTimeTest(unittest.TestCase):
   """Tests for the WebKit timestamp."""
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 21,
+        'minutes': 6,
+        'seconds': 31,
+        'microseconds': 546875}
+    date_time_values = webkit_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    webkit_time_object = webkit_time.WebKitTime()
+
+    date_time_values = webkit_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     webkit_time_object = webkit_time.WebKitTime()

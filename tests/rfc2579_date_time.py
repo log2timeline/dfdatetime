@@ -105,6 +105,26 @@ class RFC2579DateTimeTest(unittest.TestCase):
       rfc2579_date_time.RFC2579DateTime(
           rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 2, 60))
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 20,
+        'minutes': 6,
+        'seconds': 31}
+    date_time_values = rfc2579_date_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
+
+    date_time_values = rfc2579_date_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()

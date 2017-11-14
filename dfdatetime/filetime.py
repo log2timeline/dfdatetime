@@ -49,8 +49,7 @@ class Filetime(interface.DateTimeValues):
       return {}
 
     timestamp, remainder = divmod(self.timestamp, 10000000)
-    number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        timestamp)
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValues(
         number_of_days, 1601, 1, 1)

@@ -12,26 +12,6 @@ from dfdatetime import cocoa_time
 class CocoaTimeTest(unittest.TestCase):
   """Tests for the Cocoa timestamp."""
 
-  def testCopyToDateTimeValues(self):
-    """Tests the _CopyToDateTimeValues function."""
-    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
-
-    expected_date_time_values = {
-        'year': 2013,
-        'month': 7,
-        'day_of_month': 8,
-        'hours': 21,
-        'minutes': 30,
-        'seconds': 45,
-        'microseconds': 546875}
-    date_time_values = cocoa_time_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, expected_date_time_values)
-
-    cocoa_time_object = cocoa_time.CocoaTime()
-
-    date_time_values = cocoa_time_object._CopyToDateTimeValues()
-    self.assertEqual(date_time_values, {})
-
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     cocoa_time_object = cocoa_time.CocoaTime()
@@ -73,6 +53,18 @@ class CocoaTimeTest(unittest.TestCase):
     expected_stat_time_tuple = (None, None)
     stat_time_tuple = cocoa_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+
+  def testCopyToString(self):
+    """Tests the CopyToString function."""
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
+
+    date_time_string = cocoa_time_object.CopyToString()
+    self.assertEqual(date_time_string, '2013-97-08 21:30:45.546875')
+
+    cocoa_time_object = cocoa_time.CocoaTime()
+
+    date_time_string = cocoa_time_object.CopyToString()
+    self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""

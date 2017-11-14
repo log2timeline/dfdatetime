@@ -183,49 +183,6 @@ class DateTimeValues(object):
       date_time_values['microseconds'] = microseconds
     return date_time_values
 
-  def _CopyDateTimeToString(self, date_time_values):
-    """Copies a date and time to a string.
-
-    Args:
-      date_time_values (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds, milliseconds or
-          microseconds.
-
-    Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######[+-]##:##
-
-          Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
-          fraction and time zone offset are optional. The default time zone
-          is UTC.
-
-    Raises:
-      ValueError: if the date time values are invalid or not supported.
-    """
-    if not date_time_values:
-      return
-
-    time_string = '{0:04d}-{1:02d}-{2:02d}'.format(
-        date_time_values['year'], date_time_values['month'],
-        date_time_values['day_of_month'])
-
-    if ('hours' in date_time_values and 'minutes' in date_time_values and
-        'seconds' in date_time_values):
-      time_string = '{0:s} {1:02d}:{2:02d}:{3:02d}'.format(
-          time_string, date_time_values['hours'], date_time_values['minutes'],
-          date_time_values['seconds'])
-
-    if 'milliseconds' in date_time_values:
-      time_string = '{0:s}.{1:03d}'.format(
-          time_string, date_time_values['milliseconds'])
-
-    elif 'microseconds' in date_time_values:
-      time_string = '{0:s}.{1:06d}'.format(
-          time_string, date_time_values['microseconds'])
-
-    return time_string
-
   def _CopyTimeFromString(self, time_string):
     """Copies a time from a string.
 
@@ -619,6 +576,7 @@ class DateTimeValues(object):
           100 nano seconds or (None, None) on error.
     """
 
+  @abc.abstractmethod
   def CopyToString(self):
     """Copies the date time value to a date and time string.
 
@@ -626,8 +584,6 @@ class DateTimeValues(object):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
     """
-    date_time_values = self._CopyToDateTimeValues()
-    return self._CopyDateTimeToString(date_time_values)
 
   # TODO: remove this method when there is no more need for it in plaso.
   @abc.abstractmethod

@@ -144,8 +144,6 @@ class DateTimeValuesTest(unittest.TestCase):
       date_time_values._CopyDateTimeFromString(
           '2010-08-12T21:06:31.546875+01:00')
 
-  # TODO: add tests for _CopyDateTimeToString.
-
   def testCopyTimeFromString(self):
     """Tests the _CopyTimeFromString function."""
     date_time_values = interface.DateTimeValues()
@@ -473,8 +471,6 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertFalse(date_time_values._IsLeapYear(1999))
     self.assertTrue(date_time_values._IsLeapYear(2000))
     self.assertTrue(date_time_values._IsLeapYear(1996))
-
-  # TODO: add tests for CopyToString.
 
 
 if __name__ == '__main__':

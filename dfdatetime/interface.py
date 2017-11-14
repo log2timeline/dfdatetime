@@ -327,21 +327,36 @@ class DateTimeValues(object):
       raise ValueError('Epoch day of month value out of bounds.')
 
     before_epoch = number_of_days < 0
-    if before_epoch:
-      number_of_days *= -1
 
     year = epoch_year
     month = epoch_month
-
     if before_epoch:
-      month = epoch_month - 1
+      month -= 1
       if month <= 0:
         month = 12
         year -= 1
 
-      number_of_days -= epoch_day_of_month
-    else:
-      number_of_days += epoch_day_of_month
+    number_of_days += epoch_day_of_month
+    if before_epoch:
+      number_of_days *= -1
+
+    # Align year with the next century.
+    # TODO
+    _, remainder = divmod(year, 100)
+    for _ in range(remainder, 100):
+      days_in_year = self._GetNumberOfDaysInYear(year)
+      while number_of_days > days_in_year:
+        if before_epoch:
+          year -= 1
+        else:
+          year += 1
+
+        number_of_days -= days_in_year
+        days_in_year = self._GetNumberOfDaysInYear(year)
+
+      if number_of_days < days_in_year:
+        break
+    # TODO
 
     days_in_century = self._GetNumberOfDaysInCentury(year)
     while number_of_days > days_in_century:

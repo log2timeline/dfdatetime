@@ -48,6 +48,30 @@ class FATDateTime(interface.DateTimeValues):
     self._number_of_seconds = number_of_seconds
     self.precision = definitions.PRECISION_2_SECONDS
 
+  def _CopyToDateTimeValues(self):
+    """Copies a FAT date time to date and time values.
+
+    Return:
+       dict[str, int]: date and time values, such as year, month, day of month,
+           hours, minutes, seconds.
+    """
+    if self._number_of_seconds is None or self._number_of_seconds < 0:
+      return {}
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self._number_of_seconds)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1980, 1, 1)
+
+    return {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds}
+
   def _GetNumberOfSeconds(self, fat_date_time):
     """Retrieves the number of seconds from a FAT date time.
 

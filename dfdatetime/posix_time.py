@@ -34,6 +34,30 @@ class PosixTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_SECOND
     self.timestamp = timestamp
 
+  def _CopyToDateTimeValues(self):
+    """Copies a POSIX timestamp to date and time values.
+
+    Return:
+       dict[str, int]: date and time values, such as year, month, day of month,
+           hours, minutes, seconds.
+    """
+    if self.timestamp is None:
+      return {}
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self.timestamp)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1970, 1, 1)
+
+    return {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds}
+
   def CopyFromString(self, time_string):
     """Copies a POSIX timestamp from a date and time string.
 
@@ -105,6 +129,31 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     super(PosixTimeInMicroseconds, self).__init__()
     self.precision = definitions.PRECISION_1_MICROSECOND
     self.timestamp = timestamp
+
+  def _CopyToDateTimeValues(self):
+    """Copies a POSIX timestamp to date and time values.
+
+    Return:
+       dict[str, int]: date and time values, such as year, month, day of month,
+           hours, minutes, seconds, microseconds.
+    """
+    if self.timestamp is None:
+      return {}
+
+    timestamp, microseconds = divmod(self.timestamp, 1000000)
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1970, 1, 1)
+
+    return {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds,
+        'microseconds': microseconds}
 
   def CopyFromString(self, time_string):
     """Copies a POSIX timestamp from a date and time string.

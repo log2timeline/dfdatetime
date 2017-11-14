@@ -351,37 +351,49 @@ class DateTimeValues(object):
            hours, minutes, seconds, milliseconds or microseconds.
     """
 
-  def _GetDateValues(self, number_of_days, year_epoch):
+  def _GetDateValues(
+      self, number_of_days, epoch_year, epoch_month, epoch_day_of_month):
     """Determines date values.
 
     Args:
       number_of_days (int): number of days.
-      year_epoch (int): year that is the start of the epoch.
+      epoch_year (int): year that is the start of the epoch.
+      epoch_month (int): month that is the start of the epoch.
+      epoch_day_of_month (int): day of month that is the start of the epoch.
 
     Return:
        tuple[int, int, int]: year, month, day of month.
 
     Raises:
-      ValueError: if the year epoch value is out of bounds.
+      ValueError: if the epoch year, month or day of month values are out
+          of bounds.
     """
-    if year_epoch < 0:
-      raise ValueError('Year epoch value out of bounds.')
+    if epoch_year < 0:
+      raise ValueError('Epoch year value out of bounds.')
+
+    if epoch_month not in range(1, 13):
+      raise ValueError('Epock month value out of bounds.')
+
+    epoch_days_per_month = self._GetDaysPerMonth(epoch_year, epoch_month)
+    if epoch_day_of_month < 1 or epoch_day_of_month > epoch_days_per_month:
+      raise ValueError('Epoch day of month value out of bounds.')
 
     before_epoch = number_of_days < 0
     if before_epoch:
       number_of_days *= -1
-      year = year_epoch - 1
-      month = 12
 
-    else:
-      year = year_epoch
-      month = 1
+    year = epoch_year
+    month = epoch_month
 
-    # Compensate 1 day since January 1 is represented as 0.
     if before_epoch:
-      number_of_days -= 1
+      month = epoch_month - 1
+      if month <= 0:
+        month = 12
+        year -= 1
+
+      number_of_days -= epoch_day_of_month
     else:
-      number_of_days += 1
+      number_of_days += epoch_day_of_month
 
     days_in_century = self._GetNumberOfDaysInCentury(year)
     while number_of_days > days_in_century:
@@ -409,6 +421,13 @@ class DateTimeValues(object):
         month -= 1
       else:
         month += 1
+
+      if month <= 0:
+        month = 12
+        year -= 1
+      elif month > 12:
+        month = 1
+        year += 1
 
       number_of_days -= days_per_month
       days_per_month = self._GetDaysPerMonth(year, month)

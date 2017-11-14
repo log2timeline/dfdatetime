@@ -30,6 +30,35 @@ class FakeTime(interface.DateTimeValues):
     self._number_of_seconds = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
 
+  def _CopyToDateTimeValues(self):
+    """Copies a fake timestamp to date and time values.
+
+    Return:
+       dict[str, int]: date and time values, such as year, month, day of month,
+           hours, minutes, seconds, microseconds.
+    """
+    if self._number_of_seconds is None:
+      return {}
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self._number_of_seconds)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1970, 1, 1)
+
+    date_time_values = {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds}
+
+    if self._microseconds is not None:
+      date_time_values['microseconds'] = self._microseconds
+
+    return date_time_values
+
   def CopyFromString(self, time_string):
     """Copies a fake timestamp from a date and time string.
 

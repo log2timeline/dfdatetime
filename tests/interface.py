@@ -239,38 +239,66 @@ class DateTimeValuesTest(unittest.TestCase):
     """Tests the _GetDateValues function."""
     date_time_values = interface.DateTimeValues()
 
-    year, month, day_of_month = date_time_values._GetDateValues(0, 2000)
+    year, month, day_of_month = date_time_values._GetDateValues(0, 2000, 1, 1)
     self.assertEqual(year, 2000)
     self.assertEqual(month, 1)
     self.assertEqual(day_of_month, 1)
 
-    year, month, day_of_month = date_time_values._GetDateValues(10, 2000)
+    year, month, day_of_month = date_time_values._GetDateValues(10, 2000, 1, 1)
     self.assertEqual(year, 2000)
     self.assertEqual(month, 1)
     self.assertEqual(day_of_month, 11)
 
-    year, month, day_of_month = date_time_values._GetDateValues(100, 2000)
+    year, month, day_of_month = date_time_values._GetDateValues(100, 2000, 1, 1)
     self.assertEqual(year, 2000)
     self.assertEqual(month, 4)
     self.assertEqual(day_of_month, 10)
 
-    year, month, day_of_month = date_time_values._GetDateValues(100, 1999)
+    year, month, day_of_month = date_time_values._GetDateValues(100, 1999, 1, 1)
     self.assertEqual(year, 1999)
     self.assertEqual(month, 4)
     self.assertEqual(day_of_month, 11)
 
-    year, month, day_of_month = date_time_values._GetDateValues(-10, 2000)
+    year, month, day_of_month = date_time_values._GetDateValues(0, 1999, 12, 30)
+    self.assertEqual(year, 1999)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 30)
+
+    year, month, day_of_month = date_time_values._GetDateValues(5, 1999, 12, 30)
+    self.assertEqual(year, 2000)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 4)
+
+    year, month, day_of_month = date_time_values._GetDateValues(-10, 2000, 1, 1)
     self.assertEqual(year, 1999)
     self.assertEqual(month, 12)
     self.assertEqual(day_of_month, 22)
 
-    year, month, day_of_month = date_time_values._GetDateValues(-100, 2000)
+    year, month, day_of_month = date_time_values._GetDateValues(
+        -100, 2000, 1, 1)
     self.assertEqual(year, 1999)
     self.assertEqual(month, 9)
     self.assertEqual(day_of_month, 23)
 
+    year, month, day_of_month = date_time_values._GetDateValues(-10, 2000, 1, 9)
+    self.assertEqual(year, 1999)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 30)
+
     with self.assertRaises(ValueError):
-      date_time_values._GetDateValues(10, -1)
+      date_time_values._GetDateValues(10, -1, 1, 1)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDateValues(10, 2000, 0, 1)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDateValues(10, 2000, 13, 1)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDateValues(10, 2000, 1, 0)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetDateValues(10, 2000, 1, 32)
 
   def testGetDayOfYear(self):
     """Tests the _GetDayOfYear function."""

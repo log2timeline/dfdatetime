@@ -14,6 +14,25 @@ class FATDateTime(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 21,
+        'minutes': 6,
+        'seconds': 32}
+    date_time_values = fat_date_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    date_time_values = fat_date_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     fat_date_time_object = fat_date_time.FATDateTime()

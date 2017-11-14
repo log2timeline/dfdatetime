@@ -12,6 +12,26 @@ from dfdatetime import java_time
 class JavaTimeTest(unittest.TestCase):
   """Tests for the Java java.util.Date timestamp."""
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    java_time_object = java_time.JavaTime(timestamp=1281643591546)
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 20,
+        'minutes': 6,
+        'seconds': 31,
+        'milliseconds': 546}
+    date_time_values = java_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    java_time_object = java_time.JavaTime()
+
+    date_time_values = java_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     java_time_object = java_time.JavaTime()

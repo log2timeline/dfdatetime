@@ -12,6 +12,25 @@ from dfdatetime import posix_time
 class PosixTimeTest(unittest.TestCase):
   """Tests for the POSIX timestamp."""
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 20,
+        'minutes': 6,
+        'seconds': 31}
+    date_time_values = posix_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    posix_time_object = posix_time.PosixTime()
+
+    date_time_values = posix_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     posix_time_object = posix_time.PosixTime()
@@ -70,6 +89,27 @@ class PosixTimeTest(unittest.TestCase):
 
 class PosixTimeInMicrosecondsTest(unittest.TestCase):
   """Tests for the POSIX timestamp in microseconds."""
+
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=1281643591546875)
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 20,
+        'minutes': 6,
+        'seconds': 31,
+        'microseconds': 546875}
+    date_time_values = posix_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds()
+
+    date_time_values = posix_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""

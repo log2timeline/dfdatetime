@@ -12,6 +12,25 @@ from dfdatetime import hfs_time
 class HFSTimeTest(unittest.TestCase):
   """Tests for the HFS timestamp."""
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
+
+    expected_date_time_values = {
+        'year': 2013,
+        'month': 8,
+        'day_of_month': 1,
+        'hours': 15,
+        'minutes': 25,
+        'seconds': 28}
+    date_time_values = hfs_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    hfs_time_object = hfs_time.HFSTime()
+
+    date_time_values = hfs_time_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     hfs_time_object = hfs_time.HFSTime()

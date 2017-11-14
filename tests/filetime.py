@@ -12,6 +12,26 @@ from dfdatetime import filetime
 class FiletimeTest(unittest.TestCase):
   """Tests for the FILETIME timestamp."""
 
+  def testCopyToDateTimeValues(self):
+    """Tests the _CopyToDateTimeValues function."""
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+
+    expected_date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 21,
+        'minutes': 6,
+        'seconds': 31,
+        'microseconds': 546875}
+    date_time_values = filetime_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, expected_date_time_values)
+
+    filetime_object = filetime.Filetime()
+
+    date_time_values = filetime_object._CopyToDateTimeValues()
+    self.assertEqual(date_time_values, {})
+
   def testCopyFromString(self):
     """Tests the CopyFromString function."""
     filetime_object = filetime.Filetime()

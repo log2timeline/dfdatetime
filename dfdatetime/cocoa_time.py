@@ -44,13 +44,16 @@ class CocoaTime(interface.DateTimeValues):
        dict[str, int]: date and time values, such as year, month, day of month,
            hours, minutes, seconds, microseconds.
     """
-    # TODO: add support for fraction.
-    number_of_seconds = int(self.timestamp)
+    if self.timestamp is None:
+      return {}
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        number_of_seconds)
+        int(self.timestamp))
 
-    year, month, day_of_month = self._GetDateValues(number_of_days, 2001)
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 2001, 1, 1)
+
+    microseconds = int((self.timestamp % 1) * 1000000)
 
     return {
         'year': year,
@@ -58,7 +61,8 @@ class CocoaTime(interface.DateTimeValues):
         'day_of_month': day_of_month,
         'hours': hours,
         'minutes': minutes,
-        'seconds': seconds}
+        'seconds': seconds,
+        'microseconds': microseconds}
 
   def CopyFromString(self, time_string):
     """Copies a Cocoa timestamp from a date and time string.

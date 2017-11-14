@@ -279,7 +279,7 @@ class TimeElements(interface.DateTimeValues):
 
     Return:
       dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds, milliseconds or microseconds.
+          hours, minutes, seconds.
     """
     if self._number_of_seconds is None:
       return {}
@@ -476,7 +476,7 @@ class TimeElementsInMilliseconds(TimeElements):
 
     Return:
       dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds, milliseconds or microseconds.
+          hours, minutes, seconds, milliseconds.
     """
     if self._number_of_seconds is None or self._milliseconds is None:
       return {}

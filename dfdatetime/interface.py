@@ -340,23 +340,36 @@ class DateTimeValues(object):
     if before_epoch:
       number_of_days *= -1
 
-    # Align year with the next century.
-    # TODO
+    # Align with the start of the year.
+    while month > 1:
+      days_per_month = self._GetDaysPerMonth(year, month)
+      if number_of_days < days_per_month:
+        break
+
+      if before_epoch:
+        month -= 1
+      else:
+        month += 1
+
+      if month > 12:
+        month = 1
+        year += 1
+
+      number_of_days -= days_per_month
+
+    # Align with the start of the next century.
     _, remainder = divmod(year, 100)
     for _ in range(remainder, 100):
       days_in_year = self._GetNumberOfDaysInYear(year)
-      while number_of_days > days_in_year:
-        if before_epoch:
-          year -= 1
-        else:
-          year += 1
-
-        number_of_days -= days_in_year
-        days_in_year = self._GetNumberOfDaysInYear(year)
-
       if number_of_days < days_in_year:
         break
-    # TODO
+
+      if before_epoch:
+        year -= 1
+      else:
+        year += 1
+
+      number_of_days -= days_in_year
 
     days_in_century = self._GetNumberOfDaysInCentury(year)
     while number_of_days > days_in_century:

@@ -298,6 +298,42 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._GetDateValues(10, 2000, 1, 32)
 
+    year, month, day_of_month = date_time_values._GetDateValues(
+        0, 1899, 12, 30)
+    self.assertEqual(year, 1899)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 30)
+
+    year, month, day_of_month = date_time_values._GetDateValues(
+        25569, 1899, 12, 30)
+    self.assertEqual(year, 1970)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 1)
+
+    year, month, day_of_month = date_time_values._GetDateValues(
+        36526, 1899, 12, 30)
+    self.assertEqual(year, 2000)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 1)
+
+    year, month, day_of_month = date_time_values._GetDateValues(
+        41275, 1899, 12, 30)
+    self.assertEqual(year, 2013)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 1)
+
+    year, month, day_of_month = date_time_values._GetDateValues(
+        41443, 1899, 12, 30)
+    self.assertEqual(year, 2013)
+    self.assertEqual(month, 6)
+    self.assertEqual(day_of_month, 18)
+
+    year, month, day_of_month = date_time_values._GetDateValues(
+        -25569, 1899, 12, 30)
+    self.assertEqual(year, 1829)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 28)
+
   def testGetDayOfYear(self):
     """Tests the _GetDayOfYear function."""
     date_time_values = interface.DateTimeValues()

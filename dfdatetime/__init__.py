@@ -5,4 +5,4 @@ dfDateTime, or Digital Forensics date and time, provides date and time
 objects to preserve accuracy and precision.
 """
 
-__version__ = '20171109'
+__version__ = '20171116'

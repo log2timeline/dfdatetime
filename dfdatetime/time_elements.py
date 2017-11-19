@@ -485,7 +485,7 @@ class TimeElementsInMilliseconds(TimeElements):
     if self._number_of_seconds is None or self._milliseconds is None:
       return None, None
 
-    return self._number_of_seconds, self._milliseconds * 1000
+    return self._number_of_seconds, self._milliseconds * 10000
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -497,3 +497,108 @@ class TimeElementsInMilliseconds(TimeElements):
       return
 
     return ((self._number_of_seconds * 1000) + self._milliseconds) * 1000
+
+
+class TimeElementsInMicroseconds(TimeElements):
+  """Time elements in microseconds.
+
+  Attributes:
+    is_local_time (bool): True if the date and time value is in local time.
+    precision (str): precision of the date and time value, which should
+        be one of the PRECISION_VALUES in definitions.
+  """
+
+  def __init__(self, time_elements_tuple=None):
+    """Initializes time elements.
+
+    Args:
+      time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
+          time elements, contains year, month, day of month, hours, minutes,
+          seconds and microseconds.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid.
+    """
+    microseconds = None
+    if time_elements_tuple:
+      if len(time_elements_tuple) < 7:
+        raise ValueError('Invalid time elements tuple 7 elements required.')
+
+      microseconds = time_elements_tuple[6]
+      time_elements_tuple = time_elements_tuple[:6]
+
+      if microseconds < 0 or microseconds > 999999:
+        raise ValueError('Invalid number of microseconds.')
+
+    super(TimeElementsInMicroseconds, self).__init__(
+        time_elements_tuple=time_elements_tuple)
+    self._microseconds = microseconds
+    self.precision = definitions.PRECISION_1_MICROSECOND
+
+  def _CopyFromDateTimeValues(self, date_time_values):
+    """Copies time elements from date and time values.
+
+    Args:
+      date_time_values  (dict[str, int]): date and time values, such as year,
+          month, day of month, hours, minutes, seconds, microseconds.
+    """
+    year = date_time_values.get('year', 0)
+    month = date_time_values.get('month', 0)
+    day_of_month = date_time_values.get('day_of_month', 0)
+    hours = date_time_values.get('hours', 0)
+    minutes = date_time_values.get('minutes', 0)
+    seconds = date_time_values.get('seconds', 0)
+    microseconds = date_time_values.get('microseconds', 0)
+
+    self._number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds)
+    self._microseconds = microseconds
+    self._time_elements_tuple = (
+        year, month, day_of_month, hours, minutes, seconds, microseconds)
+
+    self.is_local_time = False
+
+  def CopyFromStringTuple(self, time_elements_tuple):
+    """Copies time elements from string-based time elements tuple.
+
+    Args:
+      time_elements_tuple (Optional[tuple[str, str, str, str, str, str, str]]):
+          time elements, contains year, month, day of month, hours, minutes,
+          seconds and microseconds.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid.
+    """
+    if len(time_elements_tuple) < 7:
+      raise ValueError('Invalid time elements tuple 7 elements required.')
+
+    super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
+        time_elements_tuple)
+    try:
+      self._microseconds = int(time_elements_tuple[6], 10)
+    except (TypeError, ValueError):
+      raise ValueError('Invalid microseconds value: {0!s}'.format(
+          time_elements_tuple[6]))
+
+  def CopyToStatTimeTuple(self):
+    """Copies the time elements to a stat timestamp tuple.
+
+    Returns:
+      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
+          100 nano seconds or (None, None) on error.
+    """
+    if self._number_of_seconds is None or self._microseconds is None:
+      return None, None
+
+    return self._number_of_seconds, self._microseconds * 10
+
+  def GetPlasoTimestamp(self):
+    """Retrieves a timestamp that is compatible with plaso.
+
+    Returns:
+      int: a POSIX timestamp in microseconds or None on error.
+    """
+    if self._number_of_seconds is None or self._microseconds is None:
+      return
+
+    return (self._number_of_seconds * 1000000) + self._microseconds

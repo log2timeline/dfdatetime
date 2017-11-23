@@ -182,7 +182,7 @@ class RFC2579DateTime(interface.DateTimeValues):
 
     Returns:
       str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+          YYYY-MM-DD hh:mm:ss
     """
     if self._number_of_seconds is None:
       return

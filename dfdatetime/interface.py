@@ -304,7 +304,7 @@ class DateTimeValues(object):
     """Determines date values.
 
     Args:
-      number_of_days (int): number of days.
+      number_of_days (int): number of days since epoch.
       epoch_year (int): year that is the start of the epoch.
       epoch_month (int): month that is the start of the epoch.
       epoch_day_of_month (int): day of month that is the start of the epoch.
@@ -320,7 +320,7 @@ class DateTimeValues(object):
       raise ValueError('Epoch year value out of bounds.')
 
     if epoch_month not in range(1, 13):
-      raise ValueError('Epock month value out of bounds.')
+      raise ValueError('Epoch month value out of bounds.')
 
     epoch_days_per_month = self._GetDaysPerMonth(epoch_year, epoch_month)
     if epoch_day_of_month < 1 or epoch_day_of_month > epoch_days_per_month:
@@ -464,7 +464,7 @@ class DateTimeValues(object):
     return days_per_month
 
   def _GetNumberOfDaysInCentury(self, year):
-    """Retrieves the number of (remaining) days in a century.
+    """Retrieves the number of days in a century.
 
     Args:
       year (int): year e.g. 1970.
@@ -601,7 +601,7 @@ class DateTimeValues(object):
 
     Returns:
       str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+          YYYY-MM-DD hh:mm:ss.######
     """
 
   # TODO: remove this method when there is no more need for it in plaso.

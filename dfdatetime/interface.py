@@ -467,7 +467,7 @@ class DateTimeValues(object):
     """Retrieves the number of days in a century.
 
     Args:
-      year (int): year e.g. 1970.
+      year (int): year in the century e.g. 1970.
 
     Returns:
       int: number of (remaining) days in the century.

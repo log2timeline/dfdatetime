@@ -76,7 +76,7 @@ class FakeTime(interface.DateTimeValues):
     """Copies the fake timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
+      str: date and time value formatted as one of the following:
           YYYY-MM-DD hh:mm:ss
           YYYY-MM-DD hh:mm:ss.######
     """

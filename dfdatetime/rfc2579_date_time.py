@@ -122,7 +122,7 @@ class RFC2579DateTime(interface.DateTimeValues):
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
           self.seconds)
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a RFC2579 date-time from a date and time string.
 
     Args:

@@ -34,7 +34,7 @@ class PosixTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_SECOND
     self.timestamp = timestamp
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a POSIX timestamp from a date and time string.
 
     Args:
@@ -125,7 +125,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_MICROSECOND
     self.timestamp = timestamp
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a POSIX timestamp from a date and time string.
 
     Args:

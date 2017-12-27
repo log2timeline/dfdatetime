@@ -37,7 +37,7 @@ class CocoaTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_SECOND
     self.timestamp = timestamp
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a Cocoa timestamp from a date and time string.
 
     Args:

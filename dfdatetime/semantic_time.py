@@ -30,7 +30,7 @@ class SemanticTime(interface.DateTimeValues):
     super(SemanticTime, self).__init__()
     self.string = string
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies semantic time from a date and time string.
 
     Args:

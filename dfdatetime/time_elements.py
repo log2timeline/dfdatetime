@@ -274,7 +274,7 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies time elements from a date and time string.
 
     Args:
@@ -290,7 +290,7 @@ class TimeElements(interface.DateTimeValues):
 
     self._CopyFromDateTimeValues(date_time_values)
 
-  def CopyFromStringISO8601(self, time_string):
+  def CopyFromDateTimeStringISO8601(self, time_string):
     """Copies time elements from an ISO 8601 date and time string.
 
     Currently not supported:
@@ -316,7 +316,7 @@ class TimeElements(interface.DateTimeValues):
 
     self._CopyFromDateTimeValues(date_time_values)
 
-  def CopyFromStringTuple(self, time_elements_tuple):
+  def CopyFromDateTimeStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -468,7 +468,7 @@ class TimeElementsInMilliseconds(TimeElements):
 
     self.is_local_time = False
 
-  def CopyFromStringTuple(self, time_elements_tuple):
+  def CopyFromDateTimeStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -482,7 +482,7 @@ class TimeElementsInMilliseconds(TimeElements):
     if len(time_elements_tuple) < 7:
       raise ValueError('Invalid time elements tuple 7 elements required.')
 
-    super(TimeElementsInMilliseconds, self).CopyFromStringTuple(
+    super(TimeElementsInMilliseconds, self).CopyFromDateTimeStringTuple(
         time_elements_tuple)
     try:
       self._milliseconds = int(time_elements_tuple[6], 10)
@@ -589,7 +589,7 @@ class TimeElementsInMicroseconds(TimeElements):
 
     self.is_local_time = False
 
-  def CopyFromStringTuple(self, time_elements_tuple):
+  def CopyFromDateTimeStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -603,7 +603,7 @@ class TimeElementsInMicroseconds(TimeElements):
     if len(time_elements_tuple) < 7:
       raise ValueError('Invalid time elements tuple 7 elements required.')
 
-    super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
+    super(TimeElementsInMicroseconds, self).CopyFromDateTimeStringTuple(
         time_elements_tuple)
     try:
       self._microseconds = int(time_elements_tuple[6], 10)

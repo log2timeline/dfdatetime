@@ -6,6 +6,8 @@ from __future__ import unicode_literals
 import abc
 import calendar
 
+from dfdatetime import decorators
+
 
 class DateTimeValues(object):
   """Defines the date time values interface.
@@ -569,8 +571,26 @@ class DateTimeValues(object):
     # pylint: disable=consider-using-ternary
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 
-  @abc.abstractmethod
+  @decorators.deprecated
   def CopyFromString(self, time_string):
+    """Copies a date time value from a date and time string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######[+-]##:##
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction and time zone offset are optional. The default time zone
+          is UTC.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    self.CopyFromDateTimeString(time_string)
+
+  @abc.abstractmethod
+  def CopyFromDateTimeString(self, time_string):
     """Copies a date time value from a date and time string.
 
     Args:

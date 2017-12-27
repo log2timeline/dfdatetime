@@ -30,7 +30,7 @@ class FakeTime(interface.DateTimeValues):
     self._number_of_seconds = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a fake timestamp from a date and time string.
 
     Args:

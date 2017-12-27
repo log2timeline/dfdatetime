@@ -14,11 +14,11 @@ class SemanticTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     semantic_time_object = semantic_time.SemanticTime()
 
-    semantic_time_object.CopyFromString('Never')
+    semantic_time_object.CopyFromDateTimeString('Never')
     self.assertEqual(semantic_time_object.string, 'Never')
 
   def testCopyToStatTimeTuple(self):

@@ -34,7 +34,7 @@ class WebKitTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_MICROSECOND
     self.timestamp = timestamp
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a WebKit timestamp from a date and time string.
 
     Args:

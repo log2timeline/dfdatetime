@@ -42,6 +42,14 @@ class SemanticTime(interface.DateTimeValues):
     """
     self.string = time_string
 
+  def CopyToDateTimeString(self):
+    """Copies the date time value to a date and time string.
+
+    Returns:
+      str: semantic representation of the time, such as: "Never", "Not set".
+    """
+    return self.string
+
   def CopyToStatTimeTuple(self):
     """Copies the semantic timestamp to a stat timestamp tuple.
 

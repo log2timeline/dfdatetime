@@ -290,7 +290,7 @@ class TimeElements(interface.DateTimeValues):
 
     self._CopyFromDateTimeValues(date_time_values)
 
-  def CopyFromDateTimeStringISO8601(self, time_string):
+  def CopyFromStringISO8601(self, time_string):
     """Copies time elements from an ISO 8601 date and time string.
 
     Currently not supported:

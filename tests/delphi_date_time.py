@@ -10,7 +10,7 @@ from dfdatetime import delphi_date_time
 
 
 class DelphiDateTimeInvalidYear(delphi_date_time.DelphiDateTime):
-  """Delphi TDateTime timestamp for testing invalid year in CopyFromDateTimeString."""
+  """Delphi TDateTime timestamp for testing invalid year."""
 
   def _CopyDateTimeFromString(self, unused_time_string):
     """Copies a date and time from a string.
@@ -60,11 +60,13 @@ class DelphiDateTimeTest(unittest.TestCase):
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 41443.86806188513
-    delphi_date_time_object.CopyFromDateTimeString('2013-06-18 19:50:00.546875-01:00')
+    delphi_date_time_object.CopyFromDateTimeString(
+        '2013-06-18 19:50:00.546875-01:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 41443.78472855179
-    delphi_date_time_object.CopyFromDateTimeString('2013-06-18 19:50:00.546875+01:00')
+    delphi_date_time_object.CopyFromDateTimeString(
+        '2013-06-18 19:50:00.546875+01:00')
     self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1.0

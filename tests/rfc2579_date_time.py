@@ -10,7 +10,7 @@ from dfdatetime import rfc2579_date_time
 
 
 class RFC2579DateTimeInvalidYear(rfc2579_date_time.RFC2579DateTime):
-  """RFC2579 date-time for testing invalid year in CopyFromDateTimeString."""
+  """RFC2579 date-time for testing invalid year."""
 
   def _CopyDateTimeFromString(self, unused_time_string):
     """Copies a date and time from a string.
@@ -134,7 +134,8 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 0)
 
     expected_number_of_seconds = 1281647191
-    rfc2579_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
+    rfc2579_date_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
@@ -146,7 +147,8 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
 
     expected_number_of_seconds = 1281650791
-    rfc2579_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
+    rfc2579_date_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
@@ -158,7 +160,8 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
 
     expected_number_of_seconds = 1281643591
-    rfc2579_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
+    rfc2579_date_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(rfc2579_date_time_object.year, 2010)

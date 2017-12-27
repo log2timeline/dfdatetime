@@ -29,11 +29,13 @@ class WebKitTimeTest(unittest.TestCase):
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 12926124391546875
-    webkit_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
+    webkit_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 12926117191546875
-    webkit_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
+    webkit_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 86400 * 1000000

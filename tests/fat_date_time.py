@@ -34,12 +34,14 @@ class FATDateTime(unittest.TestCase):
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     expected_number_of_seconds = 966117991
-    fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
+    fat_date_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     expected_number_of_seconds = 966110791
-    fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
+    fat_date_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 

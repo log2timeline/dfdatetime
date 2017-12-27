@@ -316,7 +316,7 @@ class TimeElements(interface.DateTimeValues):
 
     self._CopyFromDateTimeValues(date_time_values)
 
-  def CopyFromDateTimeStringTuple(self, time_elements_tuple):
+  def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -468,7 +468,7 @@ class TimeElementsInMilliseconds(TimeElements):
 
     self.is_local_time = False
 
-  def CopyFromDateTimeStringTuple(self, time_elements_tuple):
+  def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -482,7 +482,7 @@ class TimeElementsInMilliseconds(TimeElements):
     if len(time_elements_tuple) < 7:
       raise ValueError('Invalid time elements tuple 7 elements required.')
 
-    super(TimeElementsInMilliseconds, self).CopyFromDateTimeStringTuple(
+    super(TimeElementsInMilliseconds, self).CopyFromStringTuple(
         time_elements_tuple)
     try:
       self._milliseconds = int(time_elements_tuple[6], 10)
@@ -589,7 +589,7 @@ class TimeElementsInMicroseconds(TimeElements):
 
     self.is_local_time = False
 
-  def CopyFromDateTimeStringTuple(self, time_elements_tuple):
+  def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -603,7 +603,7 @@ class TimeElementsInMicroseconds(TimeElements):
     if len(time_elements_tuple) < 7:
       raise ValueError('Invalid time elements tuple 7 elements required.')
 
-    super(TimeElementsInMicroseconds, self).CopyFromDateTimeStringTuple(
+    super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
         time_elements_tuple)
     try:
       self._microseconds = int(time_elements_tuple[6], 10)

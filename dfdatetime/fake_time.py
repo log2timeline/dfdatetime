@@ -72,6 +72,31 @@ class FakeTime(interface.DateTimeValues):
 
     return self._number_of_seconds, None
 
+  def CopyToDateTimeString(self):
+    """Copies the fake timestamp to a date and time string.
+
+    Returns:
+      str: date and time value formatted as one of the following:
+          YYYY-MM-DD hh:mm:ss
+          YYYY-MM-DD hh:mm:ss.######
+    """
+    if self._number_of_seconds is None:
+      return
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self._number_of_seconds)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1970, 1, 1)
+
+    if self._microseconds is None:
+      return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+          year, month, day_of_month, hours, minutes, seconds)
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
+        year, month, day_of_month, hours, minutes, seconds,
+        self._microseconds)
+
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 

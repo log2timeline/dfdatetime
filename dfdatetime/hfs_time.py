@@ -81,6 +81,26 @@ class HFSTime(interface.DateTimeValues):
     timestamp = self.timestamp - self._HFS_TO_POSIX_BASE
     return timestamp, 0
 
+  def CopyToDateTimeString(self):
+    """Copies the HFS timestamp to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss
+    """
+    if (self.timestamp is None or self.timestamp < 0 or
+        self.timestamp > self._UINT32_MAX):
+      return
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self.timestamp)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1904, 1, 1)
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+        year, month, day_of_month, hours, minutes, seconds)
+
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 

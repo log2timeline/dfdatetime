@@ -54,6 +54,18 @@ class JavaTimeTest(unittest.TestCase):
     stat_time_tuple = java_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    java_time_object = java_time.JavaTime(timestamp=1281643591546)
+
+    date_time_string = java_time_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.546')
+
+    java_time_object = java_time.JavaTime()
+
+    date_time_string = java_time_object.CopyToDateTimeString()
+    self.assertIsNone(date_time_string)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     java_time_object = java_time.JavaTime(timestamp=1281643591546)

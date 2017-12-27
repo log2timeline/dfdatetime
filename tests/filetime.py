@@ -63,6 +63,18 @@ class FiletimeTest(unittest.TestCase):
     stat_time_tuple = filetime_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+
+    date_time_string = filetime_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 21:06:31.5468750')
+
+    filetime_object = filetime.Filetime()
+
+    date_time_string = filetime_object.CopyToDateTimeString()
+    self.assertIsNone(date_time_string)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)

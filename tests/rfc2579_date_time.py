@@ -201,6 +201,19 @@ class RFC2579DateTimeTest(unittest.TestCase):
     stat_time_tuple = rfc2579_date_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
+
+    date_time_string = rfc2579_date_time_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31')
+
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
+
+    date_time_string = rfc2579_date_time_object.CopyToDateTimeString()
+    self.assertIsNone(date_time_string)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(

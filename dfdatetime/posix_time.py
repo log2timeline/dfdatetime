@@ -72,6 +72,25 @@ class PosixTime(interface.DateTimeValues):
 
     return self.timestamp, None
 
+  def CopyToDateTimeString(self):
+    """Copies the POSIX timestamp to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss
+    """
+    if self.timestamp is None:
+      return
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self.timestamp)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1970, 1, 1)
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+        year, month, day_of_month, hours, minutes, seconds)
+
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 
@@ -147,6 +166,25 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
     timestamp, microseconds = divmod(self.timestamp, 1000000)
     return timestamp, microseconds * 10
+
+  def CopyToDateTimeString(self):
+    """Copies the POSIX timestamp to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######
+    """
+    if self.timestamp is None:
+      return
+
+    timestamp, microseconds = divmod(self.timestamp, 1000000)
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 1970, 1, 1)
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
+        year, month, day_of_month, hours, minutes, seconds, microseconds)
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

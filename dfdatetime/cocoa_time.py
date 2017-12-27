@@ -87,6 +87,27 @@ class CocoaTime(interface.DateTimeValues):
     remainder = int((timestamp % 1) * 10000000)
     return int(timestamp), remainder
 
+  def CopyToDateTimeString(self):
+    """Copies the Cocoa timestamp to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.######
+    """
+    if self.timestamp is None:
+      return
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        int(self.timestamp))
+
+    year, month, day_of_month = self._GetDateValues(
+        number_of_days, 2001, 1, 1)
+
+    microseconds = int((self.timestamp % 1) * 1000000)
+
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
+        year, month, day_of_month, hours, minutes, seconds, microseconds)
+
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 

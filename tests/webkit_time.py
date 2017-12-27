@@ -60,6 +60,18 @@ class WebKitTimeTest(unittest.TestCase):
     stat_time_tuple = webkit_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
+
+    date_time_string = webkit_time_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 21:06:31.546875')
+
+    webkit_time_object = webkit_time.WebKitTime()
+
+    date_time_string = webkit_time_object.CopyToDateTimeString()
+    self.assertIsNone(date_time_string)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)

@@ -96,6 +96,18 @@ class FATDateTime(unittest.TestCase):
     stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+
+    date_time_string = fat_date_time_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 21:06:32')
+
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    date_time_string = fat_date_time_object.CopyToDateTimeString()
+    self.assertIsNone(date_time_string)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)

@@ -91,6 +91,19 @@ class DelphiDateTimeTest(unittest.TestCase):
     stat_time_tuple = delphi_date_time_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+
+    date_time_string = delphi_date_time_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2013-06-18 19:50:00.553919')
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime()
+
+    date_time_string = delphi_date_time_object.CopyToDateTimeString()
+    self.assertIsNone(date_time_string)
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime(

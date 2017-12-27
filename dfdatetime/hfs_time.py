@@ -81,7 +81,7 @@ class HFSTime(interface.DateTimeValues):
     timestamp = self.timestamp - self._HFS_TO_POSIX_BASE
     return timestamp, 0
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the HFS timestamp to a date and time string.
 
     Returns:

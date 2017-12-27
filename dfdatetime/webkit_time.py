@@ -81,7 +81,7 @@ class WebKitTime(interface.DateTimeValues):
     timestamp -= self._WEBKIT_TO_POSIX_BASE
     return timestamp, microseconds * 10
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the WebKit timestamp to a date and time string.
 
     Returns:

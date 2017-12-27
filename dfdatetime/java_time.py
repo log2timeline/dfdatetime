@@ -82,7 +82,7 @@ class JavaTime(interface.DateTimeValues):
     timestamp, milliseconds = divmod(self.timestamp, 1000)
     return timestamp, milliseconds * 10000
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the Java timestamp to a date and time string.
 
     Returns:

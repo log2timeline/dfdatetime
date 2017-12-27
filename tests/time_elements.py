@@ -433,17 +433,17 @@ class TimeElementsTest(unittest.TestCase):
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
-  def testCopyToString(self):
-    """Tests the CopyToString function."""
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
     time_elements_object = time_elements.TimeElements(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
-    date_time_string = time_elements_object.CopyToString()
+    date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2010-08-12 20:06:31')
 
     time_elements_object = time_elements.TimeElements()
 
-    date_time_string = time_elements_object.CopyToString()
+    date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):
@@ -675,17 +675,17 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
-  def testCopyToString(self):
-    """Tests the CopyToString function."""
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
     time_elements_object = time_elements.TimeElementsInMilliseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
 
-    date_time_string = time_elements_object.CopyToString()
+    date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2010-08-12 20:06:31.429')
 
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
-    date_time_string = time_elements_object.CopyToString()
+    date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):
@@ -917,17 +917,17 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
     self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
 
-  def testCopyToString(self):
-    """Tests the CopyToString function."""
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
     time_elements_object = time_elements.TimeElementsInMicroseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
 
-    date_time_string = time_elements_object.CopyToString()
+    date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2010-08-12 20:06:31.429876')
 
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 
-    date_time_string = time_elements_object.CopyToString()
+    date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
   def testGetPlasoTimestamp(self):

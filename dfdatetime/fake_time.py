@@ -72,7 +72,7 @@ class FakeTime(interface.DateTimeValues):
 
     return self._number_of_seconds, None
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the fake timestamp to a date and time string.
 
     Returns:

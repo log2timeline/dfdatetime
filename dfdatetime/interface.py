@@ -596,7 +596,7 @@ class DateTimeValues(object):
     """
 
   @abc.abstractmethod
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the date time value to a date and time string.
 
     Returns:

@@ -382,7 +382,7 @@ class TimeElements(interface.DateTimeValues):
       return None, None
     return self._number_of_seconds, None
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the time elements to a date and time string.
 
     Returns:
@@ -502,7 +502,7 @@ class TimeElementsInMilliseconds(TimeElements):
 
     return self._number_of_seconds, self._milliseconds * 10000
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the time elements to a date and time string.
 
     Returns:
@@ -623,7 +623,7 @@ class TimeElementsInMicroseconds(TimeElements):
 
     return self._number_of_seconds, self._microseconds * 10
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the time elements to a date and time string.
 
     Returns:

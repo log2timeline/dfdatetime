@@ -139,7 +139,7 @@ class FATDateTime(interface.DateTimeValues):
     timestamp = self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE
     return timestamp, None
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the FAT date time to a date and time string.
 
     Returns:

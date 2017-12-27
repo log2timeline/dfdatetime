@@ -93,7 +93,7 @@ class UUIDTime(interface.DateTimeValues):
     timestamp -= self._UUID_TO_POSIX_BASE
     return timestamp, remainder
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the UUID timestamp to a date and time string.
 
     Returns:

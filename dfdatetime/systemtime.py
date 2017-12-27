@@ -159,7 +159,7 @@ class Systemtime(interface.DateTimeValues):
 
     return self._number_of_seconds, self.milliseconds * 10000
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the SYSTEMTIME structure to a date and time string.
 
     Returns:

@@ -88,7 +88,7 @@ class Filetime(interface.DateTimeValues):
     timestamp -= self._FILETIME_TO_POSIX_BASE
     return timestamp, remainder
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the FILETIME timestamp to a date and time string.
 
     Returns:

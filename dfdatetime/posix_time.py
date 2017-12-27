@@ -72,7 +72,7 @@ class PosixTime(interface.DateTimeValues):
 
     return self.timestamp, None
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
@@ -167,7 +167,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     timestamp, microseconds = divmod(self.timestamp, 1000000)
     return timestamp, microseconds * 10
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:

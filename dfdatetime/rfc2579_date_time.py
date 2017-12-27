@@ -177,7 +177,7 @@ class RFC2579DateTime(interface.DateTimeValues):
 
     return self._number_of_seconds, self.deciseconds * 1000000
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the RFC2579 date-time to a date and time string.
 
     Returns:

@@ -87,7 +87,7 @@ class CocoaTime(interface.DateTimeValues):
     remainder = int((timestamp % 1) * 10000000)
     return int(timestamp), remainder
 
-  def CopyToString(self):
+  def CopyToDateTimeString(self):
     """Copies the Cocoa timestamp to a date and time string.
 
     Returns:

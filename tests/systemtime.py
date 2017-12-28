@@ -66,12 +66,12 @@ class FiletimeTest(unittest.TestCase):
       systemtime.Systemtime(
           system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 1001))
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     systemtime_object = systemtime.Systemtime()
 
     expected_number_of_seconds = 1281571200
-    systemtime_object.CopyFromString('2010-08-12')
+    systemtime_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -83,7 +83,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 0)
 
     expected_number_of_seconds = 1281647191
-    systemtime_object.CopyFromString('2010-08-12 21:06:31')
+    systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -95,7 +95,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 0)
 
     expected_number_of_seconds = 1281647191
-    systemtime_object.CopyFromString('2010-08-12 21:06:31.546875')
+    systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -107,7 +107,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
 
     expected_number_of_seconds = 1281650791
-    systemtime_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
+    systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -119,7 +119,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
 
     expected_number_of_seconds = 1281643591
-    systemtime_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
+    systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 2010)
@@ -131,7 +131,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
 
     expected_number_of_seconds = -11644387200
-    systemtime_object.CopyFromString('1601-01-02 00:00:00')
+    systemtime_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(
         systemtime_object._number_of_seconds, expected_number_of_seconds)
     self.assertEqual(systemtime_object.year, 1601)
@@ -143,7 +143,7 @@ class FiletimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 0)
 
     with self.assertRaises(ValueError):
-      systemtime_object.CopyFromString('1600-01-02 00:00:00')
+      systemtime_object.CopyFromDateTimeString('1600-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

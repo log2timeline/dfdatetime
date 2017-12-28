@@ -12,32 +12,32 @@ from dfdatetime import java_time
 class JavaTimeTest(unittest.TestCase):
   """Tests for the Java java.util.Date timestamp."""
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     java_time_object = java_time.JavaTime()
 
     expected_timestamp = 1281571200000
-    java_time_object.CopyFromString('2010-08-12')
+    java_time_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(java_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281647191000
-    java_time_object.CopyFromString('2010-08-12 21:06:31')
+    java_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(java_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281647191546
-    java_time_object.CopyFromString('2010-08-12 21:06:31.546875')
+    java_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(java_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281650791546
-    java_time_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
+    java_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(java_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 1281643591546
-    java_time_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
+    java_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(java_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = -11644387200000
-    java_time_object.CopyFromString('1601-01-02 00:00:00')
+    java_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(java_time_object.timestamp, expected_timestamp)
 
   def testCopyToStatTimeTuple(self):

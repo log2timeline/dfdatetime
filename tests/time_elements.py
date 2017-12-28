@@ -241,9 +241,13 @@ class TimeElementsTest(unittest.TestCase):
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
 
-    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
-    time_elements_object.CopyFromString('2010-08-12 21:06:31')
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
+    time_elements_object = time_elements.TimeElements()
+
+    expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
+    expected_number_of_seconds = 1281571200
+    time_elements_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -251,7 +255,15 @@ class TimeElementsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875')
+    time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31')
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+    time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -259,7 +271,8 @@ class TimeElementsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31)
     expected_number_of_seconds = 1281650791
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
+    time_elements_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -267,7 +280,8 @@ class TimeElementsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
     expected_number_of_seconds = 1281643591
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
+    time_elements_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -275,7 +289,7 @@ class TimeElementsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0)
     expected_number_of_seconds = -11644387200
-    time_elements_object.CopyFromString('1601-01-02 00:00:00')
+    time_elements_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -490,13 +504,13 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
   # TODO: add tests for _CopyFromDateTimeValues
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0, 0)
     expected_number_of_seconds = 1281571200
-    time_elements_object.CopyFromString('2010-08-12')
+    time_elements_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -504,7 +518,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31, 0)
     expected_number_of_seconds = 1281647191
-    time_elements_object.CopyFromString('2010-08-12 21:06:31')
+    time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -512,7 +526,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31, 546)
     expected_number_of_seconds = 1281647191
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875')
+    time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -520,7 +534,8 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31, 546)
     expected_number_of_seconds = 1281650791
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
+    time_elements_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -528,7 +543,8 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31, 546)
     expected_number_of_seconds = 1281643591
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
+    time_elements_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -536,7 +552,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0, 0)
     expected_number_of_seconds = -11644387200
-    time_elements_object.CopyFromString('1601-01-02 00:00:00')
+    time_elements_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -732,13 +748,13 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
   # TODO: add tests for _CopyFromDateTimeValues
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0, 0)
     expected_number_of_seconds = 1281571200
-    time_elements_object.CopyFromString('2010-08-12')
+    time_elements_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -746,7 +762,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31, 0)
     expected_number_of_seconds = 1281647191
-    time_elements_object.CopyFromString('2010-08-12 21:06:31')
+    time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -754,7 +770,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31, 546875)
     expected_number_of_seconds = 1281647191
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875')
+    time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -762,7 +778,8 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31, 546875)
     expected_number_of_seconds = 1281650791
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
+    time_elements_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -770,7 +787,8 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31, 546875)
     expected_number_of_seconds = 1281643591
-    time_elements_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
+    time_elements_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
@@ -778,7 +796,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0, 0)
     expected_number_of_seconds = -11644387200
-    time_elements_object.CopyFromString('1601-01-02 00:00:00')
+    time_elements_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(

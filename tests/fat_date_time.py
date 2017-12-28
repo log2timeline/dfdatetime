@@ -14,42 +14,44 @@ class FATDateTime(unittest.TestCase):
 
   # pylint: disable=protected-access
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     fat_date_time_object = fat_date_time.FATDateTime()
 
     expected_number_of_seconds = 966038400
-    fat_date_time_object.CopyFromString('2010-08-12')
+    fat_date_time_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     expected_number_of_seconds = 966114391
-    fat_date_time_object.CopyFromString('2010-08-12 21:06:31')
+    fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     expected_number_of_seconds = 966114391
-    fat_date_time_object.CopyFromString('2010-08-12 21:06:31.546875')
+    fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     expected_number_of_seconds = 966117991
-    fat_date_time_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
+    fat_date_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     expected_number_of_seconds = 966110791
-    fat_date_time_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
+    fat_date_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     expected_number_of_seconds = 86400
-    fat_date_time_object.CopyFromString('1980-01-02 00:00:00')
+    fat_date_time_object.CopyFromDateTimeString('1980-01-02 00:00:00')
     self.assertEqual(
         fat_date_time_object._number_of_seconds, expected_number_of_seconds)
 
     with self.assertRaises(ValueError):
-      fat_date_time_object.CopyFromString('2200-01-02 00:00:00')
+      fat_date_time_object.CopyFromDateTimeString('2200-01-02 00:00:00')
 
   def testGetNumberOfSeconds(self):
     """Tests the _GetNumberOfSeconds function."""

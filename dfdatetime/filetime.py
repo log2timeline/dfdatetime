@@ -37,7 +37,7 @@ class Filetime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_100_NANOSECONDS
     self.timestamp = timestamp
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a FILETIME timestamp from a date and time string.
 
     Args:

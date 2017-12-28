@@ -30,7 +30,7 @@ class SemanticTime(interface.DateTimeValues):
     super(SemanticTime, self).__init__()
     self.string = string
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies semantic time from a date and time string.
 
     Args:
@@ -41,6 +41,14 @@ class SemanticTime(interface.DateTimeValues):
       ValueError: because semantic time cannot be copied from a string.
     """
     self.string = time_string
+
+  def CopyToDateTimeString(self):
+    """Copies the date time value to a date and time string.
+
+    Returns:
+      str: semantic representation of the time, such as: "Never", "Not set".
+    """
+    return self.string
 
   def CopyToStatTimeTuple(self):
     """Copies the semantic timestamp to a stat timestamp tuple.

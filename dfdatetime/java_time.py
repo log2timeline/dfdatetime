@@ -36,7 +36,7 @@ class JavaTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_1_MILLISECOND
     self.timestamp = timestamp
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies a Java timestamp from a date and time string.
 
     Args:

@@ -12,32 +12,34 @@ from dfdatetime import webkit_time
 class WebKitTimeTest(unittest.TestCase):
   """Tests for the WebKit timestamp."""
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     webkit_time_object = webkit_time.WebKitTime()
 
     expected_timestamp = 12926044800000000
-    webkit_time_object.CopyFromString('2010-08-12')
+    webkit_time_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 12926120791000000
-    webkit_time_object.CopyFromString('2010-08-12 21:06:31')
+    webkit_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 12926120791546875
-    webkit_time_object.CopyFromString('2010-08-12 21:06:31.546875')
+    webkit_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 12926124391546875
-    webkit_time_object.CopyFromString('2010-08-12 21:06:31.546875-01:00')
+    webkit_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 12926117191546875
-    webkit_time_object.CopyFromString('2010-08-12 21:06:31.546875+01:00')
+    webkit_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 86400 * 1000000
-    webkit_time_object.CopyFromString('1601-01-02 00:00:00')
+    webkit_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(webkit_time_object.timestamp, expected_timestamp)
 
   def testCopyToStatTimeTuple(self):

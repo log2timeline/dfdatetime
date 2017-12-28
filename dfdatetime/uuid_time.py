@@ -42,7 +42,7 @@ class UUIDTime(interface.DateTimeValues):
     self.precision = definitions.PRECISION_100_NANOSECONDS
     self.timestamp = timestamp
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies an UUID timestamp from a date and time string.
 
     Args:

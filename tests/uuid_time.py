@@ -30,36 +30,36 @@ class UUIDTimeTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       uuid_time.UUIDTime(timestamp=-1)
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     uuid_time_object = uuid_time.UUIDTime()
 
     expected_timestamp = 135946080000000000
-    uuid_time_object.CopyFromString('2013-08-01')
+    uuid_time_object.CopyFromDateTimeString('2013-08-01')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946635280000000
-    uuid_time_object.CopyFromString('2013-08-01 15:25:28')
+    uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946635285468750
-    uuid_time_object.CopyFromString('2013-08-01 15:25:28.546875')
+    uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946671285468750
-    uuid_time_object.CopyFromString('2013-08-01 15:25:28.546875-01:00')
+    uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875-01:00')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 135946599285468750
-    uuid_time_object.CopyFromString('2013-08-01 15:25:28.546875+01:00')
+    uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875+01:00')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 864000000000
-    uuid_time_object.CopyFromString('1582-10-16 00:00:00')
+    uuid_time_object.CopyFromDateTimeString('1582-10-16 00:00:00')
     self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
 
     with self.assertRaises(ValueError):
-      uuid_time_object.CopyFromString('1570-01-02 00:00:00')
+      uuid_time_object.CopyFromDateTimeString('1570-01-02 00:00:00')
 
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""

@@ -12,32 +12,32 @@ from dfdatetime import cocoa_time
 class CocoaTimeTest(unittest.TestCase):
   """Tests for the Cocoa timestamp."""
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
     cocoa_time_object = cocoa_time.CocoaTime()
 
     expected_timestamp = 394934400.0
-    cocoa_time_object.CopyFromString('2013-07-08')
+    cocoa_time_object.CopyFromDateTimeString('2013-07-08')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 395011845.0
-    cocoa_time_object.CopyFromString('2013-07-08 21:30:45')
+    cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 395011845.546875
-    cocoa_time_object.CopyFromString('2013-07-08 21:30:45.546875')
+    cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 395015445.546875
-    cocoa_time_object.CopyFromString('2013-07-08 21:30:45.546875-01:00')
+    cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875-01:00')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 395008245.546875
-    cocoa_time_object.CopyFromString('2013-07-08 21:30:45.546875+01:00')
+    cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875+01:00')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
     expected_timestamp = 86400.0
-    cocoa_time_object.CopyFromString('2001-01-02 00:00:00')
+    cocoa_time_object.CopyFromDateTimeString('2001-01-02 00:00:00')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
   def testCopyToStatTimeTuple(self):

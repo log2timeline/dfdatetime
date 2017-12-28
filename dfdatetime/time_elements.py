@@ -274,7 +274,7 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
-  def CopyFromString(self, time_string):
+  def CopyFromDateTimeString(self, time_string):
     """Copies time elements from a date and time string.
 
     Args:

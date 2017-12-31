@@ -448,6 +448,9 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 6, 65)
 
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfSecondsFromElements(2013, 2, 29, 1, 4, 25)
+
   def testGetTimeValues(self):
     """Tests the _GetTimeValues function."""
     date_time_values = interface.DateTimeValues()

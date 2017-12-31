@@ -500,13 +500,13 @@ class DateTimeValues(object):
     return 365
 
   def _GetNumberOfSecondsFromElements(
-      self, year, month, day, hours, minutes, seconds):
+      self, year, month, day_of_month, hours, minutes, seconds):
     """Retrieves the number of seconds from the date and time elements.
 
     Args:
       year (int): year e.g. 1970.
       month (int): month of year.
-      day(int): day of month.
+      day_of_month (int): day of month.
       hours (int): hours.
       minutes (int): minutes.
       seconds (int): seconds.
@@ -517,7 +517,7 @@ class DateTimeValues(object):
     Raises:
       ValueError: if the time elements are invalid.
     """
-    if not year or not month or not day:
+    if not year or not month or not day_of_month:
       return
 
     # calendar.timegm does not sanity check the time elements.
@@ -537,9 +537,14 @@ class DateTimeValues(object):
     elif seconds not in range(0, 60):
       raise ValueError('Seconds value: {0!s} out of bounds.'.format(seconds))
 
+    # Note that calendar.timegm() does not raise when date is: 2013-02-29.
+    days_per_month = self._GetDaysPerMonth(year, month)
+    if day_of_month < 1 or day_of_month > days_per_month:
+      raise ValueError('Day of month value out of bounds.')
+
     # calendar.timegm requires the time tuple to contain at least
     # 6 integer values.
-    time_elements_tuple = (year, month, day, hours, minutes, seconds)
+    time_elements_tuple = (year, month, day_of_month, hours, minutes, seconds)
 
     number_of_seconds = calendar.timegm(time_elements_tuple)
 

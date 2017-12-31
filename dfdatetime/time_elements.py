@@ -439,12 +439,12 @@ class TimeElementsWithTimeFraction(TimeElements):
           definitions.PRECISION_1_MICROSECOND):
         raise ValueError('Unsupported precision.')
 
-      if (precision == definitions.PRECISION_1_MILLISECOND and
-          (time_fraction < 0 or time_fraction > 999)):
+      if (precision == definitions.PRECISION_1_MILLISECOND and (
+          time_fraction < 0 or time_fraction > 999)):
         raise ValueError('Invalid number of milliseconds.')
 
-      elif (precision == definitions.PRECISION_1_MICROSECOND and
-          (time_fraction < 0 or time_fraction > 999999)):
+      elif (precision == definitions.PRECISION_1_MICROSECOND and (
+          time_fraction < 0 or time_fraction > 999999)):
         raise ValueError('Invalid number of microseconds.')
 
     super(TimeElementsWithTimeFraction, self).__init__(
@@ -500,12 +500,12 @@ class TimeElementsWithTimeFraction(TimeElements):
       raise ValueError('Invalid time fraction value: {0!s}'.format(
           time_elements_tuple[6]))
 
-    if (self.precision == definitions.PRECISION_1_MILLISECOND and
-        (time_fraction < 0 or time_fraction > 999)):
+    if (self.precision == definitions.PRECISION_1_MILLISECOND and (
+        time_fraction < 0 or time_fraction > 999)):
       raise ValueError('Invalid number of milliseconds.')
 
-    elif (self.precision == definitions.PRECISION_1_MICROSECOND and
-        (time_fraction < 0 or time_fraction > 999999)):
+    elif (self.precision == definitions.PRECISION_1_MICROSECOND and (
+        time_fraction < 0 or time_fraction > 999999)):
       raise ValueError('Invalid number of microseconds.')
 
     self._time_fraction = time_fraction

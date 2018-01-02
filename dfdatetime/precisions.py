@@ -3,8 +3,6 @@
 
 from __future__ import unicode_literals
 
-import abc
-
 from dfdatetime import definitions
 
 
@@ -14,9 +12,7 @@ class DateTimePrecisionHelper(object):
   This is the super class of different date and time precision helpers.
   """
 
-  FORMAT_DATE_TIME_STRING = None
-
-  @abc.abstractmethod
+  @classmethod
   def CopyMicrosecondsToFractionOfSecond(self, microseconds):
     """Copies the number of microseconds to a fraction of second value.
 
@@ -26,8 +22,9 @@ class DateTimePrecisionHelper(object):
     Returns:
       float: fraction of second value.
     """
+    raise NotImplementedError()
 
-  @abc.abstractmethod
+  @classmethod
   def CopyToDateTimeString(self, time_elements_tuple, fraction_of_second):
     """Copies the date time value to a date and time string.
 
@@ -41,11 +38,13 @@ class DateTimePrecisionHelper(object):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######
     """
+    raise NotImplementedError()
 
 
 class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
   """Milliseconds precision helper."""
 
+  @classmethod
   def CopyMicrosecondsToFractionOfSecond(self, microseconds):
     """Copies the number of microseconds to a fraction of second value.
 
@@ -59,6 +58,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
         microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
     return float(milliseconds) / definitions.MILLISECONDS_PER_SECOND
 
+  @classmethod
   def CopyToDateTimeString(self, time_elements_tuple, fraction_of_second):
     """Copies the date time value to a date and time string.
 
@@ -84,6 +84,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
 class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
   """Microseconds precision helper."""
 
+  @classmethod
   def CopyMicrosecondsToFractionOfSecond(self, microseconds):
     """Copies the number of microseconds to a fraction of second value.
 
@@ -95,6 +96,7 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
     """
     return float(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
+  @classmethod
   def CopyToDateTimeString(self, time_elements_tuple, fraction_of_second):
     """Copies the time elements to a date and time string.
 
@@ -134,7 +136,7 @@ class PrecisionHelperFactory(object):
           be one of the PRECISION_VALUES in definitions.
 
     Returns:
-      DateTimePrecisionHelper: date time precision helper.
+      class: date time precision helper class.
 
     Raises:
       ValueError: if the precision value is unsupported.
@@ -143,4 +145,4 @@ class PrecisionHelperFactory(object):
     if not precision_helper_class:
       raise ValueError('Unsupported precision: {0!s}'.format(precision))
 
-    return precision_helper_class()
+    return precision_helper_class

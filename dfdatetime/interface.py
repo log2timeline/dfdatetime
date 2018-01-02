@@ -7,7 +7,6 @@ import abc
 import calendar
 
 from dfdatetime import decorators
-from dfdatetime import definitions
 
 
 class DateTimeValues(object):

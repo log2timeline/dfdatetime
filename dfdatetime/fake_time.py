@@ -27,7 +27,7 @@ class FakeTime(interface.DateTimeValues):
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
     self._microseconds = int(
-       fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
+        fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
     self._number_of_seconds = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
 

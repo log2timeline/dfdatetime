@@ -13,7 +13,7 @@ class DateTimePrecisionHelper(object):
   """
 
   @classmethod
-  def CopyMicrosecondsToFractionOfSecond(self, microseconds):
+  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
     """Copies the number of microseconds to a fraction of second value.
 
     Args:
@@ -25,7 +25,7 @@ class DateTimePrecisionHelper(object):
     raise NotImplementedError()
 
   @classmethod
-  def CopyToDateTimeString(self, time_elements_tuple, fraction_of_second):
+  def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
     """Copies the date time value to a date and time string.
 
     Args:
@@ -45,7 +45,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
   """Milliseconds precision helper."""
 
   @classmethod
-  def CopyMicrosecondsToFractionOfSecond(self, microseconds):
+  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
     """Copies the number of microseconds to a fraction of second value.
 
     Args:
@@ -59,7 +59,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
     return float(milliseconds) / definitions.MILLISECONDS_PER_SECOND
 
   @classmethod
-  def CopyToDateTimeString(self, time_elements_tuple, fraction_of_second):
+  def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
     """Copies the date time value to a date and time string.
 
     Args:
@@ -85,7 +85,7 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
   """Microseconds precision helper."""
 
   @classmethod
-  def CopyMicrosecondsToFractionOfSecond(self, microseconds):
+  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
     """Copies the number of microseconds to a fraction of second value.
 
     Args:
@@ -97,7 +97,7 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
     return float(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
   @classmethod
-  def CopyToDateTimeString(self, time_elements_tuple, fraction_of_second):
+  def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
     """Copies the time elements to a date and time string.
 
     Args:
@@ -128,7 +128,7 @@ class PrecisionHelperFactory(object):
   }
 
   @classmethod
-  def CreatePrecisionHelper(self, precision):
+  def CreatePrecisionHelper(cls, precision):
     """Creates a precision helper.
 
     Args:
@@ -141,7 +141,7 @@ class PrecisionHelperFactory(object):
     Raises:
       ValueError: if the precision value is unsupported.
     """
-    precision_helper_class = self._PRECISION_CLASSES.get(precision, None)
+    precision_helper_class = cls._PRECISION_CLASSES.get(precision, None)
     if not precision_helper_class:
       raise ValueError('Unsupported precision: {0!s}'.format(precision))
 

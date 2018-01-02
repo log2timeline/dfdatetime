@@ -167,4 +167,5 @@ class FATDateTime(interface.DateTimeValues):
     if self._number_of_seconds is None or self._number_of_seconds < 0:
       return
 
-    return (self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE) * 1000000
+    return self._MICROSECONDS_PER_SECOND * (
+        self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE)

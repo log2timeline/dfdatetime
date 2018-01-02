@@ -492,7 +492,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     self.assertIsNotNone(time_elements_object)
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     with self.assertRaises(ValueError):
       time_elements.TimeElementsInMilliseconds(
@@ -515,7 +515,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -524,7 +524,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -533,7 +533,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31)
     expected_number_of_seconds = 1281650791
@@ -543,7 +543,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
     expected_number_of_seconds = 1281643591
@@ -553,7 +553,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0)
     expected_number_of_seconds = -11644387200
@@ -562,7 +562,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
   def testCopyFromStringISO8601(self):
     """Tests the CopyFromStringISO8601 function."""
@@ -575,7 +575,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -584,7 +584,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -593,7 +593,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -602,7 +602,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 500)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.5)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -611,7 +611,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -620,7 +620,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
     expected_number_of_seconds = 1330980000
@@ -629,7 +629,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31)
     expected_number_of_seconds = 1281650791
@@ -639,7 +639,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
     expected_number_of_seconds = 1281643591
@@ -649,7 +649,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringISO8601(None)
@@ -681,7 +681,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     self.assertIsNotNone(time_elements_object)
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546)
 
     with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringTuple(
@@ -751,7 +751,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     self.assertIsNotNone(time_elements_object)
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.000546)
 
     with self.assertRaises(ValueError):
       time_elements.TimeElementsInMicroseconds(
@@ -774,7 +774,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -783,7 +783,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -792,7 +792,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546875)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546875)
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31)
     expected_number_of_seconds = 1281650791
@@ -802,7 +802,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546875)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546875)
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
     expected_number_of_seconds = 1281643591
@@ -812,7 +812,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546875)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546875)
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0)
     expected_number_of_seconds = -11644387200
@@ -821,7 +821,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
   def testCopyFromStringISO8601(self):
     """Tests the CopyFromStringISO8601 function."""
@@ -834,7 +834,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -843,7 +843,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -852,7 +852,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -861,7 +861,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 500000)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.500000)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -870,7 +870,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546875)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546875)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
     expected_number_of_seconds = 1281647191
@@ -879,7 +879,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546875)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546875)
 
     expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
     expected_number_of_seconds = 1330980000
@@ -888,7 +888,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 0)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.0)
 
     expected_time_elements_tuple = (2010, 8, 12, 22, 6, 31)
     expected_number_of_seconds = 1281650791
@@ -898,7 +898,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546875)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546875)
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
     expected_number_of_seconds = 1281643591
@@ -908,7 +908,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object._time_fraction, 546875)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.546875)
 
     with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringISO8601(None)
@@ -940,7 +940,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     self.assertIsNotNone(time_elements_object)
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(time_elements_object._time_fraction, 546)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.000546)
 
     with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringTuple(

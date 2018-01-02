@@ -580,7 +580,8 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
           milliseconds >= definitions.MILLISECONDS_PER_SECOND):
         raise ValueError('Invalid number of milliseconds.')
 
-      fraction_of_second = float(milliseconds) / definitions.MILLISECONDS_PER_SECOND
+      fraction_of_second = (
+          float(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
 
     super(TimeElementsInMilliseconds, self).__init__(
         fraction_of_second=fraction_of_second,

@@ -37,7 +37,8 @@ class TimeElements(interface.DateTimeValues):
 
     if time_elements_tuple:
       if len(time_elements_tuple) < 6:
-        raise ValueError('Invalid time elements tuple 6 elements required.')
+        raise ValueError(
+            'Invalid time elements tuple at least 6 elements required.')
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           *time_elements_tuple)
@@ -328,7 +329,8 @@ class TimeElements(interface.DateTimeValues):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 6:
-      raise ValueError('Invalid time elements tuple 6 elements required.')
+      raise ValueError(
+          'Invalid time elements tuple at least 6 elements required.')
 
     try:
       year = int(time_elements_tuple[0], 10)
@@ -477,12 +479,12 @@ class TimeElementsWithFractionOfSecond(TimeElements):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError('Invalid time elements tuple 7 elements required.')
+      raise ValueError(
+          'Invalid time elements tuple at least 7 elements required.')
 
     super(TimeElementsWithFractionOfSecond, self).CopyFromStringTuple(
         time_elements_tuple)
 
-    print("XXX", time_elements_tuple)
     try:
       fraction_of_second = float(time_elements_tuple[6])
     except (TypeError, ValueError):
@@ -501,7 +503,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     if self._number_of_seconds is None or self.fraction_of_second is None:
       return None, None
 
-    return self._number_of_seconds, ( 
+    return self._number_of_seconds, (
         int(self.fraction_of_second * self._100NS_PER_SECOND))
 
   def CopyToDateTimeString(self):
@@ -569,12 +571,13 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     fraction_of_second = None
     if time_elements_tuple:
       if len(time_elements_tuple) < 7:
-        raise ValueError('Invalid time elements tuple 7 elements required.')
+        raise ValueError(
+            'Invalid time elements tuple at least 7 elements required.')
 
       milliseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
 
-      if milliseconds < 0 or milliseconds > 999:
+      if milliseconds < 0 or milliseconds >= self._MILLISECONDS_PER_SECOND:
         raise ValueError('Invalid number of milliseconds.')
 
       fraction_of_second = float(milliseconds) / self._MILLISECONDS_PER_SECOND
@@ -583,6 +586,11 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         fraction_of_second=fraction_of_second,
         time_elements_tuple=time_elements_tuple)
     self.precision = definitions.PRECISION_1_MILLISECOND
+
+  @property
+  def milliseconds(self):
+    """int: number of milliseconds."""
+    return int(self.fraction_of_second * self._MILLISECONDS_PER_SECOND)
 
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
@@ -596,7 +604,8 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError('Invalid time elements tuple 7 elements required.')
+      raise ValueError(
+          'Invalid time elements tuple at least 7 elements required.')
 
     year, month, day_of_month, hours, minutes, seconds, milliseconds = (
         time_elements_tuple)
@@ -606,7 +615,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     except (TypeError, ValueError):
       raise ValueError('Invalid millisecond value: {0!s}'.format(milliseconds))
 
-    if milliseconds < 0 or milliseconds > 999:
+    if milliseconds < 0 or milliseconds >= self._MILLISECONDS_PER_SECOND:
       raise ValueError('Invalid number of milliseconds.')
 
     fraction_of_second = float(milliseconds) / self._MILLISECONDS_PER_SECOND
@@ -643,12 +652,13 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     fraction_of_second = None
     if time_elements_tuple:
       if len(time_elements_tuple) < 7:
-        raise ValueError('Invalid time elements tuple 7 elements required.')
+        raise ValueError(
+            'Invalid time elements tuple at least 7 elements required.')
 
       microseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
 
-      if microseconds < 0 or microseconds > 999999:
+      if microseconds < 0 or microseconds >= self._MICROSECONDS_PER_SECOND:
         raise ValueError('Invalid number of microseconds.')
 
       fraction_of_second = float(microseconds) / self._MICROSECONDS_PER_SECOND
@@ -657,6 +667,11 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         fraction_of_second=fraction_of_second,
         time_elements_tuple=time_elements_tuple)
     self.precision = definitions.PRECISION_1_MICROSECOND
+
+  @property
+  def microseconds(self):
+    """int: number of microseconds."""
+    return int(self.fraction_of_second * self._MICROSECONDS_PER_SECOND)
 
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
@@ -670,7 +685,8 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError('Invalid time elements tuple 7 elements required.')
+      raise ValueError(
+          'Invalid time elements tuple at least 7 elements required.')
 
     year, month, day_of_month, hours, minutes, seconds, microseconds = (
         time_elements_tuple)
@@ -680,7 +696,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     except (TypeError, ValueError):
       raise ValueError('Invalid microsecond value: {0!s}'.format(microseconds))
 
-    if microseconds < 0 or microseconds > 999999:
+    if microseconds < 0 or microseconds >= self._MICROSECONDS_PER_SECOND:
       raise ValueError('Invalid number of microseconds.')
 
     fraction_of_second = float(microseconds) / self._MICROSECONDS_PER_SECOND

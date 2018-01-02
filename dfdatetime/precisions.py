@@ -41,6 +41,46 @@ class DateTimePrecisionHelper(object):
     raise NotImplementedError()
 
 
+class SecondsPrecisionHelper(DateTimePrecisionHelper):
+  """Seconds precision helper."""
+
+  @classmethod
+  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
+    """Copies the number of microseconds to a fraction of second value.
+
+    Args:
+      microseconds (int): number of microseconds.
+
+    Returns:
+      float: fraction of second value.
+
+    Raises:
+      ValueError: if the number of microseconds is invalid.
+    """
+    if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
+      raise ValueError('Invalid number of microseconds.')
+
+    return 0.0
+
+  @classmethod
+  def CopyToDateTimeString(cls, time_elements_tuple, unused_fraction_of_second):
+    """Copies the date time value to a date and time string.
+
+    Args:
+      time_elements_tuple (tuple[int, int, int, int, int, int]):
+          time elements, contains year, month, day of month, hours, minutes and
+          seconds.
+      fraction_of_second (float): fraction of second.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.###
+    """
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+        time_elements_tuple[0], time_elements_tuple[1], time_elements_tuple[2],
+        time_elements_tuple[3], time_elements_tuple[4], time_elements_tuple[5])
+
+
 class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
   """Milliseconds precision helper."""
 
@@ -53,7 +93,13 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
 
     Returns:
       float: fraction of second value.
+
+    Raises:
+      ValueError: if the number of microseconds is invalid.
     """
+    if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
+      raise ValueError('Invalid number of microseconds.')
+
     milliseconds, _ = divmod(
         microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
     return float(milliseconds) / definitions.MILLISECONDS_PER_SECOND
@@ -93,7 +139,13 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
 
     Returns:
       float: fraction of second value.
+
+    Raises:
+      ValueError: if the number of microseconds is invalid.
     """
+    if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
+      raise ValueError('Invalid number of microseconds.')
+
     return float(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
   @classmethod
@@ -125,6 +177,7 @@ class PrecisionHelperFactory(object):
   _PRECISION_CLASSES = {
       definitions.PRECISION_1_MICROSECOND: MicrosecondsPrecisionHelper,
       definitions.PRECISION_1_MILLISECOND: MillisecondsPrecisionHelper,
+      definitions.PRECISION_1_SECOND: SecondsPrecisionHelper,
   }
 
   @classmethod

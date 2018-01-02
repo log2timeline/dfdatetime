@@ -59,7 +59,7 @@ class WebKitTime(interface.DateTimeValues):
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self.timestamp += self._WEBKIT_TO_POSIX_BASE
-    self.timestamp *= self._MICROSECONDS_PER_SECOND
+    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
     self.timestamp += date_time_values.get('microseconds', 0)
 
     self.is_local_time = False
@@ -76,7 +76,7 @@ class WebKitTime(interface.DateTimeValues):
       return None, None
 
     timestamp, microseconds = divmod(
-        self.timestamp, self._MICROSECONDS_PER_SECOND)
+        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
     timestamp -= self._WEBKIT_TO_POSIX_BASE
     return timestamp, microseconds * self._100NS_PER_MICROSECOND
 
@@ -92,7 +92,7 @@ class WebKitTime(interface.DateTimeValues):
       return
 
     timestamp, microseconds = divmod(
-        self.timestamp, self._MICROSECONDS_PER_SECOND)
+        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValues(
@@ -112,4 +112,4 @@ class WebKitTime(interface.DateTimeValues):
       return
 
     return self.timestamp - (
-        self._WEBKIT_TO_POSIX_BASE * self._MICROSECONDS_PER_SECOND)
+        self._WEBKIT_TO_POSIX_BASE * definitions.MICROSECONDS_PER_SECOND)

@@ -67,7 +67,7 @@ class Filetime(interface.DateTimeValues):
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self.timestamp += self._FILETIME_TO_POSIX_BASE
-    self.timestamp *= self._MICROSECONDS_PER_SECOND
+    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
     self.timestamp += date_time_values.get('microseconds', 0)
     self.timestamp *= self._100NS_PER_MICROSECOND
 
@@ -120,4 +120,4 @@ class Filetime(interface.DateTimeValues):
 
     timestamp, _ = divmod(self.timestamp, self._100NS_PER_MICROSECOND)
     return timestamp - (
-        self._FILETIME_TO_POSIX_BASE * self._MICROSECONDS_PER_SECOND)
+        self._FILETIME_TO_POSIX_BASE * definitions.MICROSECONDS_PER_SECOND)

@@ -127,7 +127,8 @@ class Systemtime(interface.DateTimeValues):
     seconds = date_time_values.get('seconds', 0)
 
     microseconds = date_time_values.get('microseconds', 0)
-    milliseconds, _ = divmod(microseconds, self._MICROSECONDS_PER_MILLISECOND)
+    milliseconds, _ = divmod(
+        microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
 
     if year < 1601 or year > 30827:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
@@ -183,7 +184,7 @@ class Systemtime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return
 
-    timestamp = self._number_of_seconds * self._MILLISECONDS_PER_SECOND
+    timestamp = self._number_of_seconds * definitions.MILLISECONDS_PER_SECOND
     timestamp += self.milliseconds
-    timestamp *= self._MICROSECONDS_PER_MILLISECOND
+    timestamp *= definitions.MICROSECONDS_PER_MILLISECOND
     return timestamp

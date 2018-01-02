@@ -117,7 +117,8 @@ class DelphiDateTime(interface.DateTimeValues):
     year, month, day_of_month = self._GetDateValues(
         number_of_days, 1899, 12, 30)
 
-    microseconds = int((number_of_seconds % 1) * self._MICROSECONDS_PER_SECOND)
+    microseconds = int(
+        (number_of_seconds % 1) * definitions.MICROSECONDS_PER_SECOND)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, microseconds)

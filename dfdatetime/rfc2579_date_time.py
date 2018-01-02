@@ -147,7 +147,8 @@ class RFC2579DateTime(interface.DateTimeValues):
     seconds = date_time_values.get('seconds', 0)
 
     microseconds = date_time_values.get('microseconds', 0)
-    deciseconds, _ = divmod(microseconds, self._MICROSECONDS_PER_DECISECOND)
+    deciseconds, _ = divmod(
+        microseconds, definitions.MICROSECONDS_PER_DECISECOND)
 
     if year < 0 or year > 65536:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
@@ -201,7 +202,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return
 
-    timestamp = self._number_of_seconds * self._DECISECONDS_PER_SECOND
+    timestamp = self._number_of_seconds * definitions.DECISECONDS_PER_SECOND
     timestamp += self.deciseconds
-    timestamp *= self._MICROSECONDS_PER_DECISECOND
+    timestamp *= definitions.MICROSECONDS_PER_DECISECOND
     return timestamp

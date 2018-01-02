@@ -7,10 +7,11 @@ import abc
 import calendar
 
 from dfdatetime import decorators
+from dfdatetime import definitions
 
 
 class DateTimeValues(object):
-  """Defines the date time values interface.
+  """Date time values interface.
 
   This is the super class of different date and time representations.
 

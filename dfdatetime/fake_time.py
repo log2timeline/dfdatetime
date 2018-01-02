@@ -26,7 +26,8 @@ class FakeTime(interface.DateTimeValues):
     super(FakeTime, self).__init__()
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
-    self._microseconds = int(fraction_of_second * self._MICROSECONDS_PER_SECOND)
+    self._microseconds = int(
+       fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
     self._number_of_seconds = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
 
@@ -107,7 +108,7 @@ class FakeTime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return
 
-    timestamp = self._number_of_seconds * self._MICROSECONDS_PER_SECOND
+    timestamp = self._number_of_seconds * definitions.MICROSECONDS_PER_SECOND
     if self._microseconds is None:
       return timestamp
 

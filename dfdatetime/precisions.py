@@ -10,6 +10,9 @@ class DateTimePrecisionHelper(object):
   """Date time precision helper interface.
 
   This is the super class of different date and time precision helpers.
+
+  A date time precision helper provided helper functions for date and time
+  values that can be represented in different precisions.
   """
 
   @classmethod
@@ -20,19 +23,20 @@ class DateTimePrecisionHelper(object):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second value.
+      float: fraction of second, which is a value between 0.0 and 1.0.
     """
     raise NotImplementedError()
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
-    """Copies the date time value to a date and time string.
+    """Copies the time elements tuple and fragment to a date and time string.
 
     Args:
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second.
+      fraction_of_second (float): fraction of second, which is a value between
+          0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:
@@ -52,7 +56,7 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second value.
+      float: fraction of second, which is a value between 0.0 and 1.0.
 
     Raises:
       ValueError: if the number of microseconds is invalid.
@@ -64,13 +68,14 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, unused_fraction_of_second):
-    """Copies the date time value to a date and time string.
+    """Copies the time elements tuple and fragment to a date and time string.
 
     Args:
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second.
+      fraction_of_second (float): fraction of second, which is a value between
+          0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:
@@ -92,7 +97,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second value.
+      float: fraction of second, which is a value between 0.0 and 1.0.
 
     Raises:
       ValueError: if the number of microseconds is invalid.
@@ -106,13 +111,14 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
-    """Copies the date time value to a date and time string.
+    """Copies the time elements tuple and fragment to a date and time string.
 
     Args:
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second.
+      fraction_of_second (float): fraction of second, which is a value between
+          0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:
@@ -138,7 +144,7 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second value.
+      float: fraction of second, which is a value between 0.0 and 1.0.
 
     Raises:
       ValueError: if the number of microseconds is invalid.
@@ -156,7 +162,8 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second.
+      fraction_of_second (float): fraction of second, which is a value between
+          0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:

@@ -37,8 +37,9 @@ class TimeElements(interface.DateTimeValues):
 
     if time_elements_tuple:
       if len(time_elements_tuple) < 6:
-        raise ValueError(
-            'Invalid time elements tuple at least 6 elements required.')
+        raise ValueError((
+            'Invalid time elements tuple at least 6 elements required,'
+            'got: {0:d}').format(len(time_elements_tuple)))
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           *time_elements_tuple)
@@ -329,8 +330,9 @@ class TimeElements(interface.DateTimeValues):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 6:
-      raise ValueError(
-          'Invalid time elements tuple at least 6 elements required.')
+      raise ValueError((
+          'Invalid time elements tuple at least 6 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
 
     try:
       year = int(time_elements_tuple[0], 10)
@@ -479,8 +481,9 @@ class TimeElementsWithFractionOfSecond(TimeElements):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError(
-          'Invalid time elements tuple at least 7 elements required.')
+      raise ValueError((
+          'Invalid time elements tuple at least 7 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
 
     super(TimeElementsWithFractionOfSecond, self).CopyFromStringTuple(
         time_elements_tuple)
@@ -571,8 +574,9 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     fraction_of_second = None
     if time_elements_tuple:
       if len(time_elements_tuple) < 7:
-        raise ValueError(
-            'Invalid time elements tuple at least 7 elements required.')
+        raise ValueError((
+            'Invalid time elements tuple at least 7 elements required,'
+            'got: {0:d}').format(len(time_elements_tuple)))
 
       milliseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
@@ -604,8 +608,9 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError(
-          'Invalid time elements tuple at least 7 elements required.')
+      raise ValueError((
+          'Invalid time elements tuple at least 7 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
 
     year, month, day_of_month, hours, minutes, seconds, milliseconds = (
         time_elements_tuple)
@@ -652,8 +657,9 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     fraction_of_second = None
     if time_elements_tuple:
       if len(time_elements_tuple) < 7:
-        raise ValueError(
-            'Invalid time elements tuple at least 7 elements required.')
+        raise ValueError((
+            'Invalid time elements tuple at least 7 elements required,'
+            'got: {0:d}').format(len(time_elements_tuple)))
 
       microseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
@@ -685,8 +691,9 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError(
-          'Invalid time elements tuple at least 7 elements required.')
+      raise ValueError((
+          'Invalid time elements tuple at least 7 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
 
     year, month, day_of_month, hours, minutes, seconds, microseconds = (
         time_elements_tuple)

@@ -22,6 +22,11 @@ class DateTimeValues(object):
 
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
+  _100NS_PER_SECOND = 10000000
+  _100NS_PER_DECISECOND = 1000000
+  _100NS_PER_MILLISECOND = 10000
+  _100NS_PER_MICROSECOND = 10
+
   # The number of seconds in a day
   _SECONDS_PER_DAY = 24 * 60 * 60
 

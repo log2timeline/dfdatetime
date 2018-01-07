@@ -11,7 +11,7 @@ class OLEAutomationDate(interface.DateTimeValues):
   """OLE Automation date.
 
   The OLE Automation date is a floating point value that contains the number of
-  days since 1899-12-31 (also known as the OLE Automation date epoch), and the
+  days since 1899-12-30 (also known as the OLE Automation date epoch), and the
   fractional part represents the fraction of a day since midnight. Negative
   values represent date and times predating the OLE Automation date epoch.
 
@@ -25,8 +25,8 @@ class OLEAutomationDate(interface.DateTimeValues):
         be one of the PRECISION_VALUES in definitions.
     timestamp (float): OLE Automation date.
   """
-  # The difference between Dec 31, 1899 and Jan 1, 1970 in days.
-  _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25568
+  # The difference between Dec 30, 1899 and Jan 1, 1970 in days.
+  _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25569
 
   def __init__(self, timestamp=None):
     """Initializes an OLE Automation date.
@@ -65,11 +65,13 @@ class OLEAutomationDate(interface.DateTimeValues):
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    timestamp += self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
 
     timestamp = float(timestamp)
     if microseconds is not None:
       timestamp += float(microseconds) / definitions.MICROSECONDS_PER_SECOND
+
+    timestamp /= definitions.SECONDS_PER_DAY
+    timestamp += self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
 
     self.timestamp = timestamp
     self.is_local_time = False
@@ -85,8 +87,8 @@ class OLEAutomationDate(interface.DateTimeValues):
       return None, None
 
     timestamp = self.timestamp - self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
-    remainder = int(
-        (timestamp % 1) * definitions.SECONDS_PER_DAY * self._100NS_PER_SECOND)
+    timestamp *= definitions.SECONDS_PER_DAY
+    remainder = int((timestamp % 1) * self._100NS_PER_SECOND)
     return int(timestamp), remainder
 
   def CopyToDateTimeString(self):
@@ -99,15 +101,15 @@ class OLEAutomationDate(interface.DateTimeValues):
     if self.timestamp is None:
       return
 
+    timestamp = self.timestamp * definitions.SECONDS_PER_DAY
+
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        int(self.timestamp))
+        int(timestamp))
 
     year, month, day_of_month = self._GetDateValues(
-        number_of_days, 2001, 1, 1)
+        number_of_days, 1899, 12, 30)
 
-    microseconds = int(
-        (self.timestamp % 1) * definitions.SECONDS_PER_DAY *
-        definitions.MICROSECONDS_PER_SECOND)
+    microseconds = int((timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, microseconds)

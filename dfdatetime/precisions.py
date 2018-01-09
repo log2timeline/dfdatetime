@@ -29,7 +29,7 @@ class DateTimePrecisionHelper(object):
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
-    """Copies the time elements and fragment of second to a string.
+    """Copies the time elements and fraction of second to a string.
 
     Args:
       time_elements_tuple (tuple[int, int, int, int, int, int]):
@@ -71,7 +71,7 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
-    """Copies the time elements and fragment of second to a string.
+    """Copies the time elements and fraction of second to a string.
 
     Args:
       time_elements_tuple (tuple[int, int, int, int, int, int]):
@@ -87,8 +87,8 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
     Raises:
       ValueError: if the fraction of second is out of bounds.
     """
-    if fraction_of_second < 0.0 or fraction_of_second > 1.0:
-      raise ValueError('Fraction of seconds value: {0:f} out of bounds.'.format(
+    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
           fraction_of_second))
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
@@ -123,7 +123,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
-    """Copies the time elements and fragment of second to a string.
+    """Copies the time elements and fraction of second to a string.
 
     Args:
       time_elements_tuple (tuple[int, int, int, int, int, int]):
@@ -139,8 +139,8 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
     Raises:
       ValueError: if the fraction of second is out of bounds.
     """
-    if fraction_of_second < 0.0 or fraction_of_second > 1.0:
-      raise ValueError('Fraction of seconds value: {0:f} out of bounds.'.format(
+    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
           fraction_of_second))
 
     milliseconds = int(fraction_of_second * definitions.MILLISECONDS_PER_SECOND)
@@ -176,7 +176,7 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
-    """Copies the time elements and fragment of second to a string.
+    """Copies the time elements and fraction of second to a string.
 
     Args:
       time_elements_tuple (tuple[int, int, int, int, int, int]):
@@ -192,8 +192,8 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
     Raises:
       ValueError: if the fraction of second is out of bounds.
     """
-    if fraction_of_second < 0.0 or fraction_of_second > 1.0:
-      raise ValueError('Fraction of seconds value: {0:f} out of bounds.'.format(
+    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
           fraction_of_second))
 
     microseconds = int(fraction_of_second * definitions.MICROSECONDS_PER_SECOND)

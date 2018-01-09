@@ -414,7 +414,7 @@ class TimeElements(interface.DateTimeValues):
 
 
 class TimeElementsWithFractionOfSecond(TimeElements):
-  """Time elements with a fraction of second.
+  """Time elements with a fraction of second interface.
 
   Attributes:
     fraction_of_second (float): fraction of second, which must be a value
@@ -435,8 +435,15 @@ class TimeElementsWithFractionOfSecond(TimeElements):
           seconds.
 
     Raises:
-      ValueError: if the time elements tuple is invalid.
+      ValueError: if the time elements tuple is invalid or fraction of second
+          value is out of bounds.
     """
+    if fraction_of_second is not None:
+      if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+        raise ValueError(
+            'Fraction of second value: {0:f} out of bounds.'.format(
+                fraction_of_second))
+
     super(TimeElementsWithFractionOfSecond, self).__init__(
         time_elements_tuple=time_elements_tuple)
     self.fraction_of_second = fraction_of_second
@@ -498,8 +505,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
       raise ValueError('Invalid fraction of second value: {0!s}'.format(
           time_elements_tuple[6]))
 
-    if fraction_of_second < 0.0 or fraction_of_second > 1.0:
-      raise ValueError('Fraction of seconds value: {0:f} out of bounds.'.format(
+    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
           fraction_of_second))
 
     self.fraction_of_second = fraction_of_second
@@ -559,8 +566,8 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     fraction_of_second (float): fraction of second, which must be a value
         between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be PRECISION_1_MILLISECOND.
+    precision (str): precision of the date of the date and time value, that
+        represents 1 millisecond (PRECISION_1_MILLISECOND).
   """
 
   def __init__(self, time_elements_tuple=None):
@@ -607,7 +614,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     Args:
       time_elements_tuple (Optional[tuple[str, str, str, str, str, str, str]]):
           time elements, contains year, month, day of month, hours, minutes,
-          seconds and microseconds.
+          seconds and milliseconds.
 
     Raises:
       ValueError: if the time elements tuple is invalid.
@@ -646,8 +653,8 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     fraction_of_second (float): fraction of second, which must be a value
         between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be PRECISION_1_MICROSECOND.
+    precision (str): precision of the date of the date and time value, that
+        represents 1 microsecond (PRECISION_1_MICROSECOND).
   """
 
   def __init__(self, time_elements_tuple=None):

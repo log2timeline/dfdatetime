@@ -27,8 +27,6 @@ class DateTimeValues(object):
   _100NS_PER_MILLISECOND = 10000
   _100NS_PER_MICROSECOND = 10
 
-  _SECONDS_PER_DAY = 24 * 60 * 60
-
   _INT64_MIN = -(1 << 63)
   _INT64_MAX = (1 << 63) - 1
 

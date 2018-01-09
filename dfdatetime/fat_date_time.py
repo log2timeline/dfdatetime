@@ -90,7 +90,7 @@ class FATDateTime(interface.DateTimeValues):
       raise ValueError('Seconds value out of bounds.')
 
     number_of_seconds = (((hours * 60) + minutes) * 60) + seconds
-    number_of_seconds += number_of_days * self._SECONDS_PER_DAY
+    number_of_seconds += number_of_days * definitions.SECONDS_PER_DAY
     return number_of_seconds
 
   def CopyFromDateTimeString(self, time_string):

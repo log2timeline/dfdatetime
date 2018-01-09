@@ -16,8 +16,7 @@ class OLEAutomationDate(interface.DateTimeValues):
   values represent date and times predating the OLE Automation date epoch.
 
   Also see:
-    https://msdn.microsoft.com/en-us/library/
-        system.datetime.tooadate(v=vs.110).aspx
+    https://msdn.microsoft.com/en-us/library/system.datetime.tooadate(v=vs.110).aspx
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
@@ -35,7 +34,7 @@ class OLEAutomationDate(interface.DateTimeValues):
       timestamp (Optional[float]): OLE Automation date.
     """
     super(OLEAutomationDate, self).__init__()
-    self.precision = definitions.PRECISION_1_DAY
+    self.precision = definitions.PRECISION_1_MICROSECOND
     self.timestamp = timestamp
 
   def CopyFromDateTimeString(self, time_string):

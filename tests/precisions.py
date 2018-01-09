@@ -53,6 +53,9 @@ class SecondsPrecisionHelperTest(unittest.TestCase):
         (2018, 1, 2, 19, 45, 12), 0.123456)
     self.assertEqual(date_time_string, '2018-01-02 19:45:12')
 
+    with self.assertRaises(ValueError):
+      precision_helper.CopyToDateTimeString((2018, 1, 2, 19, 45, 12), 4.123456)
+
 
 class MillisecondsPrecisionHelperTest(unittest.TestCase):
   """Tests for the milliseconds precision helper."""
@@ -79,6 +82,9 @@ class MillisecondsPrecisionHelperTest(unittest.TestCase):
         (2018, 1, 2, 19, 45, 12), 0.123456)
     self.assertEqual(date_time_string, '2018-01-02 19:45:12.123')
 
+    with self.assertRaises(ValueError):
+      precision_helper.CopyToDateTimeString((2018, 1, 2, 19, 45, 12), 4.123456)
+
 
 class MicrosecondsPrecisionHelperTest(unittest.TestCase):
   """Tests for the milliseconds precision helper."""
@@ -104,6 +110,9 @@ class MicrosecondsPrecisionHelperTest(unittest.TestCase):
     date_time_string = precision_helper.CopyToDateTimeString(
         (2018, 1, 2, 19, 45, 12), 0.123456)
     self.assertEqual(date_time_string, '2018-01-02 19:45:12.123456')
+
+    with self.assertRaises(ValueError):
+      precision_helper.CopyToDateTimeString((2018, 1, 2, 19, 45, 12), 4.123456)
 
 
 class PrecisionHelperFactoryTest(unittest.TestCase):

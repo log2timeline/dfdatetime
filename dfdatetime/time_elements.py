@@ -417,7 +417,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
   """Time elements with a fraction of second.
 
   Attributes:
-    fraction_of_second (float): fraction of second.
+    fraction_of_second (float): fraction of second, which must be a value
+        between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
@@ -427,7 +428,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     """Initializes time elements.
 
     Args:
-      fraction_of_second (Optional[float]): fraction of second.
+      fraction_of_second (Optional[float]): fraction of second, which must be
+          a value between 0.0 and 1.0.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
@@ -438,16 +440,17 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     super(TimeElementsWithFractionOfSecond, self).__init__(
         time_elements_tuple=time_elements_tuple)
     self.fraction_of_second = fraction_of_second
+    self.precision = None
 
   def _CopyFromDateTimeValues(self, date_time_values):
     """Copies time elements from date and time values.
 
     Args:
       date_time_values  (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds and fraction.
+          month, day of month, hours, minutes, seconds, microseconds.
 
     Raises:
-      ValueError: if the precision value is unsupported.
+      ValueError: if no helper can be created for the current precision.
     """
     year = date_time_values.get('year', 0)
     month = date_time_values.get('month', 0)
@@ -494,6 +497,10 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     except (TypeError, ValueError):
       raise ValueError('Invalid fraction of second value: {0!s}'.format(
           time_elements_tuple[6]))
+
+    if fraction_of_second < 0.0 or fraction_of_second > 1.0:
+      raise ValueError('Fraction of seconds value: {0:f} out of bounds.'.format(
+          fraction_of_second))
 
     self.fraction_of_second = fraction_of_second
 
@@ -549,10 +556,11 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
   """Time elements in milliseconds.
 
   Attributes:
-    fraction_of_second (float): fraction of second.
+    fraction_of_second (float): fraction of second, which must be a value
+        between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
+        be PRECISION_1_MILLISECOND.
   """
 
   def __init__(self, time_elements_tuple=None):
@@ -599,7 +607,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     Args:
       time_elements_tuple (Optional[tuple[str, str, str, str, str, str, str]]):
           time elements, contains year, month, day of month, hours, minutes,
-          seconds and mircorseconds.
+          seconds and microseconds.
 
     Raises:
       ValueError: if the time elements tuple is invalid.
@@ -635,10 +643,11 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
   """Time elements in microseconds.
 
   Attributes:
-    fraction_of_second (float): fraction of second.
+    fraction_of_second (float): fraction of second, which must be a value
+        between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
+        be PRECISION_1_MICROSECOND.
   """
 
   def __init__(self, time_elements_tuple=None):
@@ -685,7 +694,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     Args:
       time_elements_tuple (Optional[tuple[str, str, str, str, str, str, str]]):
           time elements, contains year, month, day of month, hours, minutes,
-          seconds and mircorseconds.
+          seconds and microseconds.
 
     Raises:
       ValueError: if the time elements tuple is invalid.

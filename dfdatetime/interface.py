@@ -10,7 +10,7 @@ from dfdatetime import decorators
 
 
 class DateTimeValues(object):
-  """Defines the date time values interface.
+  """Date time values interface.
 
   This is the super class of different date and time representations.
 
@@ -27,8 +27,8 @@ class DateTimeValues(object):
   _100NS_PER_MILLISECOND = 10000
   _100NS_PER_MICROSECOND = 10
 
-  # The number of seconds in a day
-  _SECONDS_PER_DAY = 24 * 60 * 60
+  _INT64_MIN = -(1 << 63)
+  _INT64_MAX = (1 << 63) - 1
 
   def __init__(self):
     """Initializes date time values."""

@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 from dfdatetime import definitions
 from dfdatetime import interface
+from dfdatetime import precisions
 
 
 class TimeElements(interface.DateTimeValues):
@@ -37,7 +38,9 @@ class TimeElements(interface.DateTimeValues):
 
     if time_elements_tuple:
       if len(time_elements_tuple) < 6:
-        raise ValueError('Invalid time elements tuple 6 elements required.')
+        raise ValueError((
+            'Invalid time elements tuple at least 6 elements required,'
+            'got: {0:d}').format(len(time_elements_tuple)))
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           *time_elements_tuple)
@@ -50,7 +53,7 @@ class TimeElements(interface.DateTimeValues):
           hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The seconds fraction and
+          fraction can be either 3 or 6 digits. The fraction of second and
           time zone offset are optional.
 
     Returns:
@@ -127,7 +130,7 @@ class TimeElements(interface.DateTimeValues):
           hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The seconds fraction and
+          fraction can be either 3 or 6 digits. The faction of second and
           time zone offset are optional.
 
     Returns:
@@ -231,7 +234,7 @@ class TimeElements(interface.DateTimeValues):
         seconds = int(time_fraction)
         time_fraction -= seconds
 
-      time_fraction *= 1000000
+      time_fraction *= definitions.MICROSECONDS_PER_SECOND
       microseconds = int(time_fraction)
 
     if minutes is not None and minutes not in range(0, 60):
@@ -328,7 +331,9 @@ class TimeElements(interface.DateTimeValues):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 6:
-      raise ValueError('Invalid time elements tuple 6 elements required.')
+      raise ValueError((
+          'Invalid time elements tuple at least 6 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
 
     try:
       year = int(time_elements_tuple[0], 10)
@@ -405,16 +410,164 @@ class TimeElements(interface.DateTimeValues):
     """
     if self._number_of_seconds is None:
       return
-    return self._number_of_seconds * 1000000
+    return self._number_of_seconds * definitions.MICROSECONDS_PER_SECOND
 
 
-class TimeElementsInMilliseconds(TimeElements):
-  """Time elements in milliseconds.
+class TimeElementsWithFractionOfSecond(TimeElements):
+  """Time elements with a fraction of second interface.
 
   Attributes:
+    fraction_of_second (float): fraction of second, which must be a value
+        between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
+  """
+
+  def __init__(self, fraction_of_second=None, time_elements_tuple=None):
+    """Initializes time elements.
+
+    Args:
+      fraction_of_second (Optional[float]): fraction of second, which must be
+          a value between 0.0 and 1.0.
+      time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
+          time elements, contains year, month, day of month, hours, minutes and
+          seconds.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid or fraction of second
+          value is out of bounds.
+    """
+    if fraction_of_second is not None:
+      if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+        raise ValueError(
+            'Fraction of second value: {0:f} out of bounds.'.format(
+                fraction_of_second))
+
+    super(TimeElementsWithFractionOfSecond, self).__init__(
+        time_elements_tuple=time_elements_tuple)
+    self.fraction_of_second = fraction_of_second
+    self.precision = None
+
+  def _CopyFromDateTimeValues(self, date_time_values):
+    """Copies time elements from date and time values.
+
+    Args:
+      date_time_values  (dict[str, int]): date and time values, such as year,
+          month, day of month, hours, minutes, seconds, microseconds.
+
+    Raises:
+      ValueError: if no helper can be created for the current precision.
+    """
+    year = date_time_values.get('year', 0)
+    month = date_time_values.get('month', 0)
+    day_of_month = date_time_values.get('day_of_month', 0)
+    hours = date_time_values.get('hours', 0)
+    minutes = date_time_values.get('minutes', 0)
+    seconds = date_time_values.get('seconds', 0)
+    microseconds = date_time_values.get('microseconds', 0)
+
+    precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
+        self.precision)
+
+    fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
+        microseconds)
+
+    self._number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds)
+    self._time_elements_tuple = (
+        year, month, day_of_month, hours, minutes, seconds)
+    self.fraction_of_second = fraction_of_second
+    self.is_local_time = False
+
+  def CopyFromStringTuple(self, time_elements_tuple):
+    """Copies time elements from string-based time elements tuple.
+
+    Args:
+      time_elements_tuple (Optional[tuple[str, str, str, str, str, str, str]]):
+          time elements, contains year, month, day of month, hours, minutes,
+          seconds and fraction of seconds.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid.
+    """
+    if len(time_elements_tuple) < 7:
+      raise ValueError((
+          'Invalid time elements tuple at least 7 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
+
+    super(TimeElementsWithFractionOfSecond, self).CopyFromStringTuple(
+        time_elements_tuple)
+
+    try:
+      fraction_of_second = float(time_elements_tuple[6])
+    except (TypeError, ValueError):
+      raise ValueError('Invalid fraction of second value: {0!s}'.format(
+          time_elements_tuple[6]))
+
+    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
+          fraction_of_second))
+
+    self.fraction_of_second = fraction_of_second
+
+  def CopyToStatTimeTuple(self):
+    """Copies the time elements to a stat timestamp tuple.
+
+    Returns:
+      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
+          100 nano seconds or (None, None) on error.
+    """
+    if self._number_of_seconds is None or self.fraction_of_second is None:
+      return None, None
+
+    return self._number_of_seconds, (
+        int(self.fraction_of_second * self._100NS_PER_SECOND))
+
+  def CopyToDateTimeString(self):
+    """Copies the time elements to a date and time string.
+
+    Returns:
+      str: date and time value formatted as:
+          YYYY-MM-DD hh:mm:ss.### or
+          YYYY-MM-DD hh:mm:ss.######
+
+    Raises:
+      ValueError: if the precision value is unsupported.
+    """
+    if self._number_of_seconds is None or self.fraction_of_second is None:
+      return
+
+    precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
+        self.precision)
+
+    return precision_helper.CopyToDateTimeString(
+        self._time_elements_tuple, self.fraction_of_second)
+
+  def GetPlasoTimestamp(self):
+    """Retrieves a timestamp that is compatible with plaso.
+
+    Returns:
+      int: a POSIX timestamp in microseconds or None on error.
+    """
+    if self._number_of_seconds is None or self.fraction_of_second is None:
+      return
+
+    timestamp = self._number_of_seconds * definitions.MICROSECONDS_PER_SECOND
+    timestamp += int(
+        self.fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
+    return timestamp
+
+
+class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
+  """Time elements in milliseconds.
+
+  Attributes:
+    fraction_of_second (float): fraction of second, which must be a value
+        between 0.0 and 1.0.
+    is_local_time (bool): True if the date and time value is in local time.
+    precision (str): precision of the date of the date and time value, that
+        represents 1 millisecond (PRECISION_1_MILLISECOND).
   """
 
   def __init__(self, time_elements_tuple=None):
@@ -428,45 +581,32 @@ class TimeElementsInMilliseconds(TimeElements):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
-    milliseconds = None
+    fraction_of_second = None
     if time_elements_tuple:
       if len(time_elements_tuple) < 7:
-        raise ValueError('Invalid time elements tuple 7 elements required.')
+        raise ValueError((
+            'Invalid time elements tuple at least 7 elements required,'
+            'got: {0:d}').format(len(time_elements_tuple)))
 
       milliseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
 
-      if milliseconds < 0 or milliseconds > 999:
+      if (milliseconds < 0 or
+          milliseconds >= definitions.MILLISECONDS_PER_SECOND):
         raise ValueError('Invalid number of milliseconds.')
 
+      fraction_of_second = (
+          float(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
+
     super(TimeElementsInMilliseconds, self).__init__(
+        fraction_of_second=fraction_of_second,
         time_elements_tuple=time_elements_tuple)
-    self._milliseconds = milliseconds
     self.precision = definitions.PRECISION_1_MILLISECOND
 
-  def _CopyFromDateTimeValues(self, date_time_values):
-    """Copies time elements from date and time values.
-
-    Args:
-      date_time_values  (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds, microseconds.
-    """
-    year = date_time_values.get('year', 0)
-    month = date_time_values.get('month', 0)
-    day_of_month = date_time_values.get('day_of_month', 0)
-    hours = date_time_values.get('hours', 0)
-    minutes = date_time_values.get('minutes', 0)
-    seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', 0)
-    milliseconds, _ = divmod(microseconds, 1000)
-
-    self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
-    self._milliseconds = milliseconds
-    self._time_elements_tuple = (
-        year, month, day_of_month, hours, minutes, seconds, milliseconds)
-
-    self.is_local_time = False
+  @property
+  def milliseconds(self):
+    """int: number of milliseconds."""
+    return int(self.fraction_of_second * definitions.MILLISECONDS_PER_SECOND)
 
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
@@ -480,63 +620,41 @@ class TimeElementsInMilliseconds(TimeElements):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError('Invalid time elements tuple 7 elements required.')
+      raise ValueError((
+          'Invalid time elements tuple at least 7 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
+
+    year, month, day_of_month, hours, minutes, seconds, milliseconds = (
+        time_elements_tuple)
+
+    try:
+      milliseconds = int(milliseconds, 10)
+    except (TypeError, ValueError):
+      raise ValueError('Invalid millisecond value: {0!s}'.format(milliseconds))
+
+    if milliseconds < 0 or milliseconds >= definitions.MILLISECONDS_PER_SECOND:
+      raise ValueError('Invalid number of milliseconds.')
+
+    fraction_of_second = (
+        float(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
+
+    time_elements_tuple = (
+        year, month, day_of_month, hours, minutes, seconds,
+        str(fraction_of_second))
 
     super(TimeElementsInMilliseconds, self).CopyFromStringTuple(
         time_elements_tuple)
-    try:
-      self._milliseconds = int(time_elements_tuple[6], 10)
-    except (TypeError, ValueError):
-      raise ValueError('Invalid milliseconds value: {0!s}'.format(
-          time_elements_tuple[6]))
-
-  def CopyToStatTimeTuple(self):
-    """Copies the time elements to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None or self._milliseconds is None:
-      return None, None
-
-    return self._number_of_seconds, self._milliseconds * 10000
-
-  def CopyToDateTimeString(self):
-    """Copies the time elements to a date and time string.
-
-    Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.###
-    """
-    if self._number_of_seconds is None or self._milliseconds is None:
-      return
-
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:03d}'.format(
-        self._time_elements_tuple[0], self._time_elements_tuple[1],
-        self._time_elements_tuple[2], self._time_elements_tuple[3],
-        self._time_elements_tuple[4], self._time_elements_tuple[5],
-        self._milliseconds)
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None or self._milliseconds is None:
-      return
-
-    return ((self._number_of_seconds * 1000) + self._milliseconds) * 1000
 
 
-class TimeElementsInMicroseconds(TimeElements):
+class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
   """Time elements in microseconds.
 
   Attributes:
+    fraction_of_second (float): fraction of second, which must be a value
+        between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
+    precision (str): precision of the date of the date and time value, that
+        represents 1 microsecond (PRECISION_1_MICROSECOND).
   """
 
   def __init__(self, time_elements_tuple=None):
@@ -550,44 +668,32 @@ class TimeElementsInMicroseconds(TimeElements):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
-    microseconds = None
+    fraction_of_second = None
     if time_elements_tuple:
       if len(time_elements_tuple) < 7:
-        raise ValueError('Invalid time elements tuple 7 elements required.')
+        raise ValueError((
+            'Invalid time elements tuple at least 7 elements required,'
+            'got: {0:d}').format(len(time_elements_tuple)))
 
       microseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
 
-      if microseconds < 0 or microseconds > 999999:
+      if (microseconds < 0 or
+          microseconds >= definitions.MICROSECONDS_PER_SECOND):
         raise ValueError('Invalid number of microseconds.')
 
+      fraction_of_second = (
+          float(microseconds) / definitions.MICROSECONDS_PER_SECOND)
+
     super(TimeElementsInMicroseconds, self).__init__(
+        fraction_of_second=fraction_of_second,
         time_elements_tuple=time_elements_tuple)
-    self._microseconds = microseconds
     self.precision = definitions.PRECISION_1_MICROSECOND
 
-  def _CopyFromDateTimeValues(self, date_time_values):
-    """Copies time elements from date and time values.
-
-    Args:
-      date_time_values  (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds, microseconds.
-    """
-    year = date_time_values.get('year', 0)
-    month = date_time_values.get('month', 0)
-    day_of_month = date_time_values.get('day_of_month', 0)
-    hours = date_time_values.get('hours', 0)
-    minutes = date_time_values.get('minutes', 0)
-    seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', 0)
-
-    self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
-    self._microseconds = microseconds
-    self._time_elements_tuple = (
-        year, month, day_of_month, hours, minutes, seconds, microseconds)
-
-    self.is_local_time = False
+  @property
+  def microseconds(self):
+    """int: number of microseconds."""
+    return int(self.fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
 
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.
@@ -601,51 +707,27 @@ class TimeElementsInMicroseconds(TimeElements):
       ValueError: if the time elements tuple is invalid.
     """
     if len(time_elements_tuple) < 7:
-      raise ValueError('Invalid time elements tuple 7 elements required.')
+      raise ValueError((
+          'Invalid time elements tuple at least 7 elements required,'
+          'got: {0:d}').format(len(time_elements_tuple)))
+
+    year, month, day_of_month, hours, minutes, seconds, microseconds = (
+        time_elements_tuple)
+
+    try:
+      microseconds = int(microseconds, 10)
+    except (TypeError, ValueError):
+      raise ValueError('Invalid microsecond value: {0!s}'.format(microseconds))
+
+    if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
+      raise ValueError('Invalid number of microseconds.')
+
+    fraction_of_second = (
+        float(microseconds) / definitions.MICROSECONDS_PER_SECOND)
+
+    time_elements_tuple = (
+        year, month, day_of_month, hours, minutes, seconds,
+        str(fraction_of_second))
 
     super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
         time_elements_tuple)
-    try:
-      self._microseconds = int(time_elements_tuple[6], 10)
-    except (TypeError, ValueError):
-      raise ValueError('Invalid microseconds value: {0!s}'.format(
-          time_elements_tuple[6]))
-
-  def CopyToStatTimeTuple(self):
-    """Copies the time elements to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None or self._microseconds is None:
-      return None, None
-
-    return self._number_of_seconds, self._microseconds * 10
-
-  def CopyToDateTimeString(self):
-    """Copies the time elements to a date and time string.
-
-    Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######
-    """
-    if self._number_of_seconds is None or self._microseconds is None:
-      return
-
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
-        self._time_elements_tuple[0], self._time_elements_tuple[1],
-        self._time_elements_tuple[2], self._time_elements_tuple[3],
-        self._time_elements_tuple[4], self._time_elements_tuple[5],
-        self._microseconds)
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None or self._microseconds is None:
-      return
-
-    return (self._number_of_seconds * 1000000) + self._microseconds

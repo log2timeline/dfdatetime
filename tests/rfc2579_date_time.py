@@ -210,7 +210,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
 
     date_time_string = rfc2579_date_time_object.CopyToDateTimeString()
-    self.assertEqual(date_time_string, '2010-08-12 20:06:31')
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.6')
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 

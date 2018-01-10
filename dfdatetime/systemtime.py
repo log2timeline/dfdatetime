@@ -127,7 +127,8 @@ class Systemtime(interface.DateTimeValues):
     seconds = date_time_values.get('seconds', 0)
 
     microseconds = date_time_values.get('microseconds', 0)
-    milliseconds, _ = divmod(microseconds, 1000)
+    milliseconds, _ = divmod(
+        microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
 
     if year < 1601 or year > 30827:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
@@ -157,7 +158,8 @@ class Systemtime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return None, None
 
-    return self._number_of_seconds, self.milliseconds * 10000
+    return self._number_of_seconds, (
+        self.milliseconds * self._100NS_PER_MILLISECOND)
 
   def CopyToDateTimeString(self):
     """Copies the SYSTEMTIME structure to a date and time string.
@@ -182,4 +184,7 @@ class Systemtime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return
 
-    return ((self._number_of_seconds * 1000) + self.milliseconds) * 1000
+    timestamp = self._number_of_seconds * definitions.MILLISECONDS_PER_SECOND
+    timestamp += self.milliseconds
+    timestamp *= definitions.MICROSECONDS_PER_MILLISECOND
+    return timestamp

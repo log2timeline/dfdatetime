@@ -90,7 +90,7 @@ class FATDateTime(interface.DateTimeValues):
       raise ValueError('Seconds value out of bounds.')
 
     number_of_seconds = (((hours * 60) + minutes) * 60) + seconds
-    number_of_seconds += number_of_days * self._SECONDS_PER_DAY
+    number_of_seconds += number_of_days * definitions.SECONDS_PER_DAY
     return number_of_seconds
 
   def CopyFromDateTimeString(self, time_string):
@@ -152,8 +152,7 @@ class FATDateTime(interface.DateTimeValues):
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self._number_of_seconds)
 
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1980, 1, 1)
+    year, month, day_of_month = self._GetDateValues(number_of_days, 1980, 1, 1)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
         year, month, day_of_month, hours, minutes, seconds)
@@ -167,4 +166,5 @@ class FATDateTime(interface.DateTimeValues):
     if self._number_of_seconds is None or self._number_of_seconds < 0:
       return
 
-    return (self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE) * 1000000
+    return definitions.MICROSECONDS_PER_SECOND * (
+        self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE)

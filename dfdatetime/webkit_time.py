@@ -21,8 +21,6 @@ class WebKitTime(interface.DateTimeValues):
 
   # The difference between Jan 1, 1601 and Jan 1, 1970 in seconds.
   _WEBKIT_TO_POSIX_BASE = 11644473600
-  _INT64_MIN = -(1 << 63)
-  _INT64_MAX = (1 << 63) - 1
 
   def __init__(self, timestamp=None):
     """Initializes a WebKit timestamp.
@@ -61,7 +59,7 @@ class WebKitTime(interface.DateTimeValues):
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self.timestamp += self._WEBKIT_TO_POSIX_BASE
-    self.timestamp *= 1000000
+    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
     self.timestamp += date_time_values.get('microseconds', 0)
 
     self.is_local_time = False
@@ -77,9 +75,10 @@ class WebKitTime(interface.DateTimeValues):
         self.timestamp > self._INT64_MAX):
       return None, None
 
-    timestamp, microseconds = divmod(self.timestamp, 1000000)
+    timestamp, microseconds = divmod(
+        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
     timestamp -= self._WEBKIT_TO_POSIX_BASE
-    return timestamp, microseconds * 10
+    return timestamp, microseconds * self._100NS_PER_MICROSECOND
 
   def CopyToDateTimeString(self):
     """Copies the WebKit timestamp to a date and time string.
@@ -92,7 +91,8 @@ class WebKitTime(interface.DateTimeValues):
         self.timestamp > self._INT64_MAX):
       return
 
-    timestamp, microseconds = divmod(self.timestamp, 1000000)
+    timestamp, microseconds = divmod(
+        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValues(
@@ -111,4 +111,5 @@ class WebKitTime(interface.DateTimeValues):
         self.timestamp > self._INT64_MAX):
       return
 
-    return self.timestamp - (self._WEBKIT_TO_POSIX_BASE * 1000000)
+    return self.timestamp - (
+        self._WEBKIT_TO_POSIX_BASE * definitions.MICROSECONDS_PER_SECOND)

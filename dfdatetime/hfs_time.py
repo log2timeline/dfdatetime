@@ -112,4 +112,4 @@ class HFSTime(interface.DateTimeValues):
       return
 
     timestamp = self.timestamp - self._HFS_TO_POSIX_BASE
-    return timestamp * 1000000
+    return timestamp * definitions.MICROSECONDS_PER_SECOND

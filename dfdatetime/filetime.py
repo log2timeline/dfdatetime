@@ -67,9 +67,9 @@ class Filetime(interface.DateTimeValues):
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self.timestamp += self._FILETIME_TO_POSIX_BASE
-    self.timestamp *= 1000000
+    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
     self.timestamp += date_time_values.get('microseconds', 0)
-    self.timestamp *= 10
+    self.timestamp *= self._100NS_PER_MICROSECOND
 
     self.is_local_time = False
 
@@ -84,7 +84,7 @@ class Filetime(interface.DateTimeValues):
         self.timestamp > self._UINT64_MAX):
       return None, None
 
-    timestamp, remainder = divmod(self.timestamp, 10000000)
+    timestamp, remainder = divmod(self.timestamp, self._100NS_PER_SECOND)
     timestamp -= self._FILETIME_TO_POSIX_BASE
     return timestamp, remainder
 
@@ -99,7 +99,7 @@ class Filetime(interface.DateTimeValues):
         self.timestamp > self._UINT64_MAX):
       return
 
-    timestamp, remainder = divmod(self.timestamp, 10000000)
+    timestamp, remainder = divmod(self.timestamp, self._100NS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValues(
@@ -118,5 +118,6 @@ class Filetime(interface.DateTimeValues):
         self.timestamp > self._UINT64_MAX):
       return
 
-    timestamp, _ = divmod(self.timestamp, 10)
-    return timestamp - (self._FILETIME_TO_POSIX_BASE * 1000000)
+    timestamp, _ = divmod(self.timestamp, self._100NS_PER_MICROSECOND)
+    return timestamp - (
+        self._FILETIME_TO_POSIX_BASE * definitions.MICROSECONDS_PER_SECOND)

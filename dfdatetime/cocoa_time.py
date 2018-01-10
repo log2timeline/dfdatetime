@@ -68,7 +68,7 @@ class CocoaTime(interface.DateTimeValues):
 
     timestamp = float(timestamp)
     if microseconds is not None:
-      timestamp += float(microseconds) / 1000000
+      timestamp += float(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
     self.timestamp = timestamp
     self.is_local_time = False
@@ -84,7 +84,7 @@ class CocoaTime(interface.DateTimeValues):
       return None, None
 
     timestamp = self.timestamp - self._COCOA_TO_POSIX_BASE
-    remainder = int((timestamp % 1) * 10000000)
+    remainder = int((timestamp % 1) * self._100NS_PER_SECOND)
     return int(timestamp), remainder
 
   def CopyToDateTimeString(self):
@@ -103,7 +103,8 @@ class CocoaTime(interface.DateTimeValues):
     year, month, day_of_month = self._GetDateValues(
         number_of_days, 2001, 1, 1)
 
-    microseconds = int((self.timestamp % 1) * 1000000)
+    microseconds = int(
+        (self.timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, microseconds)
@@ -117,5 +118,6 @@ class CocoaTime(interface.DateTimeValues):
     if self.timestamp is None:
       return
 
-    timestamp = (self.timestamp - self._COCOA_TO_POSIX_BASE) * 1000000
+    timestamp = definitions.MICROSECONDS_PER_SECOND * (
+        self.timestamp - self._COCOA_TO_POSIX_BASE)
     return int(timestamp)

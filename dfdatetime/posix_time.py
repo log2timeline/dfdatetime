@@ -100,7 +100,7 @@ class PosixTime(interface.DateTimeValues):
     if self.timestamp is None:
       return
 
-    return self.timestamp * 1000000
+    return self.timestamp * definitions.MICROSECONDS_PER_SECOND
 
 
 class PosixTimeInMicroseconds(interface.DateTimeValues):
@@ -149,7 +149,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp *= 1000000
+    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
     self.timestamp += microseconds
 
     self.is_local_time = False
@@ -164,8 +164,9 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     if self.timestamp is None:
       return None, None
 
-    timestamp, microseconds = divmod(self.timestamp, 1000000)
-    return timestamp, microseconds * 10
+    timestamp, microseconds = divmod(
+        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
+    return timestamp, microseconds * self._100NS_PER_MICROSECOND
 
   def CopyToDateTimeString(self):
     """Copies the POSIX timestamp to a date and time string.
@@ -177,7 +178,8 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     if self.timestamp is None:
       return
 
-    timestamp, microseconds = divmod(self.timestamp, 1000000)
+    timestamp, microseconds = divmod(
+        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValues(

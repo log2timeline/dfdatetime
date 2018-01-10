@@ -23,8 +23,6 @@ class JavaTime(interface.DateTimeValues):
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): Java timestamp.
   """
-  _INT64_MIN = -(1 << 63)
-  _INT64_MAX = (1 << 63) - 1
 
   def __init__(self, timestamp=None):
     """Initializes a Java timestamp.
@@ -60,10 +58,11 @@ class JavaTime(interface.DateTimeValues):
 
     self.timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp *= 1000
+    self.timestamp *= definitions.MILLISECONDS_PER_SECOND
 
     if microseconds:
-      milliseconds, _ = divmod(microseconds, 1000)
+      milliseconds, _ = divmod(
+          microseconds, definitions.MILLISECONDS_PER_SECOND)
       self.timestamp += milliseconds
 
     self.is_local_time = False
@@ -79,8 +78,9 @@ class JavaTime(interface.DateTimeValues):
         self.timestamp > self._INT64_MAX):
       return None, None
 
-    timestamp, milliseconds = divmod(self.timestamp, 1000)
-    return timestamp, milliseconds * 10000
+    timestamp, milliseconds = divmod(
+        self.timestamp, definitions.MILLISECONDS_PER_SECOND)
+    return timestamp, milliseconds * self._100NS_PER_MILLISECOND
 
   def CopyToDateTimeString(self):
     """Copies the Java timestamp to a date and time string.
@@ -93,7 +93,8 @@ class JavaTime(interface.DateTimeValues):
         self.timestamp > self._INT64_MAX):
       return
 
-    timestamp, milliseconds = divmod(self.timestamp, 1000)
+    timestamp, milliseconds = divmod(
+        self.timestamp, definitions.MILLISECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValues(
@@ -112,4 +113,4 @@ class JavaTime(interface.DateTimeValues):
         self.timestamp > self._INT64_MAX):
       return
 
-    return self.timestamp * 1000
+    return self.timestamp * definitions.MICROSECONDS_PER_MILLISECOND

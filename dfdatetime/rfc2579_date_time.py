@@ -147,7 +147,8 @@ class RFC2579DateTime(interface.DateTimeValues):
     seconds = date_time_values.get('seconds', 0)
 
     microseconds = date_time_values.get('microseconds', 0)
-    deciseconds, _ = divmod(microseconds, 100000)
+    deciseconds, _ = divmod(
+        microseconds, definitions.MICROSECONDS_PER_DECISECOND)
 
     if year < 0 or year > 65536:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
@@ -175,21 +176,22 @@ class RFC2579DateTime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return None, None
 
-    return self._number_of_seconds, self.deciseconds * 1000000
+    return self._number_of_seconds, (
+        self.deciseconds * self._100NS_PER_DECISECOND)
 
   def CopyToDateTimeString(self):
     """Copies the RFC2579 date-time to a date and time string.
 
     Returns:
       str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss
+          YYYY-MM-DD hh:mm:ss.#
     """
     if self._number_of_seconds is None:
       return
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:01d}'.format(
         self.year, self.month, self.day_of_month, self.hours, self.minutes,
-        self.seconds)
+        self.seconds, self.deciseconds)
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -200,4 +202,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return
 
-    return ((self._number_of_seconds * 10) + self.deciseconds) * 100000
+    timestamp = self._number_of_seconds * definitions.DECISECONDS_PER_SECOND
+    timestamp += self.deciseconds
+    timestamp *= definitions.MICROSECONDS_PER_DECISECOND
+    return timestamp

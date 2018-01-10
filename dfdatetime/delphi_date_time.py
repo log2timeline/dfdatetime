@@ -29,9 +29,6 @@ class DelphiDateTime(interface.DateTimeValues):
   # The difference between Dec 30, 1899 and Jan 1, 1970 in days.
   _DELPHI_TO_POSIX_BASE = 25569
 
-  # The number of seconds per day.
-  _SECONDS_PER_DAY = 86400
-
   # The number of microseconds per day.
   _MICROSECONDS_PER_DAY = 86400000000
 
@@ -76,7 +73,7 @@ class DelphiDateTime(interface.DateTimeValues):
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
 
-    timestamp = float(timestamp) / self._SECONDS_PER_DAY
+    timestamp = float(timestamp) / definitions.SECONDS_PER_DAY
     timestamp += self._DELPHI_TO_POSIX_BASE
     if microseconds is not None:
       timestamp += float(microseconds) / self._MICROSECONDS_PER_DAY
@@ -94,9 +91,9 @@ class DelphiDateTime(interface.DateTimeValues):
     if self.timestamp is None:
       return None, None
 
-    timestamp = (
-        (self.timestamp - self._DELPHI_TO_POSIX_BASE) * self._SECONDS_PER_DAY)
-    remainder = int((timestamp % 1) * 10000000)
+    timestamp = definitions.SECONDS_PER_DAY * (
+        self.timestamp - self._DELPHI_TO_POSIX_BASE)
+    remainder = int((timestamp % 1) * self._100NS_PER_SECOND)
     return int(timestamp), remainder
 
   def CopyToDateTimeString(self):
@@ -109,7 +106,7 @@ class DelphiDateTime(interface.DateTimeValues):
     if self.timestamp is None:
       return
 
-    number_of_seconds = self.timestamp * self._SECONDS_PER_DAY
+    number_of_seconds = self.timestamp * definitions.SECONDS_PER_DAY
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         int(number_of_seconds))
@@ -117,7 +114,8 @@ class DelphiDateTime(interface.DateTimeValues):
     year, month, day_of_month = self._GetDateValues(
         number_of_days, 1899, 12, 30)
 
-    microseconds = int((number_of_seconds % 1) * 1000000)
+    microseconds = int(
+        (number_of_seconds % 1) * definitions.MICROSECONDS_PER_SECOND)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, microseconds)

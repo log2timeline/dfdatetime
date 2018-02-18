@@ -170,6 +170,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     if year < 0 or year > 65536:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
 

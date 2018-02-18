@@ -150,6 +150,7 @@ class Systemtime(interface.DateTimeValues):
     if year < 1601 or year > 30827:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
 

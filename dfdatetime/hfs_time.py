@@ -62,19 +62,6 @@ class HFSTime(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if (self._timestamp is None or self._timestamp < 0 or
-        self._timestamp > self._UINT32_MAX):
-      return
-
-    timestamp = self._timestamp - self._HFS_TO_POSIX_BASE
-    return timestamp * definitions.MICROSECONDS_PER_SECOND
-
   def CopyFromDateTimeString(self, time_string):
     """Copies a HFS timestamp from a date and time string.
 

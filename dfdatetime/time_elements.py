@@ -128,6 +128,7 @@ class TimeElements(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
@@ -384,6 +385,7 @@ class TimeElements(interface.DateTimeValues):
       raise ValueError('Invalid seconds value: {0!s}'.format(
           time_elements_tuple[5]))
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
@@ -493,6 +495,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
         microseconds)
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (

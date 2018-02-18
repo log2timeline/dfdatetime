@@ -105,6 +105,7 @@ class UUIDTime(interface.DateTimeValues):
     timestamp += date_time_values.get('microseconds', 0)
     timestamp *= self._100NS_PER_MICROSECOND
 
+    self._normalized_timestamp = None
     self._timestamp = timestamp
     self.is_local_time = False
 

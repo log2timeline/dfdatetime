@@ -194,15 +194,13 @@ class RFC2579DateTimeTest(unittest.TestCase):
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
         rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
 
-    expected_stat_time_tuple = (1281643591, 6000000)
     stat_time_tuple = rfc2579_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, 6000000))
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = rfc2579_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -217,15 +215,26 @@ class RFC2579DateTimeTest(unittest.TestCase):
     date_time_string = rfc2579_date_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
+
+    date_tuple = rfc2579_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
+
+    date_tuple = rfc2579_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
         rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
 
-    expected_micro_posix_number_of_seconds = 1281643591600000
     micro_posix_number_of_seconds = rfc2579_date_time_object.GetPlasoTimestamp()
-    self.assertEqual(
-        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
+    self.assertEqual(micro_posix_number_of_seconds, 1281643591600000)
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 

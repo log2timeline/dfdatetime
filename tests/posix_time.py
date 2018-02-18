@@ -1,12 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Tests for the POSIX timestamp implementation."""
+"""Tests for the POSIX time implementation."""
 
 from __future__ import unicode_literals
 
 import unittest
 
 from dfdatetime import posix_time
+
+
+class PosixTimeEpochTest(unittest.TestCase):
+  """Tests for the POSIX time epoch."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    posix_epoch = posix_time.PosixTimeEpoch()
+    self.assertIsNotNone(posix_epoch)
 
 
 class PosixTimeTest(unittest.TestCase):
@@ -44,15 +53,13 @@ class PosixTimeTest(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     posix_time_object = posix_time.PosixTime(timestamp=1281643591)
 
-    expected_stat_time_tuple = (1281643591, None)
     stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, None))
 
     posix_time_object = posix_time.PosixTime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -66,13 +73,24 @@ class PosixTimeTest(unittest.TestCase):
     date_time_string = posix_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+    date_tuple = posix_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    posix_time_object = posix_time.PosixTime()
+
+    date_tuple = posix_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     posix_time_object = posix_time.PosixTime(timestamp=1281643591)
 
-    expected_micro_posix_timestamp = 1281643591000000
     micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1281643591000000)
 
     posix_time_object = posix_time.PosixTime()
 
@@ -116,15 +134,13 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     posix_time_object = posix_time.PosixTimeInMicroseconds(
         timestamp=1281643591546875)
 
-    expected_stat_time_tuple = (1281643591, 5468750)
     stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, 5468750))
 
     posix_time_object = posix_time.PosixTimeInMicroseconds()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -139,14 +155,26 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     date_time_string = posix_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=1281643591546875)
+
+    date_tuple = posix_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds()
+
+    date_tuple = posix_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     posix_time_object = posix_time.PosixTimeInMicroseconds(
         timestamp=1281643591546875)
 
-    expected_micro_posix_timestamp = 1281643591546875
     micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1281643591546875)
 
     posix_time_object = posix_time.PosixTimeInMicroseconds()
 

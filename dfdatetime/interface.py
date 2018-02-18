@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Date and time values interface."""
+"""Date and time interfaces."""
 
 from __future__ import unicode_literals
 
@@ -9,8 +9,28 @@ import calendar
 from dfdatetime import decorators
 
 
+class DateTimeEpoch(object):
+  """Date and time epoch interface.
+
+  This is the super class of different epoch representations.
+  """
+
+  def __init__(self, year, month, day_of_month):
+    """Initializes a date time epoch.
+
+    Args:
+      year (int): year of the epoch.
+      month (int): month of the epoch.
+      day_of_month (int): day of month of the epoch.
+    """
+    super(DateTimeEpoch, self).__init__()
+    self.day_of_month = day_of_month
+    self.month = month
+    self.year = year
+
+
 class DateTimeValues(object):
-  """Date time values interface.
+  """Date and time values interface.
 
   This is the super class of different date and time representations.
 
@@ -29,6 +49,10 @@ class DateTimeValues(object):
 
   _INT64_MIN = -(1 << 63)
   _INT64_MAX = (1 << 63) - 1
+
+  _UINT32_MAX = (1 << 32) - 1
+  _UINT60_MAX = (1 << 60) - 1
+  _UINT64_MAX = (1 << 64) - 1
 
   def __init__(self):
     """Initializes date time values."""
@@ -316,7 +340,7 @@ class DateTimeValues(object):
       epoch_month (int): month that is the start of the epoch.
       epoch_day_of_month (int): day of month that is the start of the epoch.
 
-    Return:
+    Returns:
        tuple[int, int, int]: year, month, day of month.
 
     Raises:
@@ -420,6 +444,20 @@ class DateTimeValues(object):
       number_of_days = days_per_month - number_of_days
 
     return year, month, number_of_days
+
+  def _GetDateValuesWithEpoch(self, number_of_days, date_time_epoch):
+    """Determines date values.
+
+    Args:
+      number_of_days (int): number of days since epoch.
+      date_time_epoch (DateTimeEpoch): date and time of the epoch.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month.
+    """
+    return self._GetDateValues(
+        number_of_days, date_time_epoch.year, date_time_epoch.month,
+        date_time_epoch.day_of_month)
 
   def _GetDayOfYear(self, year, month, day_of_month):
     """Retrieves the day of the year for a specific day of a month in a year.
@@ -561,7 +599,7 @@ class DateTimeValues(object):
     Args:
       number_of_seconds (int): number of seconds.
 
-    Return:
+    Returns:
        tuple[int, int, int, int]: days, hours, minutes, seconds.
     """
     number_of_minutes, seconds = divmod(number_of_seconds, 60)
@@ -616,6 +654,7 @@ class DateTimeValues(object):
       ValueError: if the time string is invalid or not supported.
     """
 
+  # TODO: remove this method when there is no more need for it in dfvfs.
   @abc.abstractmethod
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.
@@ -632,6 +671,15 @@ class DateTimeValues(object):
     Returns:
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######
+    """
+
+  @abc.abstractmethod
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
     """
 
   # TODO: remove this method when there is no more need for it in plaso.

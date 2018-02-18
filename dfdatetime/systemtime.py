@@ -175,6 +175,18 @@ class Systemtime(interface.DateTimeValues):
         self.year, self.month, self.day_of_month, self.hours, self.minutes,
         self.seconds, self.milliseconds)
 
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if self._number_of_seconds is None:
+      return None, None, None
+
+    return self.year, self.month, self.day_of_month
+
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 

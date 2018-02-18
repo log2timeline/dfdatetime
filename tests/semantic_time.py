@@ -32,17 +32,22 @@ class SemanticTimeTest(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     semantic_time_object = semantic_time.SemanticTime()
 
-    expected_stat_time_tuple = (0, 0)
     stat_time_tuple = semantic_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
+
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    semantic_time_object = semantic_time.SemanticTime()
+
+    date_tuple = semantic_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
 
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     semantic_time_object = semantic_time.SemanticTime()
 
-    expected_micro_posix_timestamp = 0
     micro_posix_timestamp = semantic_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 0)
 
 
 class InvalidTimeTest(unittest.TestCase):

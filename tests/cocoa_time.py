@@ -1,12 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Tests for the Cocoa timestamp implementation."""
+"""Tests for the Cocoa time implementation."""
 
 from __future__ import unicode_literals
 
 import unittest
 
 from dfdatetime import cocoa_time
+
+
+class CocoaTimeEpochTest(unittest.TestCase):
+  """Tests for the Cocoa time epoch."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    cocoa_time_epoch = cocoa_time.CocoaTimeEpoch()
+    self.assertIsNotNone(cocoa_time_epoch)
 
 
 class CocoaTimeTest(unittest.TestCase):
@@ -44,15 +53,13 @@ class CocoaTimeTest(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)
 
-    expected_stat_time_tuple = (1373319045, 0)
     stat_time_tuple = cocoa_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1373319045, 0))
 
     cocoa_time_object = cocoa_time.CocoaTime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = cocoa_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -66,13 +73,24 @@ class CocoaTimeTest(unittest.TestCase):
     date_time_string = cocoa_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
+
+    date_tuple = cocoa_time_object.GetDate()
+    self.assertEqual(date_tuple, (2013, 7, 8))
+
+    cocoa_time_object = cocoa_time.CocoaTime()
+
+    date_tuple = cocoa_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)
 
-    expected_micro_posix_timestamp = 1373319045000000
     micro_posix_timestamp = cocoa_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1373319045000000)
 
     cocoa_time_object = cocoa_time.CocoaTime()
 

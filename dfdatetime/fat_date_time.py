@@ -7,6 +7,14 @@ from dfdatetime import definitions
 from dfdatetime import interface
 
 
+class FATDateTimeEpoch(interface.DateTimeEpoch):
+  """FAT date time time epoch."""
+
+  def __init__(self):
+    """Initializes a FAT date time epoch."""
+    super(FATDateTimeEpoch, self).__init__(1980, 1, 1)
+
+
 class FATDateTime(interface.DateTimeValues):
   """FAT date time.
 
@@ -30,6 +38,8 @@ class FATDateTime(interface.DateTimeValues):
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
   """
+
+  _EPOCH = FATDateTimeEpoch()
 
   # The difference between Jan 1, 1980 and Jan 1, 1970 in seconds.
   _FAT_DATE_TO_POSIX_BASE = 315532800
@@ -152,10 +162,28 @@ class FATDateTime(interface.DateTimeValues):
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self._number_of_seconds)
 
-    year, month, day_of_month = self._GetDateValues(number_of_days, 1980, 1, 1)
+    year, month, day_of_month = self._GetDateValuesWithEpoch(
+        number_of_days, self._EPOCH)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
         year, month, day_of_month, hours, minutes, seconds)
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if self._number_of_seconds is None:
+      return None, None, None
+
+    try:
+      number_of_days, _, _, _ = self._GetTimeValues(self._number_of_seconds)
+      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
+
+    except ValueError:
+      return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

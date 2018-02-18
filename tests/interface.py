@@ -1,12 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Tests for the date and time values interface."""
+"""Tests for the date and time interfaces."""
 
 from __future__ import unicode_literals
 
 import unittest
 
 from dfdatetime import interface
+
+
+class DateTimeEpochTest(unittest.TestCase):
+  """Tests for the date and time epoch interface."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    date_time_epoch = interface.DateTimeEpoch(1970, 1, 1)
+    self.assertIsNotNone(date_time_epoch)
 
 
 class DateTimeValuesTest(unittest.TestCase):
@@ -333,6 +342,17 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertEqual(year, 1829)
     self.assertEqual(month, 12)
     self.assertEqual(day_of_month, 28)
+
+  def testGetDateValuesWithEpoch(self):
+    """Tests the _GetDateValuesWithEpoch function."""
+    date_time_epoch = interface.DateTimeEpoch(2000, 1, 1)
+    date_time_values = interface.DateTimeValues()
+
+    year, month, day_of_month = date_time_values._GetDateValuesWithEpoch(
+        0, date_time_epoch)
+    self.assertEqual(year, 2000)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 1)
 
   def testGetDayOfYear(self):
     """Tests the _GetDayOfYear function."""

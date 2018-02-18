@@ -23,6 +23,60 @@ class DateTimeValuesTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testComparison(self):
+    """Tests the comparison functions."""
+    date_time_values1 = interface.DateTimeValues()
+    date_time_values1._normalized_timestamp = 0.0
+
+    date_time_values2 = interface.DateTimeValues()
+    date_time_values2._normalized_timestamp = None
+
+    self.assertFalse(date_time_values1 == date_time_values2)
+    self.assertTrue(date_time_values1 >= date_time_values2)
+    self.assertTrue(date_time_values1 > date_time_values2)
+    self.assertFalse(date_time_values1 <= date_time_values2)
+    self.assertFalse(date_time_values1 < date_time_values2)
+    self.assertTrue(date_time_values1 != date_time_values2)
+
+    date_time_values1 = interface.DateTimeValues()
+    date_time_values1._normalized_timestamp = 0.0
+
+    date_time_values2 = interface.DateTimeValues()
+    date_time_values2._normalized_timestamp = None
+
+    self.assertFalse(date_time_values1 == date_time_values2)
+    self.assertTrue(date_time_values1 >= date_time_values2)
+    self.assertTrue(date_time_values1 > date_time_values2)
+    self.assertFalse(date_time_values1 <= date_time_values2)
+    self.assertFalse(date_time_values1 < date_time_values2)
+    self.assertTrue(date_time_values1 != date_time_values2)
+
+    date_time_values1 = interface.DateTimeValues()
+    date_time_values1._normalized_timestamp = None
+
+    date_time_values2 = interface.DateTimeValues()
+    date_time_values2._normalized_timestamp = None
+
+    self.assertTrue(date_time_values1 == date_time_values2)
+    self.assertTrue(date_time_values1 >= date_time_values2)
+    self.assertFalse(date_time_values1 > date_time_values2)
+    self.assertTrue(date_time_values1 <= date_time_values2)
+    self.assertFalse(date_time_values1 < date_time_values2)
+    self.assertFalse(date_time_values1 != date_time_values2)
+
+    date_time_values1 = interface.DateTimeValues()
+    date_time_values1._normalized_timestamp = 1.0
+
+    date_time_values2 = interface.DateTimeValues()
+    date_time_values2._normalized_timestamp = 1.0
+
+    self.assertTrue(date_time_values1 == date_time_values2)
+    self.assertTrue(date_time_values1 >= date_time_values2)
+    self.assertFalse(date_time_values1 > date_time_values2)
+    self.assertTrue(date_time_values1 <= date_time_values2)
+    self.assertFalse(date_time_values1 < date_time_values2)
+    self.assertFalse(date_time_values1 != date_time_values2)
+
   # TODO: add tests for _AdjustForTimeZoneOffset.
 
   def testCopyDateFromString(self):

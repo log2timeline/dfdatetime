@@ -59,8 +59,125 @@ class DateTimeValues(object):
   def __init__(self):
     """Initializes date time values."""
     super(DateTimeValues, self).__init__()
+    self._normalized_timestamp = None
     self.is_local_time = False
     self.precision = None
+
+  def __eq__(self, other):
+    """Determines if the date time values are equal to other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are equal to other.
+    """
+    other_normalized_timestamp = getattr(other, '_normalized_timestamp', None)
+    return self._normalized_timestamp == other_normalized_timestamp
+
+  def __ge__(self, other):
+    """Determines if the date time values are greater equal than other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are greater equal than other.
+    """
+    other_normalized_timestamp = getattr(other, '_normalized_timestamp', None)
+
+    if (self._normalized_timestamp is None and
+        other_normalized_timestamp is not None):
+      return False
+
+    if (self._normalized_timestamp is not None and
+        other_normalized_timestamp is None):
+      return True
+
+    if (self._normalized_timestamp is None and
+        other_normalized_timestamp is None):
+      return True
+
+    return self._normalized_timestamp >= other_normalized_timestamp
+
+  def __gt__(self, other):
+    """Determines if the date time values are greater than other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are greater than other.
+    """
+    other_normalized_timestamp = getattr(other, '_normalized_timestamp', None)
+
+    if (self._normalized_timestamp is None and
+        other_normalized_timestamp is not None):
+      return False
+
+    if (self._normalized_timestamp is not None and
+        other_normalized_timestamp is None):
+      return True
+
+    return self._normalized_timestamp > other_normalized_timestamp
+
+  def __le__(self, other):
+    """Determines if the date time values are less equal than other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are less equal than other.
+    """
+    other_normalized_timestamp = getattr(other, '_normalized_timestamp', None)
+
+    if (self._normalized_timestamp is None and
+        other_normalized_timestamp is not None):
+      return True
+
+    if (self._normalized_timestamp is not None and
+        other_normalized_timestamp is None):
+      return False
+
+    if (self._normalized_timestamp is None and
+        other_normalized_timestamp is None):
+      return True
+
+    return self._normalized_timestamp <= other_normalized_timestamp
+
+  def __lt__(self, other):
+    """Determines if the date time values are less than other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are less than other.
+    """
+    other_normalized_timestamp = getattr(other, '_normalized_timestamp', None)
+
+    if (self._normalized_timestamp is None and
+        other_normalized_timestamp is not None):
+      return True
+
+    if (self._normalized_timestamp is not None and
+        other_normalized_timestamp is None):
+      return False
+
+    return self._normalized_timestamp < other_normalized_timestamp
+
+  def __ne__(self, other):
+    """Determines if the date time values are not equal to other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are not equal to other.
+    """
+    other_normalized_timestamp = getattr(other, '_normalized_timestamp', None)
+    return self._normalized_timestamp != other_normalized_timestamp
 
   def _AdjustForTimeZoneOffset(
       self, year, month, day_of_month, hours, minutes, time_zone_offset):

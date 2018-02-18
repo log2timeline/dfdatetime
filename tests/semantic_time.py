@@ -14,6 +14,21 @@ class SemanticTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testComparison(self):
+    """Tests the comparison functions."""
+    semantic_time_object1 = semantic_time.SemanticTime()
+    semantic_time_object1._sort_order = 0
+
+    semantic_time_object2 = semantic_time.SemanticTime()
+    semantic_time_object2._sort_order = 1
+
+    self.assertFalse(semantic_time_object1 == semantic_time_object2)
+    self.assertFalse(semantic_time_object1 >= semantic_time_object2)
+    self.assertFalse(semantic_time_object1 > semantic_time_object2)
+    self.assertTrue(semantic_time_object1 <= semantic_time_object2)
+    self.assertTrue(semantic_time_object1 < semantic_time_object2)
+    self.assertTrue(semantic_time_object1 != semantic_time_object2)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     semantic_time_object = semantic_time.SemanticTime()

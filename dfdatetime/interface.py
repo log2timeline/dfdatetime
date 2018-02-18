@@ -5,8 +5,10 @@ from __future__ import unicode_literals
 
 import abc
 import calendar
+import math
 
 from dfdatetime import decorators
+from dfdatetime import definitions
 
 
 class DateTimeEpoch(object):
@@ -629,6 +631,15 @@ class DateTimeValues(object):
 
     return days_per_month
 
+  @abc.abstractmethod
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970.
+    """
+
   def _GetNumberOfDaysInCentury(self, year):
     """Retrieves the number of days in a century.
 
@@ -776,7 +787,6 @@ class DateTimeValues(object):
     """
 
   # TODO: remove this method when there is no more need for it in dfvfs.
-  @abc.abstractmethod
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.
 
@@ -784,6 +794,12 @@ class DateTimeValues(object):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None, None
+
+    remainder = int((normalized_timestamp % 1) * self._100NS_PER_SECOND)
+    return int(normalized_timestamp), remainder
 
   @abc.abstractmethod
   def CopyToDateTimeString(self):
@@ -804,10 +820,15 @@ class DateTimeValues(object):
     """
 
   # TODO: remove this method when there is no more need for it in plaso.
-  @abc.abstractmethod
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return
+
+    normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
+    return int(math.ceil(normalized_timestamp))

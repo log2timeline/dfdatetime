@@ -14,6 +14,20 @@ class FakeTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
+
+    normalized_timestamp = fake_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1281647191.546875)
+
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object._number_of_seconds = None
+
+    normalized_timestamp = fake_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     fake_time_object = fake_time.FakeTime()
@@ -54,29 +68,6 @@ class FakeTimeTest(unittest.TestCase):
         fake_time_object._number_of_seconds, expected_number_of_seconds)
     self.assertIsNone(fake_time_object._microseconds)
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
-
-    expected_stat_time_tuple = (1281647191, 5468750)
-    stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
-
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-
-    expected_stat_time_tuple = (1281647191, None)
-    stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
-
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object._number_of_seconds = None
-
-    expected_stat_time_tuple = (None, None)
-    stat_time_tuple = fake_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     fake_time_object = fake_time.FakeTime()
@@ -108,30 +99,6 @@ class FakeTimeTest(unittest.TestCase):
 
     date_tuple = fake_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
-
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
-
-    expected_micro_posix_number_of_seconds = 1281647191546875
-    micro_posix_number_of_seconds = fake_time_object.GetPlasoTimestamp()
-    self.assertEqual(
-        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
-
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-
-    expected_micro_posix_number_of_seconds = 1281647191000000
-    micro_posix_number_of_seconds = fake_time_object.GetPlasoTimestamp()
-    self.assertEqual(
-        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
-
-    fake_time_object = fake_time.FakeTime()
-    fake_time_object._number_of_seconds = None
-
-    micro_posix_number_of_seconds = fake_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_number_of_seconds)
 
 
 if __name__ == '__main__':

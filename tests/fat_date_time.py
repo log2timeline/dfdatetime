@@ -23,6 +23,18 @@ class FATDateTime(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+
+    normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1281647192.0)
+
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     fat_date_time_object = fat_date_time.FATDateTime()
@@ -93,18 +105,6 @@ class FATDateTime(unittest.TestCase):
     with self.assertRaises(ValueError):
       fat_date_time_object._GetNumberOfSeconds(test_fat_date_time)
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
-
-    stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1281647192, None))
-
-    fat_date_time_object = fat_date_time.FATDateTime()
-
-    stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
@@ -133,18 +133,6 @@ class FATDateTime(unittest.TestCase):
 
     date_tuple = fat_date_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
-
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
-
-    micro_posix_timestamp = fat_date_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, 1281647192000000)
-
-    fat_date_time_object = fat_date_time.FATDateTime()
-
-    micro_posix_timestamp = fat_date_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

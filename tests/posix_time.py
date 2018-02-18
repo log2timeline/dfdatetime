@@ -104,6 +104,8 @@ class PosixTimeTest(unittest.TestCase):
 class PosixTimeInMicrosecondsTest(unittest.TestCase):
   """Tests for the POSIX timestamp in microseconds."""
 
+  # pylint: disable=protected-access
+
   def testProperties(self):
     """Tests the properties."""
     posix_time_object = posix_time.PosixTimeInMicroseconds(

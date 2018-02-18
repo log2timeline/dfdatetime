@@ -121,6 +121,15 @@ class SemanticTime(interface.DateTimeValues):
 
     return super(SemanticTime, self).__eq__(other)
 
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970.
+    """
+    return None
+
   def CopyFromDateTimeString(self, time_string):
     """Copies semantic time from a date and time string.
 

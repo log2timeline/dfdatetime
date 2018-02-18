@@ -41,6 +41,40 @@ class UUIDTimeTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       uuid_time.UUIDTime(timestamp=-1)
 
+  def testProperties(self):
+    """Tests the properties."""
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
+    uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
+    self.assertEqual(uuid_time_object.timestamp, 0x1e19ef400911b54)
+
+    uuid_time_object = uuid_time.UUIDTime()
+    self.assertIsNone(uuid_time_object.timestamp)
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
+    uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
+
+    normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1337130661.6544075)
+
+    uuid_time_object = uuid_time.UUIDTime()
+    uuid_time_object._timestamp = 0x1fffffffffffffff
+
+    normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
+    uuid_time_object = uuid_time.UUIDTime()
+    uuid_time_object._timestamp = -1
+
+    normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
+    uuid_time_object = uuid_time.UUIDTime()
+
+    normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     uuid_time_object = uuid_time.UUIDTime()
@@ -72,31 +106,6 @@ class UUIDTimeTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       uuid_time_object.CopyFromDateTimeString('1570-01-02 00:00:00')
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
-    uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
-
-    stat_time_tuple = uuid_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1337130661, 6544084))
-
-    uuid_time_object = uuid_time.UUIDTime()
-    uuid_time_object.timestamp = 0x1fffffffffffffff
-
-    stat_time_tuple = uuid_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
-    uuid_time_object = uuid_time.UUIDTime()
-    uuid_time_object.timestamp = -1
-
-    stat_time_tuple = uuid_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
-    uuid_time_object = uuid_time.UUIDTime()
-
-    stat_time_tuple = uuid_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
@@ -127,31 +136,6 @@ class UUIDTimeTest(unittest.TestCase):
 
     date_tuple = uuid_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
-
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
-    uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
-
-    micro_posix_timestamp = uuid_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, 1337130661654408)
-
-    uuid_time_object = uuid_time.UUIDTime()
-    uuid_time_object.timestamp = 0x1fffffffffffffff
-
-    micro_posix_timestamp = uuid_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
-
-    uuid_time_object = uuid_time.UUIDTime()
-    uuid_time_object.timestamp = -1
-
-    micro_posix_timestamp = uuid_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
-
-    uuid_time_object = uuid_time.UUIDTime()
-
-    micro_posix_timestamp = uuid_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

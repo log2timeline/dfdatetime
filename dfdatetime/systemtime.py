@@ -34,6 +34,8 @@ class Systemtime(interface.DateTimeValues):
     milliseconds (int): milliseconds, 0 through 999.
   """
 
+  # TODO: make attributes read-only.
+
   def __init__(self, system_time_tuple=None):
     """Initializes a SYSTEMTIME structure.
 
@@ -102,6 +104,21 @@ class Systemtime(interface.DateTimeValues):
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
           self.seconds)
 
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970.
+    """
+    if not self._normalized_timestamp:
+      if self._number_of_seconds is not None:
+        self._normalized_timestamp = float(self._number_of_seconds)
+        self._normalized_timestamp += (
+            float(self.milliseconds) / definitions.MILLISECONDS_PER_SECOND)
+
+    return self._normalized_timestamp
+
   def CopyFromDateTimeString(self, time_string):
     """Copies a SYSTEMTIME structure from a date and time string.
 
@@ -148,19 +165,6 @@ class Systemtime(interface.DateTimeValues):
 
     self.is_local_time = False
 
-  def CopyToStatTimeTuple(self):
-    """Copies the SYSTEMTIME structure to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None:
-      return None, None
-
-    return self._number_of_seconds, (
-        self.milliseconds * self._100NS_PER_MILLISECOND)
-
   def CopyToDateTimeString(self):
     """Copies the SYSTEMTIME structure to a date and time string.
 
@@ -186,17 +190,3 @@ class Systemtime(interface.DateTimeValues):
       return None, None, None
 
     return self.year, self.month, self.day_of_month
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None:
-      return
-
-    timestamp = self._number_of_seconds * definitions.MILLISECONDS_PER_SECOND
-    timestamp += self.milliseconds
-    timestamp *= definitions.MICROSECONDS_PER_MILLISECOND
-    return timestamp

@@ -93,14 +93,15 @@ class Filetime(interface.DateTimeValues):
     if year < 1601:
       raise ValueError('Year value not supported: {0!s}.'.format(year))
 
-    self._normalized_timestamp = None
-    self._timestamp = self._GetNumberOfSecondsFromElements(
+    timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self._timestamp += self._FILETIME_TO_POSIX_BASE
-    self._timestamp *= definitions.MICROSECONDS_PER_SECOND
-    self._timestamp += date_time_values.get('microseconds', 0)
-    self._timestamp *= self._100NS_PER_MICROSECOND
+    timestamp += self._FILETIME_TO_POSIX_BASE
+    timestamp *= definitions.MICROSECONDS_PER_SECOND
+    timestamp += date_time_values.get('microseconds', 0)
+    timestamp *= self._100NS_PER_MICROSECOND
 
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
     self.is_local_time = False
 
   def CopyToDateTimeString(self):

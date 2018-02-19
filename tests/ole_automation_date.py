@@ -21,6 +21,8 @@ class OLEAutomationDateEpochTest(unittest.TestCase):
 class OLEAutomationDateTest(unittest.TestCase):
   """Tests for the OLE Automation date."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()

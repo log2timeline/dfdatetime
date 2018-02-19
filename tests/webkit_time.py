@@ -21,6 +21,8 @@ class WebKitTimeEpochTest(unittest.TestCase):
 class WebKitTimeTest(unittest.TestCase):
   """Tests for the WebKit timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     webkit_time_object = webkit_time.WebKitTime()

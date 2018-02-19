@@ -21,6 +21,8 @@ class PosixTimeEpochTest(unittest.TestCase):
 class PosixTimeTest(unittest.TestCase):
   """Tests for the POSIX timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     posix_time_object = posix_time.PosixTime()
@@ -105,6 +107,8 @@ class PosixTimeTest(unittest.TestCase):
 
 class PosixTimeInMicrosecondsTest(unittest.TestCase):
   """Tests for the POSIX timestamp in microseconds."""
+
+  # pylint: disable=protected-access
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""

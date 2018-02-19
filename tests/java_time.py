@@ -12,6 +12,8 @@ from dfdatetime import java_time
 class JavaTimeTest(unittest.TestCase):
   """Tests for the Java java.util.Date timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     java_time_object = java_time.JavaTime()

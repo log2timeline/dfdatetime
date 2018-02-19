@@ -52,6 +52,8 @@ class DelphiDateTimeInvalidYear(delphi_date_time.DelphiDateTime):
 class DelphiDateTimeTest(unittest.TestCase):
   """Tests for the Delphi TDateTime timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime()

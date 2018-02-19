@@ -21,6 +21,8 @@ class FiletimeEpochTest(unittest.TestCase):
 class FiletimeTest(unittest.TestCase):
   """Tests for the FILETIME timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     filetime_object = filetime.Filetime()

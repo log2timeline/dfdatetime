@@ -21,6 +21,8 @@ class HFSTimeEpochTest(unittest.TestCase):
 class HFSTimeTest(unittest.TestCase):
   """Tests for the HFS timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     hfs_time_object = hfs_time.HFSTime()

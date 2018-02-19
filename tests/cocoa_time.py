@@ -21,6 +21,8 @@ class CocoaTimeEpochTest(unittest.TestCase):
 class CocoaTimeTest(unittest.TestCase):
   """Tests for the Cocoa timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     cocoa_time_object = cocoa_time.CocoaTime()

@@ -22,6 +22,8 @@ class UUIDTimeEpochTEst(unittest.TestCase):
 class UUIDTimeTest(unittest.TestCase):
   """Tests for the UUID version 1 timestamp."""
 
+  # pylint: disable=protected-access
+
   def testInitialize(self):
     """Tests the initialization function."""
     uuid_time_object = uuid_time.UUIDTime()

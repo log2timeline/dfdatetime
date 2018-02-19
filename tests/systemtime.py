@@ -9,7 +9,7 @@ import unittest
 from dfdatetime import systemtime
 
 
-class FiletimeTest(unittest.TestCase):
+class SystemtimeTest(unittest.TestCase):
   """Tests for the SYSTEMTIME structure."""
 
   # pylint: disable=protected-access

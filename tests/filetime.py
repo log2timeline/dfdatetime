@@ -88,6 +88,11 @@ class FiletimeTest(unittest.TestCase):
     date_tuple = filetime_object.GetDate()
     self.assertEqual(date_tuple, (2010, 8, 12))
 
+    filetime_object._EPOCH.year = -1
+
+    date_tuple = filetime_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
     filetime_object = filetime.Filetime()
 
     date_tuple = filetime_object.GetDate()

@@ -9,6 +9,34 @@ import unittest
 from dfdatetime import interface
 
 
+class EmptyDateTimeValues(interface.DateTimeValues):
+  """Empty date time values for testing."""
+
+  # pylint: disable=abstract-method
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which is None for testing purposes.
+    """
+    return
+
+
+class TestDateTimeValues(interface.DateTimeValues):
+  """Date time values for testing."""
+
+  # pylint: disable=abstract-method
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which is 0.0 for testing purposes.
+    """
+    return 0.0
+
+
 class DateTimeEpochTest(unittest.TestCase):
   """Tests for the date and time epoch interface."""
 
@@ -25,37 +53,9 @@ class DateTimeValuesTest(unittest.TestCase):
 
   def testComparison(self):
     """Tests the comparison functions."""
-    date_time_values1 = interface.DateTimeValues()
-    date_time_values1._normalized_timestamp = 0.0
+    date_time_values1 = EmptyDateTimeValues()
 
-    date_time_values2 = interface.DateTimeValues()
-    date_time_values2._normalized_timestamp = None
-
-    self.assertFalse(date_time_values1 == date_time_values2)
-    self.assertTrue(date_time_values1 >= date_time_values2)
-    self.assertTrue(date_time_values1 > date_time_values2)
-    self.assertFalse(date_time_values1 <= date_time_values2)
-    self.assertFalse(date_time_values1 < date_time_values2)
-    self.assertTrue(date_time_values1 != date_time_values2)
-
-    date_time_values1 = interface.DateTimeValues()
-    date_time_values1._normalized_timestamp = 0.0
-
-    date_time_values2 = interface.DateTimeValues()
-    date_time_values2._normalized_timestamp = None
-
-    self.assertFalse(date_time_values1 == date_time_values2)
-    self.assertTrue(date_time_values1 >= date_time_values2)
-    self.assertTrue(date_time_values1 > date_time_values2)
-    self.assertFalse(date_time_values1 <= date_time_values2)
-    self.assertFalse(date_time_values1 < date_time_values2)
-    self.assertTrue(date_time_values1 != date_time_values2)
-
-    date_time_values1 = interface.DateTimeValues()
-    date_time_values1._normalized_timestamp = None
-
-    date_time_values2 = interface.DateTimeValues()
-    date_time_values2._normalized_timestamp = None
+    date_time_values2 = EmptyDateTimeValues()
 
     self.assertTrue(date_time_values1 == date_time_values2)
     self.assertTrue(date_time_values1 >= date_time_values2)
@@ -64,11 +64,31 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertFalse(date_time_values1 < date_time_values2)
     self.assertFalse(date_time_values1 != date_time_values2)
 
-    date_time_values1 = interface.DateTimeValues()
-    date_time_values1._normalized_timestamp = 1.0
+    date_time_values1 = EmptyDateTimeValues()
 
-    date_time_values2 = interface.DateTimeValues()
-    date_time_values2._normalized_timestamp = 1.0
+    date_time_values2 = TestDateTimeValues()
+
+    self.assertFalse(date_time_values1 == date_time_values2)
+    self.assertFalse(date_time_values1 >= date_time_values2)
+    self.assertFalse(date_time_values1 > date_time_values2)
+    self.assertTrue(date_time_values1 <= date_time_values2)
+    self.assertTrue(date_time_values1 < date_time_values2)
+    self.assertTrue(date_time_values1 != date_time_values2)
+
+    date_time_values1 = TestDateTimeValues()
+
+    date_time_values2 = EmptyDateTimeValues()
+
+    self.assertFalse(date_time_values1 == date_time_values2)
+    self.assertTrue(date_time_values1 >= date_time_values2)
+    self.assertTrue(date_time_values1 > date_time_values2)
+    self.assertFalse(date_time_values1 <= date_time_values2)
+    self.assertFalse(date_time_values1 < date_time_values2)
+    self.assertTrue(date_time_values1 != date_time_values2)
+
+    date_time_values1 = TestDateTimeValues()
+
+    date_time_values2 = TestDateTimeValues()
 
     self.assertTrue(date_time_values1 == date_time_values2)
     self.assertTrue(date_time_values1 >= date_time_values2)
@@ -76,6 +96,24 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertTrue(date_time_values1 <= date_time_values2)
     self.assertFalse(date_time_values1 < date_time_values2)
     self.assertFalse(date_time_values1 != date_time_values2)
+
+    with self.assertRaises(ValueError):
+      date_time_values1 == 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      date_time_values1 >= 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      date_time_values1 > 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      date_time_values1 <= 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      date_time_values1 < 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      date_time_values1 != 0.0  # pylint: disable=pointless-statement
 
   # TODO: add tests for _AdjustForTimeZoneOffset.
 

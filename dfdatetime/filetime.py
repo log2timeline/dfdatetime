@@ -55,9 +55,10 @@ class Filetime(interface.DateTimeValues):
 
     Returns:
       float: normalized timestamp, which contains the number of seconds since
-          January 1, 1970.
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
     """
-    if not self._normalized_timestamp:
+    if self._normalized_timestamp is None:
       if (self._timestamp is not None and self._timestamp >= 0 and
           self._timestamp <= self._UINT64_MAX):
         self._normalized_timestamp = (

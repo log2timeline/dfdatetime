@@ -19,9 +19,11 @@ class DateTimeEpoch(object):
     """Initializes a date time epoch.
 
     Args:
-      year (int): year of the epoch.
-      month (int): month of the epoch.
-      day_of_month (int): day of month of the epoch.
+      year (int): year that is the start of the epoch e.g. 1970.
+      month (int): month that is the start of the epoch, where 1 represents
+          January.
+      day_of_month (int): day of the month that is the start of the epoch,
+          where 1 represents the first day.
     """
     super(DateTimeEpoch, self).__init__()
     self.day_of_month = day_of_month
@@ -65,9 +67,9 @@ class DateTimeValues(object):
     """Adjusts the date and time values for a time zone offset.
 
     Args:
-      year (int): year.
-      month (int): month.
-      day_of_month (int): day of month.
+      year (int): year e.g. 1970.
+      month (int): month, where 1 represents January.
+      day_of_month (int): day of the month, where 1 represents the first day.
       hours (int): hours.
       minutes (int): minutes.
       time_zone_offset (int): time zone offset in number of minutes from UTC.
@@ -336,9 +338,11 @@ class DateTimeValues(object):
 
     Args:
       number_of_days (int): number of days since epoch.
-      epoch_year (int): year that is the start of the epoch.
-      epoch_month (int): month that is the start of the epoch.
-      epoch_day_of_month (int): day of month that is the start of the epoch.
+      epoch_year (int): year that is the start of the epoch e.g. 1970.
+      epoch_month (int): month that is the start of the epoch, where
+          1 represents January.
+      epoch_day_of_month (int): day of month that is the start of the epoch,
+          where 1 represents the first day.
 
     Returns:
        tuple[int, int, int]: year, month, day of month.
@@ -464,8 +468,8 @@ class DateTimeValues(object):
 
     Args:
       year (int): year e.g. 1970.
-      month (int): month where 1 represents January.
-      day_of_month (int): day of the month where 1 represents the first day.
+      month (int): month, where 1 represents January.
+      day_of_month (int): day of the month, where 1 represents the first day.
 
     Returns:
       int: day of year.
@@ -491,7 +495,7 @@ class DateTimeValues(object):
 
     Args:
       year (int): year e.g. 1970.
-      month (int): month ranging from 1 to 12.
+      month (int): month, where 1 represents January.
 
     Returns:
       int: number of days in the month.
@@ -548,8 +552,8 @@ class DateTimeValues(object):
 
     Args:
       year (int): year e.g. 1970.
-      month (int): month of year.
-      day_of_month (int): day of month.
+      month (int): month, where 1 represents January.
+      day_of_month (int): day of the month, where 1 represents the first day.
       hours (int): hours.
       minutes (int): minutes.
       seconds (int): seconds.

@@ -402,6 +402,20 @@ class TimeElements(interface.DateTimeValues):
         self._time_elements_tuple[2], self._time_elements_tuple[3],
         self._time_elements_tuple[4], self._time_elements_tuple[5])
 
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if self._number_of_seconds is None:
+      return None, None, None
+
+    return (
+        self._time_elements_tuple[0], self._time_elements_tuple[1],
+        self._time_elements_tuple[2])
+
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 

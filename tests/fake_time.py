@@ -91,6 +91,24 @@ class FakeTimeTest(unittest.TestCase):
     date_time_string = fake_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
+
+    date_tuple = fake_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    fake_time_object._EPOCH.year = -1
+
+    date_tuple = fake_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+    fake_time_object = fake_time.FakeTime()
+
+    date_tuple = fake_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     fake_time_object = fake_time.FakeTime()

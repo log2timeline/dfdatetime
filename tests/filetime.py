@@ -9,8 +9,19 @@ import unittest
 from dfdatetime import filetime
 
 
+class FiletimeEpochTest(unittest.TestCase):
+  """Tests for the FILETIME epoch."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    filetime_epoch = filetime.FiletimeEpoch()
+    self.assertIsNotNone(filetime_epoch)
+
+
 class FiletimeTest(unittest.TestCase):
   """Tests for the FILETIME timestamp."""
+
+  # pylint: disable=protected-access
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -47,21 +58,18 @@ class FiletimeTest(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
 
-    expected_stat_time_tuple = (1281647191, 5468750)
     stat_time_tuple = filetime_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281647191, 5468750))
 
     filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = filetime_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
     filetime_object = filetime.Filetime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = filetime_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -75,13 +83,29 @@ class FiletimeTest(unittest.TestCase):
     date_time_string = filetime_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+
+    date_tuple = filetime_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    filetime_object._EPOCH.year = -1
+
+    date_tuple = filetime_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+    filetime_object = filetime.Filetime()
+
+    date_tuple = filetime_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
 
-    expected_micro_posix_timestamp = 1281647191546875
     micro_posix_timestamp = filetime_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1281647191546875)
 
     filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
 

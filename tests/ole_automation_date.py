@@ -9,8 +9,19 @@ import unittest
 from dfdatetime import ole_automation_date
 
 
+class OLEAutomationDateEpochTest(unittest.TestCase):
+  """Tests for the OLE Automation date epoch."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    ole_automation_date_epoch = ole_automation_date.OLEAutomationDateEpoch()
+    self.assertIsNotNone(ole_automation_date_epoch)
+
+
 class OLEAutomationDateTest(unittest.TestCase):
   """Tests for the OLE Automation date."""
+
+  # pylint: disable=protected-access
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -48,15 +59,13 @@ class OLEAutomationDateTest(unittest.TestCase):
     ole_automation_date_object = ole_automation_date.OLEAutomationDate(
         timestamp=43044.480556)
 
-    expected_stat_time_tuple = (1509881520, 384001)
     stat_time_tuple = ole_automation_date_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1509881520, 384001))
 
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = ole_automation_date_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -71,14 +80,31 @@ class OLEAutomationDateTest(unittest.TestCase):
     date_time_string = ole_automation_date_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    ole_automation_date_object = ole_automation_date.OLEAutomationDate(
+        timestamp=43044.480556)
+
+    date_tuple = ole_automation_date_object.GetDate()
+    self.assertEqual(date_tuple, (2017, 11, 5))
+
+    ole_automation_date_object._EPOCH.year = -1
+
+    date_tuple = ole_automation_date_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+    ole_automation_date_object = ole_automation_date.OLEAutomationDate()
+
+    date_tuple = ole_automation_date_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     ole_automation_date_object = ole_automation_date.OLEAutomationDate(
         timestamp=43044.480556)
 
-    expected_micro_posix_timestamp = 1509881520038400
     micro_posix_timestamp = ole_automation_date_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1509881520038400)
 
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 

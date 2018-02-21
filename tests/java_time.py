@@ -12,6 +12,8 @@ from dfdatetime import java_time
 class JavaTimeTest(unittest.TestCase):
   """Tests for the Java java.util.Date timestamp."""
 
+  # pylint: disable=protected-access
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     java_time_object = java_time.JavaTime()
@@ -44,15 +46,13 @@ class JavaTimeTest(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     java_time_object = java_time.JavaTime(timestamp=1281643591546)
 
-    expected_stat_time_tuple = (1281643591, 5460000)
     stat_time_tuple = java_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, 5460000))
 
     java_time_object = java_time.JavaTime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = java_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -66,13 +66,29 @@ class JavaTimeTest(unittest.TestCase):
     date_time_string = java_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    java_time_object = java_time.JavaTime(timestamp=1281643591546)
+
+    date_tuple = java_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    java_time_object._EPOCH.year = -1
+
+    date_tuple = java_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+    java_time_object = java_time.JavaTime()
+
+    date_tuple = java_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     java_time_object = java_time.JavaTime(timestamp=1281643591546)
 
-    expected_micro_posix_timestamp = 1281643591546000
     micro_posix_timestamp = java_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1281643591546000)
 
     java_time_object = java_time.JavaTime()
 

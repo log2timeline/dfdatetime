@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Tests for the WebKit timestamp implementation."""
+"""Tests for the WebKit time implementation."""
 
 from __future__ import unicode_literals
 
@@ -9,8 +9,19 @@ import unittest
 from dfdatetime import webkit_time
 
 
+class WebKitTimeEpochTest(unittest.TestCase):
+  """Tests for the WebKit time epoch."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    webkit_epoch = webkit_time.WebKitTimeEpoch()
+    self.assertIsNotNone(webkit_epoch)
+
+
 class WebKitTimeTest(unittest.TestCase):
   """Tests for the WebKit timestamp."""
+
+  # pylint: disable=protected-access
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -46,21 +57,18 @@ class WebKitTimeTest(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
 
-    expected_stat_time_tuple = (1281647191, 5468750)
     stat_time_tuple = webkit_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281647191, 5468750))
 
     webkit_time_object = webkit_time.WebKitTime(timestamp=0x1ffffffffffffffff)
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = webkit_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
     webkit_time_object = webkit_time.WebKitTime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = webkit_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -74,13 +82,29 @@ class WebKitTimeTest(unittest.TestCase):
     date_time_string = webkit_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
+
+    date_tuple = webkit_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    webkit_time_object._EPOCH.year = -1
+
+    date_tuple = webkit_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+    webkit_time_object = webkit_time.WebKitTime()
+
+    date_tuple = webkit_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
 
-    expected_micro_posix_timestamp = 1281647191546875
     micro_posix_timestamp = webkit_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1281647191546875)
 
     webkit_time_object = webkit_time.WebKitTime(timestamp=0x1ffffffffffffffff)
 

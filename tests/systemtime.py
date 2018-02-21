@@ -9,7 +9,7 @@ import unittest
 from dfdatetime import systemtime
 
 
-class FiletimeTest(unittest.TestCase):
+class SystemtimeTest(unittest.TestCase):
   """Tests for the SYSTEMTIME structure."""
 
   # pylint: disable=protected-access
@@ -150,15 +150,13 @@ class FiletimeTest(unittest.TestCase):
     systemtime_object = systemtime.Systemtime(
         system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
-    expected_stat_time_tuple = (1281643591, 1420000)
     stat_time_tuple = systemtime_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, 1420000))
 
     systemtime_object = systemtime.Systemtime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = systemtime_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -173,15 +171,26 @@ class FiletimeTest(unittest.TestCase):
     date_time_string = systemtime_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
+
+    date_tuple = systemtime_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    systemtime_object = systemtime.Systemtime()
+
+    date_tuple = systemtime_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     systemtime_object = systemtime.Systemtime(
         system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
-    expected_micro_posix_number_of_seconds = 1281643591142000
     micro_posix_number_of_seconds = systemtime_object.GetPlasoTimestamp()
-    self.assertEqual(
-        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
+    self.assertEqual(micro_posix_number_of_seconds, 1281643591142000)
 
     systemtime_object = systemtime.Systemtime()
 

@@ -437,15 +437,13 @@ class TimeElementsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElements(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
-    expected_stat_time_tuple = (1281643591, None)
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, None))
 
     time_elements_object = time_elements.TimeElements()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -460,15 +458,26 @@ class TimeElementsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    date_tuple = time_elements_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    time_elements_object = time_elements.TimeElements()
+
+    date_tuple = time_elements_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     time_elements_object = time_elements.TimeElements(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
-    expected_micro_posix_number_of_seconds = 1281643591000000
     micro_posix_number_of_seconds = time_elements_object.GetPlasoTimestamp()
-    self.assertEqual(
-        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
+    self.assertEqual(micro_posix_number_of_seconds, 1281643591000000)
 
     time_elements_object = time_elements.TimeElements()
 
@@ -696,15 +705,13 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElementsInMilliseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
 
-    expected_stat_time_tuple = (1281643591, 4290000)
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, 4290000))
 
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -719,15 +726,26 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
+
+    date_tuple = time_elements_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    time_elements_object = time_elements.TimeElementsInMilliseconds()
+
+    date_tuple = time_elements_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     time_elements_object = time_elements.TimeElementsInMilliseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
 
-    expected_micro_posix_number_of_seconds = 1281643591429000
     micro_posix_number_of_seconds = time_elements_object.GetPlasoTimestamp()
-    self.assertEqual(
-        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
+    self.assertEqual(micro_posix_number_of_seconds, 1281643591429000)
 
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
@@ -955,15 +973,13 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElementsInMicroseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
 
-    expected_stat_time_tuple = (1281643591, 4298760)
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281643591, 4298760))
 
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = time_elements_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -978,15 +994,26 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
+
+    date_tuple = time_elements_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    time_elements_object = time_elements.TimeElementsInMicroseconds()
+
+    date_tuple = time_elements_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     time_elements_object = time_elements.TimeElementsInMicroseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
 
-    expected_micro_posix_number_of_seconds = 1281643591429876
     micro_posix_number_of_seconds = time_elements_object.GetPlasoTimestamp()
-    self.assertEqual(
-        micro_posix_number_of_seconds, expected_micro_posix_number_of_seconds)
+    self.assertEqual(micro_posix_number_of_seconds, 1281643591429876)
 
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 

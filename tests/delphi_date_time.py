@@ -1,12 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""Tests for the Delphi TDateTime timestamp implementation."""
+"""Tests for the Delphi TDateTime implementation."""
 
 from __future__ import unicode_literals
 
 import unittest
 
 from dfdatetime import delphi_date_time
+
+
+class DelphiDateTimeEpochTest(unittest.TestCase):
+  """Tests for the Delphi TDateTime epoch."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    delphi_date_time_epoch = delphi_date_time.DelphiDateTimeEpoch()
+    self.assertIsNotNone(delphi_date_time_epoch)
 
 
 class DelphiDateTimeInvalidYear(delphi_date_time.DelphiDateTime):
@@ -42,6 +51,8 @@ class DelphiDateTimeInvalidYear(delphi_date_time.DelphiDateTime):
 
 class DelphiDateTimeTest(unittest.TestCase):
   """Tests for the Delphi TDateTime timestamp."""
+
+  # pylint: disable=protected-access
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -83,15 +94,13 @@ class DelphiDateTimeTest(unittest.TestCase):
     delphi_date_time_object = delphi_date_time.DelphiDateTime(
         timestamp=41443.8263953)
 
-    expected_stat_time_tuple = (1371585000, 5539197)
     stat_time_tuple = delphi_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1371585000, 5539197))
 
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = delphi_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -106,14 +115,31 @@ class DelphiDateTimeTest(unittest.TestCase):
     date_time_string = delphi_date_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+
+    date_tuple = delphi_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (2013, 6, 18))
+
+    delphi_date_time_object._EPOCH.year = -1
+
+    date_tuple = delphi_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime()
+
+    date_tuple = delphi_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime(
         timestamp=41443.8263953)
 
-    expected_micro_posix_timestamp = 1371585000553920
     micro_posix_timestamp = delphi_date_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1371585000553920)
 
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 

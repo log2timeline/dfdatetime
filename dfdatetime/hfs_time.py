@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
-"""HFS timestamp implementation."""
+"""HFS time implementation."""
 
 from __future__ import unicode_literals
 
 from dfdatetime import definitions
 from dfdatetime import interface
+
+
+class HFSTimeEpoch(interface.DateTimeEpoch):
+  """HFS time epoch."""
+
+  def __init__(self):
+    """Initializes a HFS time epoch."""
+    super(HFSTimeEpoch, self).__init__(1904, 1, 1)
 
 
 class HFSTime(interface.DateTimeValues):
@@ -20,9 +28,10 @@ class HFSTime(interface.DateTimeValues):
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): HFS timestamp.
   """
+  _EPOCH = HFSTimeEpoch()
+
   # The difference between Jan 1, 1904 and Jan 1, 1970 in seconds.
   _HFS_TO_POSIX_BASE = 2082844800
-  _UINT32_MAX = (1 << 32) - 1
 
   def __init__(self, timestamp=None):
     """Initializes a HFS timestamp.
@@ -95,11 +104,29 @@ class HFSTime(interface.DateTimeValues):
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self.timestamp)
 
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1904, 1, 1)
+    year, month, day_of_month = self._GetDateValuesWithEpoch(
+        number_of_days, self._EPOCH)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
         year, month, day_of_month, hours, minutes, seconds)
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if (self.timestamp is None or self.timestamp < 0 or
+        self.timestamp > self._UINT32_MAX):
+      return None, None, None
+
+    try:
+      number_of_days, _, _, _ = self._GetTimeValues(self.timestamp)
+      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
+
+    except ValueError:
+      return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

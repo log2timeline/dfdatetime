@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 from dfdatetime import definitions
 from dfdatetime import interface
+from dfdatetime import posix_time
 
 
 class JavaTime(interface.DateTimeValues):
@@ -23,6 +24,8 @@ class JavaTime(interface.DateTimeValues):
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): Java timestamp.
   """
+
+  _EPOCH = posix_time.PosixTimeEpoch()
 
   def __init__(self, timestamp=None):
     """Initializes a Java timestamp.
@@ -97,11 +100,30 @@ class JavaTime(interface.DateTimeValues):
         self.timestamp, definitions.MILLISECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1970, 1, 1)
+    year, month, day_of_month = self._GetDateValuesWithEpoch(
+        number_of_days, self._EPOCH)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:03d}'.format(
         year, month, day_of_month, hours, minutes, seconds, milliseconds)
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
+        self.timestamp > self._INT64_MAX):
+      return None, None, None
+
+    try:
+      timestamp, _ = divmod(self.timestamp, definitions.MILLISECONDS_PER_SECOND)
+      number_of_days, _, _, _ = self._GetTimeValues(timestamp)
+      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
+
+    except ValueError:
+      return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

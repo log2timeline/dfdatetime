@@ -7,6 +7,14 @@ from dfdatetime import definitions
 from dfdatetime import interface
 
 
+class OLEAutomationDateEpoch(interface.DateTimeEpoch):
+  """OLE automation date epoch."""
+
+  def __init__(self):
+    """Initializes a OLE automation date epoch."""
+    super(OLEAutomationDateEpoch, self).__init__(1899, 12, 30)
+
+
 class OLEAutomationDate(interface.DateTimeValues):
   """OLE Automation date.
 
@@ -24,6 +32,8 @@ class OLEAutomationDate(interface.DateTimeValues):
         be one of the PRECISION_VALUES in definitions.
     timestamp (float): OLE Automation date.
   """
+  _EPOCH = OLEAutomationDateEpoch()
+
   # The difference between Dec 30, 1899 and Jan 1, 1970 in days.
   _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25569
 
@@ -105,13 +115,31 @@ class OLEAutomationDate(interface.DateTimeValues):
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         int(timestamp))
 
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1899, 12, 30)
+    year, month, day_of_month = self._GetDateValuesWithEpoch(
+        number_of_days, self._EPOCH)
 
     microseconds = int((timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, microseconds)
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if self.timestamp is None:
+      return None, None, None
+
+    try:
+      timestamp = self.timestamp * definitions.SECONDS_PER_DAY
+      number_of_days, _, _, _ = self._GetTimeValues(int(timestamp))
+      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
+
+    except ValueError:
+      return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

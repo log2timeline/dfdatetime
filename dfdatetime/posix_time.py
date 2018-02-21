@@ -7,6 +7,14 @@ from dfdatetime import definitions
 from dfdatetime import interface
 
 
+class PosixTimeEpoch(interface.DateTimeEpoch):
+  """POSIX time epoch."""
+
+  def __init__(self):
+    """Initializes a POSIX time epoch."""
+    super(PosixTimeEpoch, self).__init__(1970, 1, 1)
+
+
 class PosixTime(interface.DateTimeValues):
   """POSIX timestamp.
 
@@ -23,6 +31,8 @@ class PosixTime(interface.DateTimeValues):
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): POSIX timestamp.
   """
+
+  _EPOCH = PosixTimeEpoch()
 
   def __init__(self, timestamp=None):
     """Initializes a POSIX timestamp.
@@ -85,11 +95,28 @@ class PosixTime(interface.DateTimeValues):
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self.timestamp)
 
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1970, 1, 1)
+    year, month, day_of_month = self._GetDateValuesWithEpoch(
+        number_of_days, self._EPOCH)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
         year, month, day_of_month, hours, minutes, seconds)
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if self.timestamp is None:
+      return None, None, None
+
+    try:
+      number_of_days, _, _, _ = self._GetTimeValues(self.timestamp)
+      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
+
+    except ValueError:
+      return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
@@ -114,6 +141,8 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
         be one of the PRECISION_VALUES in definitions.
     timestamp (int): POSIX timestamp in microseconds.
   """
+
+  _EPOCH = PosixTimeEpoch()
 
   def __init__(self, timestamp=None):
     """Initializes a POSIX timestamp in microseconds.
@@ -182,11 +211,29 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
         self.timestamp, definitions.MICROSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1970, 1, 1)
+    year, month, day_of_month = self._GetDateValuesWithEpoch(
+        number_of_days, self._EPOCH)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, microseconds)
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if self.timestamp is None:
+      return None, None, None
+
+    try:
+      timestamp, _ = divmod(self.timestamp, definitions.MICROSECONDS_PER_SECOND)
+      number_of_days, _, _, _ = self._GetTimeValues(timestamp)
+      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
+
+    except ValueError:
+      return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

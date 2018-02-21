@@ -55,9 +55,18 @@ class SemanticTime(interface.DateTimeValues):
 
     Returns:
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds, which will always be 0, 0.
+          100 nano seconds, which will always be None, None.
     """
-    return 0, 0
+    return None, None
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

@@ -7,6 +7,7 @@ import time
 
 from dfdatetime import definitions
 from dfdatetime import interface
+from dfdatetime import posix_time
 
 
 class FakeTime(interface.DateTimeValues):
@@ -20,6 +21,8 @@ class FakeTime(interface.DateTimeValues):
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
   """
+
+  _EPOCH = posix_time.PosixTimeEpoch()
 
   def __init__(self):
     """Initializes a fake timestamp."""
@@ -88,8 +91,8 @@ class FakeTime(interface.DateTimeValues):
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self._number_of_seconds)
 
-    year, month, day_of_month = self._GetDateValues(
-        number_of_days, 1970, 1, 1)
+    year, month, day_of_month = self._GetDateValuesWithEpoch(
+        number_of_days, self._EPOCH)
 
     if self._microseconds is None:
       return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
@@ -98,6 +101,23 @@ class FakeTime(interface.DateTimeValues):
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds,
         self._microseconds)
+
+  def GetDate(self):
+    """Retrieves the date represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: year, month, day of month or (None, None, None)
+           if the date and time values do not represent a date.
+    """
+    if self._number_of_seconds is None:
+      return None, None, None
+
+    try:
+      number_of_days, _, _, _ = self._GetTimeValues(self._number_of_seconds)
+      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
+
+    except ValueError:
+      return None, None, None
 
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

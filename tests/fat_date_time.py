@@ -9,6 +9,15 @@ import unittest
 from dfdatetime import fat_date_time
 
 
+class FATDateTimeEpochTest(unittest.TestCase):
+  """Tests for the FAT date time epoch."""
+
+  def testInitialize(self):
+    """Tests the __init__ function."""
+    fat_date_time_epoch = fat_date_time.FATDateTimeEpoch()
+    self.assertIsNotNone(fat_date_time_epoch)
+
+
 class FATDateTime(unittest.TestCase):
   """Tests for the FAT date time."""
 
@@ -88,15 +97,13 @@ class FATDateTime(unittest.TestCase):
     """Tests the CopyToStatTimeTuple function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
-    expected_stat_time_tuple = (1281647192, None)
     stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (1281647192, None))
 
     fat_date_time_object = fat_date_time.FATDateTime()
 
-    expected_stat_time_tuple = (None, None)
     stat_time_tuple = fat_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, expected_stat_time_tuple)
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -110,13 +117,29 @@ class FATDateTime(unittest.TestCase):
     date_time_string = fat_date_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+
+    date_tuple = fat_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    fat_date_time_object._EPOCH.year = -1
+
+    date_tuple = fat_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    date_tuple = fat_date_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
-    expected_micro_posix_timestamp = 1281647192000000
     micro_posix_timestamp = fat_date_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, expected_micro_posix_timestamp)
+    self.assertEqual(micro_posix_timestamp, 1281647192000000)
 
     fat_date_time_object = fat_date_time.FATDateTime()
 

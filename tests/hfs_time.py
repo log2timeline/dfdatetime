@@ -52,7 +52,6 @@ class HFSTimeTest(unittest.TestCase):
 
     normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
     self.assertIsNone(normalized_timestamp)
->>>>>>> Added date time values compare functions
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""

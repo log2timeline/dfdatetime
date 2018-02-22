@@ -47,7 +47,6 @@ class FiletimeTest(unittest.TestCase):
 
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
     self.assertIsNone(normalized_timestamp)
->>>>>>> Added date time values compare functions
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""

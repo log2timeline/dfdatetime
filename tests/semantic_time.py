@@ -120,7 +120,7 @@ class NeverTest(unittest.TestCase):
 
   def testInitialize(self):
     """Tests the __init__ function."""
-    never_time_object = never_time.Never()
+    never_time_object = semantic_time.Never()
     self.assertEqual(never_time_object.string, 'Never')
 
   def testComparison(self):

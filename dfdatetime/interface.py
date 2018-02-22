@@ -92,13 +92,13 @@ class DateTimeValues(object):
     return normalized_timestamp == other_normalized_timestamp
 
   def __ge__(self, other):
-    """Determines if the date time values are greater equal than other.
+    """Determines if the date time values are greater than or equal to other.
 
     Args:
       other (DateTimeValues): date time values to compare against.
 
     Returns:
-      bool: True if the date time values are greater equal than other.
+      bool: True if the date time values are greater than or equal to other.
 
     Raises:
       ValueError: if other is not an instance of DateTimeValues.
@@ -147,13 +147,13 @@ class DateTimeValues(object):
     return normalized_timestamp > other_normalized_timestamp
 
   def __le__(self, other):
-    """Determines if the date time values are less equal than other.
+    """Determines if the date time values are greater than or equal to other.
 
     Args:
       other (DateTimeValues): date time values to compare against.
 
     Returns:
-      bool: True if the date time values are less equal than other.
+      bool: True if the date time values are greater than or equal to other.
 
     Raises:
       ValueError: if other is not an instance of DateTimeValues.

@@ -56,13 +56,13 @@ class SemanticTime(interface.DateTimeValues):
     return self._SORT_ORDER == other._SORT_ORDER  # pylint: disable=protected-access
 
   def __ge__(self, other):
-    """Determines if the date time values are greater equal than other.
+    """Determines if the date time values are greater than or equal to other.
 
     Args:
       other (DateTimeValues): date time values to compare against.
 
     Returns:
-      bool: True if the date time values are greater equal than other.
+      bool: True if the date time values are greater than or equal to other.
 
     Raises:
       ValueError: if other is not an instance of DateTimeValues.
@@ -96,13 +96,13 @@ class SemanticTime(interface.DateTimeValues):
     return self._SORT_ORDER > other._SORT_ORDER  # pylint: disable=protected-access
 
   def __le__(self, other):
-    """Determines if the date time values are less equal than other.
+    """Determines if the date time values are greater than or equal to other.
 
     Args:
       other (DateTimeValues): date time values to compare against.
 
     Returns:
-      bool: True if the date time values are less equal than other.
+      bool: True if the date time values are greater than or equal to other.
 
     Raises:
       ValueError: if other is not an instance of DateTimeValues.
@@ -249,13 +249,13 @@ class Never(SemanticTime):
     return isinstance(other, Never)
 
   def __ge__(self, other):
-    """Determines if the date time values are greater equal than other.
+    """Determines if the date time values are greater than or equal to other.
 
     Args:
       other (DateTimeValues): date time values to compare against.
 
     Returns:
-      bool: True if the date time values are greater equal than other.
+      bool: True if the date time values are greater than or equal to other.
 
     Raises:
       ValueError: if other is not an instance of DateTimeValues.
@@ -283,13 +283,13 @@ class Never(SemanticTime):
     return not isinstance(other, Never)
 
   def __le__(self, other):
-    """Determines if the date time values are less equal than other.
+    """Determines if the date time values are less than or equal to other.
 
     Args:
       other (DateTimeValues): date time values to compare against.
 
     Returns:
-      bool: True if the date time values are less equal than other.
+      bool: True if the date time values are greater than or equal to other.
 
     Raises:
       ValueError: if other is not an instance of DateTimeValues.

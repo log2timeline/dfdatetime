@@ -23,6 +23,26 @@ class PosixTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testProperties(self):
+    """Tests the properties."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+    self.assertEqual(posix_time_object.timestamp, 1281643591)
+
+    posix_time_object = posix_time.PosixTime()
+    self.assertIsNone(posix_time_object.timestamp)
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1281643591.0)
+
+    posix_time_object = posix_time.PosixTime()
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     posix_time_object = posix_time.PosixTime()
@@ -50,18 +70,6 @@ class PosixTimeTest(unittest.TestCase):
     expected_timestamp = -11644387200
     posix_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
-
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
-
-    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1281643591, None))
-
-    posix_time_object = posix_time.PosixTime()
-
-    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -92,21 +100,33 @@ class PosixTimeTest(unittest.TestCase):
     date_tuple = posix_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
-
-    micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, 1281643591000000)
-
-    posix_time_object = posix_time.PosixTime()
-
-    micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
-
 
 class PosixTimeInMicrosecondsTest(unittest.TestCase):
   """Tests for the POSIX timestamp in microseconds."""
+
+  # pylint: disable=protected-access
+
+  def testProperties(self):
+    """Tests the properties."""
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=1281643591546875)
+    self.assertEqual(posix_time_object.timestamp, 1281643591546875)
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds()
+    self.assertIsNone(posix_time_object.timestamp)
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=1281643591546875)
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1281643591.546875)
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds()
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
 
   # pylint: disable=protected-access
 
@@ -138,19 +158,6 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     posix_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(posix_time_object.timestamp, expected_timestamp)
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    posix_time_object = posix_time.PosixTimeInMicroseconds(
-        timestamp=1281643591546875)
-
-    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1281643591, 5468750))
-
-    posix_time_object = posix_time.PosixTimeInMicroseconds()
-
-    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     posix_time_object = posix_time.PosixTimeInMicroseconds(
@@ -181,19 +188,6 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
 
     date_tuple = posix_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
-
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    posix_time_object = posix_time.PosixTimeInMicroseconds(
-        timestamp=1281643591546875)
-
-    micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, 1281643591546875)
-
-    posix_time_object = posix_time.PosixTimeInMicroseconds()
-
-    micro_posix_timestamp = posix_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

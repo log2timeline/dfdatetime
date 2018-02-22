@@ -23,6 +23,36 @@ class HFSTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testProperties(self):
+    """Tests the properties."""
+    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
+    self.assertEqual(hfs_time_object.timestamp, 3458215528)
+
+    hfs_time_object = hfs_time.HFSTime()
+    self.assertIsNone(hfs_time_object.timestamp)
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
+
+    normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1375370728.0)
+
+    hfs_time_object = hfs_time.HFSTime(timestamp=0x1ffffffff)
+
+    normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
+    hfs_time_object = hfs_time.HFSTime(timestamp=-0x1ffffffff)
+
+    normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
+    hfs_time_object = hfs_time.HFSTime()
+
+    normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     hfs_time_object = hfs_time.HFSTime()
@@ -54,28 +84,6 @@ class HFSTimeTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       hfs_time_object.CopyFromDateTimeString('1600-01-02 00:00:00')
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
-
-    stat_time_tuple = hfs_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1375370728, 0))
-
-    hfs_time_object = hfs_time.HFSTime(timestamp=0x1ffffffff)
-
-    stat_time_tuple = hfs_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
-    hfs_time_object = hfs_time.HFSTime(timestamp=-0x1ffffffff)
-
-    stat_time_tuple = hfs_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
-    hfs_time_object = hfs_time.HFSTime()
-
-    stat_time_tuple = hfs_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
@@ -104,28 +112,6 @@ class HFSTimeTest(unittest.TestCase):
 
     date_tuple = hfs_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
-
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
-
-    micro_posix_timestamp = hfs_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, 1375370728000000)
-
-    hfs_time_object = hfs_time.HFSTime(timestamp=0x1ffffffff)
-
-    micro_posix_timestamp = hfs_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
-
-    hfs_time_object = hfs_time.HFSTime(timestamp=-0x1ffffffff)
-
-    micro_posix_timestamp = hfs_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
-
-    hfs_time_object = hfs_time.HFSTime()
-
-    micro_posix_timestamp = hfs_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

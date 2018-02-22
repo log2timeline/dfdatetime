@@ -22,7 +22,6 @@ class JavaTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    timestamp (int): Java timestamp.
   """
 
   _EPOCH = posix_time.PosixTimeEpoch()
@@ -34,8 +33,29 @@ class JavaTime(interface.DateTimeValues):
       timestamp (Optional[int]): Java timestamp.
     """
     super(JavaTime, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_MILLISECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """int: Java timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
+          self._timestamp <= self._INT64_MAX):
+        self._normalized_timestamp = (
+            float(self._timestamp) / definitions.MILLISECONDS_PER_SECOND)
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a Java timestamp from a date and time string.
@@ -59,31 +79,18 @@ class JavaTime(interface.DateTimeValues):
     seconds = date_time_values.get('seconds', 0)
     microseconds = date_time_values.get('microseconds', None)
 
-    self.timestamp = self._GetNumberOfSecondsFromElements(
+    timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp *= definitions.MILLISECONDS_PER_SECOND
+    timestamp *= definitions.MILLISECONDS_PER_SECOND
 
     if microseconds:
       milliseconds, _ = divmod(
           microseconds, definitions.MILLISECONDS_PER_SECOND)
-      self.timestamp += milliseconds
+      timestamp += milliseconds
 
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the Java timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
-        self.timestamp > self._INT64_MAX):
-      return None, None
-
-    timestamp, milliseconds = divmod(
-        self.timestamp, definitions.MILLISECONDS_PER_SECOND)
-    return timestamp, milliseconds * self._100NS_PER_MILLISECOND
 
   def CopyToDateTimeString(self):
     """Copies the Java timestamp to a date and time string.
@@ -92,12 +99,12 @@ class JavaTime(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.###
     """
-    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
-        self.timestamp > self._INT64_MAX):
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       return
 
     timestamp, milliseconds = divmod(
-        self.timestamp, definitions.MILLISECONDS_PER_SECOND)
+        self._timestamp, definitions.MILLISECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
@@ -124,15 +131,3 @@ class JavaTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
-        self.timestamp > self._INT64_MAX):
-      return
-
-    return self.timestamp * definitions.MICROSECONDS_PER_MILLISECOND

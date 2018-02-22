@@ -5,8 +5,10 @@ from __future__ import unicode_literals
 
 import abc
 import calendar
+import math
 
 from dfdatetime import decorators
+from dfdatetime import definitions
 
 
 class DateTimeEpoch(object):
@@ -59,8 +61,165 @@ class DateTimeValues(object):
   def __init__(self):
     """Initializes date time values."""
     super(DateTimeValues, self).__init__()
+    self._normalized_timestamp = None
     self.is_local_time = False
     self.precision = None
+
+  def __eq__(self, other):
+    """Determines if the date time values are equal to other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are equal to other.
+
+    Raises:
+      ValueError: if other is not an instance of DateTimeValues.
+    """
+    if not isinstance(other, DateTimeValues):
+      raise ValueError('Other not an instance of DateTimeValues')
+
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
+
+    if normalized_timestamp is None and other_normalized_timestamp is not None:
+      return False
+
+    if normalized_timestamp is not None and other_normalized_timestamp is None:
+      return False
+
+    return normalized_timestamp == other_normalized_timestamp
+
+  def __ge__(self, other):
+    """Determines if the date time values are greater than or equal to other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are greater than or equal to other.
+
+    Raises:
+      ValueError: if other is not an instance of DateTimeValues.
+    """
+    if not isinstance(other, DateTimeValues):
+      raise ValueError('Other not an instance of DateTimeValues')
+
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
+
+    if normalized_timestamp is None:
+      return other_normalized_timestamp is None
+
+    elif other_normalized_timestamp is None:
+      return True
+
+    return normalized_timestamp >= other_normalized_timestamp
+
+  def __gt__(self, other):
+    """Determines if the date time values are greater than other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are greater than other.
+
+    Raises:
+      ValueError: if other is not an instance of DateTimeValues.
+    """
+    if not isinstance(other, DateTimeValues):
+      raise ValueError('Other not an instance of DateTimeValues')
+
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
+
+    if normalized_timestamp is None:
+      return False
+
+    elif other_normalized_timestamp is None:
+      return True
+
+    return normalized_timestamp > other_normalized_timestamp
+
+  def __le__(self, other):
+    """Determines if the date time values are greater than or equal to other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are greater than or equal to other.
+
+    Raises:
+      ValueError: if other is not an instance of DateTimeValues.
+    """
+    if not isinstance(other, DateTimeValues):
+      raise ValueError('Other not an instance of DateTimeValues')
+
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
+
+    if normalized_timestamp is None:
+      return True
+
+    elif other_normalized_timestamp is None:
+      return False
+
+    return normalized_timestamp <= other_normalized_timestamp
+
+  def __lt__(self, other):
+    """Determines if the date time values are less than other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are less than other.
+
+    Raises:
+      ValueError: if other is not an instance of DateTimeValues.
+    """
+    if not isinstance(other, DateTimeValues):
+      raise ValueError('Other not an instance of DateTimeValues')
+
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
+
+    if normalized_timestamp is None:
+      return other_normalized_timestamp is not None
+
+    elif other_normalized_timestamp is None:
+      return False
+
+    return normalized_timestamp < other_normalized_timestamp
+
+  def __ne__(self, other):
+    """Determines if the date time values are not equal to other.
+
+    Args:
+      other (DateTimeValues): date time values to compare against.
+
+    Returns:
+      bool: True if the date time values are not equal to other.
+
+    Raises:
+      ValueError: if other is not an instance of DateTimeValues.
+    """
+    if not isinstance(other, DateTimeValues):
+      raise ValueError('Other not an instance of DateTimeValues')
+
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
+
+    if normalized_timestamp is None and other_normalized_timestamp is not None:
+      return True
+
+    if normalized_timestamp is not None and other_normalized_timestamp is None:
+      return True
+
+    return normalized_timestamp != other_normalized_timestamp
 
   def _AdjustForTimeZoneOffset(
       self, year, month, day_of_month, hours, minutes, time_zone_offset):
@@ -512,6 +671,16 @@ class DateTimeValues(object):
 
     return days_per_month
 
+  @abc.abstractmethod
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+
   def _GetNumberOfDaysInCentury(self, year):
     """Retrieves the number of days in a century.
 
@@ -659,7 +828,6 @@ class DateTimeValues(object):
     """
 
   # TODO: remove this method when there is no more need for it in dfvfs.
-  @abc.abstractmethod
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.
 
@@ -667,6 +835,12 @@ class DateTimeValues(object):
       tuple[int, int]: a POSIX timestamp in seconds and the remainder in
           100 nano seconds or (None, None) on error.
     """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None, None
+
+    remainder = int((normalized_timestamp % 1) * self._100NS_PER_SECOND)
+    return int(normalized_timestamp), remainder
 
   @abc.abstractmethod
   def CopyToDateTimeString(self):
@@ -687,10 +861,15 @@ class DateTimeValues(object):
     """
 
   # TODO: remove this method when there is no more need for it in plaso.
-  @abc.abstractmethod
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
       int: a POSIX timestamp in microseconds or None on error.
     """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return
+
+    normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
+    return int(math.ceil(normalized_timestamp))

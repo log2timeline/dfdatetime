@@ -32,9 +32,8 @@ class DelphiDateTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    timestamp (float): Delphi TDateTime timestamp.
   """
-  # The difference between Dec 30, 1899 and Jan 1, 1970 in days.
+  # The difference between December 30, 1899 and January 1, 1970 in days.
   _DELPHI_TO_POSIX_BASE = 25569
 
   _EPOCH = DelphiDateTimeEpoch()
@@ -46,8 +45,29 @@ class DelphiDateTime(interface.DateTimeValues):
       timestamp (Optional[float]): Delphi TDateTime timestamp.
     """
     super(DelphiDateTime, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_MILLISECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """float: Delphi TDateTime timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._timestamp is not None:
+        self._normalized_timestamp = (
+            self._timestamp - self._DELPHI_TO_POSIX_BASE)
+        self._normalized_timestamp *= definitions.SECONDS_PER_DAY
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a Delphi TDateTime timestamp from a string.
@@ -85,23 +105,9 @@ class DelphiDateTime(interface.DateTimeValues):
     if microseconds is not None:
       timestamp += float(microseconds) / definitions.MICROSECONDS_PER_DAY
 
-    self.timestamp = timestamp
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the Delphi TDateTime timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self.timestamp is None:
-      return None, None
-
-    timestamp = definitions.SECONDS_PER_DAY * (
-        self.timestamp - self._DELPHI_TO_POSIX_BASE)
-    remainder = int((timestamp % 1) * self._100NS_PER_SECOND)
-    return int(timestamp), remainder
 
   def CopyToDateTimeString(self):
     """Copies the Delphi TDateTime timestamp to a date and time string.
@@ -110,10 +116,10 @@ class DelphiDateTime(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######
     """
-    if self.timestamp is None:
+    if self._timestamp is None:
       return
 
-    number_of_seconds = self.timestamp * definitions.SECONDS_PER_DAY
+    number_of_seconds = self._timestamp * definitions.SECONDS_PER_DAY
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         int(number_of_seconds))
@@ -144,17 +150,3 @@ class DelphiDateTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self.timestamp is None:
-      return
-
-    timestamp = (
-        (self.timestamp - self._DELPHI_TO_POSIX_BASE) *
-        definitions.MICROSECONDS_PER_DAY)
-    return int(timestamp)

@@ -29,7 +29,6 @@ class PosixTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    timestamp (int): POSIX timestamp.
   """
 
   _EPOCH = PosixTimeEpoch()
@@ -41,8 +40,27 @@ class PosixTime(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp.
     """
     super(PosixTime, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_SECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """int: POSIX timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._timestamp is not None:
+        self._normalized_timestamp = float(self._timestamp)
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a POSIX timestamp from a date and time string.
@@ -65,22 +83,10 @@ class PosixTime(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
 
-    self.timestamp = self._GetNumberOfSecondsFromElements(
+    self._timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
 
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the POSIX timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self.timestamp is None:
-      return None, None
-
-    return self.timestamp, None
 
   def CopyToDateTimeString(self):
     """Copies the POSIX timestamp to a date and time string.
@@ -89,11 +95,11 @@ class PosixTime(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss
     """
-    if self.timestamp is None:
+    if self._timestamp is None:
       return
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        self.timestamp)
+        self._timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
@@ -118,17 +124,6 @@ class PosixTime(interface.DateTimeValues):
     except ValueError:
       return None, None, None
 
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self.timestamp is None:
-      return
-
-    return self.timestamp * definitions.MICROSECONDS_PER_SECOND
-
 
 class PosixTimeInMicroseconds(interface.DateTimeValues):
   """POSIX timestamp in microseconds.
@@ -139,7 +134,6 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    timestamp (int): POSIX timestamp in microseconds.
   """
 
   _EPOCH = PosixTimeEpoch()
@@ -151,8 +145,28 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp in microseconds.
     """
     super(PosixTimeInMicroseconds, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_MICROSECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """int: POSIX timestamp in microseconds or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._timestamp is not None:
+        self._normalized_timestamp = (
+            float(self._timestamp) / definitions.MICROSECONDS_PER_SECOND)
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a POSIX timestamp from a date and time string.
@@ -176,26 +190,13 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     seconds = date_time_values.get('seconds', 0)
     microseconds = date_time_values.get('microseconds', 0)
 
-    self.timestamp = self._GetNumberOfSecondsFromElements(
+    timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
-    self.timestamp += microseconds
+    timestamp *= definitions.MICROSECONDS_PER_SECOND
+    timestamp += microseconds
 
+    self._timestamp = timestamp
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the POSIX timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self.timestamp is None:
-      return None, None
-
-    timestamp, microseconds = divmod(
-        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
-    return timestamp, microseconds * self._100NS_PER_MICROSECOND
 
   def CopyToDateTimeString(self):
     """Copies the POSIX timestamp to a date and time string.
@@ -204,11 +205,11 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######
     """
-    if self.timestamp is None:
+    if self._timestamp is None:
       return
 
     timestamp, microseconds = divmod(
-        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
+        self._timestamp, definitions.MICROSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
@@ -234,14 +235,3 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self.timestamp is None:
-      return
-
-    return self.timestamp

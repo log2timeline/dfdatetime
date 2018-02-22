@@ -23,6 +23,26 @@ class CocoaTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testProperties(self):
+    """Tests the properties."""
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)
+    self.assertEqual(cocoa_time_object.timestamp, 395011845.0)
+
+    cocoa_time_object = cocoa_time.CocoaTime()
+    self.assertIsNone(cocoa_time_object.timestamp)
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)
+
+    normalized_timestamp = cocoa_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1373319045.0)
+
+    cocoa_time_object = cocoa_time.CocoaTime()
+
+    normalized_timestamp = cocoa_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     cocoa_time_object = cocoa_time.CocoaTime()
@@ -51,6 +71,7 @@ class CocoaTimeTest(unittest.TestCase):
     cocoa_time_object.CopyFromDateTimeString('2001-01-02 00:00:00')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
+  # TODO: remove this method when there is no more need for it in dfvfs.
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)
@@ -92,6 +113,7 @@ class CocoaTimeTest(unittest.TestCase):
     date_tuple = cocoa_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  # TODO: remove this method when there is no more need for it in plaso.
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)

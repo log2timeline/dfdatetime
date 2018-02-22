@@ -41,7 +41,7 @@ class FATDateTime(interface.DateTimeValues):
 
   _EPOCH = FATDateTimeEpoch()
 
-  # The difference between Jan 1, 1980 and Jan 1, 1970 in seconds.
+  # The difference between January 1, 1980 and January 1, 1970 in seconds.
   _FAT_DATE_TO_POSIX_BASE = 315532800
 
   def __init__(self, fat_date_time=None):
@@ -57,6 +57,21 @@ class FATDateTime(interface.DateTimeValues):
     super(FATDateTime, self).__init__()
     self._number_of_seconds = number_of_seconds
     self.precision = definitions.PRECISION_2_SECONDS
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._number_of_seconds is not None and self._number_of_seconds >= 0:
+        self._normalized_timestamp = (
+            float(self._number_of_seconds) + self._FAT_DATE_TO_POSIX_BASE)
+
+    return self._normalized_timestamp
 
   def _GetNumberOfSeconds(self, fat_date_time):
     """Retrieves the number of seconds from a FAT date time.
@@ -130,24 +145,12 @@ class FATDateTime(interface.DateTimeValues):
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError('Year value not supported: {0!s}.'.format(year))
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._number_of_seconds -= self._FAT_DATE_TO_POSIX_BASE
 
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the FAT date time to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None or self._number_of_seconds < 0:
-      return None, None
-
-    timestamp = self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE
-    return timestamp, None
 
   def CopyToDateTimeString(self):
     """Copies the FAT date time to a date and time string.
@@ -184,15 +187,3 @@ class FATDateTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None or self._number_of_seconds < 0:
-      return
-
-    return definitions.MICROSECONDS_PER_SECOND * (
-        self._number_of_seconds + self._FAT_DATE_TO_POSIX_BASE)

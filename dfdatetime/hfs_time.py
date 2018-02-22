@@ -26,7 +26,6 @@ class HFSTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    timestamp (int): HFS timestamp.
   """
   _EPOCH = HFSTimeEpoch()
 
@@ -40,8 +39,29 @@ class HFSTime(interface.DateTimeValues):
       timestamp (Optional[int]): HFS timestamp.
     """
     super(HFSTime, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_SECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """int: HFS timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if (self._timestamp is not None and self._timestamp >= 0 and
+          self._timestamp <= self._UINT32_MAX):
+        self._normalized_timestamp = (
+            float(self._timestamp) - self._HFS_TO_POSIX_BASE)
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a HFS timestamp from a date and time string.
@@ -70,25 +90,12 @@ class HFSTime(interface.DateTimeValues):
     if year < 1904 or year > 2040:
       raise ValueError('Year value not supported.')
 
-    self.timestamp = self._GetNumberOfSecondsFromElements(
+    self._normalized_timestamp = None
+    self._timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp += self._HFS_TO_POSIX_BASE
+    self._timestamp += self._HFS_TO_POSIX_BASE
 
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the HFS timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT32_MAX):
-      return None, None
-
-    timestamp = self.timestamp - self._HFS_TO_POSIX_BASE
-    return timestamp, 0
 
   def CopyToDateTimeString(self):
     """Copies the HFS timestamp to a date and time string.
@@ -97,12 +104,12 @@ class HFSTime(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss
     """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT32_MAX):
+    if (self._timestamp is None or self._timestamp < 0 or
+        self._timestamp > self._UINT32_MAX):
       return
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        self.timestamp)
+        self._timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
@@ -127,16 +134,3 @@ class HFSTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT32_MAX):
-      return
-
-    timestamp = self.timestamp - self._HFS_TO_POSIX_BASE
-    return timestamp * definitions.MICROSECONDS_PER_SECOND

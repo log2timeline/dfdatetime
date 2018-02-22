@@ -8,11 +8,65 @@ import unittest
 
 from dfdatetime import semantic_time
 
+from tests import interface
+
 
 class SemanticTimeTest(unittest.TestCase):
   """Tests for semantic time."""
 
   # pylint: disable=protected-access
+
+  def testComparison(self):
+    """Tests the comparison functions."""
+    semantic_time_object1 = semantic_time.SemanticTime()
+    semantic_time_object1._SORT_ORDER = 1
+
+    semantic_time_object2 = semantic_time.SemanticTime()
+    semantic_time_object2._SORT_ORDER = 1
+
+    self.assertTrue(semantic_time_object1 == semantic_time_object2)
+    self.assertTrue(semantic_time_object1 >= semantic_time_object2)
+    self.assertFalse(semantic_time_object1 > semantic_time_object2)
+    self.assertTrue(semantic_time_object1 <= semantic_time_object2)
+    self.assertFalse(semantic_time_object1 < semantic_time_object2)
+    self.assertFalse(semantic_time_object1 != semantic_time_object2)
+
+    semantic_time_object2 = semantic_time.SemanticTime()
+    semantic_time_object2._SORT_ORDER = 2
+
+    self.assertFalse(semantic_time_object1 == semantic_time_object2)
+    self.assertFalse(semantic_time_object1 >= semantic_time_object2)
+    self.assertFalse(semantic_time_object1 > semantic_time_object2)
+    self.assertTrue(semantic_time_object1 <= semantic_time_object2)
+    self.assertTrue(semantic_time_object1 < semantic_time_object2)
+    self.assertTrue(semantic_time_object1 != semantic_time_object2)
+
+    date_time_values1 = interface.TestDateTimeValues()
+
+    self.assertFalse(semantic_time_object1 == date_time_values1)
+    self.assertFalse(semantic_time_object1 >= date_time_values1)
+    self.assertFalse(semantic_time_object1 > date_time_values1)
+    self.assertTrue(semantic_time_object1 <= date_time_values1)
+    self.assertTrue(semantic_time_object1 < date_time_values1)
+    self.assertTrue(semantic_time_object1 != date_time_values1)
+
+    with self.assertRaises(ValueError):
+      semantic_time_object1 == 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      semantic_time_object1 >= 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      semantic_time_object1 > 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      semantic_time_object1 <= 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      semantic_time_object1 < 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      semantic_time_object1 != 0.0  # pylint: disable=pointless-statement
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -55,17 +109,69 @@ class InvalidTimeTest(unittest.TestCase):
 
   def testInitialize(self):
     """Tests the __init__ function."""
-    semantic_time_object = semantic_time.InvalidTime()
-    self.assertEqual(semantic_time_object.string, 'Invalid')
+    invalid_time_object = semantic_time.InvalidTime()
+    self.assertEqual(invalid_time_object.string, 'Invalid')
 
 
 class NeverTest(unittest.TestCase):
   """Tests for semantic time that represents never."""
 
+  # pylint: disable=protected-access
+
   def testInitialize(self):
     """Tests the __init__ function."""
-    semantic_time_object = semantic_time.Never()
-    self.assertEqual(semantic_time_object.string, 'Never')
+    never_time_object = semantic_time.Never()
+    self.assertEqual(never_time_object.string, 'Never')
+
+  def testComparison(self):
+    """Tests the comparison functions."""
+    never_time_object1 = semantic_time.Never()
+
+    never_time_object2 = semantic_time.Never()
+
+    self.assertTrue(never_time_object1 == never_time_object2)
+    self.assertTrue(never_time_object1 >= never_time_object2)
+    self.assertFalse(never_time_object1 > never_time_object2)
+    self.assertTrue(never_time_object1 <= never_time_object2)
+    self.assertFalse(never_time_object1 < never_time_object2)
+    self.assertFalse(never_time_object1 != never_time_object2)
+
+    semantic_time_object2 = semantic_time.SemanticTime()
+    semantic_time_object2._SORT_ORDER = 1
+
+    self.assertFalse(never_time_object1 == semantic_time_object2)
+    self.assertTrue(never_time_object1 >= semantic_time_object2)
+    self.assertTrue(never_time_object1 > semantic_time_object2)
+    self.assertFalse(never_time_object1 <= semantic_time_object2)
+    self.assertFalse(never_time_object1 < semantic_time_object2)
+    self.assertTrue(never_time_object1 != semantic_time_object2)
+
+    date_time_values1 = interface.TestDateTimeValues()
+
+    self.assertFalse(never_time_object1 == date_time_values1)
+    self.assertTrue(never_time_object1 >= date_time_values1)
+    self.assertTrue(never_time_object1 > date_time_values1)
+    self.assertFalse(never_time_object1 <= date_time_values1)
+    self.assertFalse(never_time_object1 < date_time_values1)
+    self.assertTrue(never_time_object1 != date_time_values1)
+
+    with self.assertRaises(ValueError):
+      never_time_object1 == 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      never_time_object1 >= 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      never_time_object1 > 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      never_time_object1 <= 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      never_time_object1 < 0.0  # pylint: disable=pointless-statement
+
+    with self.assertRaises(ValueError):
+      never_time_object1 != 0.0  # pylint: disable=pointless-statement
 
 
 class NotSetTest(unittest.TestCase):
@@ -73,8 +179,8 @@ class NotSetTest(unittest.TestCase):
 
   def testInitialize(self):
     """Tests the __init__ function."""
-    semantic_time_object = semantic_time.NotSet()
-    self.assertEqual(semantic_time_object.string, 'Not set')
+    not_set_time_object = semantic_time.NotSet()
+    self.assertEqual(not_set_time_object.string, 'Not set')
 
 
 if __name__ == '__main__':

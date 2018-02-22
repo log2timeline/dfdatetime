@@ -54,6 +54,28 @@ class DelphiDateTimeTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testProperties(self):
+    """Tests the properties."""
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+    self.assertEqual(delphi_date_time_object.timestamp, 41443.8263953)
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime()
+    self.assertIsNone(delphi_date_time_object.timestamp)
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+
+    normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1371585000.5539198)
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime()
+
+    normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
@@ -89,19 +111,6 @@ class DelphiDateTimeTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       delphi_date_time_object.CopyFromDateTimeString('9999-01-02 00:00:00')
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    delphi_date_time_object = delphi_date_time.DelphiDateTime(
-        timestamp=41443.8263953)
-
-    stat_time_tuple = delphi_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1371585000, 5539197))
-
-    delphi_date_time_object = delphi_date_time.DelphiDateTime()
-
-    stat_time_tuple = delphi_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime(
@@ -132,19 +141,6 @@ class DelphiDateTimeTest(unittest.TestCase):
 
     date_tuple = delphi_date_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
-
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    delphi_date_time_object = delphi_date_time.DelphiDateTime(
-        timestamp=41443.8263953)
-
-    micro_posix_timestamp = delphi_date_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_timestamp, 1371585000553920)
-
-    delphi_date_time_object = delphi_date_time.DelphiDateTime()
-
-    micro_posix_timestamp = delphi_date_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_timestamp)
 
 
 if __name__ == '__main__':

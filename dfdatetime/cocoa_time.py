@@ -30,9 +30,8 @@ class CocoaTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    timestamp (float): Cocoa timestamp.
   """
-  # The difference between Jan 1, 2001 and Jan 1, 1970 in seconds.
+  # The difference between January 1, 2001 and January 1, 1970 in seconds.
   _COCOA_TO_POSIX_BASE = -978307200
 
   _EPOCH = CocoaTimeEpoch()
@@ -44,8 +43,27 @@ class CocoaTime(interface.DateTimeValues):
       timestamp (Optional[float]): Cocoa timestamp.
     """
     super(CocoaTime, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_SECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """float: Cocoa timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._timestamp is not None:
+        self._normalized_timestamp = self._timestamp - self._COCOA_TO_POSIX_BASE
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a Cocoa timestamp from a date and time string.
@@ -80,22 +98,9 @@ class CocoaTime(interface.DateTimeValues):
     if microseconds is not None:
       timestamp += float(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
-    self.timestamp = timestamp
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the Cocoa timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self.timestamp is None:
-      return None, None
-
-    timestamp = self.timestamp - self._COCOA_TO_POSIX_BASE
-    remainder = int((timestamp % 1) * self._100NS_PER_SECOND)
-    return int(timestamp), remainder
 
   def CopyToDateTimeString(self):
     """Copies the Cocoa timestamp to a date and time string.
@@ -104,17 +109,17 @@ class CocoaTime(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######
     """
-    if self.timestamp is None:
+    if self._timestamp is None:
       return
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        int(self.timestamp))
+        int(self._timestamp))
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 
     microseconds = int(
-        (self.timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
+        (self._timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, microseconds)
@@ -135,16 +140,3 @@ class CocoaTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self.timestamp is None:
-      return
-
-    timestamp = definitions.MICROSECONDS_PER_SECOND * (
-        self.timestamp - self._COCOA_TO_POSIX_BASE)
-    return int(timestamp)

@@ -19,7 +19,7 @@ class WebKitTime(interface.DateTimeValues):
   """WebKit timestamp.
 
   The WebKit timestamp is a signed 64-bit integer that contains the number of
-  micro seconds since 1601-01-01 00:00:00.
+  microseconds since 1601-01-01 00:00:00.
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
@@ -29,7 +29,7 @@ class WebKitTime(interface.DateTimeValues):
 
   _EPOCH = WebKitTimeEpoch()
 
-  # The difference between Jan 1, 1601 and Jan 1, 1970 in seconds.
+  # The difference between January 1, 1601 and January 1, 1970 in seconds.
   _WEBKIT_TO_POSIX_BASE = 11644473600
 
   def __init__(self, timestamp=None):
@@ -39,8 +39,30 @@ class WebKitTime(interface.DateTimeValues):
       timestamp (Optional[int]): WebKit timestamp.
     """
     super(WebKitTime, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_MICROSECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """float: WebKit timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
+          self._timestamp <= self._INT64_MAX):
+        self._normalized_timestamp = (
+            float(self._timestamp) / definitions.MICROSECONDS_PER_SECOND)
+        self._normalized_timestamp -= self._WEBKIT_TO_POSIX_BASE
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a WebKit timestamp from a date and time string.
@@ -66,29 +88,15 @@ class WebKitTime(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
 
-    self.timestamp = self._GetNumberOfSecondsFromElements(
+    timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp += self._WEBKIT_TO_POSIX_BASE
-    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
-    self.timestamp += date_time_values.get('microseconds', 0)
+    timestamp += self._WEBKIT_TO_POSIX_BASE
+    timestamp *= definitions.MICROSECONDS_PER_SECOND
+    timestamp += date_time_values.get('microseconds', 0)
 
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the WebKit timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
-        self.timestamp > self._INT64_MAX):
-      return None, None
-
-    timestamp, microseconds = divmod(
-        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
-    timestamp -= self._WEBKIT_TO_POSIX_BASE
-    return timestamp, microseconds * self._100NS_PER_MICROSECOND
 
   def CopyToDateTimeString(self):
     """Copies the WebKit timestamp to a date and time string.
@@ -97,12 +105,12 @@ class WebKitTime(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######
     """
-    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
-        self.timestamp > self._INT64_MAX):
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       return
 
     timestamp, microseconds = divmod(
-        self.timestamp, definitions.MICROSECONDS_PER_SECOND)
+        self._timestamp, definitions.MICROSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
@@ -129,16 +137,3 @@ class WebKitTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if (self.timestamp is None or self.timestamp < self._INT64_MIN or
-        self.timestamp > self._INT64_MAX):
-      return
-
-    return self.timestamp - (
-        self._WEBKIT_TO_POSIX_BASE * definitions.MICROSECONDS_PER_SECOND)

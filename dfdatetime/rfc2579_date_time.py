@@ -39,6 +39,8 @@ class RFC2579DateTime(interface.DateTimeValues):
     deciseconds (int): deciseconds, 0 through 9.
   """
 
+  # TODO: make attributes read-only.
+
   def __init__(self, rfc2579_date_time_tuple=None):
     """Initializes a RFC2579 date-time.
 
@@ -122,6 +124,22 @@ class RFC2579DateTime(interface.DateTimeValues):
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
           self.seconds)
 
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._number_of_seconds is not None:
+        self._normalized_timestamp = float(self._number_of_seconds)
+        self._normalized_timestamp += (
+            float(self.deciseconds) / definitions.DECISECONDS_PER_SECOND)
+
+    return self._normalized_timestamp
+
   def CopyFromDateTimeString(self, time_string):
     """Copies a RFC2579 date-time from a date and time string.
 
@@ -153,6 +171,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     if year < 0 or year > 65536:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
 
@@ -165,19 +184,6 @@ class RFC2579DateTime(interface.DateTimeValues):
     self.deciseconds = deciseconds
 
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the RFC2579 date-time to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None:
-      return None, None
-
-    return self._number_of_seconds, (
-        self.deciseconds * self._100NS_PER_DECISECOND)
 
   def CopyToDateTimeString(self):
     """Copies the RFC2579 date-time to a date and time string.
@@ -204,17 +210,3 @@ class RFC2579DateTime(interface.DateTimeValues):
       return None, None, None
 
     return self.year, self.month, self.day_of_month
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None:
-      return
-
-    timestamp = self._number_of_seconds * definitions.DECISECONDS_PER_SECOND
-    timestamp += self.deciseconds
-    timestamp *= definitions.MICROSECONDS_PER_DECISECOND
-    return timestamp

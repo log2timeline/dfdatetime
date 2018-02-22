@@ -26,13 +26,30 @@ class FakeTime(interface.DateTimeValues):
 
   def __init__(self):
     """Initializes a fake timestamp."""
-    super(FakeTime, self).__init__()
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
+
+    super(FakeTime, self).__init__()
     self._microseconds = int(
         fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
     self._number_of_seconds = int(timestamp)
     self.precision = definitions.PRECISION_1_MICROSECOND
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._number_of_seconds is not None:
+        self._normalized_timestamp = float(self._number_of_seconds)
+        self._normalized_timestamp += (
+            float(self._microseconds) / definitions.MICROSECONDS_PER_SECOND)
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a fake timestamp from a date and time string.
@@ -55,27 +72,12 @@ class FakeTime(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._microseconds = date_time_values.get('microseconds', None)
 
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the fake timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None:
-      return None, None
-
-    if self._microseconds is not None:
-      return self._number_of_seconds, (
-          self._microseconds * self._100NS_PER_MICROSECOND)
-
-    return self._number_of_seconds, None
 
   def CopyToDateTimeString(self):
     """Copies the fake timestamp to a date and time string.
@@ -118,18 +120,3 @@ class FakeTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None:
-      return
-
-    timestamp = self._number_of_seconds * definitions.MICROSECONDS_PER_SECOND
-    if self._microseconds is None:
-      return timestamp
-
-    return timestamp + self._microseconds

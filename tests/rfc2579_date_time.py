@@ -105,6 +105,19 @@ class RFC2579DateTimeTest(unittest.TestCase):
       rfc2579_date_time.RFC2579DateTime(
           rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 2, 60))
 
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
+
+    normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, 1281643591.6)
+
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
+
+    normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
@@ -189,19 +202,6 @@ class RFC2579DateTimeTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       rfc2579_date_time_object.CopyFromDateTimeString('9999-01-02 00:00:00')
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
-
-    stat_time_tuple = rfc2579_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1281643591, 6000000))
-
-    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
-
-    stat_time_tuple = rfc2579_date_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
@@ -227,19 +227,6 @@ class RFC2579DateTimeTest(unittest.TestCase):
 
     date_tuple = rfc2579_date_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
-
-  def testGetPlasoTimestamp(self):
-    """Tests the GetPlasoTimestamp function."""
-    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
-        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
-
-    micro_posix_number_of_seconds = rfc2579_date_time_object.GetPlasoTimestamp()
-    self.assertEqual(micro_posix_number_of_seconds, 1281643591600000)
-
-    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
-
-    micro_posix_number_of_seconds = rfc2579_date_time_object.GetPlasoTimestamp()
-    self.assertIsNone(micro_posix_number_of_seconds)
 
 
 if __name__ == '__main__':

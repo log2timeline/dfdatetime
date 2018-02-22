@@ -28,11 +28,10 @@ class UUIDTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
-    timestamp (int): UUID timestamp.
   """
   _EPOCH = UUIDTimeEpoch()
 
-  # The difference between Oct 15, 1582 and Jan 1, 1970 in seconds.
+  # The difference between October 15, 1582 and January 1, 1970 in seconds.
   _UUID_TO_POSIX_BASE = 12219292800
 
   def __init__(self, timestamp=None):
@@ -48,8 +47,30 @@ class UUIDTime(interface.DateTimeValues):
       raise ValueError('Invalid UUID version 1 timestamp.')
 
     super(UUIDTime, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_100_NANOSECONDS
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """int: UUID timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if (self._timestamp is not None and self._timestamp >= 0 and
+          self._timestamp <= self._UINT60_MAX):
+        self._normalized_timestamp = (
+            float(self._timestamp) / self._100NS_PER_SECOND)
+        self._normalized_timestamp -= self._UUID_TO_POSIX_BASE
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies an UUID timestamp from a date and time string.
@@ -78,29 +99,16 @@ class UUIDTime(interface.DateTimeValues):
     if year < 1582:
       raise ValueError('Year value not supported.')
 
-    self.timestamp = self._GetNumberOfSecondsFromElements(
+    timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-    self.timestamp += self._UUID_TO_POSIX_BASE
-    self.timestamp *= definitions.MICROSECONDS_PER_SECOND
-    self.timestamp += date_time_values.get('microseconds', 0)
-    self.timestamp *= self._100NS_PER_MICROSECOND
+    timestamp += self._UUID_TO_POSIX_BASE
+    timestamp *= definitions.MICROSECONDS_PER_SECOND
+    timestamp += date_time_values.get('microseconds', 0)
+    timestamp *= self._100NS_PER_MICROSECOND
 
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the UUID timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT60_MAX):
-      return None, None
-
-    timestamp, remainder = divmod(self.timestamp, self._100NS_PER_SECOND)
-    timestamp -= self._UUID_TO_POSIX_BASE
-    return timestamp, remainder
 
   def CopyToDateTimeString(self):
     """Copies the UUID timestamp to a date and time string.
@@ -109,11 +117,11 @@ class UUIDTime(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.#######
     """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT60_MAX):
+    if (self._timestamp is None or self._timestamp < 0 or
+        self._timestamp > self._UINT60_MAX):
       return
 
-    timestamp, remainder = divmod(self.timestamp, self._100NS_PER_SECOND)
+    timestamp, remainder = divmod(self._timestamp, self._100NS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
@@ -140,17 +148,3 @@ class UUIDTime(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT60_MAX):
-      return
-
-    timestamp, _ = divmod(self.timestamp, self._100NS_PER_MICROSECOND)
-    timestamp -= self._UUID_TO_POSIX_BASE * definitions.MICROSECONDS_PER_SECOND
-    return timestamp

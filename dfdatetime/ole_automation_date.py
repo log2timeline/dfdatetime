@@ -34,7 +34,7 @@ class OLEAutomationDate(interface.DateTimeValues):
   """
   _EPOCH = OLEAutomationDateEpoch()
 
-  # The difference between Dec 30, 1899 and Jan 1, 1970 in days.
+  # The difference between December 30, 1899 and January 1, 1970 in days.
   _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25569
 
   def __init__(self, timestamp=None):
@@ -44,8 +44,29 @@ class OLEAutomationDate(interface.DateTimeValues):
       timestamp (Optional[float]): OLE Automation date.
     """
     super(OLEAutomationDate, self).__init__()
+    self._timestamp = timestamp
     self.precision = definitions.PRECISION_1_MICROSECOND
-    self.timestamp = timestamp
+
+  @property
+  def timestamp(self):
+    """float: OLE Automation date timestamp or None if timestamp is not set."""
+    return self._timestamp
+
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._timestamp is not None:
+        self._normalized_timestamp = (
+            self._timestamp - self._OLE_AUTOMATION_DATE_TO_POSIX_BASE)
+        self._normalized_timestamp *= definitions.SECONDS_PER_DAY
+
+    return self._normalized_timestamp
 
   def CopyFromDateTimeString(self, time_string):
     """Copies an OLE Automation date from a date and time string.
@@ -82,23 +103,9 @@ class OLEAutomationDate(interface.DateTimeValues):
     timestamp /= definitions.SECONDS_PER_DAY
     timestamp += self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
 
-    self.timestamp = timestamp
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
     self.is_local_time = False
-
-  def CopyToStatTimeTuple(self):
-    """Copies the OLE Automation date to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self.timestamp is None:
-      return None, None
-
-    timestamp = self.timestamp - self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
-    timestamp *= definitions.SECONDS_PER_DAY
-    remainder = int((timestamp % 1) * self._100NS_PER_SECOND)
-    return int(timestamp), remainder
 
   def CopyToDateTimeString(self):
     """Copies the OLE Automation date to a date and time string.
@@ -107,10 +114,10 @@ class OLEAutomationDate(interface.DateTimeValues):
       str: date and time value formatted as:
           YYYY-MM-DD hh:mm:ss.######
     """
-    if self.timestamp is None:
+    if self._timestamp is None:
       return
 
-    timestamp = self.timestamp * definitions.SECONDS_PER_DAY
+    timestamp = self._timestamp * definitions.SECONDS_PER_DAY
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         int(timestamp))
@@ -140,17 +147,3 @@ class OLEAutomationDate(interface.DateTimeValues):
 
     except ValueError:
       return None, None, None
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self.timestamp is None:
-      return
-
-    timestamp = self.timestamp - self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
-    timestamp *= definitions.SECONDS_PER_DAY
-    timestamp *= definitions.MICROSECONDS_PER_SECOND
-    return int(timestamp)

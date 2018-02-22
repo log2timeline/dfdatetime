@@ -45,6 +45,20 @@ class TimeElements(interface.DateTimeValues):
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           *time_elements_tuple)
 
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if self._number_of_seconds is not None:
+        self._normalized_timestamp = float(self._number_of_seconds)
+
+    return self._normalized_timestamp
+
   def _CopyDateTimeFromStringISO8601(self, time_string):
     """Copies a date and time from an ISO 8601 date and time string.
 
@@ -115,6 +129,7 @@ class TimeElements(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
@@ -371,21 +386,11 @@ class TimeElements(interface.DateTimeValues):
       raise ValueError('Invalid seconds value: {0!s}'.format(
           time_elements_tuple[5]))
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
-
-  def CopyToStatTimeTuple(self):
-    """Copies the time elements to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None:
-      return None, None
-    return self._number_of_seconds, None
 
   def CopyToDateTimeString(self):
     """Copies the time elements to a date and time string.
@@ -415,17 +420,6 @@ class TimeElements(interface.DateTimeValues):
     return (
         self._time_elements_tuple[0], self._time_elements_tuple[1],
         self._time_elements_tuple[2])
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None:
-      return
-    return self._number_of_seconds * definitions.MICROSECONDS_PER_SECOND
-
 
 class TimeElementsWithFractionOfSecond(TimeElements):
   """Time elements with a fraction of second interface.
@@ -463,6 +457,22 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     self.fraction_of_second = fraction_of_second
     self.precision = None
 
+  def _GetNormalizedTimestamp(self):
+    """Retrieves the normalized timestamp.
+
+    Returns:
+      float: normalized timestamp, which contains the number of seconds since
+          January 1, 1970 00:00:00 and a fraction of second used for increased
+          precision, or None if the normalized timestamp cannot be determined.
+    """
+    if self._normalized_timestamp is None:
+      if (self._number_of_seconds is not None and
+          self.fraction_of_second is not None):
+        self._normalized_timestamp = (
+            float(self._number_of_seconds) + self.fraction_of_second)
+
+    return self._normalized_timestamp
+
   def _CopyFromDateTimeValues(self, date_time_values):
     """Copies time elements from date and time values.
 
@@ -487,6 +497,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
         microseconds)
 
+    self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
@@ -525,19 +536,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     self.fraction_of_second = fraction_of_second
 
-  def CopyToStatTimeTuple(self):
-    """Copies the time elements to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds or (None, None) on error.
-    """
-    if self._number_of_seconds is None or self.fraction_of_second is None:
-      return None, None
-
-    return self._number_of_seconds, (
-        int(self.fraction_of_second * self._100NS_PER_SECOND))
-
   def CopyToDateTimeString(self):
     """Copies the time elements to a date and time string.
 
@@ -557,20 +555,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     return precision_helper.CopyToDateTimeString(
         self._time_elements_tuple, self.fraction_of_second)
-
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
-
-    Returns:
-      int: a POSIX timestamp in microseconds or None on error.
-    """
-    if self._number_of_seconds is None or self.fraction_of_second is None:
-      return
-
-    timestamp = self._number_of_seconds * definitions.MICROSECONDS_PER_SECOND
-    timestamp += int(
-        self.fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
-    return timestamp
 
 
 class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):

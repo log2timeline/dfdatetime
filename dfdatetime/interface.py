@@ -109,13 +109,10 @@ class DateTimeValues(object):
     normalized_timestamp = self._GetNormalizedTimestamp()
     other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
 
-    if normalized_timestamp is None and other_normalized_timestamp is not None:
-      return False
+    if normalized_timestamp is None:
+      return other_normalized_timestamp is None
 
-    if normalized_timestamp is not None and other_normalized_timestamp is None:
-      return True
-
-    if normalized_timestamp is None and other_normalized_timestamp is None:
+    elif other_normalized_timestamp is None:
       return True
 
     return normalized_timestamp >= other_normalized_timestamp
@@ -138,10 +135,10 @@ class DateTimeValues(object):
     normalized_timestamp = self._GetNormalizedTimestamp()
     other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
 
-    if normalized_timestamp is None and other_normalized_timestamp is not None:
+    if normalized_timestamp is None:
       return False
 
-    if normalized_timestamp is not None and other_normalized_timestamp is None:
+    elif other_normalized_timestamp is None:
       return True
 
     return normalized_timestamp > other_normalized_timestamp
@@ -164,14 +161,11 @@ class DateTimeValues(object):
     normalized_timestamp = self._GetNormalizedTimestamp()
     other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
 
-    if normalized_timestamp is None and other_normalized_timestamp is not None:
+    if normalized_timestamp is None:
       return True
 
-    if normalized_timestamp is not None and other_normalized_timestamp is None:
+    elif other_normalized_timestamp is None:
       return False
-
-    if normalized_timestamp is None and other_normalized_timestamp is None:
-      return True
 
     return normalized_timestamp <= other_normalized_timestamp
 
@@ -193,10 +187,10 @@ class DateTimeValues(object):
     normalized_timestamp = self._GetNormalizedTimestamp()
     other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
 
-    if normalized_timestamp is None and other_normalized_timestamp is not None:
-      return True
+    if normalized_timestamp is None:
+      return other_normalized_timestamp is not None
 
-    if normalized_timestamp is not None and other_normalized_timestamp is None:
+    elif other_normalized_timestamp is None:
       return False
 
     return normalized_timestamp < other_normalized_timestamp

@@ -21,12 +21,12 @@ then
 
 	mv l2tbinaries ../;
 
-	for PACKAGE in L2TBINARIES_DEPENDENCIES;
+	for PACKAGE in ${L2TBINARIES_DEPENDENCIES};
 	do
 		sudo /usr/sbin/installer -target / -pkg ../l2tbinaries/macos/${PACKAGE}-*.dmg;
 	done
 
-	for PACKAGE in L2TBINARIES_TEST_DEPENDENCIES;
+	for PACKAGE in ${L2TBINARIES_TEST_DEPENDENCIES};
 	do
 		sudo /usr/sbin/installer -target / -pkg ../l2tbinaries/macos/${PACKAGE}-*.dmg;
 	done

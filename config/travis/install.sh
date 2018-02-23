@@ -17,12 +17,19 @@ set -e;
 
 if test ${TRAVIS_OS_NAME} = "osx";
 then
-	git clone https://github.com/log2timeline/l2tdevtools.git;
+	git clone https://github.com/log2timeline/l2tbinaties.git -b dev;
 
-	mv l2tdevtools ../;
-	mkdir dependencies;
+	mv l2tbinaries ../;
 
-	PYTHONPATH=../l2tdevtools ../l2tdevtools/tools/update.py --download-directory dependencies --track dev ${L2TBINARIES_DEPENDENCIES} ${L2TBINARIES_TEST_DEPENDENCIES};
+	for PACKAGE in L2TBINARIES_DEPENDENCIES;
+	do
+		sudo /usr/sbin/installer -target / -pkg ../l2tbinaries/macos/${PACKAGE}-*.dmg;
+	done
+
+	for PACKAGE in L2TBINARIES_TEST_DEPENDENCIES;
+	do
+		sudo /usr/sbin/installer -target / -pkg ../l2tbinaries/macos/${PACKAGE}-*.dmg;
+	done
 
 elif test ${TRAVIS_OS_NAME} = "linux";
 then

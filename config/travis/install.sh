@@ -17,7 +17,7 @@ set -e;
 
 if test ${TRAVIS_OS_NAME} = "osx";
 then
-	git clone https://github.com/log2timeline/l2tbinaties.git -b dev;
+	git clone https://github.com/log2timeline/l2tbinaries.git -b dev;
 
 	mv l2tbinaries ../;
 

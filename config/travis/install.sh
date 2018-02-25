@@ -2,7 +2,7 @@
 #
 # Script to set up Travis-CI test VM.
 
-COVERALL_DEPENDENCIES="python-coverage python-coveralls python-docopt";
+COVERALLS_DEPENDENCIES="python-coverage python-coveralls python-docopt";
 
 L2TBINARIES_DEPENDENCIES="";
 
@@ -11,6 +11,10 @@ L2TBINARIES_TEST_DEPENDENCIES="funcsigs mock pbr six";
 PYTHON2_DEPENDENCIES="";
 
 PYTHON2_TEST_DEPENDENCIES="python-mock python-tox";
+
+PYTHON3_DEPENDENCIES="";
+
+PYTHON3_TEST_DEPENDENCIES="python3-mock python3-setuptools python3-tox";
 
 # Exit on error.
 set -e;
@@ -41,7 +45,11 @@ then
 
 	sudo add-apt-repository ppa:gift/dev -y;
 	sudo apt-get update -q;
-	# Only install the Python 2 dependencies.
-	# Also see: https://docs.travis-ci.com/user/languages/python/#Travis-CI-Uses-Isolated-virtualenvs
-	sudo apt-get install -y ${COVERALL_DEPENDENCIES} ${PYTHON2_DEPENDENCIES} ${PYTHON2_TEST_DEPENDENCIES};
+
+	if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+	then
+		sudo apt-get install -y ${COVERALLS_DEPENDENCIES} ${PYTHON2_DEPENDENCIES} ${PYTHON2_TEST_DEPENDENCIES};
+	else
+		sudo apt-get install -y ${PYTHON3_DEPENDENCIES} ${PYTHON3_TEST_DEPENDENCIES};
+	fi
 fi

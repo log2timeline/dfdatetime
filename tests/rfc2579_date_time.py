@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import rfc2579_date_time
@@ -111,7 +112,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
 
     normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281643591.6)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.6'))
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 

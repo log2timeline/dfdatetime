@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import java_time
@@ -27,7 +28,7 @@ class JavaTimeTest(unittest.TestCase):
     java_time_object = java_time.JavaTime(timestamp=1281643591546)
 
     normalized_timestamp = java_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281643591.546)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546'))
 
     java_time_object = java_time.JavaTime()
 

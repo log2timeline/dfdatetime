@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import webkit_time
@@ -36,7 +37,7 @@ class WebKitTimeTest(unittest.TestCase):
     webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
 
     normalized_timestamp = webkit_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281647191.546877)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281647191.546875'))
 
     webkit_time_object = webkit_time.WebKitTime(timestamp=0x1ffffffffffffffff)
 

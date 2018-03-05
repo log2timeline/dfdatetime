@@ -3,6 +3,8 @@
 
 from __future__ import unicode_literals
 
+import decimal
+
 from dfdatetime import definitions
 
 
@@ -23,7 +25,8 @@ class DateTimePrecisionHelper(object):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second, which must be a value between 0.0 and 1.0.
+      decimal.Decimal: fraction of second, which must be a value between 0.0
+          and 1.0.
     """
     raise NotImplementedError()
 
@@ -35,8 +38,8 @@ class DateTimePrecisionHelper(object):
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second, which must be a value
-          between 0.0 and 1.0.
+      fraction_of_second (decimal.Decimal): fraction of second, which must be a
+          value between 0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as: YYYY-MM-DD hh:mm:ss with fraction
@@ -56,8 +59,8 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second, which must be a value between 0.0 and 1.0.
-          For the seconds precision helper this will always be 0.0.
+      decimal.Decimal: fraction of second, which must be a value between 0.0 and
+          1.0. For the seconds precision helper this will always be 0.0.
 
     Raises:
       ValueError: if the number of microseconds is out of bounds.
@@ -67,7 +70,7 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
           'Number of microseconds value: {0:d} out of bounds.'.format(
               microseconds))
 
-    return 0.0
+    return decimal.Decimal(0.0)
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
@@ -77,8 +80,8 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second, which must be a value
-          between 0.0 and 1.0.
+      fraction_of_second (decimal.Decimal): fraction of second, which must be a
+          value between 0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:
@@ -107,7 +110,8 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second, which must be a value between 0.0 and 1.0.
+      decimal.Decimal: fraction of second, which must be a value between 0.0 and
+          1.0.
 
     Raises:
       ValueError: if the number of microseconds is out of bounds.
@@ -119,7 +123,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
 
     milliseconds, _ = divmod(
         microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
-    return float(milliseconds) / definitions.MILLISECONDS_PER_SECOND
+    return decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
@@ -129,8 +133,8 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second, which must be a value
-          between 0.0 and 1.0.
+      fraction_of_second (decimal.Decimal): fraction of second, which must be a
+          value between 0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:
@@ -162,7 +166,8 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
       microseconds (int): number of microseconds.
 
     Returns:
-      float: fraction of second, which must be a value between 0.0 and 1.0.
+      decimal.Decimal: fraction of second, which must be a value between 0.0 and
+          1.0.
 
     Raises:
       ValueError: if the number of microseconds is out of bounds.
@@ -172,7 +177,7 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
           'Number of microseconds value: {0:d} out of bounds.'.format(
               microseconds))
 
-    return float(microseconds) / definitions.MICROSECONDS_PER_SECOND
+    return decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
   @classmethod
   def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
@@ -182,8 +187,8 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
       time_elements_tuple (tuple[int, int, int, int, int, int]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
-      fraction_of_second (float): fraction of second, which must be a value
-          between 0.0 and 1.0.
+      fraction_of_second (decimal.Decimal): fraction of second, which must be a
+          value between 0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:

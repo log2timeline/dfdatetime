@@ -3,6 +3,8 @@
 
 from __future__ import unicode_literals
 
+import decimal
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -61,7 +63,8 @@ class CocoaTime(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
-        self._normalized_timestamp = self._timestamp - self._COCOA_TO_POSIX_BASE
+        self._SetNormalizedTimestamp(
+            decimal.Decimal(self._timestamp) - self._COCOA_TO_POSIX_BASE)
 
     return self._normalized_timestamp
 
@@ -94,9 +97,9 @@ class CocoaTime(interface.DateTimeValues):
         year, month, day_of_month, hours, minutes, seconds)
     timestamp += self._COCOA_TO_POSIX_BASE
 
-    timestamp = float(timestamp)
     if microseconds is not None:
-      timestamp += float(microseconds) / definitions.MICROSECONDS_PER_SECOND
+      timestamp += (float(microseconds) /
+                    definitions.MICROSECONDS_PER_SECOND)
 
     self._normalized_timestamp = None
     self._timestamp = timestamp

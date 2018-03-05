@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import delphi_date_time
@@ -69,7 +70,7 @@ class DelphiDateTimeTest(unittest.TestCase):
         timestamp=41443.8263953)
 
     normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1371585000.5539198)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1371585000.554'))
 
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 

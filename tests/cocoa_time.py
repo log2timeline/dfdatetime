@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import cocoa_time
@@ -36,7 +37,7 @@ class CocoaTimeTest(unittest.TestCase):
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)
 
     normalized_timestamp = cocoa_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1373319045.0)
+    self.assertEqual(normalized_timestamp, decimal.Decimal(1373319045.0))
 
     cocoa_time_object = cocoa_time.CocoaTime()
 
@@ -98,7 +99,7 @@ class CocoaTimeTest(unittest.TestCase):
 
   def testGetDate(self):
     """Tests the GetDate function."""
-    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
+    cocoa_time_object = cocoa_time.CocoaTime(395011845.546875)
 
     date_tuple = cocoa_time_object.GetDate()
     self.assertEqual(date_tuple, (2013, 7, 8))

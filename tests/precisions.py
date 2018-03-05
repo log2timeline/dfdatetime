@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import definitions
@@ -66,7 +67,7 @@ class MillisecondsPrecisionHelperTest(unittest.TestCase):
 
     fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
         123456)
-    self.assertEqual(fraction_of_second, 0.123)
+    self.assertEqual(fraction_of_second, decimal.Decimal('0.123'))
 
     with self.assertRaises(ValueError):
       precision_helper.CopyMicrosecondsToFractionOfSecond(-1)
@@ -95,7 +96,7 @@ class MicrosecondsPrecisionHelperTest(unittest.TestCase):
 
     fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
         123456)
-    self.assertEqual(fraction_of_second, 0.123456)
+    self.assertEqual(fraction_of_second, decimal.Decimal('0.123456'))
 
     with self.assertRaises(ValueError):
       precision_helper.CopyMicrosecondsToFractionOfSecond(-1)

@@ -29,14 +29,14 @@ then
 	do
 		sudo /usr/bin/hdiutil attach ../l2tbinaries/macos/${PACKAGE}-*.dmg;
 		sudo /usr/sbin/installer -target / -pkg /Volumes/${PACKAGE}-*.pkg/${PACKAGE}-*.pkg;
-		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg 
+		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg
 	done
 
 	for PACKAGE in ${L2TBINARIES_TEST_DEPENDENCIES};
 	do
 		sudo /usr/bin/hdiutil attach ../l2tbinaries/macos/${PACKAGE}-*.dmg;
 		sudo /usr/sbin/installer -target / -pkg /Volumes/${PACKAGE}-*.pkg/${PACKAGE}-*.pkg;
-		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg 
+		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg
 	done
 
 elif test ${TRAVIS_OS_NAME} = "linux";

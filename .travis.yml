@@ -36,7 +36,7 @@ matrix:
     osx_image: xcode8.3
     language: generic
   allow_failures:
-  - env: TARGET="linux-python34
+  - env: TARGET="linux-python34"
 install:
 - ./config/travis/install.sh
 script:

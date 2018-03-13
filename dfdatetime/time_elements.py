@@ -58,7 +58,8 @@ class TimeElements(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
-        self._SetNormalizedTimestamp(decimal.Decimal(self._number_of_seconds))
+        normalized_timestamp = decimal.Decimal(self._number_of_seconds)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 
@@ -238,8 +239,9 @@ class TimeElements(interface.DateTimeValues):
       try:
         time_fraction = time_string[time_string_index:time_zone_string_index]
         time_fraction = int(time_fraction, 10)
-        time_fraction = (decimal.Decimal(time_fraction) /
-                         decimal.Decimal(10 ** time_fraction_length))
+        time_fraction = (
+            decimal.Decimal(time_fraction) /
+            decimal.Decimal(10 ** time_fraction_length))
       except ValueError:
         raise ValueError('Unable to parse time fraction.')
 
@@ -425,6 +427,7 @@ class TimeElements(interface.DateTimeValues):
         self._time_elements_tuple[0], self._time_elements_tuple[1],
         self._time_elements_tuple[2])
 
+
 class TimeElementsWithFractionOfSecond(TimeElements):
   """Time elements with a fraction of second interface.
 
@@ -473,8 +476,9 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     if self._normalized_timestamp is None:
       if (self._number_of_seconds is not None and
           self.fraction_of_second is not None):
-        self._normalized_timestamp = (
+        normalized_timestamp = (
             decimal.Decimal(self._number_of_seconds) + self.fraction_of_second)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

@@ -47,10 +47,12 @@ class FakeTime(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
-        fraction_of_second = (decimal.Decimal(self._microseconds) /
-                              definitions.MICROSECONDS_PER_SECOND)
-        self._SetNormalizedTimestamp(
+        fraction_of_second = (
+            decimal.Decimal(self._microseconds) /
+            definitions.MICROSECONDS_PER_SECOND)
+        normalized_timestamp = (
             decimal.Decimal(self._number_of_seconds) + fraction_of_second)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

@@ -71,8 +71,10 @@ class FATDateTime(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None and self._number_of_seconds >= 0:
-        self._SetNormalizedTimestamp(decimal.Decimal(self._number_of_seconds) +
-                                     self._FAT_DATE_TO_POSIX_BASE)
+        normalized_timestamp = (
+            decimal.Decimal(self._number_of_seconds) +
+            self._FAT_DATE_TO_POSIX_BASE)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

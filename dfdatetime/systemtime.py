@@ -117,10 +117,11 @@ class Systemtime(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
-        self._SetNormalizedTimestamp(
-            decimal.Decimal(self._number_of_seconds)
-            + (decimal.Decimal(self.milliseconds)
-               / definitions.MILLISECONDS_PER_SECOND))
+        normalized_timestamp = decimal.Decimal(self._number_of_seconds)
+        normalized_timestamp += (
+            decimal.Decimal(self.milliseconds) /
+            definitions.MILLISECONDS_PER_SECOND)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

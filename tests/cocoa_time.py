@@ -99,7 +99,7 @@ class CocoaTimeTest(unittest.TestCase):
 
   def testGetDate(self):
     """Tests the GetDate function."""
-    cocoa_time_object = cocoa_time.CocoaTime(395011845.546875)
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
 
     date_tuple = cocoa_time_object.GetDate()
     self.assertEqual(date_tuple, (2013, 7, 8))

@@ -72,9 +72,9 @@ class DateTimeValues(object):
       definitions.PRECISION_2_SECONDS: 0,
   }
 
-  _DECIMAL_GRANULARITY = dict(
-      [(precision, decimal.Decimal(10) ** (-places))
-       for (precision, places) in _DECIMAL_PLACES.items()])
+  _DECIMAL_GRANULARITY = dict([
+      (precision, decimal.Decimal(10) ** (-places))
+      for (precision, places) in _DECIMAL_PLACES.items()])
 
   def __init__(self):
     """Initializes date time values."""
@@ -86,11 +86,11 @@ class DateTimeValues(object):
   def _SetNormalizedTimestamp(self, timestamp):
     """Sets the normalized timestamp with the correct precision.
 
-    If the desired precision is listed in definitions.DECIMAL_EXPONENTS, the
-    normalized timestamp is quantized to it.
+    The normalized timestamp is quantized to desired precision is listed in
+    _DECIMAL_GRANULARITY.
 
     Args:
-      timestamp (decimal.Decimal): the timestamp to be set.
+      timestamp (decimal.Decimal): timestamp.
     """
     try:
       granularity = self._DECIMAL_GRANULARITY[self.precision]

@@ -65,9 +65,11 @@ class OLEAutomationDate(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
-        days = (decimal.Decimal(self._timestamp) -
-                self._OLE_AUTOMATION_DATE_TO_POSIX_BASE)
-        self._SetNormalizedTimestamp(days * definitions.SECONDS_PER_DAY)
+        number_of_days = (
+            decimal.Decimal(self._timestamp) -
+            self._OLE_AUTOMATION_DATE_TO_POSIX_BASE)
+        normalized_timestamp = number_of_days * definitions.SECONDS_PER_DAY
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

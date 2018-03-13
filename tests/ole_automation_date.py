@@ -36,7 +36,7 @@ class OLEAutomationDateTest(unittest.TestCase):
   def testGetNormalizedTimestamp(self):
     """Tests the _GetNormalizedTimestamp function."""
     ole_automation_date_object = ole_automation_date.OLEAutomationDate(
-        43044.480556)
+        timestamp=43044.480556)
 
     normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1509881520.038400'))

@@ -60,9 +60,11 @@ class WebKitTime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
           self._timestamp <= self._INT64_MAX):
-        seconds = (decimal.Decimal(self._timestamp) /
-                   definitions.MICROSECONDS_PER_SECOND)
-        self._SetNormalizedTimestamp(seconds - self._WEBKIT_TO_POSIX_BASE)
+        normalized_timestamp = (
+            decimal.Decimal(self._timestamp) /
+            definitions.MICROSECONDS_PER_SECOND)
+        normalized_timestamp -= self._WEBKIT_TO_POSIX_BASE
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

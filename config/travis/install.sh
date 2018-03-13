@@ -29,14 +29,14 @@ then
 	do
 		sudo /usr/bin/hdiutil attach ../l2tbinaries/macos/${PACKAGE}-*.dmg;
 		sudo /usr/sbin/installer -target / -pkg /Volumes/${PACKAGE}-*.pkg/${PACKAGE}-*.pkg;
-		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg 
+		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg
 	done
 
 	for PACKAGE in ${L2TBINARIES_TEST_DEPENDENCIES};
 	do
 		sudo /usr/bin/hdiutil attach ../l2tbinaries/macos/${PACKAGE}-*.dmg;
 		sudo /usr/sbin/installer -target / -pkg /Volumes/${PACKAGE}-*.pkg/${PACKAGE}-*.pkg;
-		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg 
+		sudo /usr/bin/hdiutil detach /Volumes/${PACKAGE}-*.pkg
 	done
 
 elif test ${TRAVIS_OS_NAME} = "linux";
@@ -46,14 +46,14 @@ then
 	sudo add-apt-repository ppa:gift/dev -y;
 	sudo apt-get update -q;
 
-	if test ${TARGET} = "pylint";
-	then
-		sudo apt-get install -y pylint;
-
-	elif test ${TRAVIS_PYTHON_VERSION} = "2.7";
+	if test ${TRAVIS_PYTHON_VERSION} = "2.7";
 	then
 		sudo apt-get install -y ${COVERALLS_DEPENDENCIES} ${PYTHON2_DEPENDENCIES} ${PYTHON2_TEST_DEPENDENCIES};
 	else
 		sudo apt-get install -y ${PYTHON3_DEPENDENCIES} ${PYTHON3_TEST_DEPENDENCIES};
+	fi
+	if test ${TARGET} = "pylint";
+	then
+		sudo apt-get install -y pylint;
 	fi
 fi

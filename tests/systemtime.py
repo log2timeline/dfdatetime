@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import systemtime
@@ -72,7 +73,7 @@ class SystemtimeTest(unittest.TestCase):
         system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
     normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281643591.142)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.142'))
 
     systemtime_object = systemtime.Systemtime()
 

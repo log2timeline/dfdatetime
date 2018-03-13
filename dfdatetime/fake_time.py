@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import time
 
 from dfdatetime import definitions
@@ -39,15 +40,19 @@ class FakeTime(interface.DateTimeValues):
     """Retrieves the normalized timestamp.
 
     Returns:
-      float: normalized timestamp, which contains the number of seconds since
-          January 1, 1970 00:00:00 and a fraction of second used for increased
-          precision, or None if the normalized timestamp cannot be determined.
+      decimal.Decimal: normalized timestamp, which contains the number of
+          seconds since January 1, 1970 00:00:00 and a fraction of second used
+          for increased precision, or None if the normalized timestamp cannot be
+          determined.
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
-        self._normalized_timestamp = float(self._number_of_seconds)
-        self._normalized_timestamp += (
-            float(self._microseconds) / definitions.MICROSECONDS_PER_SECOND)
+        fraction_of_second = (
+            decimal.Decimal(self._microseconds) /
+            definitions.MICROSECONDS_PER_SECOND)
+        normalized_timestamp = (
+            decimal.Decimal(self._number_of_seconds) + fraction_of_second)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

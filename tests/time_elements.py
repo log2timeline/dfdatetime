@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import time_elements
@@ -504,7 +505,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281643591.429)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.429'))
 
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
@@ -759,7 +760,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281643591.429876)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.429876'))
 
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 

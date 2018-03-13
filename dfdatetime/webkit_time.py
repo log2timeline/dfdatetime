@@ -3,6 +3,8 @@
 
 from __future__ import unicode_literals
 
+import decimal
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -44,7 +46,7 @@ class WebKitTime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """float: WebKit timestamp or None if timestamp is not set."""
+    """decimal.Decimal: WebKit timestamp or None if timestamp is not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):
@@ -58,9 +60,11 @@ class WebKitTime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
           self._timestamp <= self._INT64_MAX):
-        self._normalized_timestamp = (
-            float(self._timestamp) / definitions.MICROSECONDS_PER_SECOND)
-        self._normalized_timestamp -= self._WEBKIT_TO_POSIX_BASE
+        normalized_timestamp = (
+            decimal.Decimal(self._timestamp) /
+            definitions.MICROSECONDS_PER_SECOND)
+        normalized_timestamp -= self._WEBKIT_TO_POSIX_BASE
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

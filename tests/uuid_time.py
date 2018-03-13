@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import uuid
 import unittest
 
@@ -56,7 +57,8 @@ class UUIDTimeTest(unittest.TestCase):
     uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
 
     normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1337130661.6544075)
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1337130661.6544084'))
 
     uuid_time_object = uuid_time.UUIDTime()
     uuid_time_object._timestamp = 0x1fffffffffffffff

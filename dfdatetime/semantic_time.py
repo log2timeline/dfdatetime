@@ -159,9 +159,10 @@ class SemanticTime(interface.DateTimeValues):
     """Retrieves the normalized timestamp.
 
     Returns:
-      float: normalized timestamp, which contains the number of seconds since
-          January 1, 1970 00:00:00 and a fraction of second used for increased
-          precision, or None if the normalized timestamp cannot be determined.
+      decimal.Decimal: normalized timestamp, which contains the number of
+          seconds since January 1, 1970 00:00:00 and a fraction of second used
+          for increased precision, or None if the normalized timestamp cannot be
+          determined.
     """
     return None
 

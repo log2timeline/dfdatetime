@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import ole_automation_date
@@ -38,7 +39,7 @@ class OLEAutomationDateTest(unittest.TestCase):
         timestamp=43044.480556)
 
     normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1509881520.0384002)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1509881520.038400'))
 
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 

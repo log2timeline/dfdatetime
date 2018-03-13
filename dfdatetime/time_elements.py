@@ -3,6 +3,8 @@
 
 from __future__ import unicode_literals
 
+import decimal
+
 from dfdatetime import definitions
 from dfdatetime import interface
 from dfdatetime import precisions
@@ -49,13 +51,15 @@ class TimeElements(interface.DateTimeValues):
     """Retrieves the normalized timestamp.
 
     Returns:
-      float: normalized timestamp, which contains the number of seconds since
-          January 1, 1970 00:00:00 and a fraction of second used for increased
-          precision, or None if the normalized timestamp cannot be determined.
+      decimal.Decimal: normalized timestamp, which contains the number of
+          seconds since January 1, 1970 00:00:00 and a fraction of second used
+          for increased precision, or None if the normalized timestamp cannot be
+          determined.
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
-        self._normalized_timestamp = float(self._number_of_seconds)
+        normalized_timestamp = decimal.Decimal(self._number_of_seconds)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 
@@ -235,7 +239,9 @@ class TimeElements(interface.DateTimeValues):
       try:
         time_fraction = time_string[time_string_index:time_zone_string_index]
         time_fraction = int(time_fraction, 10)
-        time_fraction = float(time_fraction) / float(10 ** time_fraction_length)
+        time_fraction = (
+            decimal.Decimal(time_fraction) /
+            decimal.Decimal(10 ** time_fraction_length))
       except ValueError:
         raise ValueError('Unable to parse time fraction.')
 
@@ -421,12 +427,13 @@ class TimeElements(interface.DateTimeValues):
         self._time_elements_tuple[0], self._time_elements_tuple[1],
         self._time_elements_tuple[2])
 
+
 class TimeElementsWithFractionOfSecond(TimeElements):
   """Time elements with a fraction of second interface.
 
   Attributes:
-    fraction_of_second (float): fraction of second, which must be a value
-        between 0.0 and 1.0.
+    fraction_of_second (decimal.Decimal): fraction of second, which must be a
+        value between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
@@ -436,8 +443,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     """Initializes time elements.
 
     Args:
-      fraction_of_second (Optional[float]): fraction of second, which must be
-          a value between 0.0 and 1.0.
+      fraction_of_second (Optional[decimal.Decimal]): fraction of second, which
+          must be a value between 0.0 and 1.0.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
@@ -461,15 +468,17 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     """Retrieves the normalized timestamp.
 
     Returns:
-      float: normalized timestamp, which contains the number of seconds since
-          January 1, 1970 00:00:00 and a fraction of second used for increased
-          precision, or None if the normalized timestamp cannot be determined.
+      decimal.Decimal: normalized timestamp, which contains the number of
+          seconds since January 1, 1970 00:00:00 and a fraction of second used
+          for increased precision, or None if the normalized timestamp cannot be
+          determined.
     """
     if self._normalized_timestamp is None:
       if (self._number_of_seconds is not None and
           self.fraction_of_second is not None):
-        self._normalized_timestamp = (
-            float(self._number_of_seconds) + self.fraction_of_second)
+        normalized_timestamp = (
+            decimal.Decimal(self._number_of_seconds) + self.fraction_of_second)
+        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 
@@ -525,7 +534,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         time_elements_tuple)
 
     try:
-      fraction_of_second = float(time_elements_tuple[6])
+      fraction_of_second = decimal.Decimal(time_elements_tuple[6])
     except (TypeError, ValueError):
       raise ValueError('Invalid fraction of second value: {0!s}'.format(
           time_elements_tuple[6]))
@@ -561,8 +570,8 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
   """Time elements in milliseconds.
 
   Attributes:
-    fraction_of_second (float): fraction of second, which must be a value
-        between 0.0 and 1.0.
+    fraction_of_second (decimal.Decimal): fraction of second, which must be a
+        value between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date of the date and time value, that
         represents 1 millisecond (PRECISION_1_MILLISECOND).
@@ -594,7 +603,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         raise ValueError('Invalid number of milliseconds.')
 
       fraction_of_second = (
-          float(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
+          decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
 
     super(TimeElementsInMilliseconds, self).__init__(
         fraction_of_second=fraction_of_second,
@@ -634,7 +643,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
       raise ValueError('Invalid number of milliseconds.')
 
     fraction_of_second = (
-        float(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
+        decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
 
     time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds,
@@ -648,8 +657,8 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
   """Time elements in microseconds.
 
   Attributes:
-    fraction_of_second (float): fraction of second, which must be a value
-        between 0.0 and 1.0.
+    fraction_of_second (decimal.Decimal): fraction of second, which must be a
+        value between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date of the date and time value, that
         represents 1 microsecond (PRECISION_1_MICROSECOND).
@@ -681,7 +690,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         raise ValueError('Invalid number of microseconds.')
 
       fraction_of_second = (
-          float(microseconds) / definitions.MICROSECONDS_PER_SECOND)
+          decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND)
 
     super(TimeElementsInMicroseconds, self).__init__(
         fraction_of_second=fraction_of_second,
@@ -721,7 +730,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
       raise ValueError('Invalid number of microseconds.')
 
     fraction_of_second = (
-        float(microseconds) / definitions.MICROSECONDS_PER_SECOND)
+        decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND)
 
     time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds,

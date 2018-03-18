@@ -83,6 +83,19 @@ class PosixTimeTest(unittest.TestCase):
     date_time_string = posix_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  # TODO: remove this method when there is no more need for it in dfvfs.
+  def testCopyToStatTimeTuple(self):
+    """Tests the CopyToStatTimeTuple function."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, (1281643591, None))
+
+    posix_time_object = posix_time.PosixTime()
+
+    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, (None, None))
+
   def testGetDate(self):
     """Tests the GetDate function."""
     posix_time_object = posix_time.PosixTime(timestamp=1281643591)
@@ -170,6 +183,20 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
 
     date_time_string = posix_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
+
+  # TODO: remove this method when there is no more need for it in dfvfs.
+  def testCopyToStatTimeTuple(self):
+    """Tests the CopyToStatTimeTuple function."""
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=1281643591546875)
+
+    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, (1281643591, 5468750))
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds()
+
+    stat_time_tuple = posix_time_object.CopyToStatTimeTuple()
+    self.assertEqual(stat_time_tuple, (None, None))
 
   def testGetDate(self):
     """Tests the GetDate function."""

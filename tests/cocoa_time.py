@@ -72,19 +72,6 @@ class CocoaTimeTest(unittest.TestCase):
     cocoa_time_object.CopyFromDateTimeString('2001-01-02 00:00:00')
     self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
 
-  # TODO: remove this method when there is no more need for it in dfvfs.
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.0)
-
-    stat_time_tuple = cocoa_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1373319045, 0))
-
-    cocoa_time_object = cocoa_time.CocoaTime()
-
-    stat_time_tuple = cocoa_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)

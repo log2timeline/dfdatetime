@@ -875,8 +875,17 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return None, None
 
-    remainder = int((normalized_timestamp % 1) * self._100NS_PER_SECOND)
-    return int(normalized_timestamp), remainder
+    if self.precision in (
+        definitions.PRECISION_1_NANOSECOND,
+        definitions.PRECISION_100_NANOSECONDS,
+        definitions.PRECISION_1_MICROSECOND,
+        definitions.PRECISION_1_MILLISECOND,
+        definitions.PRECISION_100_MILLISECONDS):
+      remainder = int((normalized_timestamp % 1) * self._100NS_PER_SECOND)
+
+      return int(normalized_timestamp), remainder
+
+    return int(normalized_timestamp), None
 
   @abc.abstractmethod
   def CopyToDateTimeString(self):

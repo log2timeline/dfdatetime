@@ -917,4 +917,4 @@ class DateTimeValues(object):
       return
 
     normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
-    return int(math.ceil(normalized_timestamp))
+    return int(math.floor(normalized_timestamp))

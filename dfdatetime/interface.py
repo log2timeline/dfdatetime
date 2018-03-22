@@ -6,7 +6,6 @@ from __future__ import unicode_literals
 import abc
 import calendar
 import decimal
-import math
 
 from dfdatetime import decorators
 from dfdatetime import definitions
@@ -917,4 +916,4 @@ class DateTimeValues(object):
       return
 
     normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
-    return int(math.floor(normalized_timestamp))
+    return int(round(normalized_timestamp))

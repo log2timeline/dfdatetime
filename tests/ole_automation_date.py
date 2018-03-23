@@ -38,8 +38,10 @@ class OLEAutomationDateTest(unittest.TestCase):
     ole_automation_date_object = ole_automation_date.OLEAutomationDate(
         timestamp=43044.480556)
 
+    expected_normalized_timestamp = decimal.Decimal(
+        '1509881520.038400194607675076')
     normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1509881520.038400'))
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 

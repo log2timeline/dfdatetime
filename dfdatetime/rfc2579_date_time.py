@@ -137,11 +137,10 @@ class RFC2579DateTime(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
-        fraction = (decimal.Decimal(self.deciseconds) /
-                    definitions.DECISECONDS_PER_SECOND)
-        normalized_timestamp = (
-            decimal.Decimal(self._number_of_seconds) + fraction)
-        self._SetNormalizedTimestamp(normalized_timestamp)
+        self._normalized_timestamp = (
+            decimal.Decimal(self.deciseconds) /
+            definitions.DECISECONDS_PER_SECOND)
+        self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
 
     return self._normalized_timestamp
 

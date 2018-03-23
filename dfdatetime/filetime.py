@@ -64,10 +64,9 @@ class Filetime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if (self._timestamp is not None and self._timestamp >= 0 and
           self._timestamp <= self._UINT64_MAX):
-        normalized_timestamp = (
+        self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) / self._100NS_PER_SECOND)
-        normalized_timestamp -= self._FILETIME_TO_POSIX_BASE
-        self._SetNormalizedTimestamp(normalized_timestamp)
+        self._normalized_timestamp -= self._FILETIME_TO_POSIX_BASE
 
     return self._normalized_timestamp
 

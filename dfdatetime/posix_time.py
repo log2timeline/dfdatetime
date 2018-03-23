@@ -93,11 +93,11 @@ class PosixTime(interface.DateTimeValues):
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss" or None
+          if the timestamp is missing.
     """
     if self._timestamp is None:
-      return
+      return None
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self._timestamp)
@@ -203,11 +203,11 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
+          None if the timestamp is missing.
     """
     if self._timestamp is None:
-      return
+      return None
 
     timestamp, microseconds = divmod(
         self._timestamp, definitions.MICROSECONDS_PER_SECOND)

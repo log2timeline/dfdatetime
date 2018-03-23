@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 
 import abc
 import calendar
-import decimal
 
 from dfdatetime import decorators
 from dfdatetime import definitions

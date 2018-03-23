@@ -37,8 +37,6 @@ class FATDateTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _EPOCH = FATDateTimeEpoch()
@@ -57,8 +55,8 @@ class FATDateTime(interface.DateTimeValues):
       number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
 
     super(FATDateTime, self).__init__()
+    self._precision = definitions.PRECISION_2_SECONDS
     self._number_of_seconds = number_of_seconds
-    self.precision = definitions.PRECISION_2_SECONDS
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.

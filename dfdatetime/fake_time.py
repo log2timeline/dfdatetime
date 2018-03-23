@@ -19,8 +19,6 @@ class FakeTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _EPOCH = posix_time.PosixTimeEpoch()
@@ -34,7 +32,7 @@ class FakeTime(interface.DateTimeValues):
     self._microseconds = int(
         fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
     self._number_of_seconds = int(timestamp)
-    self.precision = definitions.PRECISION_1_MICROSECOND
+    self._precision = definitions.PRECISION_1_MICROSECOND
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.

@@ -57,12 +57,12 @@ class RFC2579DateTime(interface.DateTimeValues):
     """
     super(RFC2579DateTime, self).__init__()
     self._number_of_seconds = None
+    self._precision = definitions.PRECISION_100_MILLISECONDS
     self.day_of_month = None
     self.hours = None
     self.deciseconds = None
     self.minutes = None
     self.month = None
-    self.precision = definitions.PRECISION_100_MILLISECONDS
     self.seconds = None
     self.year = None
 

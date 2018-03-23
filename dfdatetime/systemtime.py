@@ -52,13 +52,13 @@ class Systemtime(interface.DateTimeValues):
     """
     super(Systemtime, self).__init__()
     self._number_of_seconds = None
+    self._precision = definitions.PRECISION_1_MILLISECOND
     self.day_of_month = None
     self.day_of_week = None
     self.hours = None
     self.milliseconds = None
     self.minutes = None
     self.month = None
-    self.precision = definitions.PRECISION_1_MILLISECOND
     self.seconds = None
     self.year = None
 

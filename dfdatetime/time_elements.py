@@ -18,8 +18,6 @@ class TimeElements(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   def __init__(self, time_elements_tuple=None):
@@ -35,8 +33,8 @@ class TimeElements(interface.DateTimeValues):
     """
     super(TimeElements, self).__init__()
     self._number_of_seconds = None
+    self._precision = definitions.PRECISION_1_SECOND
     self._time_elements_tuple = time_elements_tuple
-    self.precision = definitions.PRECISION_1_SECOND
 
     if time_elements_tuple:
       if len(time_elements_tuple) < 6:
@@ -434,8 +432,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     fraction_of_second (decimal.Decimal): fraction of second, which must be a
         value between 0.0 and 1.0.
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   def __init__(self, fraction_of_second=None, time_elements_tuple=None):
@@ -460,8 +456,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     super(TimeElementsWithFractionOfSecond, self).__init__(
         time_elements_tuple=time_elements_tuple)
+    self._precision = None
     self.fraction_of_second = fraction_of_second
-    self.precision = None
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -499,7 +495,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     microseconds = date_time_values.get('microseconds', 0)
 
     precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
-        self.precision)
+        self._precision)
 
     fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
         microseconds)
@@ -558,7 +554,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
       return
 
     precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
-        self.precision)
+        self._precision)
 
     return precision_helper.CopyToDateTimeString(
         self._time_elements_tuple, self.fraction_of_second)
@@ -606,7 +602,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     super(TimeElementsInMilliseconds, self).__init__(
         fraction_of_second=fraction_of_second,
         time_elements_tuple=time_elements_tuple)
-    self.precision = definitions.PRECISION_1_MILLISECOND
+    self._precision = definitions.PRECISION_1_MILLISECOND
 
   @property
   def milliseconds(self):
@@ -693,7 +689,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     super(TimeElementsInMicroseconds, self).__init__(
         fraction_of_second=fraction_of_second,
         time_elements_tuple=time_elements_tuple)
-    self.precision = definitions.PRECISION_1_MICROSECOND
+    self._precision = definitions.PRECISION_1_MICROSECOND
 
   @property
   def microseconds(self):

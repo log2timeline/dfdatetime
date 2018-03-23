@@ -32,8 +32,6 @@ class DelphiDateTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
   # The difference between December 30, 1899 and January 1, 1970 in days.
   _DELPHI_TO_POSIX_BASE = 25569
@@ -47,8 +45,8 @@ class DelphiDateTime(interface.DateTimeValues):
       timestamp (Optional[float]): Delphi TDateTime timestamp.
     """
     super(DelphiDateTime, self).__init__()
+    self._precision = definitions.PRECISION_1_MILLISECOND
     self._timestamp = timestamp
-    self.precision = definitions.PRECISION_1_MILLISECOND
 
   @property
   def timestamp(self):

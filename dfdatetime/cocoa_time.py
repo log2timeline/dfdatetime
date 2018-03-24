@@ -107,11 +107,10 @@ class CocoaTime(interface.DateTimeValues):
     """Copies the Cocoa timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######
+      str: date and time value formatted as: YYYY-MM-DD hh:mm:ss.######
     """
     if self._timestamp is None:
-      return
+      return None
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         int(self._timestamp))

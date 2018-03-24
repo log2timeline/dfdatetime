@@ -98,12 +98,12 @@ class JavaTime(interface.DateTimeValues):
     """Copies the Java timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.###
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.###" or
+          None if the timestamp is missing or invalid.
     """
     if (self._timestamp is None or self._timestamp < self._INT64_MIN or
         self._timestamp > self._INT64_MAX):
-      return
+      return None
 
     timestamp, milliseconds = divmod(
         self._timestamp, definitions.MILLISECONDS_PER_SECOND)

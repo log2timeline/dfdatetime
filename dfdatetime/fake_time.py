@@ -84,12 +84,12 @@ class FakeTime(interface.DateTimeValues):
     """Copies the fake timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as one of the following:
-          YYYY-MM-DD hh:mm:ss
-          YYYY-MM-DD hh:mm:ss.######
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss" or
+          "YYYY-MM-DD hh:mm:ss.######" or None if the number of seconds
+          is missing.
     """
     if self._number_of_seconds is None:
-      return
+      return None
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self._number_of_seconds)

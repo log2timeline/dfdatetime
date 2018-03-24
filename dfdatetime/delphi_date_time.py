@@ -66,10 +66,9 @@ class DelphiDateTime(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
-        normalized_timestamp = (
+        self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) - self._DELPHI_TO_POSIX_BASE)
-        normalized_timestamp *= definitions.SECONDS_PER_DAY
-        self._SetNormalizedTimestamp(normalized_timestamp)
+        self._normalized_timestamp *= definitions.SECONDS_PER_DAY
 
     return self._normalized_timestamp
 

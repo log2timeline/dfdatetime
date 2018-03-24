@@ -69,8 +69,10 @@ class DelphiDateTimeTest(unittest.TestCase):
     delphi_date_time_object = delphi_date_time.DelphiDateTime(
         timestamp=41443.8263953)
 
+    expected_normalized_timestamp = decimal.Decimal(
+        '1371585000.553919887170195579')
     normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1371585000.554'))
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 

@@ -58,8 +58,7 @@ class TimeElements(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
-        normalized_timestamp = decimal.Decimal(self._number_of_seconds)
-        self._SetNormalizedTimestamp(normalized_timestamp)
+        self._normalized_timestamp = decimal.Decimal(self._number_of_seconds)
 
     return self._normalized_timestamp
 
@@ -476,9 +475,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     if self._normalized_timestamp is None:
       if (self._number_of_seconds is not None and
           self.fraction_of_second is not None):
-        normalized_timestamp = (
+        self._normalized_timestamp = (
             decimal.Decimal(self._number_of_seconds) + self.fraction_of_second)
-        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

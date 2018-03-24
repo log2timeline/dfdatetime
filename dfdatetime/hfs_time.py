@@ -61,9 +61,8 @@ class HFSTime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if (self._timestamp is not None and self._timestamp >= 0 and
           self._timestamp <= self._UINT32_MAX):
-        normalized_timestamp = (
+        self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) - self._HFS_TO_POSIX_BASE)
-        self._SetNormalizedTimestamp(normalized_timestamp)
 
     return self._normalized_timestamp
 

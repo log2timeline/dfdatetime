@@ -5,8 +5,6 @@ from __future__ import unicode_literals
 
 import abc
 import calendar
-import decimal
-import math
 
 from dfdatetime import decorators
 from dfdatetime import definitions
@@ -59,46 +57,12 @@ class DateTimeValues(object):
   _UINT60_MAX = (1 << 60) - 1
   _UINT64_MAX = (1 << 64) - 1
 
-  _DECIMAL_PLACES = {
-      definitions.PRECISION_1_DAY: 0,
-      definitions.PRECISION_1_HOUR: 0,
-      definitions.PRECISION_1_NANOSECOND: 9,
-      definitions.PRECISION_100_NANOSECONDS: 7,
-      definitions.PRECISION_1_MICROSECOND: 6,
-      definitions.PRECISION_1_MILLISECOND: 3,
-      definitions.PRECISION_100_MILLISECONDS: 1,
-      definitions.PRECISION_1_MINUTE: 0,
-      definitions.PRECISION_1_SECOND: 0,
-      definitions.PRECISION_2_SECONDS: 0,
-  }
-
-  _DECIMAL_GRANULARITY = dict([
-      (precision, decimal.Decimal(10) ** (-places))
-      for (precision, places) in _DECIMAL_PLACES.items()])
-
   def __init__(self):
     """Initializes date time values."""
     super(DateTimeValues, self).__init__()
     self._normalized_timestamp = None
     self.is_local_time = False
     self.precision = None
-
-  def _SetNormalizedTimestamp(self, timestamp):
-    """Sets the normalized timestamp with the correct precision.
-
-    The normalized timestamp is quantized to desired precision is listed in
-    _DECIMAL_GRANULARITY.
-
-    Args:
-      timestamp (decimal.Decimal): timestamp.
-    """
-    try:
-      granularity = self._DECIMAL_GRANULARITY[self.precision]
-    except KeyError:
-      pass
-    if granularity:
-      timestamp = timestamp.quantize(granularity)
-    self._normalized_timestamp = timestamp
 
   def __eq__(self, other):
     """Determines if the date time values are equal to other.
@@ -917,4 +881,4 @@ class DateTimeValues(object):
       return
 
     normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
-    return int(math.ceil(normalized_timestamp))
+    return int(round(normalized_timestamp))

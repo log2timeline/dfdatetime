@@ -14,8 +14,6 @@ class SemanticTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _SORT_ORDER = 50

@@ -30,8 +30,6 @@ class CocoaTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
   # The difference between January 1, 2001 and January 1, 1970 in seconds.
   _COCOA_TO_POSIX_BASE = -978307200
@@ -45,8 +43,8 @@ class CocoaTime(interface.DateTimeValues):
       timestamp (Optional[float]): Cocoa timestamp.
     """
     super(CocoaTime, self).__init__()
+    self._precision = definitions.PRECISION_1_SECOND
     self._timestamp = timestamp
-    self.precision = definitions.PRECISION_1_SECOND
 
   @property
   def timestamp(self):

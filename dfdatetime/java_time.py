@@ -22,8 +22,6 @@ class JavaTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _EPOCH = posix_time.PosixTimeEpoch()
@@ -35,8 +33,8 @@ class JavaTime(interface.DateTimeValues):
       timestamp (Optional[int]): Java timestamp.
     """
     super(JavaTime, self).__init__()
+    self._precision = definitions.PRECISION_1_MILLISECOND
     self._timestamp = timestamp
-    self.precision = definitions.PRECISION_1_MILLISECOND
 
   @property
   def timestamp(self):

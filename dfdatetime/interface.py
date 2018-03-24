@@ -39,8 +39,6 @@ class DateTimeValues(object):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
@@ -61,8 +59,15 @@ class DateTimeValues(object):
     """Initializes date time values."""
     super(DateTimeValues, self).__init__()
     self._normalized_timestamp = None
+    self._precision = None
     self.is_local_time = False
-    self.precision = None
+
+  @property
+  def precision(self):
+    """precision (str): precision of the date and time value, which should
+        be one of the PRECISION_VALUES in definitions.
+    """
+    return self._precision
 
   def __eq__(self, other):
     """Determines if the date time values are equal to other.
@@ -728,13 +733,14 @@ class DateTimeValues(object):
       seconds (int): seconds.
 
     Returns:
-      int: number of seconds since January 1, 1970 00:00:00 or None.
+      int: number of seconds since January 1, 1970 00:00:00 or None if year,
+          month or day of month are not set.
 
     Raises:
       ValueError: if the time elements are invalid.
     """
     if not year or not month or not day_of_month:
-      return
+      return None
 
     # calendar.timegm does not sanity check the time elements.
     if hours is None:
@@ -839,7 +845,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return None, None
 
-    if self.precision in (
+    if self._precision in (
         definitions.PRECISION_1_NANOSECOND,
         definitions.PRECISION_100_NANOSECONDS,
         definitions.PRECISION_1_MICROSECOND,
@@ -874,11 +880,12 @@ class DateTimeValues(object):
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
-      int: a POSIX timestamp in microseconds or None on error.
+      int: a POSIX timestamp in microseconds or None if no timestamp is
+          available.
     """
     normalized_timestamp = self._GetNormalizedTimestamp()
     if normalized_timestamp is None:
-      return
+      return None
 
     normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
     return int(round(normalized_timestamp))

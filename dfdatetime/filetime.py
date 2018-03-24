@@ -28,8 +28,6 @@ class Filetime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _EPOCH = FiletimeEpoch()
@@ -44,8 +42,8 @@ class Filetime(interface.DateTimeValues):
       timestamp (Optional[int]): FILETIME timestamp.
     """
     super(Filetime, self).__init__()
+    self._precision = definitions.PRECISION_100_NANOSECONDS
     self._timestamp = timestamp
-    self.precision = definitions.PRECISION_100_NANOSECONDS
 
   @property
   def timestamp(self):

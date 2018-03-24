@@ -29,8 +29,6 @@ class PosixTime(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _EPOCH = PosixTimeEpoch()
@@ -42,8 +40,8 @@ class PosixTime(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp.
     """
     super(PosixTime, self).__init__()
+    self._precision = definitions.PRECISION_1_SECOND
     self._timestamp = timestamp
-    self.precision = definitions.PRECISION_1_SECOND
 
   @property
   def timestamp(self):
@@ -95,11 +93,11 @@ class PosixTime(interface.DateTimeValues):
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss" or None
+          if the timestamp is missing.
     """
     if self._timestamp is None:
-      return
+      return None
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self._timestamp)
@@ -135,8 +133,6 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
-    precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
   """
 
   _EPOCH = PosixTimeEpoch()
@@ -148,8 +144,8 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp in microseconds.
     """
     super(PosixTimeInMicroseconds, self).__init__()
+    self._precision = definitions.PRECISION_1_MICROSECOND
     self._timestamp = timestamp
-    self.precision = definitions.PRECISION_1_MICROSECOND
 
   @property
   def timestamp(self):
@@ -207,11 +203,11 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
+          None if the timestamp is missing.
     """
     if self._timestamp is None:
-      return
+      return None
 
     timestamp, microseconds = divmod(
         self._timestamp, definitions.MICROSECONDS_PER_SECOND)

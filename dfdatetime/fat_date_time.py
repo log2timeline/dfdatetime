@@ -158,11 +158,11 @@ class FATDateTime(interface.DateTimeValues):
     """Copies the FAT date time to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss" or None
+          if number of seconds is missing.
     """
     if self._number_of_seconds is None:
-      return
+      return None
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         self._number_of_seconds)

@@ -112,11 +112,11 @@ class OLEAutomationDate(interface.DateTimeValues):
     """Copies the OLE Automation date to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
+          None if the timestamp is missing.
     """
     if self._timestamp is None:
-      return
+      return None
 
     timestamp = self._timestamp * definitions.SECONDS_PER_DAY
 

@@ -103,12 +103,12 @@ class WebKitTime(interface.DateTimeValues):
     """Copies the WebKit timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
+          None if the timestamp is missing or invalid.
     """
     if (self._timestamp is None or self._timestamp < self._INT64_MIN or
         self._timestamp > self._INT64_MAX):
-      return
+      return None
 
     timestamp, microseconds = divmod(
         self._timestamp, definitions.MICROSECONDS_PER_SECOND)

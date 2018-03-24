@@ -862,8 +862,7 @@ class DateTimeValues(object):
     """Copies the date time value to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.######
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######"
     """
 
   @abc.abstractmethod

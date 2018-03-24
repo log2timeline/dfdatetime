@@ -110,12 +110,12 @@ class Filetime(interface.DateTimeValues):
     """Copies the FILETIME timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.#######
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.#######" or
+          None if the timestamp is missing or invalid.
     """
     if (self._timestamp is None or self._timestamp < 0 or
         self._timestamp > self._UINT64_MAX):
-      return
+      return None
 
     timestamp, remainder = divmod(self._timestamp, self._100NS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)

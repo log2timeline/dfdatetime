@@ -94,14 +94,13 @@ else:
               '%files -n {0:s}-%{{name}}'.format(python_package),
               '%defattr(644,root,root,755)',
               '%doc ACKNOWLEDGEMENTS AUTHORS LICENSE README',
-              '%{_prefix}/lib/python*/site-packages/dfdatetime/*.py',
+              '%{_prefix}/lib/python*/site-packages/**/*.py',
               '%{_prefix}/lib/python*/site-packages/dfdatetime*.egg-info/*',
               '',
               '%exclude %{_prefix}/share/doc/*',
-              '%exclude %{_prefix}/lib/python*/site-packages/dfdatetime/*.pyc',
-              '%exclude %{_prefix}/lib/python*/site-packages/dfdatetime/*.pyo',
-              ('%exclude %{_prefix}/lib/python*/site-packages/dfdatetime/'
-               '__pycache__/*')]
+              '%exclude %{_prefix}/lib/python*/site-packages/**/*.pyc',
+              '%exclude %{_prefix}/lib/python*/site-packages/**/*.pyo',
+              '%exclude %{_prefix}/lib/python*/site-packages/**/__pycache__/*']
 
           python_spec_file.extend(lines)
           break
@@ -130,7 +129,7 @@ else:
 
 
 dfdatetime_description = (
-    'Digital Forensics Date and Time (dfDateTime).')
+    'Digital Forensics date and time (dfDateTime).')
 
 dfdatetime_long_description = (
     'dfDateTime, or Digital Forensics date and time, provides date and time '

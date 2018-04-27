@@ -97,8 +97,7 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertFalse(date_time_values1 < date_time_values2)
     self.assertFalse(date_time_values1 != date_time_values2)
 
-    with self.assertRaises(ValueError):
-      date_time_values1 == 0.0  # pylint: disable=pointless-statement
+    self.assertFalse(date_time_values1 == 0.0)
 
     with self.assertRaises(ValueError):
       date_time_values1 >= 0.0  # pylint: disable=pointless-statement
@@ -112,8 +111,7 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values1 < 0.0  # pylint: disable=pointless-statement
 
-    with self.assertRaises(ValueError):
-      date_time_values1 != 0.0  # pylint: disable=pointless-statement
+    self.assertTrue(date_time_values1 != 0.0)
 
   # TODO: add tests for _AdjustForTimeZoneOffset.
 

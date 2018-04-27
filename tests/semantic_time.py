@@ -50,8 +50,7 @@ class SemanticTimeTest(unittest.TestCase):
     self.assertTrue(semantic_time_object1 < date_time_values1)
     self.assertTrue(semantic_time_object1 != date_time_values1)
 
-    with self.assertRaises(ValueError):
-      semantic_time_object1 == 0.0  # pylint: disable=pointless-statement
+    self.assertFalse(semantic_time_object1 == 0.0)
 
     with self.assertRaises(ValueError):
       semantic_time_object1 >= 0.0  # pylint: disable=pointless-statement
@@ -65,8 +64,7 @@ class SemanticTimeTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       semantic_time_object1 < 0.0  # pylint: disable=pointless-statement
 
-    with self.assertRaises(ValueError):
-      semantic_time_object1 != 0.0  # pylint: disable=pointless-statement
+    self.assertTrue(semantic_time_object1 != 0.0)
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -155,8 +153,7 @@ class NeverTest(unittest.TestCase):
     self.assertFalse(never_time_object1 < date_time_values1)
     self.assertTrue(never_time_object1 != date_time_values1)
 
-    with self.assertRaises(ValueError):
-      never_time_object1 == 0.0  # pylint: disable=pointless-statement
+    self.assertFalse(never_time_object1 == 0.0)
 
     with self.assertRaises(ValueError):
       never_time_object1 >= 0.0  # pylint: disable=pointless-statement
@@ -170,8 +167,7 @@ class NeverTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       never_time_object1 < 0.0  # pylint: disable=pointless-statement
 
-    with self.assertRaises(ValueError):
-      never_time_object1 != 0.0  # pylint: disable=pointless-statement
+    self.assertTrue(never_time_object1 != 0.0)
 
 
 class NotSetTest(unittest.TestCase):

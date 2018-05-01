@@ -41,13 +41,7 @@ class SemanticTime(interface.DateTimeValues):
 
     Returns:
       bool: True if the date time values are equal to other.
-
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
     """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
-
     if not isinstance(other, SemanticTime):
       return False
 
@@ -141,13 +135,7 @@ class SemanticTime(interface.DateTimeValues):
 
     Returns:
       bool: True if the date time values are not equal to other.
-
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
     """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
-
     if not isinstance(other, SemanticTime):
       return True
 
@@ -238,13 +226,7 @@ class Never(SemanticTime):
 
     Returns:
       bool: True if the date time values are equal to other.
-
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
     """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
-
     return isinstance(other, Never)
 
   def __ge__(self, other):
@@ -323,13 +305,7 @@ class Never(SemanticTime):
 
     Returns:
       bool: True if the date time values are not equal to other.
-
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
     """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
-
     return not isinstance(other, Never)
 
 

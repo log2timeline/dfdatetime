@@ -77,12 +77,9 @@ class DateTimeValues(object):
 
     Returns:
       bool: True if the date time values are equal to other.
-
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
     """
     if not isinstance(other, DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+      return False
 
     normalized_timestamp = self._GetNormalizedTimestamp()
     other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access
@@ -207,12 +204,9 @@ class DateTimeValues(object):
 
     Returns:
       bool: True if the date time values are not equal to other.
-
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
     """
     if not isinstance(other, DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+      return True
 
     normalized_timestamp = self._GetNormalizedTimestamp()
     other_normalized_timestamp = other._GetNormalizedTimestamp()  # pylint: disable=protected-access

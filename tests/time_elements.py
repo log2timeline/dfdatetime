@@ -459,6 +459,19 @@ class TimeElementsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToPosixTimestamp(self):
+    """Tests the CopyToPosixTimestamp function."""
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    posix_timestamp = time_elements_object.CopyToPosixTimestamp()
+    self.assertEqual(posix_timestamp, 1281643591)
+
+    time_elements_object = time_elements.TimeElements()
+
+    posix_timestamp = time_elements_object.CopyToPosixTimestamp()
+    self.assertIsNone(posix_timestamp)
+
   def testGetDate(self):
     """Tests the GetDate function."""
     time_elements_object = time_elements.TimeElements(

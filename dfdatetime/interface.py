@@ -827,6 +827,18 @@ class DateTimeValues(object):
       ValueError: if the time string is invalid or not supported.
     """
 
+  def CopyToPosixTimestamp(self):
+    """Copies the date time value to a POSIX timestamp.
+
+    Returns:
+      int: a POSIX timestamp in seconds or None if no timestamp is available.
+    """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None
+
+    return int(normalized_timestamp)
+
   # TODO: remove this method when there is no more need for it in dfvfs.
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.

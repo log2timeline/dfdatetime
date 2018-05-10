@@ -103,6 +103,18 @@ class WebKitTimeTest(unittest.TestCase):
     date_tuple = webkit_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
+
+    time_of_day_tuple = webkit_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (21, 6, 31))
+
+    webkit_time_object = webkit_time.WebKitTime()
+
+    time_of_day_tuple = webkit_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 if __name__ == '__main__':
   unittest.main()

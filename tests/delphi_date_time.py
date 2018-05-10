@@ -140,6 +140,19 @@ class DelphiDateTimeTest(unittest.TestCase):
     date_tuple = delphi_date_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+
+    time_of_day_tuple = delphi_date_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (19, 50, 0))
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime()
+
+    time_of_day_tuple = delphi_date_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 if __name__ == '__main__':
   unittest.main()

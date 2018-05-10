@@ -96,6 +96,20 @@ class FakeTimeTest(unittest.TestCase):
     date_tuple = fake_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
+
+    time_of_day_tuple = fake_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (21, 6, 31))
+
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object._number_of_seconds = None
+
+    time_of_day_tuple = fake_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 if __name__ == '__main__':
   unittest.main()

@@ -50,27 +50,27 @@ class CocoaTimeTest(unittest.TestCase):
 
     expected_timestamp = 394934400.0
     cocoa_time_object.CopyFromDateTimeString('2013-07-08')
-    self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
+    self.assertEqual(cocoa_time_object._timestamp, expected_timestamp)
 
     expected_timestamp = 395011845.0
     cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45')
-    self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
+    self.assertEqual(cocoa_time_object._timestamp, expected_timestamp)
 
     expected_timestamp = 395011845.546875
     cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875')
-    self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
+    self.assertEqual(cocoa_time_object._timestamp, expected_timestamp)
 
     expected_timestamp = 395015445.546875
     cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875-01:00')
-    self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
+    self.assertEqual(cocoa_time_object._timestamp, expected_timestamp)
 
     expected_timestamp = 395008245.546875
     cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875+01:00')
-    self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
+    self.assertEqual(cocoa_time_object._timestamp, expected_timestamp)
 
     expected_timestamp = 86400.0
     cocoa_time_object.CopyFromDateTimeString('2001-01-02 00:00:00')
-    self.assertEqual(cocoa_time_object.timestamp, expected_timestamp)
+    self.assertEqual(cocoa_time_object._timestamp, expected_timestamp)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -78,6 +78,14 @@ class CocoaTimeTest(unittest.TestCase):
 
     date_time_string = cocoa_time_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2013-07-08 21:30:45.546875')
+
+    epoch_year = cocoa_time_object._EPOCH.year
+    cocoa_time_object._EPOCH.year = -1
+
+    with self.assertRaises(ValueError):
+      cocoa_time_object.CopyToDateTimeString()
+
+    cocoa_time_object._EPOCH.year = epoch_year
 
     cocoa_time_object = cocoa_time.CocoaTime()
 
@@ -108,6 +116,18 @@ class CocoaTimeTest(unittest.TestCase):
 
     micro_posix_timestamp = cocoa_time_object.GetPlasoTimestamp()
     self.assertIsNone(micro_posix_timestamp)
+
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
+
+    time_of_day_tuple = cocoa_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (21, 30, 45))
+
+    cocoa_time_object = cocoa_time.CocoaTime()
+
+    time_of_day_tuple = cocoa_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
 
 
 if __name__ == '__main__':

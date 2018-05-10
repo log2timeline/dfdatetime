@@ -485,6 +485,19 @@ class TimeElementsTest(unittest.TestCase):
     date_tuple = time_elements_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    time_of_day_tuple = time_elements_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (20, 6, 31))
+
+    time_elements_object = time_elements.TimeElements()
+
+    time_of_day_tuple = time_elements_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 class TimeElementsInMillisecondsTest(unittest.TestCase):
   """Tests for the time elements in milliseconds."""
@@ -740,6 +753,19 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     date_tuple = time_elements_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
+
+    time_of_day_tuple = time_elements_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (20, 6, 31))
+
+    time_elements_object = time_elements.TimeElementsInMilliseconds()
+
+    time_of_day_tuple = time_elements_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 class TimeElementsInMicrosecondsTest(unittest.TestCase):
   """Tests for the time elements in microseconds."""
@@ -994,6 +1020,19 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     date_tuple = time_elements_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
+
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
+
+    time_of_day_tuple = time_elements_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (20, 6, 31))
+
+    time_elements_object = time_elements.TimeElementsInMicroseconds()
+
+    time_of_day_tuple = time_elements_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
 
 
 if __name__ == '__main__':

@@ -105,6 +105,19 @@ class OLEAutomationDateTest(unittest.TestCase):
     date_tuple = ole_automation_date_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    ole_automation_date_object = ole_automation_date.OLEAutomationDate(
+        timestamp=43044.480556)
+
+    time_of_day_tuple = ole_automation_date_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (11, 32, 0))
+
+    ole_automation_date_object = ole_automation_date.OLEAutomationDate()
+
+    time_of_day_tuple = ole_automation_date_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 if __name__ == '__main__':
   unittest.main()

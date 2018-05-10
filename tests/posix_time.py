@@ -108,6 +108,18 @@ class PosixTimeTest(unittest.TestCase):
     date_tuple = posix_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+    time_of_day_tuple = posix_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (20, 6, 31))
+
+    posix_time_object = posix_time.PosixTime()
+
+    time_of_day_tuple = posix_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 class PosixTimeInMicrosecondsTest(unittest.TestCase):
   """Tests for the POSIX timestamp in microseconds."""
@@ -205,6 +217,19 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
 
     date_tuple = posix_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
+
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=1281643591546875)
+
+    time_of_day_tuple = posix_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (20, 6, 31))
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds()
+
+    time_of_day_tuple = posix_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
 
 
 if __name__ == '__main__':

@@ -129,6 +129,18 @@ class FATDateTime(unittest.TestCase):
     date_tuple = fat_date_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+
+    time_of_day_tuple = fat_date_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (21, 6, 32))
+
+    fat_date_time_object = fat_date_time.FATDateTime()
+
+    time_of_day_tuple = fat_date_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 if __name__ == '__main__':
   unittest.main()

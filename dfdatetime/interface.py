@@ -519,14 +519,17 @@ class DateTimeValues(object):
           of bounds.
     """
     if epoch_year < 0:
-      raise ValueError('Epoch year value out of bounds.')
+      raise ValueError('Epoch year value: {0:d} out of bounds.'.format(
+          epoch_year))
 
     if epoch_month not in range(1, 13):
-      raise ValueError('Epoch month value out of bounds.')
+      raise ValueError('Epoch month value: {0:d} out of bounds.'.format(
+          epoch_month))
 
     epoch_days_per_month = self._GetDaysPerMonth(epoch_year, epoch_month)
     if epoch_day_of_month < 1 or epoch_day_of_month > epoch_days_per_month:
-      raise ValueError('Epoch day of month value out of bounds.')
+      raise ValueError('Epoch day of month value: {0:d} out of bounds.'.format(
+          epoch_day_of_month))
 
     before_epoch = number_of_days < 0
 
@@ -916,3 +919,17 @@ class DateTimeValues(object):
 
     normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
     return int(round(normalized_timestamp))
+
+  def GetTimeOfDay(self):
+    """Retrieves the time of day represented by the date and time values.
+
+    Returns:
+       tuple[int, int, int]: hours, minutes, seconds or (None, None, None)
+           if the date and time values do not represent a time of day.
+    """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None, None, None
+
+    _, hours, minutes, seconds = self._GetTimeValues(normalized_timestamp)
+    return hours, minutes, seconds

@@ -103,6 +103,18 @@ class FiletimeTest(unittest.TestCase):
     date_tuple = filetime_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+
+    time_of_day_tuple = filetime_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (21, 6, 31))
+
+    filetime_object = filetime.Filetime()
+
+    time_of_day_tuple = filetime_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 if __name__ == '__main__':
   unittest.main()

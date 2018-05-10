@@ -130,22 +130,3 @@ class UUIDTime(interface.DateTimeValues):
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:07d}'.format(
         year, month, day_of_month, hours, minutes, seconds, remainder)
-
-  def GetDate(self):
-    """Retrieves the date represented by the date and time values.
-
-    Returns:
-       tuple[int, int, int]: year, month, day of month or (None, None, None)
-           if the date and time values do not represent a date.
-    """
-    if (self.timestamp is None or self.timestamp < 0 or
-        self.timestamp > self._UINT60_MAX):
-      return None, None, None
-
-    try:
-      timestamp, _ = divmod(self.timestamp, self._100NS_PER_SECOND)
-      number_of_days, _, _, _ = self._GetTimeValues(timestamp)
-      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
-
-    except ValueError:
-      return None, None, None

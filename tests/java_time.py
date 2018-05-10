@@ -82,11 +82,6 @@ class JavaTimeTest(unittest.TestCase):
     date_tuple = java_time_object.GetDate()
     self.assertEqual(date_tuple, (2010, 8, 12))
 
-    java_time_object._EPOCH.year = -1
-
-    date_tuple = java_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     java_time_object = java_time.JavaTime()
 
     date_tuple = java_time_object.GetDate()

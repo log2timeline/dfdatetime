@@ -103,11 +103,6 @@ class HFSTimeTest(unittest.TestCase):
     date_tuple = hfs_time_object.GetDate()
     self.assertEqual(date_tuple, (2013, 8, 1))
 
-    hfs_time_object._EPOCH.year = -1
-
-    date_tuple = hfs_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     hfs_time_object = hfs_time.HFSTime()
 
     date_tuple = hfs_time_object.GetDate()

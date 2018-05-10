@@ -135,11 +135,6 @@ class DelphiDateTimeTest(unittest.TestCase):
     date_tuple = delphi_date_time_object.GetDate()
     self.assertEqual(date_tuple, (2013, 6, 18))
 
-    delphi_date_time_object._EPOCH.year = -1
-
-    date_tuple = delphi_date_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 
     date_tuple = delphi_date_time_object.GetDate()

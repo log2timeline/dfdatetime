@@ -100,11 +100,6 @@ class OLEAutomationDateTest(unittest.TestCase):
     date_tuple = ole_automation_date_object.GetDate()
     self.assertEqual(date_tuple, (2017, 11, 5))
 
-    ole_automation_date_object._EPOCH.year = -1
-
-    date_tuple = ole_automation_date_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 
     date_tuple = ole_automation_date_object.GetDate()

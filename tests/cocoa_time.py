@@ -91,11 +91,6 @@ class CocoaTimeTest(unittest.TestCase):
     date_tuple = cocoa_time_object.GetDate()
     self.assertEqual(date_tuple, (2013, 7, 8))
 
-    cocoa_time_object._EPOCH.year = -1
-
-    date_tuple = cocoa_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     cocoa_time_object = cocoa_time.CocoaTime()
 
     date_tuple = cocoa_time_object.GetDate()

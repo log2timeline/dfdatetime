@@ -185,6 +185,19 @@ class SystemtimeTest(unittest.TestCase):
     date_tuple = systemtime_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
+
+    time_of_day_tuple = systemtime_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (20, 6, 31))
+
+    systemtime_object = systemtime.Systemtime()
+
+    time_of_day_tuple = systemtime_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
 
 if __name__ == '__main__':
   unittest.main()

@@ -32,6 +32,14 @@ class DateTimeEpoch(object):
     self.year = year
 
 
+class NormalizedTimeEpoch(DateTimeEpoch):
+  """dfDateTime normalized time epoch."""
+
+  def __init__(self):
+    """Initializes a dfDateTime normalized time epoch."""
+    super(NormalizedTimeEpoch, self).__init__(1970, 1, 1)
+
+
 class DateTimeValues(object):
   """Date and time values interface.
 
@@ -42,6 +50,8 @@ class DateTimeValues(object):
   """
 
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+
+  _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()
 
   _100NS_PER_SECOND = 10000000
   _100NS_PER_DECISECOND = 1000000
@@ -770,11 +780,12 @@ class DateTimeValues(object):
     """Determines time values.
 
     Args:
-      number_of_seconds (int): number of seconds.
+      number_of_seconds (int|decimal.Decimal): number of seconds.
 
     Returns:
        tuple[int, int, int, int]: days, hours, minutes, seconds.
     """
+    number_of_seconds = int(number_of_seconds)
     number_of_minutes, seconds = divmod(number_of_seconds, 60)
     number_of_hours, minutes = divmod(number_of_minutes, 60)
     number_of_days, hours = divmod(number_of_hours, 24)
@@ -871,7 +882,6 @@ class DateTimeValues(object):
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######"
     """
 
-  @abc.abstractmethod
   def GetDate(self):
     """Retrieves the date represented by the date and time values.
 
@@ -879,6 +889,18 @@ class DateTimeValues(object):
        tuple[int, int, int]: year, month, day of month or (None, None, None)
            if the date and time values do not represent a date.
     """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None, None, None
+
+    number_of_days, _, _, _ = self._GetTimeValues(normalized_timestamp)
+
+    try:
+      return self._GetDateValuesWithEpoch(
+          number_of_days, self._EPOCH_NORMALIZED_TIME)
+
+    except ValueError:
+      return None, None, None
 
   # TODO: remove this method when there is no more need for it in plaso.
   def GetPlasoTimestamp(self):

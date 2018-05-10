@@ -172,20 +172,3 @@ class FATDateTime(interface.DateTimeValues):
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
         year, month, day_of_month, hours, minutes, seconds)
-
-  def GetDate(self):
-    """Retrieves the date represented by the date and time values.
-
-    Returns:
-       tuple[int, int, int]: year, month, day of month or (None, None, None)
-           if the date and time values do not represent a date.
-    """
-    if self._number_of_seconds is None:
-      return None, None, None
-
-    try:
-      number_of_days, _, _, _ = self._GetTimeValues(self._number_of_seconds)
-      return self._GetDateValuesWithEpoch(number_of_days, self._EPOCH)
-
-    except ValueError:
-      return None, None, None

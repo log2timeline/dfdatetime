@@ -90,12 +90,8 @@ class FakeTimeTest(unittest.TestCase):
     date_tuple = fake_time_object.GetDate()
     self.assertEqual(date_tuple, (2010, 8, 12))
 
-    fake_time_object._EPOCH.year = -1
-
-    date_tuple = fake_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     fake_time_object = fake_time.FakeTime()
+    fake_time_object._number_of_seconds = None
 
     date_tuple = fake_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))

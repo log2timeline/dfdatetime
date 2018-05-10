@@ -129,11 +129,6 @@ class UUIDTimeTest(unittest.TestCase):
     date_tuple = uuid_time_object.GetDate()
     self.assertEqual(date_tuple, (2012, 5, 16))
 
-    uuid_time_object._EPOCH.year = -1
-
-    date_tuple = uuid_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     uuid_time_object = uuid_time.UUIDTime()
 
     date_tuple = uuid_time_object.GetDate()

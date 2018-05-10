@@ -98,11 +98,6 @@ class WebKitTimeTest(unittest.TestCase):
     date_tuple = webkit_time_object.GetDate()
     self.assertEqual(date_tuple, (2010, 8, 12))
 
-    webkit_time_object._EPOCH.year = -1
-
-    date_tuple = webkit_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     webkit_time_object = webkit_time.WebKitTime()
 
     date_tuple = webkit_time_object.GetDate()

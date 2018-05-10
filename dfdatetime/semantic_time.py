@@ -181,15 +181,6 @@ class SemanticTime(interface.DateTimeValues):
     """
     return None, None
 
-  def GetDate(self):
-    """Retrieves the date represented by the date and time values.
-
-    Returns:
-       tuple[int, int, int]: year, month, day of month or (None, None, None)
-           if the date and time values do not represent a date.
-    """
-    return None, None, None
-
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 

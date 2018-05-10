@@ -103,11 +103,6 @@ class PosixTimeTest(unittest.TestCase):
     date_tuple = posix_time_object.GetDate()
     self.assertEqual(date_tuple, (2010, 8, 12))
 
-    posix_time_object._EPOCH.year = -1
-
-    date_tuple = posix_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     posix_time_object = posix_time.PosixTime()
 
     date_tuple = posix_time_object.GetDate()
@@ -205,11 +200,6 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
 
     date_tuple = posix_time_object.GetDate()
     self.assertEqual(date_tuple, (2010, 8, 12))
-
-    posix_time_object._EPOCH.year = -1
-
-    date_tuple = posix_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
 
     posix_time_object = posix_time.PosixTimeInMicroseconds()
 

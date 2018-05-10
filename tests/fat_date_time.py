@@ -124,11 +124,6 @@ class FATDateTime(unittest.TestCase):
     date_tuple = fat_date_time_object.GetDate()
     self.assertEqual(date_tuple, (2010, 8, 12))
 
-    fat_date_time_object._EPOCH.year = -1
-
-    date_tuple = fat_date_time_object.GetDate()
-    self.assertEqual(date_tuple, (None, None, None))
-
     fat_date_time_object = fat_date_time.FATDateTime()
 
     date_tuple = fat_date_time_object.GetDate()

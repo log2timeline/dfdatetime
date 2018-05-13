@@ -80,6 +80,13 @@ class SemanticTimeTest(unittest.TestCase):
     date_time_string = semantic_time_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, 'Never')
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    semantic_time_object = semantic_time.SemanticTime(string='Never')
+
+    date_time_string = semantic_time_object.CopyToDateTimeStringISO8601()
+    self.assertIsNone(date_time_string)
+
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     semantic_time_object = semantic_time.SemanticTime()

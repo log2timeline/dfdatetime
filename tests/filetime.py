@@ -91,6 +91,13 @@ class FiletimeTest(unittest.TestCase):
     date_time_string = filetime_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+
+    date_time_string = filetime_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T21:06:31.5468750Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)

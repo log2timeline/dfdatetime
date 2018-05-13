@@ -117,6 +117,13 @@ class FATDateTime(unittest.TestCase):
     date_time_string = fat_date_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+
+    date_time_string = fat_date_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T21:06:32Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)

@@ -172,6 +172,16 @@ class SemanticTime(interface.DateTimeValues):
     """
     return self._string
 
+  def CopyToDateTimeStringISO8601(self):
+    """Copies the date time value to an ISO 8601 date and time string.
+
+    Returns:
+      str: date and time value formatted as an ISO 8601 date and time string,
+          which always be None since semantic time cannot be represented in
+          ISO 8601.
+    """
+    return None
+
   def CopyToStatTimeTuple(self):
     """Copies the semantic timestamp to a stat timestamp tuple.
 

@@ -75,6 +75,13 @@ class JavaTimeTest(unittest.TestCase):
     date_time_string = java_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    java_time_object = java_time.JavaTime(timestamp=1281643591546)
+
+    date_time_string = java_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.546Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     java_time_object = java_time.JavaTime(timestamp=1281643591546)

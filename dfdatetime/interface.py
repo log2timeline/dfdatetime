@@ -894,7 +894,7 @@ class DateTimeValues(object):
           None if the timestamp cannot be copied to a date and time string.
     """
     date_time_string = self.CopyToDateTimeString()
-    if date_time_string: 
+    if date_time_string:
       date_time_string = date_time_string.replace(' ', 'T')
       date_time_string = '{0:s}Z'.format(date_time_string)
     return date_time_string

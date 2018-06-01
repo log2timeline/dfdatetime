@@ -92,6 +92,14 @@ class OLEAutomationDateTest(unittest.TestCase):
     date_time_string = ole_automation_date_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    ole_automation_date_object = ole_automation_date.OLEAutomationDate(
+        timestamp=43044.480556)
+
+    date_time_string = ole_automation_date_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2017-11-05T11:32:00.038400Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     ole_automation_date_object = ole_automation_date.OLEAutomationDate(

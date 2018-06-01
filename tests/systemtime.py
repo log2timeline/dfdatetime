@@ -172,6 +172,14 @@ class SystemtimeTest(unittest.TestCase):
     date_time_string = systemtime_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
+
+    date_time_string = systemtime_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.142Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     systemtime_object = systemtime.Systemtime(

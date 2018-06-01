@@ -216,6 +216,14 @@ class RFC2579DateTimeTest(unittest.TestCase):
     date_time_string = rfc2579_date_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
+
+    date_time_string = rfc2579_date_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.6Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(

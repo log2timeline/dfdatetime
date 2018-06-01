@@ -91,6 +91,13 @@ class WebKitTimeTest(unittest.TestCase):
     date_time_string = webkit_time_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
+
+    date_time_string = webkit_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T21:06:31.546875Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)

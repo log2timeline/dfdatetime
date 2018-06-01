@@ -459,6 +459,14 @@ class TimeElementsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31Z')
+
   def testCopyToPosixTimestamp(self):
     """Tests the CopyToPosixTimestamp function."""
     time_elements_object = time_elements.TimeElements(
@@ -740,6 +748,14 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
 
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
+
+    date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.429Z')
+
   def testGetDate(self):
     """Tests the GetDate function."""
     time_elements_object = time_elements.TimeElementsInMilliseconds(
@@ -1007,6 +1023,14 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertIsNone(date_time_string)
+
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
+
+    date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.429876Z')
 
   def testGetDate(self):
     """Tests the GetDate function."""

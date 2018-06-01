@@ -24,7 +24,7 @@ class RFC2579DateTime(interface.DateTimeValues):
       uint8_t deciseconds,
       char direction_from_utc,
       uint8_t hours_from_utc,
-      uint8_t minuted_from_utc
+      uint8_t minutes_from_utc
   }
 
   Also see:

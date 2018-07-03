@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import abc
 import calendar
+import decimal
 
 from dfdatetime import decorators
 from dfdatetime import definitions
@@ -932,7 +933,9 @@ class DateTimeValues(object):
       return None
 
     normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
-    return int(round(normalized_timestamp))
+    normalized_timestamp = normalized_timestamp.quantize(
+        1, rounding=decimal.ROUND_HALF_UP)
+    return int(normalized_timestamp)
 
   def GetTimeOfDay(self):
     """Retrieves the time of day represented by the date and time values.

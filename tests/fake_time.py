@@ -37,7 +37,6 @@ class FakeTimeTest(unittest.TestCase):
     plaso_timestamp = fake_time_object.GetPlasoTimestamp()
     self.assertEqual(plaso_timestamp, 1333794697625247)
 
-
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     fake_time_object = fake_time.FakeTime()

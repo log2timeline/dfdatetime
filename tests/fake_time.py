@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import fake_time
@@ -27,6 +28,14 @@ class FakeTimeTest(unittest.TestCase):
 
     normalized_timestamp = fake_time_object._GetNormalizedTimestamp()
     self.assertIsNone(normalized_timestamp)
+
+  def testGetPlasoTimestamp(self):
+    """Tests the GetPlasoTimestamp function."""
+    fake_time_object = fake_time.FakeTime()
+    fake_time_object._normalized_timestamp = decimal.Decimal(
+        '1333794697.6252465')
+    plaso_timestamp = fake_time_object.GetPlasoTimestamp()
+    self.assertEqual(plaso_timestamp, 1333794697625247)
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""

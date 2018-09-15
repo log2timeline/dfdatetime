@@ -22,7 +22,7 @@ class APFSTime(interface.DateTimeValues):
 
   _EPOCH = posix_time.PosixTimeEpoch()
 
-  def __init__(self, timestamp = None):
+  def __init__(self, timestamp=None):
     """Initializes a APFS timestamp.
 
     Args:
@@ -78,7 +78,7 @@ class APFSTime(interface.DateTimeValues):
     microseconds = date_time_values.get('microseconds', None)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-      year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.NANOSECONDS_PER_SECOND
 
     if microseconds:
@@ -99,7 +99,7 @@ class APFSTime(interface.DateTimeValues):
     """Copies the APFS timestamp to a date and time string.
 
     Returns:
-      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.#########" or
+      str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
           None if the timestamp is missing or invalid.
     """
     if (self._timestamp is None or self._timestamp < 0 or
@@ -110,11 +110,12 @@ class APFSTime(interface.DateTimeValues):
         self._timestamp, definitions.NANOSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
-    # trimming precision for consistency?
-    #microseconds = nanoseconds / definitions.MILLISECONDS_PER_SECOND
+    # trimming precision for consistency.
+    # TODO: fix string representation to reflect 9 digits precision.
+    microseconds = nanoseconds / definitions.MILLISECONDS_PER_SECOND
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:09d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, nanoseconds)
+    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
+        year, month, day_of_month, hours, minutes, seconds, microseconds)

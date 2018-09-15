@@ -13,7 +13,7 @@ from dfdatetime import posix_time
 class APFSTime(interface.DateTimeValues):
   """Apple File System (APFS) timestamp.
 
-  The APFS timestamp is a signed 64-bit integer that contains the number of
+  The APFS timestamp is an unsigned 64-bit integer that contains the number of
   nanoseconds since 1970-01-01 00:00:00.
 
   Attributes:

@@ -74,7 +74,7 @@ class APFSTimeTest(unittest.TestCase):
     apfs_time_object = apfs_time.APFSTime(timestamp=1281643591987654321)
 
     date_time_string = apfs_time_object.CopyToDateTimeString()
-    self.assertEqual(date_time_string, '2010-08-12 20:06:31.987654')
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.987654321')
 
     apfs_time_object = apfs_time.APFSTime()
 
@@ -86,7 +86,7 @@ class APFSTimeTest(unittest.TestCase):
     apfs_time_object = apfs_time.APFSTime(timestamp=1281643591987654321)
 
     date_time_string = apfs_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T20:06:31.987654Z')
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.987654321Z')
 
   def testGetDate(self):
     """Tests the GetDate function."""

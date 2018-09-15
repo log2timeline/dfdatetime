@@ -13,8 +13,8 @@ from dfdatetime import posix_time
 class APFSTime(interface.DateTimeValues):
   """APFS timestamp.
 
-  The APFS timestamp is an unsigned 64-bit integer that contains the number of
-  nanoseconds since 1970-01-01 00:00:00. The timestamp is always in UTC.
+  The APFS timestamp is a signed 64-bit integer that contains the number of
+  nanoseconds since 1970-01-01 00:00:00.
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.

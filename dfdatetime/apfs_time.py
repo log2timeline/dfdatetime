@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""APFS time implementation."""
+"""Apple File System (APFS) time implementation."""
 
 from __future__ import unicode_literals
 
@@ -11,7 +11,7 @@ from dfdatetime import posix_time
 
 
 class APFSTime(interface.DateTimeValues):
-  """APFS timestamp.
+  """Apple File System (APFS) timestamp.
 
   The APFS timestamp is a signed 64-bit integer that contains the number of
   nanoseconds since 1970-01-01 00:00:00.
@@ -23,7 +23,7 @@ class APFSTime(interface.DateTimeValues):
   _EPOCH = posix_time.PosixTimeEpoch()
 
   def __init__(self, timestamp=None):
-    """Initializes a APFS timestamp.
+    """Initializes an Apple File System (APFS) timestamp.
 
     Args:
       timestamp (Optional[int]): APFS timestamp.

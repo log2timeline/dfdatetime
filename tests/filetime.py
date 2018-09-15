@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import filetime
@@ -36,7 +37,7 @@ class FiletimeTest(unittest.TestCase):
     filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
 
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281647191.546875)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281647191.546875'))
 
     filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
 

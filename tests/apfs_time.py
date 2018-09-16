@@ -60,9 +60,9 @@ class APFSTimeTest(unittest.TestCase):
     apfs_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.654321+01:00')
     self.assertEqual(apfs_time_object.timestamp, expected_timestamp)
 
-    apfs_time_object = apfs_time.APFSTime()
-    with self.assertRaises(ValueError):
-      apfs_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
+    expected_timestamp = -11644387200000000000
+    apfs_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
+    self.assertEqual(apfs_time_object.timestamp, expected_timestamp)
 
     apfs_time_object = apfs_time.APFSTime()
     with self.assertRaises(ValueError):

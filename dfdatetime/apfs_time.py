@@ -13,7 +13,7 @@ from dfdatetime import posix_time
 class APFSTime(interface.DateTimeValues):
   """Apple File System (APFS) timestamp.
 
-  The APFS timestamp is an unsigned 64-bit integer that contains the number of
+  The APFS timestamp is an signed 64-bit integer that contains the number of
   nanoseconds since 1970-01-01 00:00:00.
 
   Attributes:
@@ -47,8 +47,8 @@ class APFSTime(interface.DateTimeValues):
           determined.
     """
     if self._normalized_timestamp is None:
-      if (self._timestamp is not None and self._timestamp >= 0 and
-          self._timestamp <= self._UINT64_MAX):
+      if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
+          self._timestamp <= self._INT64_MAX):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) /
             definitions.NANOSECONDS_PER_SECOND)
@@ -85,11 +85,8 @@ class APFSTime(interface.DateTimeValues):
       nanoseconds = microseconds * definitions.MILLISECONDS_PER_SECOND
       timestamp += nanoseconds
 
-    if year < 1970:
-      raise ValueError('Date time value not supported.')
-
-    # Maximum value for APFS time is 2554-07-21 23:34:33.709551615
-    if timestamp > self._UINT64_MAX:
+    # Maximum value for APFS time is 2262-04-11 16:47:16.854775807
+    if timestamp > self._INT64_MAX:
       raise ValueError('Date time value not supported.')
 
     self._normalized_timestamp = None

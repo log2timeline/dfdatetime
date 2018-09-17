@@ -58,7 +58,8 @@ class PosixTime(interface.DateTimeValues):
           determined.
     """
     if self._normalized_timestamp is None:
-      if self._timestamp is not None:
+      if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
+          self._timestamp <= self._INT64_MAX):
         self._normalized_timestamp = decimal.Decimal(self._timestamp)
 
     return self._normalized_timestamp
@@ -96,7 +97,8 @@ class PosixTime(interface.DateTimeValues):
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss" or None
           if the timestamp is missing.
     """
-    if self._timestamp is None:
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       return None
 
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
@@ -145,7 +147,8 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
           determined.
     """
     if self._normalized_timestamp is None:
-      if self._timestamp is not None:
+      if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
+          self._timestamp <= self._INT64_MAX):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) /
             definitions.MILLISECONDS_PER_SECOND)
@@ -193,7 +196,8 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
           None if the timestamp is missing.
     """
-    if self._timestamp is None:
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       return None
 
     timestamp, milliseconds = divmod(
@@ -243,7 +247,8 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
           determined.
     """
     if self._normalized_timestamp is None:
-      if self._timestamp is not None:
+      if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
+          self._timestamp <= self._INT64_MAX):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) /
             definitions.MICROSECONDS_PER_SECOND)
@@ -287,7 +292,8 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
           None if the timestamp is missing.
     """
-    if self._timestamp is None:
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       return None
 
     timestamp, microseconds = divmod(

@@ -99,8 +99,8 @@ class APFSTime(interface.DateTimeValues):
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.#########" or
           None if the timestamp is missing or invalid.
     """
-    if (self._timestamp is None or self._timestamp < 0 or
-        self._timestamp > self._UINT64_MAX):
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       return None
 
     timestamp, nanoseconds = divmod(

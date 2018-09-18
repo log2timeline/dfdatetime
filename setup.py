@@ -124,20 +124,20 @@ else:
 
           if python_package == 'python3':
             lines.extend([
-              '%{python3_sitelib}/**/*.py',
-              '%{python3_sitelib}/dfdatetime*.egg-info/*',
-              '',
-              '%exclude %{_prefix}/share/doc/*',
-              '%exclude %{python3_sitelib}/**/__pycache__/*'])
+                '%{python3_sitelib}/**/*.py',
+                '%{python3_sitelib}/dfdatetime*.egg-info/*',
+                '',
+                '%exclude %{_prefix}/share/doc/*',
+                '%exclude %{python3_sitelib}/**/__pycache__/*'])
 
           else:
             lines.extend([
-              '%{python2_sitelib}/**/*.py',
-              '%{python2_sitelib}/dfdatetime*.egg-info/*',
-              '',
-              '%exclude %{_prefix}/share/doc/*',
-              '%exclude %{python2_sitelib}/**/*.pyc',
-              '%exclude %{python2_sitelib}/**/*.pyo'])
+                '%{python2_sitelib}/**/*.py',
+                '%{python2_sitelib}/dfdatetime*.egg-info/*',
+                '',
+                '%exclude %{_prefix}/share/doc/*',
+                '%exclude %{python2_sitelib}/**/*.pyc',
+                '%exclude %{python2_sitelib}/**/*.pyo'])
 
           python_spec_file.extend(lines)
           break

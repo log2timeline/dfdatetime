@@ -104,6 +104,18 @@ else:
         elif line.startswith('%description'):
           in_description = True
 
+        elif line.startswith('python setup.py build'):
+          if python_package == 'python3':
+            line = '%py3_build'
+          else:
+            line = '%py2_build'
+
+        elif line.startswith('python setup.py install'):
+          if python_package == 'python3':
+            line = '%py3_install'
+          else:
+            line = '%py2_install'
+
         elif line.startswith('%files'):
           lines = [
               '%files -n {0:s}-%{{name}}'.format(python_package),
@@ -116,8 +128,6 @@ else:
               '%{python3_sitelib}/dfdatetime*.egg-info/*',
               '',
               '%exclude %{_prefix}/share/doc/*',
-              '%exclude %{python3_sitelib}/**/*.pyc',
-              '%exclude %{python3_sitelib}/**/*.pyo',
               '%exclude %{python3_sitelib}/**/__pycache__/*'])
 
           else:
@@ -127,8 +137,7 @@ else:
               '',
               '%exclude %{_prefix}/share/doc/*',
               '%exclude %{python2_sitelib}/**/*.pyc',
-              '%exclude %{python2_sitelib}/**/*.pyo',
-              '%exclude %{python2_sitelib}/**/__pycache__/*'])
+              '%exclude %{python2_sitelib}/**/*.pyo'])
 
           python_spec_file.extend(lines)
           break

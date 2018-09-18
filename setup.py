@@ -147,6 +147,12 @@ else:
 
           python_spec_file.append(
               '%package -n {0:s}-%{{name}}'.format(python_package))
+          if python_package == 'python2':
+            python_spec_file.append(
+                'Obsoletes: python-dfdatetime < %{version}')
+            python_spec_file.append(
+                'Provides: python-dfdatetime = %{version}')
+
           python_spec_file.append('{0:s}'.format(summary))
           python_spec_file.append('')
           python_spec_file.append(

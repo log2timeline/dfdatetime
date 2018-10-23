@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
-from dfdatetime import posix_time
 from dfdatetime import definitions
+from dfdatetime import posix_time
 
 
 class APFSTime(posix_time.PosixTimeInNanoseconds):
@@ -49,10 +49,10 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """
-    self._CopyFromDateTimeString(time_string)
+    super(APFSTime, self)._CopyFromDateTimeString(time_string)
 
     # Maximum value for APFS time is 2262-04-11 16:47:16.854775807
-    if self._timestamp > self._INT64_MAX:
+    if self._timestamp > self._INT64_MAX or self._timestamp < self._INT64_MIN:
       raise ValueError('Date time value not supported.')
 
   def CopyToDateTimeString(self):
@@ -66,4 +66,4 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
         self._timestamp > self._INT64_MAX):
       return None
 
-    return self._CopyToDateTimeString()
+    return super(APFSTime, self)._CopyToDateTimeString()

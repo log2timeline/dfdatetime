@@ -6,11 +6,10 @@ from __future__ import unicode_literals
 import decimal
 
 from dfdatetime import definitions
-from dfdatetime import interface
 from dfdatetime import posix_time
 
 
-class APFSTime(interface.DateTimeValues):
+class APFSTime(posix_time.PosixTimeInNanoseconds):
   """Apple File System (APFS) timestamp.
 
   The APFS timestamp is a signed 64-bit integer that contains the number of
@@ -19,23 +18,6 @@ class APFSTime(interface.DateTimeValues):
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
   """
-
-  _EPOCH = posix_time.PosixTimeEpoch()
-
-  def __init__(self, timestamp=None):
-    """Initializes an Apple File System (APFS) timestamp.
-
-    Args:
-      timestamp (Optional[int]): APFS timestamp.
-    """
-    super(APFSTime, self).__init__()
-    self._precision = definitions.PRECISION_1_NANOSECOND
-    self._timestamp = timestamp
-
-  @property
-  def timestamp(self):
-    """int: APFS timestamp or None if timestamp is not set."""
-    return self._timestamp
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -67,30 +49,11 @@ class APFSTime(interface.DateTimeValues):
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """
-    date_time_values = self._CopyDateTimeFromString(time_string)
+    super(APFSTime, self)._CopyFromDateTimeString(time_string)
 
-    year = date_time_values.get('year', 0)
-    month = date_time_values.get('month', 0)
-    day_of_month = date_time_values.get('day_of_month', 0)
-    hours = date_time_values.get('hours', 0)
-    minutes = date_time_values.get('minutes', 0)
-    seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', None)
-
-    timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
-    timestamp *= definitions.NANOSECONDS_PER_SECOND
-
-    if microseconds:
-      nanoseconds = microseconds * definitions.MILLISECONDS_PER_SECOND
-      timestamp += nanoseconds
-
-    # Maximum value for APFS time is 2262-04-11 16:47:16.854775807
-    if timestamp > self._INT64_MAX:
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       raise ValueError('Date time value not supported.')
-
-    self._normalized_timestamp = None
-    self._timestamp = timestamp
 
   def CopyToDateTimeString(self):
     """Copies the APFS timestamp to a date and time string.
@@ -103,12 +66,4 @@ class APFSTime(interface.DateTimeValues):
         self._timestamp > self._INT64_MAX):
       return None
 
-    timestamp, nanoseconds = divmod(
-        self._timestamp, definitions.NANOSECONDS_PER_SECOND)
-    number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
-
-    year, month, day_of_month = self._GetDateValuesWithEpoch(
-        number_of_days, self._EPOCH)
-
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:09d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, nanoseconds)
+    return super(APFSTime, self)._CopyToDateTimeString()

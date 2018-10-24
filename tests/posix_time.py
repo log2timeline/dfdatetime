@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import posix_time
@@ -242,6 +243,112 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     self.assertEqual(time_of_day_tuple, (20, 6, 31))
 
     posix_time_object = posix_time.PosixTimeInMicroseconds()
+
+    time_of_day_tuple = posix_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (None, None, None))
+
+
+class PosixTimeInNanoSecondsTest(unittest.TestCase):
+  """Tests for the POSIX timestamp in nanoseconds."""
+
+  # pylint: disable=protected-access
+
+  def testProperties(self):
+    """Tests the properties."""
+    posix_time_object = posix_time.PosixTimeInNanoseconds(
+        timestamp=1281643591987654321)
+    self.assertEqual(posix_time_object.timestamp, 1281643591987654321)
+
+    posix_time_object = posix_time.PosixTimeInNanoseconds()
+    self.assertIsNone(posix_time_object.timestamp)
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    posix_time_object = posix_time.PosixTimeInNanoseconds(
+        timestamp=1281643591987654321)
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1281643591.987654321'))
+
+    posix_time_object = posix_time.PosixTimeInNanoseconds()
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
+  def testCopyFromDateTimeString(self):
+    """Tests the CopyFromDateTimeString function."""
+    posix_time_object = posix_time.PosixTimeInNanoseconds()
+
+    expected_timestamp = 1281571200000000000
+    posix_time_object.CopyFromDateTimeString('2010-08-12')
+    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+
+    expected_timestamp = 1281647191000000000
+    posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
+    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+
+    expected_timestamp = 1281647191654321000
+    posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.654321')
+    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+
+    expected_timestamp = 1281650791654321000
+    posix_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.654321-01:00')
+    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+
+    expected_timestamp = 1281643591654321000
+    posix_time_object.CopyFromDateTimeString(
+        '2010-08-12 21:06:31.654321+01:00')
+    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+
+    expected_timestamp = -11644387200000000000
+    posix_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
+    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    posix_time_object = posix_time.PosixTimeInNanoseconds(
+        timestamp=1281643591987654321)
+
+    date_time_string = posix_time_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.987654321')
+
+    posix_time_object = posix_time.PosixTimeInNanoseconds()
+
+    date_time_string = posix_time_object.CopyToDateTimeString()
+    self.assertIsNone(date_time_string)
+
+  def testCopyToDateTimeStringISO8601(self):
+    """Tests the CopyToDateTimeStringISO8601 function."""
+    posix_time_object = posix_time.PosixTimeInNanoseconds(
+        timestamp=1281643591987654321)
+
+    date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.987654321Z')
+
+  def testGetDate(self):
+    """Tests the GetDate function."""
+    posix_time_object = posix_time.PosixTimeInNanoseconds(
+        timestamp=1281643591987654321)
+
+    date_tuple = posix_time_object.GetDate()
+    self.assertEqual(date_tuple, (2010, 8, 12))
+
+    posix_time_object = posix_time.PosixTimeInNanoseconds()
+
+    date_tuple = posix_time_object.GetDate()
+    self.assertEqual(date_tuple, (None, None, None))
+
+  def testGetTimeOfDay(self):
+    """Tests the GetTimeOfDay function."""
+    posix_time_object = posix_time.PosixTimeInNanoseconds(
+        timestamp=1281643591987654321)
+
+    time_of_day_tuple = posix_time_object.GetTimeOfDay()
+    self.assertEqual(time_of_day_tuple, (20, 6, 31))
+
+    posix_time_object = posix_time.PosixTimeInNanoseconds()
 
     time_of_day_tuple = posix_time_object.GetTimeOfDay()
     self.assertEqual(time_of_day_tuple, (None, None, None))

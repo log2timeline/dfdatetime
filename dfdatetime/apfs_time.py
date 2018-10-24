@@ -51,8 +51,8 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
     """
     super(APFSTime, self)._CopyFromDateTimeString(time_string)
 
-    # Maximum value for APFS time is 2262-04-11 16:47:16.854775807
-    if self._timestamp > self._INT64_MAX or self._timestamp < self._INT64_MIN:
+    if (self._timestamp is None or self._timestamp < self._INT64_MIN or
+        self._timestamp > self._INT64_MAX):
       raise ValueError('Date time value not supported.')
 
   def CopyToDateTimeString(self):

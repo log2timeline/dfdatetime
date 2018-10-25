@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import hfs_time
@@ -36,7 +37,7 @@ class HFSTimeTest(unittest.TestCase):
     hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
 
     normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1375370728.0)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1375370728.0'))
 
     hfs_time_object = hfs_time.HFSTime(timestamp=0x1ffffffff)
 

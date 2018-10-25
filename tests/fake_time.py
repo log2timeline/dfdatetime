@@ -21,7 +21,7 @@ class FakeTimeTest(unittest.TestCase):
     fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
 
     normalized_timestamp = fake_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281647191.546875)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281647191.546875'))
 
     fake_time_object = fake_time.FakeTime()
     fake_time_object._number_of_seconds = None

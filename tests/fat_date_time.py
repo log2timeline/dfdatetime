@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import decimal
 import unittest
 
 from dfdatetime import fat_date_time
@@ -28,7 +29,7 @@ class FATDateTime(unittest.TestCase):
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
     normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281647192.0)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281647192.0'))
 
     fat_date_time_object = fat_date_time.FATDateTime()
 

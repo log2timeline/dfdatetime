@@ -41,7 +41,7 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, 1281643591)
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591'))
 
     time_elements_object = time_elements.TimeElements()
 

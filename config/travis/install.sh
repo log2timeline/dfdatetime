@@ -57,6 +57,8 @@ then
 	fi
 	if test ${TARGET} = "pylint";
 	then
+		sudo add-apt-repository ppa:gift/pylint2 -y;
+		sudo apt-get update -q;
 		sudo apt-get install -y pylint;
 	fi
 fi

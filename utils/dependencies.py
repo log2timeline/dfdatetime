@@ -12,9 +12,6 @@ except ImportError:
   import configparser  # pylint: disable=import-error
 
 
-# pylint: disable=useless-object-inheritance
-
-
 class DependencyDefinition(object):
   """Dependency definition.
 

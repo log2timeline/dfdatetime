@@ -12,6 +12,9 @@ except ImportError:
   import configparser  # pylint: disable=import-error
 
 
+# pylint: disable=useless-object-inheritance
+
+
 class DependencyDefinition(object):
   """Dependency definition.
 
@@ -312,6 +315,7 @@ class DependencyHelper(object):
       result (bool): True if the Python module is available and conforms to
             the minimum required version, False otherwise.
       status_message (str): status message.
+      verbose_output (Optional[bool]): True if output should be verbose.
     """
     if not result or dependency.is_optional:
       if dependency.is_optional:

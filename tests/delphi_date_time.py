@@ -22,7 +22,7 @@ class DelphiDateTimeEpochTest(unittest.TestCase):
 class DelphiDateTimeInvalidYear(delphi_date_time.DelphiDateTime):
   """Delphi TDateTime timestamp for testing invalid year."""
 
-  def _CopyDateTimeFromString(self, unused_time_string):
+  def _CopyDateTimeFromString(self, time_string):
     """Copies a date and time from a string.
 
     Args:

@@ -8,6 +8,9 @@ import decimal
 from dfdatetime import definitions
 
 
+# pylint: disable=useless-object-inheritance
+
+
 class DateTimePrecisionHelper(object):
   """Date time precision helper interface.
 

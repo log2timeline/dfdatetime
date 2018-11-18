@@ -13,7 +13,7 @@ from dfdatetime import rfc2579_date_time
 class RFC2579DateTimeInvalidYear(rfc2579_date_time.RFC2579DateTime):
   """RFC2579 date-time for testing invalid year."""
 
-  def _CopyDateTimeFromString(self, unused_time_string):
+  def _CopyDateTimeFromString(self, time_string):
     """Copies a date and time from a string.
 
     Args:

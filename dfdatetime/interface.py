@@ -11,6 +11,9 @@ from dfdatetime import decorators
 from dfdatetime import definitions
 
 
+# pylint: disable=useless-object-inheritance
+
+
 class DateTimeEpoch(object):
   """Date and time epoch interface.
 
@@ -124,7 +127,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return other_normalized_timestamp is None
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return True
 
     return normalized_timestamp >= other_normalized_timestamp
@@ -150,7 +153,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return False
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return True
 
     return normalized_timestamp > other_normalized_timestamp
@@ -176,7 +179,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return True
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return False
 
     return normalized_timestamp <= other_normalized_timestamp
@@ -202,7 +205,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return other_normalized_timestamp is not None
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return False
 
     return normalized_timestamp < other_normalized_timestamp

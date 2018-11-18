@@ -11,9 +11,6 @@ from dfdatetime import decorators
 from dfdatetime import definitions
 
 
-# pylint: disable=useless-object-inheritance
-
-
 class DateTimeEpoch(object):
   """Date and time epoch interface.
 

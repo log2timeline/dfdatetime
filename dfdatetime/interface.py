@@ -50,6 +50,8 @@ class DateTimeValues(object):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
+  # pylint: disable=redundant-returns-doc
+
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
   _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()

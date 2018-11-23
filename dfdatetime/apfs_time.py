@@ -48,6 +48,9 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
           fraction can be either 3 or 6 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
+
+    Raises:
+      ValueError: if the date and time value is not supported.
     """
     super(APFSTime, self)._CopyFromDateTimeString(time_string)
 

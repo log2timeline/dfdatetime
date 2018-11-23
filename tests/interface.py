@@ -12,7 +12,7 @@ from dfdatetime import interface
 class EmptyDateTimeValues(interface.DateTimeValues):
   """Empty date time values for testing."""
 
-  # pylint: disable=abstract-method
+  # pylint: disable=abstract-method,redundant-returns-doc
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -20,7 +20,7 @@ class EmptyDateTimeValues(interface.DateTimeValues):
     Returns:
       float: normalized timestamp, which is None for testing purposes.
     """
-    return
+    return None
 
 
 class TestDateTimeValues(interface.DateTimeValues):

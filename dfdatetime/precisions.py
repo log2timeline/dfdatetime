@@ -17,6 +17,8 @@ class DateTimePrecisionHelper(object):
   values between different precisions.
   """
 
+  # pylint: disable=missing-raises-doc,redundant-returns-doc
+
   @classmethod
   def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
     """Copies the number of microseconds to a fraction of second value.

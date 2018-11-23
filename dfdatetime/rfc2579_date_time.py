@@ -43,6 +43,8 @@ class RFC2579DateTime(interface.DateTimeValues):
 
   # TODO: make attributes read-only.
 
+  # pylint: disable=missing-type-doc
+
   def __init__(self, rfc2579_date_time_tuple=None):
     """Initializes a RFC2579 date-time.
 

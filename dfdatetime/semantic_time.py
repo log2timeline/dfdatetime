@@ -16,6 +16,8 @@ class SemanticTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
+  # pylint: disable=redundant-returns-doc
+
   _SORT_ORDER = 50
 
   def __init__(self, string=None):

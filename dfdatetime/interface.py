@@ -50,6 +50,8 @@ class DateTimeValues(object):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
+  # pylint: disable=redundant-returns-doc
+
   _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
   _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()
@@ -124,7 +126,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return other_normalized_timestamp is None
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return True
 
     return normalized_timestamp >= other_normalized_timestamp
@@ -150,7 +152,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return False
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return True
 
     return normalized_timestamp > other_normalized_timestamp
@@ -176,7 +178,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return True
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return False
 
     return normalized_timestamp <= other_normalized_timestamp
@@ -202,7 +204,7 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return other_normalized_timestamp is not None
 
-    elif other_normalized_timestamp is None:
+    if other_normalized_timestamp is None:
       return False
 
     return normalized_timestamp < other_normalized_timestamp

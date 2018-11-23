@@ -14,7 +14,7 @@ from tests import interface
 class SemanticTimeTest(unittest.TestCase):
   """Tests for semantic time."""
 
-  # pylint: disable=protected-access
+  # pylint: disable=assignment-from-none,protected-access
 
   def testComparison(self):
     """Tests the comparison functions."""

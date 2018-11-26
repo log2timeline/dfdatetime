@@ -26,7 +26,7 @@ install:
 - cmd: if [%TARGET%]==[python36] (
     mkdir dependencies &&
     set PYTHONPATH=..\l2tdevtools &&
-    "%PYTHON%\\python.exe" ..\l2tdevtools\tools\update.py --download-directory dependencies --machine-type %MACHINE_TYPE% --msi-targetdir "%PYTHON%" --track dev funcsigs mock pbr six )
+    "%PYTHON%\\python.exe" ..\l2tdevtools\tools\update.py --download-directory dependencies --machine-type %MACHINE_TYPE% --msi-targetdir "%PYTHON%" --track dev mock pbr six )
 
 build: off
 

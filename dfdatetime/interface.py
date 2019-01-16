@@ -620,6 +620,11 @@ class DateTimeValues(object):
       days_per_month = self._GetDaysPerMonth(year, month)
       number_of_days = days_per_month - number_of_days
 
+    elif number_of_days == 0:
+      number_of_days = 31
+      month = 12
+      year -= 1
+
     return year, month, number_of_days
 
   def _GetDateValuesWithEpoch(self, number_of_days, date_time_epoch):

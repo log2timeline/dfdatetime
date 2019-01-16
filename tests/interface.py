@@ -433,6 +433,27 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertEqual(month, 12)
     self.assertEqual(day_of_month, 28)
 
+    year, month, day_of_month = date_time_values._GetDateValues(0, 1970, 1, 1)
+    self.assertEqual(year, 1970)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 1)
+
+    year, month, day_of_month = date_time_values._GetDateValues(-1, 1970, 1, 1)
+    self.assertEqual(year, 1969)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 31)
+
+    year, month, day_of_month = date_time_values._GetDateValues(364, 1970, 1, 1)
+    self.assertEqual(year, 1970)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 31)
+
+    year, month, day_of_month = date_time_values._GetDateValues(
+        1460, 1970, 1, 1)
+    self.assertEqual(year, 1973)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 31)
+
   def testGetDateValuesWithEpoch(self):
     """Tests the _GetDateValuesWithEpoch function."""
     date_time_epoch = interface.DateTimeEpoch(2000, 1, 1)

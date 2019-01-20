@@ -84,6 +84,7 @@ else:
         python_package = 'python3'
 
       description = []
+      requires = ''
       summary = ''
       in_description = False
 
@@ -97,9 +98,10 @@ else:
               python_package)
 
         elif line.startswith('Requires: '):
+          requires = line[10:]
           if python_package == 'python3':
-            line = line.replace('python-', 'python3-')
-            line = line.replace('python2-', 'python3-')
+            requires = requires.replace('python-', 'python3-')
+            requires = requires.replace('python2-', 'python3-')
 
         elif line.startswith('%description'):
           in_description = True
@@ -120,7 +122,8 @@ else:
           lines = [
               '%files -n {0:s}-%{{name}}'.format(python_package),
               '%defattr(644,root,root,755)',
-              '%doc ACKNOWLEDGEMENTS AUTHORS LICENSE README']
+              '%license LICENSE',
+              '%doc ACKNOWLEDGEMENTS AUTHORS README']
 
           if python_package == 'python3':
             lines.extend([
@@ -148,15 +151,18 @@ else:
           python_spec_file.append(
               '%package -n {0:s}-%{{name}}'.format(python_package))
           if python_package == 'python2':
-            python_spec_file.append(
-                'Obsoletes: python-dfdatetime < %{version}')
-            python_spec_file.append(
-                'Provides: python-dfdatetime = %{version}')
+            python_spec_file.extend([
+                'Obsoletes: python-dfdatetime < %{version}',
+                'Provides: python-dfdatetime = %{version}'])
 
-          python_spec_file.append('{0:s}'.format(summary))
-          python_spec_file.append('')
-          python_spec_file.append(
-              '%description -n {0:s}-%{{name}}'.format(python_package))
+          if requires:
+            python_spec_file.append('Requires: {0:s}'.format(requires))
+
+          python_spec_file.extend([
+              '{0:s}'.format(summary),
+              '',
+              '%description -n {0:s}-%{{name}}'.format(python_package)])
+
           python_spec_file.extend(description)
 
         elif in_description:

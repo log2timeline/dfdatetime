@@ -23,7 +23,7 @@ RPM_PYTHON2_TEST_DEPENDENCIES="python2-funcsigs python2-mock python2-pbr python2
 
 RPM_PYTHON3_DEPENDENCIES="";
 
-RPM_PYTHON3_TEST_DEPENDENCIES="python32-mock python32-pbr python32-six";
+RPM_PYTHON3_TEST_DEPENDENCIES="python3-mock python3-pbr python3-six";
 
 # Exit on error.
 set -e;

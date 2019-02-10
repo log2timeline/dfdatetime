@@ -11,11 +11,11 @@ L2TBINARIES_TEST_DEPENDENCIES="funcsigs mock pbr six";
 
 DPKG_PYTHON2_DEPENDENCIES="";
 
-DPKG_PYTHON2_TEST_DEPENDENCIES="python-coverage python-funcsigs python-mock python-pbr python-six python-tox";
+DPKG_PYTHON2_TEST_DEPENDENCIES="python-coverage python-funcsigs python-mock python-pbr python-six tox";
 
 DPKG_PYTHON3_DEPENDENCIES="";
 
-DPKG_PYTHON3_TEST_DEPENDENCIES="python3-mock python3-pbr python3-setuptools python3-six python3-tox";
+DPKG_PYTHON3_TEST_DEPENDENCIES="python3-mock python3-pbr python3-setuptools python3-six tox";
 
 RPM_PYTHON2_DEPENDENCIES="";
 
@@ -68,6 +68,30 @@ then
 	else
 		docker exec ${CONTAINER_NAME} dnf install -y git python3 ${RPM_PYTHON3_DEPENDENCIES} ${RPM_PYTHON3_TEST_DEPENDENCIES};
 	fi
+
+	docker cp ../dfdatetime ${CONTAINER_NAME}:/
+
+elif test -n "${UBUNTU_VERSION}";
+then
+	CONTAINER_NAME="ubuntu${UBUNTU_VERSION}";
+
+	docker pull ubuntu:${UBUNTU_VERSION};
+
+	docker run --name=${CONTAINER_NAME} --detach -i ubuntu:${UBUNTU_VERSION};
+
+	docker exec ${CONTAINER_NAME} apt-get update -q;
+	docker exec ${CONTAINER_NAME} sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common";
+
+	docker exec ${CONTAINER_NAME} add-apt-repository ppa:gift/dev -y;
+
+	if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+	then
+		docker exec ${CONTAINER_NAME} sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y git python ${DPKG_PYTHON2_DEPENDENCIES} ${DPKG_PYTHON2_TEST_DEPENDENCIES}";
+	else
+		docker exec ${CONTAINER_NAME} sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y git python3 ${DPKG_PYTHON3_DEPENDENCIES} ${DPKG_PYTHON3_TEST_DEPENDENCIES}";
+	fi
+
+	docker cp ../dfdatetime ${CONTAINER_NAME}:/
 
 elif test ${TRAVIS_OS_NAME} = "linux" && test ${TARGET} != "jenkins";
 then

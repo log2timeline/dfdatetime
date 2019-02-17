@@ -11,11 +11,11 @@ L2TBINARIES_TEST_DEPENDENCIES="funcsigs mock pbr six";
 
 DPKG_PYTHON2_DEPENDENCIES="";
 
-DPKG_PYTHON2_TEST_DEPENDENCIES="python-coverage python-funcsigs python-mock python-pbr python-six tox";
+DPKG_PYTHON2_TEST_DEPENDENCIES="python-coverage python-funcsigs python-mock python-pbr python-six";
 
 DPKG_PYTHON3_DEPENDENCIES="";
 
-DPKG_PYTHON3_TEST_DEPENDENCIES="python3-mock python3-pbr python3-setuptools python3-six tox";
+DPKG_PYTHON3_TEST_DEPENDENCIES="python3-mock python3-pbr python3-setuptools python3-six";
 
 RPM_PYTHON2_DEPENDENCIES="";
 
@@ -62,7 +62,11 @@ then
 
 	docker exec ${CONTAINER_NAME} dnf copr -y enable @gift/dev;
 
-	if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+	if test -n "${TOXENV}";
+	then
+		docker exec ${CONTAINER_NAME} dnf install -y python3-tox;
+
+	elif test ${TRAVIS_PYTHON_VERSION} = "2.7";
 	then
 		docker exec ${CONTAINER_NAME} dnf install -y git python2 ${RPM_PYTHON2_DEPENDENCIES} ${RPM_PYTHON2_TEST_DEPENDENCIES};
 	else
@@ -84,7 +88,16 @@ then
 
 	docker exec ${CONTAINER_NAME} add-apt-repository ppa:gift/dev -y;
 
-	if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+	if test -n "${TOXENV}";
+	then
+		docker exec ${CONTAINER_NAME} add-apt-repository universe;
+		docker exec ${CONTAINER_NAME} add-apt-repository ppa:deadsnakes/ppa -y;
+
+		DPKG_PYTHON="python${TRAVIS_PYTHON_VERSION}";
+
+		docker exec ${CONTAINER_NAME} sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y ${DPKG_PYTHON} tox";
+
+	elif test ${TRAVIS_PYTHON_VERSION} = "2.7";
 	then
 		docker exec ${CONTAINER_NAME} sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y git python ${DPKG_PYTHON2_DEPENDENCIES} ${DPKG_PYTHON2_TEST_DEPENDENCIES}";
 	else

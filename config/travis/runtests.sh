@@ -42,7 +42,11 @@ elif test -n "${FEDORA_VERSION}";
 then
 	CONTAINER_NAME="fedora${FEDORA_VERSION}";
 
-	if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+	if test -n "${TOXENV}";
+	then
+		docker exec ${CONTAINER_NAME} sh -c "cd dfdatetime && tox -e ${TOXENV}";
+
+	elif test ${TRAVIS_PYTHON_VERSION} = "2.7";
 	then
 		docker exec ${CONTAINER_NAME} sh -c "export LANG=en_US.UTF-8; cd dfdatetime && python2 run_tests.py";
 	else
@@ -53,7 +57,11 @@ elif test -n "${UBUNTU_VERSION}";
 then
 	CONTAINER_NAME="ubuntu${UBUNTU_VERSION}";
 
-	if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+	if test -n "${TOXENV}";
+	then
+		docker exec ${CONTAINER_NAME} sh -c "cd dfdatetime && tox -e ${TOXENV}";
+
+	elif test ${TRAVIS_PYTHON_VERSION} = "2.7";
 	then
 		docker exec ${CONTAINER_NAME} sh -c "export LANG=en_US.UTF-8; cd dfdatetime && python2 run_tests.py";
 	else

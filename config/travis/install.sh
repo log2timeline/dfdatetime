@@ -119,13 +119,16 @@ then
 	if test -n "${TOXENV}";
 	then
 		DPKG_PACKAGES="build-essential python${TRAVIS_PYTHON_VERSION} python${TRAVIS_PYTHON_VERSION}-dev tox";
-
 	else
 		DPKG_PACKAGES="";
 
 		if test "${TARGET}" = "coverage";
 		then
 			DPKG_PACKAGES="${DPKG_PACKAGES} curl git";
+
+		elif test "${TARGET}" = "jenkins2" || test "${TARGET}" = "jenkins3";
+		then
+			DPKG_PACKAGES="${DPKG_PACKAGES} sudo";
 
 		elif test ${TARGET} = "pylint";
 		then

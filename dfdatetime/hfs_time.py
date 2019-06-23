@@ -87,16 +87,16 @@ class HFSTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 1904 or year > 2040:
       raise ValueError('Year value not supported.')
 
     self._normalized_timestamp = None
     self._timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
     self._timestamp += self._HFS_TO_POSIX_BASE
-
-    self.is_local_time = False
+    self._time_zone_offset = time_zone_offset
 
   def CopyToDateTimeString(self):
     """Copies the HFS timestamp to a date and time string.

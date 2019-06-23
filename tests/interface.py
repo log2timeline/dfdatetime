@@ -113,7 +113,27 @@ class DateTimeValuesTest(unittest.TestCase):
 
     self.assertTrue(date_time_values1 != 0.0)
 
-  # TODO: add tests for _AdjustForTimeZoneOffset.
+  def testAdjustForTimeZoneOffset(self):
+    """Tests the _AdjustForTimeZoneOffset function."""
+    date_time_values = interface.DateTimeValues()
+
+    year, month, day_of_month, hours, minutes = (
+        date_time_values._AdjustForTimeZoneOffset(
+            2009, 12, 31, 23, 45, -30))
+    self.assertEqual(year, 2010)
+    self.assertEqual(month, 1)
+    self.assertEqual(day_of_month, 1)
+    self.assertEqual(hours, 0)
+    self.assertEqual(minutes, 15)
+
+    year, month, day_of_month, hours, minutes = (
+        date_time_values._AdjustForTimeZoneOffset(
+            2010, 1, 1, 1, 15, 90))
+    self.assertEqual(year, 2009)
+    self.assertEqual(month, 12)
+    self.assertEqual(day_of_month, 31)
+    self.assertEqual(hours, 23)
+    self.assertEqual(minutes, 45)
 
   def testCopyDateFromString(self):
     """Tests the _CopyDateFromString function."""
@@ -201,39 +221,18 @@ class DateTimeValuesTest(unittest.TestCase):
 
     expected_date_dict = {
         'year': 2010, 'month': 8, 'day_of_month': 12,
-        'hours': 22, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'microseconds': 546875,
+        'time_zone_offset': -60}
     date_dict = date_time_values._CopyDateTimeFromString(
         '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
         'year': 2010, 'month': 8, 'day_of_month': 12,
-        'hours': 20, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'microseconds': 546875,
+        'time_zone_offset': 60}
     date_dict = date_time_values._CopyDateTimeFromString(
         '2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(date_dict, expected_date_dict)
-
-    expected_date_dict = {
-        'year': 2010, 'month': 8, 'day_of_month': 12,
-        'hours': 20, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
-    date_dict = date_time_values._CopyDateTimeFromString(
-        '2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(date_dict, expected_date_dict)
-
-    # Test backwards date correction.
-    expected_date_dict = {
-        'year': 2009, 'month': 12, 'day_of_month': 31,
-        'hours': 23, 'minutes': 45, 'seconds': 0, 'microseconds': 123456}
-    date_dict = date_time_values._CopyDateTimeFromString(
-        '2010-01-01 00:15:00.123456+00:30')
-    self.assertEqual(date_dict, expected_date_dict)
-
-    # Test forward date correction.
-    expected_date_dict = {
-        'year': 2010, 'month': 1, 'day_of_month': 1,
-        'hours': 1, 'minutes': 15, 'seconds': 0, 'microseconds': 123456}
-    date_dict = date_time_values._CopyDateTimeFromString(
-        '2009-12-31 23:45:00.123456-01:30')
     self.assertEqual(date_dict, expected_date_dict)
 
     with self.assertRaises(ValueError):
@@ -255,7 +254,7 @@ class DateTimeValuesTest(unittest.TestCase):
     time_tuple = date_time_values._CopyTimeFromString('20:23:56')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, None, -330)
+    expected_time_tuple = (20, 23, 56, None, 330)
     time_tuple = date_time_values._CopyTimeFromString('20:23:56+05:30')
     self.assertEqual(time_tuple, expected_time_tuple)
 
@@ -263,7 +262,7 @@ class DateTimeValuesTest(unittest.TestCase):
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327000, -60)
+    expected_time_tuple = (20, 23, 56, 327000, 60)
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327+01:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 
@@ -271,7 +270,7 @@ class DateTimeValuesTest(unittest.TestCase):
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327124')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327124, 300)
+    expected_time_tuple = (20, 23, 56, 327124, -300)
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327124-05:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 
@@ -548,39 +547,52 @@ class DateTimeValuesTest(unittest.TestCase):
     date_time_values = interface.DateTimeValues()
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, 0, 0, 0)
+        2010, 8, 12, 0, 0, 0, -60)
+    self.assertEqual(number_of_seconds, 1281574800)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        2010, 8, 12, 0, 0, 0, 60)
+    self.assertEqual(number_of_seconds, 1281567600)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        2010, 8, 12, 0, 0, 0, None)
     self.assertEqual(number_of_seconds, 1281571200)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, None, None, None)
+        2010, 8, 12, None, None, None, None)
     self.assertEqual(number_of_seconds, 1281571200)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, 21, 6, 31)
+        2010, 8, 12, 21, 6, 31, None)
     self.assertEqual(number_of_seconds, 1281647191)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        1601, 1, 2, 0, 0, 0)
+        1601, 1, 2, 0, 0, 0, None)
     self.assertEqual(number_of_seconds, -11644387200)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        0, 1, 2, 0, 0, 0)
+        0, 1, 2, 0, 0, 0, None)
     self.assertIsNone(number_of_seconds)
 
     with self.assertRaises(ValueError):
-      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 6, 31)
+      date_time_values._GetNumberOfSecondsFromElements(
+          2010, 13, 12, 21, 6, 31, None)
 
     with self.assertRaises(ValueError):
-      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 24, 6, 31)
+      date_time_values._GetNumberOfSecondsFromElements(
+          2010, 13, 12, 24, 6, 31, None)
 
     with self.assertRaises(ValueError):
-      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 99, 31)
+      date_time_values._GetNumberOfSecondsFromElements(
+          2010, 13, 12, 21, 99, 31, None)
 
     with self.assertRaises(ValueError):
-      date_time_values._GetNumberOfSecondsFromElements(2010, 13, 12, 21, 6, 65)
+      date_time_values._GetNumberOfSecondsFromElements(
+          2010, 13, 12, 21, 6, 65, None)
 
     with self.assertRaises(ValueError):
-      date_time_values._GetNumberOfSecondsFromElements(2013, 2, 29, 1, 4, 25)
+      date_time_values._GetNumberOfSecondsFromElements(
+          2013, 2, 29, 1, 4, 25, None)
 
   def testGetTimeValues(self):
     """Tests the _GetTimeValues function."""

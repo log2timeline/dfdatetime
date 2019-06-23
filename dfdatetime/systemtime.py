@@ -104,7 +104,7 @@ class Systemtime(interface.DateTimeValues):
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
-          self.seconds)
+          self.seconds, self._time_zone_offset)
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -147,8 +147,9 @@ class Systemtime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-
     microseconds = date_time_values.get('microseconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
+
     milliseconds, _ = divmod(
         microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
 
@@ -157,7 +158,8 @@ class Systemtime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+    self._time_zone_offset = time_zone_offset
 
     self.year = year
     self.month = month
@@ -168,8 +170,6 @@ class Systemtime(interface.DateTimeValues):
     self.minutes = minutes
     self.seconds = seconds
     self.milliseconds = milliseconds
-
-    self.is_local_time = False
 
   def CopyToDateTimeString(self):
     """Copies the SYSTEMTIME structure to a date and time string.

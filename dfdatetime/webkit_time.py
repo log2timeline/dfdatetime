@@ -88,16 +88,17 @@ class WebKitTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
     timestamp += self._WEBKIT_TO_POSIX_BASE
     timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += date_time_values.get('microseconds', 0)
 
     self._normalized_timestamp = None
     self._timestamp = timestamp
-    self.is_local_time = False
+    self._time_zone_offset = time_zone_offset
 
   def CopyToDateTimeString(self):
     """Copies the WebKit timestamp to a date and time string.

@@ -110,23 +110,22 @@ class RFC2579DateTime(interface.DateTimeValues):
       time_zone_offset = (
           (rfc2579_date_time_tuple[8] * 60) + rfc2579_date_time_tuple[9])
 
-      # Note that when the sign of the time zone offset is negative
-      # the difference needs to be added. We do so by flipping the sign.
-      if rfc2579_date_time_tuple[7] != '-':
+      if rfc2579_date_time_tuple[7] == '-':
         time_zone_offset = -time_zone_offset
 
-      self.year, self.month, self.day_of_month, self.hours, self.minutes = (
-          self._AdjustForTimeZoneOffset(
-              rfc2579_date_time_tuple[0], rfc2579_date_time_tuple[1],
-              rfc2579_date_time_tuple[2], rfc2579_date_time_tuple[3],
-              rfc2579_date_time_tuple[4], time_zone_offset))
+      self._time_zone_offset = time_zone_offset
 
-      self.deciseconds = rfc2579_date_time_tuple[6]
+      self.year = rfc2579_date_time_tuple[0]
+      self.month = rfc2579_date_time_tuple[1]
+      self.day_of_month = rfc2579_date_time_tuple[2]
+      self.hours = rfc2579_date_time_tuple[3]
+      self.minutes = rfc2579_date_time_tuple[4]
       self.seconds = rfc2579_date_time_tuple[5]
+      self.deciseconds = rfc2579_date_time_tuple[6]
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
-          self.seconds)
+          self.seconds, self._time_zone_offset)
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -169,8 +168,9 @@ class RFC2579DateTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-
     microseconds = date_time_values.get('microseconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
+
     deciseconds, _ = divmod(
         microseconds, definitions.MICROSECONDS_PER_DECISECOND)
 
@@ -179,7 +179,8 @@ class RFC2579DateTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+    self._time_zone_offset = time_zone_offset
 
     self.year = year
     self.month = month
@@ -188,8 +189,6 @@ class RFC2579DateTime(interface.DateTimeValues):
     self.minutes = minutes
     self.seconds = seconds
     self.deciseconds = deciseconds
-
-    self.is_local_time = False
 
   def CopyToDateTimeString(self):
     """Copies the RFC2579 date-time to a date and time string.

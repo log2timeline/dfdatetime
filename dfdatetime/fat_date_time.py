@@ -143,16 +143,16 @@ class FATDateTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError('Year value not supported: {0!s}.'.format(year))
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
     self._number_of_seconds -= self._FAT_DATE_TO_POSIX_BASE
-
-    self.is_local_time = False
+    self._time_zone_offset = time_zone_offset
 
   def CopyToDateTimeString(self):
     """Copies the FAT date time to a date and time string.

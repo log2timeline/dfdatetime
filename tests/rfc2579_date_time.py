@@ -57,10 +57,11 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
-    self.assertEqual(rfc2579_date_time_object.hours, 18)
+    self.assertEqual(rfc2579_date_time_object.hours, 20)
     self.assertEqual(rfc2579_date_time_object.minutes, 6)
     self.assertEqual(rfc2579_date_time_object.seconds, 31)
     self.assertEqual(rfc2579_date_time_object.deciseconds, 6)
+    self.assertEqual(rfc2579_date_time_object.time_zone_offset, 120)
 
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
@@ -168,10 +169,11 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
-    self.assertEqual(rfc2579_date_time_object.hours, 22)
+    self.assertEqual(rfc2579_date_time_object.hours, 21)
     self.assertEqual(rfc2579_date_time_object.minutes, 6)
     self.assertEqual(rfc2579_date_time_object.seconds, 31)
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
+    self.assertEqual(rfc2579_date_time_object.time_zone_offset, -60)
 
     expected_number_of_seconds = 1281643591
     rfc2579_date_time_object.CopyFromDateTimeString(
@@ -181,10 +183,11 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
-    self.assertEqual(rfc2579_date_time_object.hours, 20)
+    self.assertEqual(rfc2579_date_time_object.hours, 21)
     self.assertEqual(rfc2579_date_time_object.minutes, 6)
     self.assertEqual(rfc2579_date_time_object.seconds, 31)
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
+    self.assertEqual(rfc2579_date_time_object.time_zone_offset, 60)
 
     expected_number_of_seconds = -11644387200
     rfc2579_date_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')

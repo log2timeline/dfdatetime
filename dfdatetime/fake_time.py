@@ -72,13 +72,13 @@ class FakeTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
     self._microseconds = date_time_values.get('microseconds', None)
-
-    self.is_local_time = False
+    self._time_zone_offset = time_zone_offset
 
   def CopyToDateTimeString(self):
     """Copies the fake timestamp to a date and time string.

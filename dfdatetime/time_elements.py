@@ -43,7 +43,10 @@ class TimeElements(interface.DateTimeValues):
             'got: {0:d}').format(len(time_elements_tuple)))
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-          *time_elements_tuple)
+          time_elements_tuple[0], time_elements_tuple[1],
+          time_elements_tuple[2], time_elements_tuple[3],
+          time_elements_tuple[4], time_elements_tuple[5],
+          self._time_zone_offset)
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -72,8 +75,8 @@ class TimeElements(interface.DateTimeValues):
           time zone offset are optional.
 
     Returns:
-      tuple[int, int, int, int, int]: hours, minutes, seconds, microseconds,
-          time zone offset in minutes.
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds, microseconds, time zone offset in minutes.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -100,10 +103,6 @@ class TimeElements(interface.DateTimeValues):
     hours, minutes, seconds, microseconds, time_zone_offset = (
         self._CopyTimeFromStringISO8601(time_string[11:]))
 
-    if time_zone_offset:
-      year, month, day_of_month, hours, minutes = self._AdjustForTimeZoneOffset(
-          year, month, day_of_month, hours, minutes, time_zone_offset)
-
     date_time_values = {
         'year': year,
         'month': month,
@@ -114,6 +113,9 @@ class TimeElements(interface.DateTimeValues):
 
     if microseconds is not None:
       date_time_values['microseconds'] = microseconds
+    if time_zone_offset is not None:
+      date_time_values['time_zone_offset'] = time_zone_offset
+
     return date_time_values
 
   def _CopyFromDateTimeValues(self, date_time_values):
@@ -121,7 +123,8 @@ class TimeElements(interface.DateTimeValues):
 
     Args:
       date_time_values  (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds, microseconds.
+          month, day of month, hours, minutes, seconds, microseconds, time zone
+          offset in minutes.
     """
     year = date_time_values.get('year', 0)
     month = date_time_values.get('month', 0)
@@ -129,14 +132,14 @@ class TimeElements(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
-
-    self.is_local_time = False
+    self._time_zone_offset = time_zone_offset
 
   def _CopyTimeFromStringISO8601(self, time_string):
     """Copies a time from an ISO 8601 date and time string.
@@ -288,9 +291,7 @@ class TimeElements(interface.DateTimeValues):
       # pylint: disable=invalid-unary-operand-type
       time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
 
-      # Note that when the sign of the time zone offset is negative
-      # the difference needs to be added. We do so by flipping the sign.
-      if time_string[time_zone_string_index] != '-':
+      if time_string[time_zone_string_index] == '-':
         time_zone_offset = -time_zone_offset
 
     return hours, minutes, seconds, microseconds, time_zone_offset
@@ -391,7 +392,8 @@ class TimeElements(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds,
+        self._time_zone_offset)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
 
@@ -467,7 +469,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     Args:
       date_time_values  (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds, microseconds.
+          month, day of month, hours, minutes, seconds, microseconds, time zone
+          offset in minutes.
 
     Raises:
       ValueError: if no helper can be created for the current precision.
@@ -479,6 +482,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
     microseconds = date_time_values.get('microseconds', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
         self._precision)
@@ -488,11 +492,12 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
+        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
+    self._time_zone_offset = time_zone_offset
+
     self.fraction_of_second = fraction_of_second
-    self.is_local_time = False
 
   def CopyFromStringTuple(self, time_elements_tuple):
     """Copies time elements from string-based time elements tuple.

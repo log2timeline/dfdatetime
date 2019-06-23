@@ -15,6 +15,13 @@ class DateTimeEpoch(object):
   """Date and time epoch interface.
 
   This is the super class of different epoch representations.
+
+  Attributes:
+    year (int): year that is the start of the epoch e.g. 1970.
+    month (int): month that is the start of the epoch, where 1 represents
+        January.
+    day_of_month (int): day of the month that is the start of the epoch,
+        where 1 represents the first day.
   """
 
   def __init__(self, year, month, day_of_month):
@@ -73,6 +80,8 @@ class DateTimeValues(object):
     super(DateTimeValues, self).__init__()
     self._normalized_timestamp = None
     self._precision = None
+    self._time_zone_offset = None
+
     self.is_local_time = False
 
   @property
@@ -81,6 +90,13 @@ class DateTimeValues(object):
         be one of the PRECISION_VALUES in definitions.
     """
     return self._precision
+
+  @property
+  def time_zone_offset(self):
+    """time_zone_offset (int): time zone offset in number of minutes from UTC
+        or None if not set.
+    """
+    return self._time_zone_offset
 
   def __eq__(self, other):
     """Determines if the date time values are equal to other.
@@ -248,6 +264,10 @@ class DateTimeValues(object):
       tuple[int, int, int, int, int, int]: time zone correct year, month,
          day_of_month, hours and minutes values.
     """
+    # Note that when the sign of the time zone offset is negative
+    # the difference needs to be added. We do so by flipping the sign.
+    time_zone_offset = -time_zone_offset
+
     hours_from_utc, minutes_from_utc = divmod(time_zone_offset, 60)
 
     minutes += minutes_from_utc
@@ -343,7 +363,7 @@ class DateTimeValues(object):
 
     Returns:
       dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds, microseconds.
+          hours, minutes, seconds, microseconds, time zone offset in minutes.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -370,10 +390,6 @@ class DateTimeValues(object):
     hours, minutes, seconds, microseconds, time_zone_offset = (
         self._CopyTimeFromString(time_string[11:]))
 
-    if time_zone_offset:
-      year, month, day_of_month, hours, minutes = self._AdjustForTimeZoneOffset(
-          year, month, day_of_month, hours, minutes, time_zone_offset)
-
     date_time_values = {
         'year': year,
         'month': month,
@@ -384,6 +400,9 @@ class DateTimeValues(object):
 
     if microseconds is not None:
       date_time_values['microseconds'] = microseconds
+    if time_zone_offset is not None:
+      date_time_values['time_zone_offset'] = time_zone_offset
+
     return date_time_values
 
   def _CopyTimeFromString(self, time_string):
@@ -495,9 +514,7 @@ class DateTimeValues(object):
       # pylint: disable=invalid-unary-operand-type
       time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
 
-      # Note that when the sign of the time zone offset is negative
-      # the difference needs to be added. We do so by flipping the sign.
-      if time_string[time_zone_string_index] != '-':
+      if time_string[time_zone_string_index] == '-':
         time_zone_offset = -time_zone_offset
 
     return hours, minutes, seconds, microseconds, time_zone_offset
@@ -736,7 +753,8 @@ class DateTimeValues(object):
     return 365
 
   def _GetNumberOfSecondsFromElements(
-      self, year, month, day_of_month, hours, minutes, seconds):
+      self, year, month, day_of_month, hours, minutes, seconds,
+      time_zone_offset):
     """Retrieves the number of seconds from the date and time elements.
 
     Args:
@@ -746,6 +764,8 @@ class DateTimeValues(object):
       hours (int): hours.
       minutes (int): minutes.
       seconds (int): seconds.
+      time_zone_offset (int): time zone offset in number of minutes from UTC
+          or None if not set.
 
     Returns:
       int: number of seconds since January 1, 1970 00:00:00 or None if year,
@@ -778,6 +798,10 @@ class DateTimeValues(object):
     days_per_month = self._GetDaysPerMonth(year, month)
     if day_of_month < 1 or day_of_month > days_per_month:
       raise ValueError('Day of month value out of bounds.')
+
+    if time_zone_offset:
+      year, month, day_of_month, hours, minutes = self._AdjustForTimeZoneOffset(
+          year, month, day_of_month, hours, minutes, time_zone_offset)
 
     # calendar.timegm requires the time tuple to contain at least
     # 6 integer values.

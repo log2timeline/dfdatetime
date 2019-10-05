@@ -28,6 +28,8 @@ if test ${TRAVIS_OS_NAME} = "osx";
 then
 	brew update;
 
+	brew install tox;
+
 elif test -n "${FEDORA_VERSION}";
 then
 	CONTAINER_NAME="fedora${FEDORA_VERSION}";

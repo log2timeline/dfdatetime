@@ -24,13 +24,7 @@ RPM_PYTHON3_TEST_DEPENDENCIES="python3-mock python3-pbr python3-setuptools pytho
 # Exit on error.
 set -e;
 
-if test ${TRAVIS_OS_NAME} = "osx";
-then
-	brew update;
-
-	brew install tox;
-
-elif test -n "${FEDORA_VERSION}";
+if test -n "${FEDORA_VERSION}";
 then
 	CONTAINER_NAME="fedora${FEDORA_VERSION}";
 
@@ -38,8 +32,8 @@ then
 
 	docker run --name=${CONTAINER_NAME} --detach -i registry.fedoraproject.org/fedora:${FEDORA_VERSION};
 
-	# Install dnf-plugins-core.
-	docker exec ${CONTAINER_NAME} dnf install -y dnf-plugins-core;
+	# Install dnf-plugins-core and langpacks-en.
+	docker exec ${CONTAINER_NAME} dnf install -y dnf-plugins-core langpacks-en;
 
 	# Add additional dnf repositories.
 	docker exec ${CONTAINER_NAME} dnf copr -y enable @gift/dev;
@@ -114,14 +108,23 @@ then
 		then
 			DPKG_PACKAGES="${DPKG_PACKAGES} python3-distutils pylint";
 		fi
-		if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+		if test "${TARGET}" != "jenkins2" && test "${TARGET}" != "jenkins3";
 		then
-			DPKG_PACKAGES="${DPKG_PACKAGES} python ${DPKG_PYTHON2_DEPENDENCIES} ${DPKG_PYTHON2_TEST_DEPENDENCIES}";
-		else
-			DPKG_PACKAGES="${DPKG_PACKAGES} python3 ${DPKG_PYTHON3_DEPENDENCIES} ${DPKG_PYTHON3_TEST_DEPENDENCIES}";
+			if test ${TRAVIS_PYTHON_VERSION} = "2.7";
+			then
+				DPKG_PACKAGES="${DPKG_PACKAGES} python ${DPKG_PYTHON2_DEPENDENCIES} ${DPKG_PYTHON2_TEST_DEPENDENCIES}";
+			else
+				DPKG_PACKAGES="${DPKG_PACKAGES} python3 ${DPKG_PYTHON3_DEPENDENCIES} ${DPKG_PYTHON3_TEST_DEPENDENCIES}";
+			fi
 		fi
 	fi
 	docker exec -e "DEBIAN_FRONTEND=noninteractive" ${CONTAINER_NAME} sh -c "apt-get install -y ${DPKG_PACKAGES}";
 
 	docker cp ../dfdatetime ${CONTAINER_NAME}:/
+
+elif test ${TRAVIS_OS_NAME} = "osx";
+then
+	brew update;
+
+	brew install tox;
 fi

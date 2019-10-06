@@ -35,7 +35,7 @@ install:
     "%PYTHON%\\python.exe" ..\l2tdevtools\tools\update.py --download-directory dependencies --machine-type %MACHINE_TYPE% --msi-targetdir "%PYTHON%" --track dev mock pbr six )
 
 build_script:
-- cmd: if [%BUILD_ENVIRONMENT%]==[python] (
+- cmd: if [%TARGET%]==[unittests] (
     "%PYTHON%\\python.exe" setup.py bdist_msi bdist_wheel )
 
 test_script:

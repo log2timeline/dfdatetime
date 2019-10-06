@@ -1,4 +1,6 @@
 environment:
+  pypi_token:
+    secure: /FwQrmudDyj+Mu3DaxLEo23Y6/OEgdHJqyWyZTjkJKje8pxCOrUorN8ZlXRGXbd3UA60emClt0M+SI+xqyA/qkpqZTgd5CKohpVAGH2EfzRc/zwJSGJ4tmZmMVAG8ayk6N9zFxCeC+y0BgZPQnj/Eq/RfuS4YIuaKutIUa5gTMmhWpODFKGV/2Wx1w67xWxAoONfEC5j0Gu3R274SS7FfBb4qWyIiBIJMwHGjlgp1Onk8KlpCLauZv8/hGfQDmWEdZ+mjcsTYyQYr1xfr1/FjQ==
   matrix:
   - TARGET: unittests
     MACHINE_TYPE: "x86"
@@ -19,7 +21,7 @@ environment:
 
 install:
 - cmd: '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86 /release'
-- cmd: "%PYTHON%\\python.exe -m pip install --upgrade pip"
+- cmd: "%PYTHON%\\python.exe -m pip install -U pip setuptools wheel"
 - cmd: "%PYTHON%\\python.exe -m pip install pywin32 WMI"
 - cmd: "%PYTHON%\\python.exe %PYTHON%\\Scripts\\pywin32_postinstall.py -install"
 - cmd: git clone https://github.com/log2timeline/l2tdevtools.git ..\l2tdevtools
@@ -32,8 +34,18 @@ install:
     set PYTHONPATH=..\l2tdevtools &&
     "%PYTHON%\\python.exe" ..\l2tdevtools\tools\update.py --download-directory dependencies --machine-type %MACHINE_TYPE% --msi-targetdir "%PYTHON%" --track dev mock pbr six )
 
-build: off
+build_script:
+- cmd: if [%BUILD_ENVIRONMENT%]==[python] (
+    "%PYTHON%\\python.exe" setup.py bdist_msi bdist_wheel )
 
 test_script:
 - cmd: if [%TARGET%]==[unittests] (
     "%PYTHON%\\python.exe" run_tests.py )
+
+artifacts:
+- path: dist\*.whl
+
+deploy_script:
+- ps: If ($env:APPVEYOR_REPO_TAG -eq "true") {
+    Invoke-Expression "${env:PYTHON}\\python.exe -m twine upload dist/*.whl --username __token__ --password ${env:PYPI_TOKEN} --skip-existing" }
+

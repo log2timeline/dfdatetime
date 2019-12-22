@@ -2,18 +2,10 @@ Source: dfdatetime
 Section: python
 Priority: extra
 Maintainer: Log2Timeline maintainers <log2timeline-maintainers@googlegroups.com>
-Build-Depends: debhelper (>= 9), dh-python, python-all (>= 2.7~), python-setuptools, python3-all (>= 3.4~), python3-setuptools
-Standards-Version: 3.9.5
-X-Python-Version: >= 2.7
-X-Python3-Version: >= 3.4
+Build-Depends: debhelper (>= 9), dh-python, python3-all (>= 3.5~), python3-setuptools
+Standards-Version: 4.1.4
+X-Python3-Version: >= 3.5
 Homepage: https://github.com/log2timeline/dfdatetime
-
-Package: python-dfdatetime
-Architecture: all
-Depends: ${python:Depends}, ${misc:Depends}
-Description: Python 2 module of dfDateTime
- dfDateTime, or Digital Forensics date and time, provides date and time objects
- to preserve accuracy and precision.
 
 Package: python3-dfdatetime
 Architecture: all

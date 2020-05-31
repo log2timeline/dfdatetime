@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -12,7 +14,7 @@ from dfdatetime import interface
 class UUIDTimeEpoch(interface.DateTimeEpoch):
   """UUID version 1 time epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes an UUID version 1 time epoch."""
     super(UUIDTimeEpoch, self).__init__(1582, 10, 15)
 
@@ -29,12 +31,12 @@ class UUIDTime(interface.DateTimeValues):
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
   """
-  _EPOCH = UUIDTimeEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = UUIDTimeEpoch()
 
   # The difference between October 15, 1582 and January 1, 1970 in seconds.
-  _UUID_TO_POSIX_BASE = 12219292800
+  _UUID_TO_POSIX_BASE: 'int' = 12219292800
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[int]' = None) -> 'None':
     """Initializes an UUID version 1 timestamp.
 
     Args:
@@ -47,15 +49,15 @@ class UUIDTime(interface.DateTimeValues):
       raise ValueError('Invalid UUID version 1 timestamp.')
 
     super(UUIDTime, self).__init__()
-    self._precision = definitions.PRECISION_100_NANOSECONDS
-    self._timestamp = timestamp
+    self._precision: 'str' = definitions.PRECISION_100_NANOSECONDS
+    self._timestamp: 'Union[int, None]' = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[int, None]':
     """int: UUID timestamp or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
@@ -73,7 +75,7 @@ class UUIDTime(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies an UUID timestamp from a date and time string.
 
     Args:
@@ -102,7 +104,8 @@ class UUIDTime(interface.DateTimeValues):
       raise ValueError('Year value not supported.')
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     timestamp += self._UUID_TO_POSIX_BASE
     timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += date_time_values.get('microseconds', 0)
@@ -112,7 +115,7 @@ class UUIDTime(interface.DateTimeValues):
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the UUID timestamp to a date and time string.
 
     Returns:

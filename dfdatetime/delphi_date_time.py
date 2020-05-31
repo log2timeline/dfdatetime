@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -12,7 +14,7 @@ from dfdatetime import interface
 class DelphiDateTimeEpoch(interface.DateTimeEpoch):
   """Delphi TDateTime epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a Delphi TDateTime epoch."""
     super(DelphiDateTimeEpoch, self).__init__(1899, 12, 30)
 
@@ -34,33 +36,33 @@ class DelphiDateTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
   # The difference between December 30, 1899 and January 1, 1970 in days.
-  _DELPHI_TO_POSIX_BASE = 25569
+  _DELPHI_TO_POSIX_BASE: 'int' = 25569
 
-  _EPOCH = DelphiDateTimeEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = DelphiDateTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[float]' = None) -> 'None':
     """Initializes a Delphi TDateTime timestamp.
 
     Args:
       timestamp (Optional[float]): Delphi TDateTime timestamp.
     """
     super(DelphiDateTime, self).__init__()
-    self._precision = definitions.PRECISION_1_MILLISECOND
-    self._timestamp = timestamp
+    self._precision: 'str' = definitions.PRECISION_1_MILLISECOND
+    self._timestamp: 'Union[float, None]' = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[float, None]':
     """float: Delphi TDateTime timestamp or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
@@ -70,7 +72,7 @@ class DelphiDateTime(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a Delphi TDateTime timestamp from a string.
 
     Args:
@@ -99,10 +101,11 @@ class DelphiDateTime(interface.DateTimeValues):
     if year > 9999:
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
 
-    timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+    number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
 
-    timestamp = float(timestamp) / definitions.SECONDS_PER_DAY
+    timestamp = float(number_of_seconds) / definitions.SECONDS_PER_DAY
     timestamp += self._DELPHI_TO_POSIX_BASE
     if microseconds is not None:
       timestamp += float(microseconds) / definitions.MICROSECONDS_PER_DAY
@@ -111,7 +114,7 @@ class DelphiDateTime(interface.DateTimeValues):
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the Delphi TDateTime timestamp to a date and time string.
 
     Returns:

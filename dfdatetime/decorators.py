@@ -4,12 +4,20 @@
 from __future__ import unicode_literals
 
 import warnings
+import typing
+
+from typing import Any, Callable  # pylint: disable=unused-import
 
 
-def deprecated(function):  # pylint: disable=invalid-name
+# pylint: disable=invalid-name
+RETURN_TYPE = typing.TypeVar('RETURN_TYPE')
+
+
+def deprecated(
+    function: 'Callable[..., RETURN_TYPE]') -> 'Callable[..., RETURN_TYPE]':
   """Decorator to mark functions or methods as deprecated."""
 
-  def IssueDeprecationWarning(*args, **kwargs):
+  def IssueDeprecationWarning(*args: 'Any', **kwargs: 'Any') -> 'RETURN_TYPE':
     """Issue a deprecation warning."""
     warnings.simplefilter('default', DeprecationWarning)
     warnings.warn('Call to deprecated function: {0:s}.'.format(

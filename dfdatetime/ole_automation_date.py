@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -12,7 +14,7 @@ from dfdatetime import interface
 class OLEAutomationDateEpoch(interface.DateTimeEpoch):
   """OLE automation date epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a OLE automation date epoch."""
     super(OLEAutomationDateEpoch, self).__init__(1899, 12, 30)
 
@@ -31,34 +33,34 @@ class OLEAutomationDate(interface.DateTimeValues):
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
   """
-  _EPOCH = OLEAutomationDateEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = OLEAutomationDateEpoch()
 
   # The difference between December 30, 1899 and January 1, 1970 in days.
-  _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25569
+  _OLE_AUTOMATION_DATE_TO_POSIX_BASE: 'int' = 25569
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[float]' = None) -> 'None':
     """Initializes an OLE Automation date.
 
     Args:
       timestamp (Optional[float]): OLE Automation date.
     """
     super(OLEAutomationDate, self).__init__()
-    self._precision = definitions.PRECISION_1_MICROSECOND
-    self._timestamp = timestamp
+    self._precision: 'str' = definitions.PRECISION_1_MICROSECOND
+    self._timestamp: 'Union[float, None]' = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[float, None]':
     """float: OLE Automation date timestamp or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
@@ -69,7 +71,7 @@ class OLEAutomationDate(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies an OLE Automation date from a date and time string.
 
     Args:
@@ -95,10 +97,11 @@ class OLEAutomationDate(interface.DateTimeValues):
     microseconds = date_time_values.get('microseconds', None)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
-    timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+    number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
 
-    timestamp = float(timestamp)
+    timestamp = float(number_of_seconds)
     if microseconds is not None:
       timestamp += float(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
@@ -109,7 +112,7 @@ class OLEAutomationDate(interface.DateTimeValues):
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the OLE Automation date to a date and time string.
 
     Returns:

@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Tuple, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -45,28 +47,30 @@ class RFC2579DateTime(interface.DateTimeValues):
 
   # pylint: disable=missing-type-doc
 
-  def __init__(self, rfc2579_date_time_tuple=None):
+  def __init__(self, rfc2579_date_time_tuple: (
+      'Optional[Tuple[int, int, int, int, int, int, int, str, int, '
+      'int]]') = None):  # pylint: disable=bad-whitespace
     """Initializes a RFC2579 date-time.
 
     Args:
       rfc2579_date_time_tuple:
-          (Optional[tuple[int, int, int, int, int, int, int]]):
+          (Optional[tuple[int, int, int, int, int, int, int, str, int, int]]):
           RFC2579 date-time time, contains year, month, day of month, hours,
-          minutes, seconds and deciseconds.
+          minutes, seconds, deciseconds and time zone offset.
 
     Raises:
       ValueError: if the system time is invalid.
     """
     super(RFC2579DateTime, self).__init__()
-    self._number_of_seconds = None
-    self._precision = definitions.PRECISION_100_MILLISECONDS
-    self.day_of_month = None
-    self.hours = None
-    self.deciseconds = None
-    self.minutes = None
-    self.month = None
-    self.seconds = None
-    self.year = None
+    self._number_of_seconds: 'Union[int, None]' = None
+    self._precision: 'str' = definitions.PRECISION_100_MILLISECONDS
+    self.day_of_month: 'Union[int, None]' = None
+    self.hours: 'Union[int, None]' = None
+    self.deciseconds: 'Union[int, None]' = None
+    self.minutes: 'Union[int, None]' = None
+    self.month: 'Union[int, None]' = None
+    self.seconds: 'Union[int, None]' = None
+    self.year: 'Union[int, None]' = None
 
     if rfc2579_date_time_tuple:
       if len(rfc2579_date_time_tuple) < 10:
@@ -125,27 +129,27 @@ class RFC2579DateTime(interface.DateTimeValues):
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
-          self.seconds, self._time_zone_offset)
+          self.seconds, time_zone_offset=self._time_zone_offset)
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
         self._normalized_timestamp = (
-            decimal.Decimal(self.deciseconds) /
+            decimal.Decimal(self.deciseconds or 0) /
             definitions.DECISECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a RFC2579 date-time from a date and time string.
 
     Args:
@@ -179,7 +183,8 @@ class RFC2579DateTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     self._time_zone_offset = time_zone_offset
 
     self.year = year
@@ -190,7 +195,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     self.seconds = seconds
     self.deciseconds = deciseconds
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the RFC2579 date-time to a date and time string.
 
     Returns:
@@ -201,5 +206,6 @@ class RFC2579DateTime(interface.DateTimeValues):
       return None
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:01d}'.format(
-        self.year, self.month, self.day_of_month, self.hours, self.minutes,
-        self.seconds, self.deciseconds)
+        self.year or 0, self.month or 0, self.day_of_month or 0,
+        self.hours or 0, self.minutes or 0, self.seconds or 0,
+        self.deciseconds or 0)

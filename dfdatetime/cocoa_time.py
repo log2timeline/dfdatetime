@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -12,7 +14,7 @@ from dfdatetime import interface
 class CocoaTimeEpoch(interface.DateTimeEpoch):
   """Cocoa time epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a Cocoa time epoch."""
     super(CocoaTimeEpoch, self).__init__(2001, 1, 1)
 
@@ -32,32 +34,33 @@ class CocoaTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
   # The difference between January 1, 2001 and January 1, 1970 in seconds.
-  _COCOA_TO_POSIX_BASE = -978307200
+  _COCOA_TO_POSIX_BASE: 'int' = -978307200
 
-  _EPOCH = CocoaTimeEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = CocoaTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[float]' = None) -> 'None':
     """Initializes a Cocoa timestamp.
 
     Args:
       timestamp (Optional[float]): Cocoa timestamp.
     """
     super(CocoaTime, self).__init__()
-    self._precision = definitions.PRECISION_1_SECOND
-    self._timestamp = timestamp
+    self._precision: 'str' = definitions.PRECISION_1_SECOND
+    self._timestamp: 'Union[float, None]' = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[float, None]':
     """float: Cocoa timestamp or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
-      float: normalized timestamp, which contains the number of seconds since
-          January 1, 1970 00:00:00 and a fraction of second used for increased
-          precision, or None if the normalized timestamp cannot be determined.
+      decimal.Decimal: normalized timestamp, which contains the number of
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
@@ -66,7 +69,7 @@ class CocoaTime(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a Cocoa timestamp from a date and time string.
 
     Args:
@@ -92,11 +95,12 @@ class CocoaTime(interface.DateTimeValues):
     microseconds = date_time_values.get('microseconds', None)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
-    timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
-    timestamp += self._COCOA_TO_POSIX_BASE
+    number_of_seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
+    number_of_seconds += self._COCOA_TO_POSIX_BASE
 
-    timestamp = float(timestamp)
+    timestamp = float(number_of_seconds)
     if microseconds is not None:
       timestamp += float(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
@@ -104,7 +108,7 @@ class CocoaTime(interface.DateTimeValues):
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the Cocoa timestamp to a date and time string.
 
     Returns:

@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Dict, Optional, Tuple, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 from dfdatetime import precisions
@@ -20,7 +22,8 @@ class TimeElements(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  def __init__(self, time_elements_tuple=None):
+  def __init__(
+      self, time_elements_tuple: 'Optional[Tuple[int, ...]]' = None) -> 'None':
     """Initializes time elements.
 
     Args:
@@ -32,9 +35,10 @@ class TimeElements(interface.DateTimeValues):
       ValueError: if the time elements tuple is invalid.
     """
     super(TimeElements, self).__init__()
-    self._number_of_seconds = None
-    self._precision = definitions.PRECISION_1_SECOND
-    self._time_elements_tuple = time_elements_tuple
+    self._number_of_seconds: 'Union[int, None]' = None
+    self._precision: 'str' = definitions.PRECISION_1_SECOND
+    self._time_elements_tuple: 'Union[Tuple[int, ...], None]' = (
+        time_elements_tuple)
 
     if time_elements_tuple:
       if len(time_elements_tuple) < 6:
@@ -46,16 +50,16 @@ class TimeElements(interface.DateTimeValues):
           time_elements_tuple[0], time_elements_tuple[1],
           time_elements_tuple[2], time_elements_tuple[3],
           time_elements_tuple[4], time_elements_tuple[5],
-          self._time_zone_offset)
+          time_zone_offset=self._time_zone_offset)
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
@@ -63,7 +67,8 @@ class TimeElements(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def _CopyDateTimeFromStringISO8601(self, time_string):
+  def _CopyDateTimeFromStringISO8601(
+      self, time_string: 'str') -> 'Dict[str, int]':
     """Copies a date and time from an ISO 8601 date and time string.
 
     Args:
@@ -104,12 +109,12 @@ class TimeElements(interface.DateTimeValues):
         self._CopyTimeFromStringISO8601(time_string[11:]))
 
     date_time_values = {
-        'year': year,
-        'month': month,
-        'day_of_month': day_of_month,
-        'hours': hours,
-        'minutes': minutes,
-        'seconds': seconds}
+        'year': year or 0,
+        'month': month or 0,
+        'day_of_month': day_of_month or 0,
+        'hours': hours or 0,
+        'minutes': minutes or 0,
+        'seconds': seconds or 0}
 
     if microseconds is not None:
       date_time_values['microseconds'] = microseconds
@@ -118,7 +123,8 @@ class TimeElements(interface.DateTimeValues):
 
     return date_time_values
 
-  def _CopyFromDateTimeValues(self, date_time_values):
+  def _CopyFromDateTimeValues(
+      self, date_time_values: 'Dict[str, int]') -> 'None':
     """Copies time elements from date and time values.
 
     Args:
@@ -136,12 +142,15 @@ class TimeElements(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
 
-  def _CopyTimeFromStringISO8601(self, time_string):
+  def _CopyTimeFromStringISO8601(self, time_string: 'str') -> (
+      'Tuple[int, Union[int, None], Union[int, None], Union[int, None], '
+      'Union[int, None]]'):
     """Copies a time from an ISO 8601 date and time string.
 
     Args:
@@ -194,8 +203,8 @@ class TimeElements(interface.DateTimeValues):
         raise ValueError('Time string too short.')
 
       try:
-        minutes = time_string[time_string_index:time_string_index + 2]
-        minutes = int(minutes, 10)
+        minutes_string = time_string[time_string_index:time_string_index + 2]
+        minutes = int(minutes_string, 10)
       except ValueError:
         raise ValueError('Unable to parse minutes.')
 
@@ -212,8 +221,8 @@ class TimeElements(interface.DateTimeValues):
         raise ValueError('Time string too short.')
 
       try:
-        seconds = time_string[time_string_index:time_string_index + 2]
-        seconds = int(seconds, 10)
+        seconds_string = time_string[time_string_index:time_string_index + 2]
+        seconds = int(seconds_string, 10)
       except ValueError:
         raise ValueError('Unable to parse day of seconds.')
 
@@ -237,10 +246,11 @@ class TimeElements(interface.DateTimeValues):
       time_fraction_length = time_zone_string_index - time_string_index
 
       try:
-        time_fraction = time_string[time_string_index:time_zone_string_index]
-        time_fraction = int(time_fraction, 10)
+        time_fraction_string = time_string[
+            time_string_index:time_zone_string_index]
+        time_fraction_value = int(time_fraction_string, 10)
         time_fraction = (
-            decimal.Decimal(time_fraction) /
+            decimal.Decimal(time_fraction_value) /
             decimal.Decimal(10 ** time_fraction_length))
       except ValueError:
         raise ValueError('Unable to parse time fraction.')
@@ -296,7 +306,7 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies time elements from a date and time string.
 
     Args:
@@ -312,7 +322,7 @@ class TimeElements(interface.DateTimeValues):
 
     self._CopyFromDateTimeValues(date_time_values)
 
-  def CopyFromStringISO8601(self, time_string):
+  def CopyFromStringISO8601(self, time_string: 'str') -> 'None':
     """Copies time elements from an ISO 8601 date and time string.
 
     Currently not supported:
@@ -338,11 +348,12 @@ class TimeElements(interface.DateTimeValues):
 
     self._CopyFromDateTimeValues(date_time_values)
 
-  def CopyFromStringTuple(self, time_elements_tuple):
+  def CopyFromStringTuple(
+      self, time_elements_tuple: 'Tuple[str, ...]') -> 'None':
     """Copies time elements from string-based time elements tuple.
 
     Args:
-      time_elements_tuple (Optional[tuple[str, str, str, str, str, str]]):
+      time_elements_tuple (tuple[str, str, str, str, str, str]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
 
@@ -393,18 +404,18 @@ class TimeElements(interface.DateTimeValues):
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds,
-        self._time_zone_offset)
+        time_zone_offset=self._time_zone_offset)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the time elements to a date and time string.
 
     Returns:
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss" or None
           if time elements are missing.
     """
-    if self._number_of_seconds is None:
+    if self._time_elements_tuple is None:
       return None
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
@@ -422,7 +433,9 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  def __init__(self, fraction_of_second=None, time_elements_tuple=None):
+  def __init__(
+      self, fraction_of_second: 'Optional[decimal.Decimal]' = None,
+      time_elements_tuple: 'Optional[Tuple[int, ...]]' = None) -> 'None':
     """Initializes time elements.
 
     Args:
@@ -444,17 +457,16 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     super(TimeElementsWithFractionOfSecond, self).__init__(
         time_elements_tuple=time_elements_tuple)
-    self._precision = None
-    self.fraction_of_second = fraction_of_second
+    self.fraction_of_second: 'Union[decimal.Decimal, None]' = fraction_of_second
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if (self._number_of_seconds is not None and
@@ -464,7 +476,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     return self._normalized_timestamp
 
-  def _CopyFromDateTimeValues(self, date_time_values):
+  def _CopyFromDateTimeValues(
+      self, date_time_values: 'Dict[str, int]') -> 'None':
     """Copies time elements from date and time values.
 
     Args:
@@ -492,18 +505,20 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
 
     self.fraction_of_second = fraction_of_second
 
-  def CopyFromStringTuple(self, time_elements_tuple):
+  def CopyFromStringTuple(
+      self, time_elements_tuple: 'Tuple[str, ...]') -> 'None':
     """Copies time elements from string-based time elements tuple.
 
     Args:
-      time_elements_tuple (Optional[tuple[str, str, str, str, str, str, str]]):
+      time_elements_tuple (tuple[str, str, str, str, str, str, str]):
           time elements, contains year, month, day of month, hours, minutes,
           seconds and fraction of seconds.
 
@@ -530,7 +545,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     self.fraction_of_second = fraction_of_second
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the time elements to a date and time string.
 
     Returns:
@@ -540,7 +555,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     Raises:
       ValueError: if the precision value is unsupported.
     """
-    if self._number_of_seconds is None or self.fraction_of_second is None:
+    if self._time_elements_tuple is None or self.fraction_of_second is None:
       return None
 
     precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
@@ -561,7 +576,8 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         represents 1 millisecond (PRECISION_1_MILLISECOND).
   """
 
-  def __init__(self, time_elements_tuple=None):
+  def __init__(
+      self, time_elements_tuple: 'Optional[Tuple[int, ...]]' = None) -> 'None':
     """Initializes time elements.
 
     Args:
@@ -595,11 +611,13 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     self._precision = definitions.PRECISION_1_MILLISECOND
 
   @property
-  def milliseconds(self):
+  def milliseconds(self) -> 'int':
     """int: number of milliseconds."""
-    return int(self.fraction_of_second * definitions.MILLISECONDS_PER_SECOND)
+    return int(
+        (self.fraction_of_second or 0) * definitions.MILLISECONDS_PER_SECOND)
 
-  def CopyFromStringTuple(self, time_elements_tuple):
+  def CopyFromStringTuple(
+      self, time_elements_tuple: 'Tuple[str, ...]') -> 'None':
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -619,22 +637,24 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         time_elements_tuple)
 
     try:
-      milliseconds = int(milliseconds, 10)
+      milliseconds_value = int(milliseconds, 10)
     except (TypeError, ValueError):
       raise ValueError('Invalid millisecond value: {0!s}'.format(milliseconds))
 
-    if milliseconds < 0 or milliseconds >= definitions.MILLISECONDS_PER_SECOND:
+    if (milliseconds_value < 0 or
+        milliseconds_value >= definitions.MILLISECONDS_PER_SECOND):
       raise ValueError('Invalid number of milliseconds.')
 
     fraction_of_second = (
-        decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
+        decimal.Decimal(milliseconds_value) /
+        definitions.MILLISECONDS_PER_SECOND)
 
-    time_elements_tuple = (
+    time_elements_tuple_with_fraction = (
         year, month, day_of_month, hours, minutes, seconds,
         str(fraction_of_second))
 
     super(TimeElementsInMilliseconds, self).CopyFromStringTuple(
-        time_elements_tuple)
+        time_elements_tuple_with_fraction)
 
 
 class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
@@ -648,7 +668,8 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         represents 1 microsecond (PRECISION_1_MICROSECOND).
   """
 
-  def __init__(self, time_elements_tuple=None):
+  def __init__(
+      self, time_elements_tuple: 'Optional[Tuple[int, ...]]' = None) -> 'None':
     """Initializes time elements.
 
     Args:
@@ -682,11 +703,13 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     self._precision = definitions.PRECISION_1_MICROSECOND
 
   @property
-  def microseconds(self):
+  def microseconds(self) -> 'int':
     """int: number of microseconds."""
-    return int(self.fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
+    return int(
+        (self.fraction_of_second or 0) * definitions.MICROSECONDS_PER_SECOND)
 
-  def CopyFromStringTuple(self, time_elements_tuple):
+  def CopyFromStringTuple(
+      self, time_elements_tuple: 'Tuple[str, ...]') -> 'None':
     """Copies time elements from string-based time elements tuple.
 
     Args:
@@ -706,19 +729,21 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         time_elements_tuple)
 
     try:
-      microseconds = int(microseconds, 10)
+      microseconds_value = int(microseconds, 10)
     except (TypeError, ValueError):
       raise ValueError('Invalid microsecond value: {0!s}'.format(microseconds))
 
-    if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
+    if (microseconds_value < 0 or
+        microseconds_value >= definitions.MICROSECONDS_PER_SECOND):
       raise ValueError('Invalid number of microseconds.')
 
     fraction_of_second = (
-        decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND)
+        decimal.Decimal(microseconds_value) /
+        definitions.MICROSECONDS_PER_SECOND)
 
-    time_elements_tuple = (
+    time_elements_tuple_with_fraction = (
         year, month, day_of_month, hours, minutes, seconds,
         str(fraction_of_second))
 
     super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
-        time_elements_tuple)
+        time_elements_tuple_with_fraction)

@@ -6,6 +6,9 @@ from __future__ import unicode_literals
 import abc
 import calendar
 import decimal
+import typing
+
+from typing import Optional, Tuple, Union
 
 from dfdatetime import decorators
 from dfdatetime import definitions
@@ -24,7 +27,7 @@ class DateTimeEpoch(object):
         where 1 represents the first day.
   """
 
-  def __init__(self, year, month, day_of_month):
+  def __init__(self, year: 'int', month: 'int', day_of_month: 'int') -> 'None':
     """Initializes a date time epoch.
 
     Args:
@@ -35,15 +38,15 @@ class DateTimeEpoch(object):
           where 1 represents the first day.
     """
     super(DateTimeEpoch, self).__init__()
-    self.day_of_month = day_of_month
-    self.month = month
-    self.year = year
+    self.day_of_month: 'int' = day_of_month
+    self.month: 'int' = month
+    self.year: 'int' = year
 
 
 class NormalizedTimeEpoch(DateTimeEpoch):
   """dfDateTime normalized time epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a dfDateTime normalized time epoch."""
     super(NormalizedTimeEpoch, self).__init__(1970, 1, 1)
 
@@ -59,46 +62,47 @@ class DateTimeValues(object):
 
   # pylint: disable=redundant-returns-doc
 
-  _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+  _DAYS_PER_MONTH: 'Tuple[int, ...]' = (
+      31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
-  _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()
+  _EPOCH_NORMALIZED_TIME: 'DateTimeEpoch' = NormalizedTimeEpoch()
 
-  _100NS_PER_SECOND = 10000000
-  _100NS_PER_DECISECOND = 1000000
-  _100NS_PER_MILLISECOND = 10000
-  _100NS_PER_MICROSECOND = 10
+  _100NS_PER_SECOND: 'int' = 10000000
+  _100NS_PER_DECISECOND: 'int' = 1000000
+  _100NS_PER_MILLISECOND: 'int' = 10000
+  _100NS_PER_MICROSECOND: 'int' = 10
 
-  _INT64_MIN = -(1 << 63)
-  _INT64_MAX = (1 << 63) - 1
+  _INT64_MIN: 'int' = -(1 << 63)
+  _INT64_MAX: 'int' = (1 << 63) - 1
 
-  _UINT32_MAX = (1 << 32) - 1
-  _UINT60_MAX = (1 << 60) - 1
-  _UINT64_MAX = (1 << 64) - 1
+  _UINT32_MAX: 'int' = (1 << 32) - 1
+  _UINT60_MAX: 'int' = (1 << 60) - 1
+  _UINT64_MAX: 'int' = (1 << 64) - 1
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes date time values."""
     super(DateTimeValues, self).__init__()
-    self._normalized_timestamp = None
-    self._precision = None
-    self._time_zone_offset = None
+    self._normalized_timestamp: 'Union[decimal.Decimal, None]' = None
+    self._precision: 'Union[str, None]' = None
+    self._time_zone_offset: 'Union[int, None]' = None
 
-    self.is_local_time = False
+    self.is_local_time: 'bool' = False
 
   @property
-  def precision(self):
+  def precision(self) -> 'Union[str, None]':
     """precision (str): precision of the date and time value, which should
         be one of the PRECISION_VALUES in definitions.
     """
     return self._precision
 
   @property
-  def time_zone_offset(self):
+  def time_zone_offset(self) -> 'Union[int, None]':
     """time_zone_offset (int): time zone offset in number of minutes from UTC
         or None if not set.
     """
     return self._time_zone_offset
 
-  def __eq__(self, other):
+  def __eq__(self, other: 'object') -> 'bool':
     """Determines if the date time values are equal to other.
 
     Args:
@@ -121,7 +125,7 @@ class DateTimeValues(object):
 
     return normalized_timestamp == other_normalized_timestamp
 
-  def __ge__(self, other):
+  def __ge__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than or equal to other.
 
     Args:
@@ -147,7 +151,7 @@ class DateTimeValues(object):
 
     return normalized_timestamp >= other_normalized_timestamp
 
-  def __gt__(self, other):
+  def __gt__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than other.
 
     Args:
@@ -173,7 +177,7 @@ class DateTimeValues(object):
 
     return normalized_timestamp > other_normalized_timestamp
 
-  def __le__(self, other):
+  def __le__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than or equal to other.
 
     Args:
@@ -199,7 +203,7 @@ class DateTimeValues(object):
 
     return normalized_timestamp <= other_normalized_timestamp
 
-  def __lt__(self, other):
+  def __lt__(self, other: 'object') -> 'bool':
     """Determines if the date time values are less than other.
 
     Args:
@@ -225,7 +229,7 @@ class DateTimeValues(object):
 
     return normalized_timestamp < other_normalized_timestamp
 
-  def __ne__(self, other):
+  def __ne__(self, other: 'object') -> 'bool':
     """Determines if the date time values are not equal to other.
 
     Args:
@@ -249,7 +253,9 @@ class DateTimeValues(object):
     return normalized_timestamp != other_normalized_timestamp
 
   def _AdjustForTimeZoneOffset(
-      self, year, month, day_of_month, hours, minutes, time_zone_offset):
+      self, year: 'int', month: 'int', day_of_month: 'int',
+      hours: 'int', minutes: 'int',
+      time_zone_offset: 'int') -> 'Tuple[int, int, int, int, int]':
     """Adjusts the date and time values for a time zone offset.
 
     Args:
@@ -261,7 +267,7 @@ class DateTimeValues(object):
       time_zone_offset (int): time zone offset in number of minutes from UTC.
 
     Returns:
-      tuple[int, int, int, int, int, int]: time zone correct year, month,
+      tuple[int, int, int, int, int]: time zone correct year, month,
          day_of_month, hours and minutes values.
     """
     # Note that when the sign of the time zone offset is negative
@@ -307,7 +313,8 @@ class DateTimeValues(object):
 
     return year, month, day_of_month, hours, minutes
 
-  def _CopyDateFromString(self, date_string):
+  def _CopyDateFromString(
+      self, date_string: str) -> Tuple[int, int, int]:
     """Copies a date from a string.
 
     Args:
@@ -349,7 +356,7 @@ class DateTimeValues(object):
 
     return year, month, day_of_month
 
-  def _CopyDateTimeFromString(self, time_string):
+  def _CopyDateTimeFromString(self, time_string: str) -> typing.Dict[str, int]:
     """Copies a date and time from a string.
 
     Args:
@@ -405,7 +412,8 @@ class DateTimeValues(object):
 
     return date_time_values
 
-  def _CopyTimeFromString(self, time_string):
+  def _CopyTimeFromString(self, time_string: str) -> Tuple[
+      int, int, int, Union[int, None], Union[int, None]]:
     """Copies a time from a string.
 
     Args:
@@ -478,8 +486,8 @@ class DateTimeValues(object):
         raise ValueError('Invalid time string.')
 
       try:
-        time_fraction = time_string[9:time_zone_string_index]
-        time_fraction = int(time_fraction, 10)
+        time_fraction_string = time_string[9:time_zone_string_index]
+        time_fraction = int(time_fraction_string, 10)
       except ValueError:
         raise ValueError('Unable to parse time fraction.')
 
@@ -520,7 +528,8 @@ class DateTimeValues(object):
     return hours, minutes, seconds, microseconds, time_zone_offset
 
   def _GetDateValues(
-      self, number_of_days, epoch_year, epoch_month, epoch_day_of_month):
+      self, number_of_days: int, epoch_year: int, epoch_month: int,
+      epoch_day_of_month: int) -> Tuple[int, int, int]:
     """Determines date values.
 
     Args:
@@ -644,7 +653,9 @@ class DateTimeValues(object):
 
     return year, month, number_of_days
 
-  def _GetDateValuesWithEpoch(self, number_of_days, date_time_epoch):
+  def _GetDateValuesWithEpoch(
+      self, number_of_days: int,
+      date_time_epoch: DateTimeEpoch) -> Tuple[int, int, int]:
     """Determines date values.
 
     Args:
@@ -658,7 +669,7 @@ class DateTimeValues(object):
         number_of_days, date_time_epoch.year, date_time_epoch.month,
         date_time_epoch.day_of_month)
 
-  def _GetDayOfYear(self, year, month, day_of_month):
+  def _GetDayOfYear(self, year: int, month: int, day_of_month: int) -> int:
     """Retrieves the day of the year for a specific day of a month in a year.
 
     Args:
@@ -685,7 +696,7 @@ class DateTimeValues(object):
 
     return day_of_year
 
-  def _GetDaysPerMonth(self, year, month):
+  def _GetDaysPerMonth(self, year: int, month: int) -> int:
     """Retrieves the number of days in a month of a specific year.
 
     Args:
@@ -708,17 +719,17 @@ class DateTimeValues(object):
     return days_per_month
 
   @abc.abstractmethod
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> Union[decimal.Decimal, None]:
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
 
-  def _GetNumberOfDaysInCentury(self, year):
+  def _GetNumberOfDaysInCentury(self, year: int) -> int:
     """Retrieves the number of days in a century.
 
     Args:
@@ -739,7 +750,7 @@ class DateTimeValues(object):
       return 36525
     return 36524
 
-  def _GetNumberOfDaysInYear(self, year):
+  def _GetNumberOfDaysInYear(self, year: int) -> int:
     """Retrieves the number of days in a specific year.
 
     Args:
@@ -753,8 +764,8 @@ class DateTimeValues(object):
     return 365
 
   def _GetNumberOfSecondsFromElements(
-      self, year, month, day_of_month, hours, minutes, seconds,
-      time_zone_offset):
+      self, year: int, month: int, day_of_month: int, hours: int, minutes: int,
+      seconds: int, time_zone_offset: Optional[int] = None) -> int:
     """Retrieves the number of seconds from the date and time elements.
 
     Args:
@@ -764,18 +775,18 @@ class DateTimeValues(object):
       hours (int): hours.
       minutes (int): minutes.
       seconds (int): seconds.
-      time_zone_offset (int): time zone offset in number of minutes from UTC
-          or None if not set.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC.
 
     Returns:
-      int: number of seconds since January 1, 1970 00:00:00 or None if year,
-          month or day of month are not set.
+      int: number of seconds since January 1, 1970 00:00:00.
 
     Raises:
-      ValueError: if the time elements are invalid.
+      ValueError: if one or more date elements are missing or the time elements
+          are invalid.
     """
-    if not year or not month or not day_of_month:
-      return None
+    if None in (year, month, day_of_month):
+      raise ValueError('One or more date elements missing.')
 
     # calendar.timegm does not sanity check the time elements.
     if hours is None:
@@ -811,7 +822,8 @@ class DateTimeValues(object):
 
     return int(number_of_seconds)
 
-  def _GetTimeValues(self, number_of_seconds):
+  def _GetTimeValues(self, number_of_seconds: Union[
+      int, decimal.Decimal]) -> Tuple[int, int, int, int]:
     """Determines time values.
 
     Args:
@@ -826,7 +838,7 @@ class DateTimeValues(object):
     number_of_days, hours = divmod(number_of_hours, 24)
     return number_of_days, hours, minutes, seconds
 
-  def _IsLeapYear(self, year):
+  def _IsLeapYear(self, year: int) -> bool:
     """Determines if a year is a leap year.
 
     Args:
@@ -839,7 +851,7 @@ class DateTimeValues(object):
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
 
   @decorators.deprecated
-  def CopyFromString(self, time_string):
+  def CopyFromString(self, time_string: str) -> 'None':
     """Copies a date time value from a date and time string.
 
     Args:
@@ -857,7 +869,7 @@ class DateTimeValues(object):
     self.CopyFromDateTimeString(time_string)
 
   @abc.abstractmethod
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: str) -> 'None':
     """Copies a date time value from a date and time string.
 
     Args:
@@ -873,7 +885,7 @@ class DateTimeValues(object):
       ValueError: if the time string is invalid or not supported.
     """
 
-  def CopyToPosixTimestamp(self):
+  def CopyToPosixTimestamp(self) -> Union[int, None]:
     """Copies the date time value to a POSIX timestamp.
 
     Returns:
@@ -886,7 +898,9 @@ class DateTimeValues(object):
     return int(normalized_timestamp)
 
   # TODO: remove this method when there is no more need for it in dfvfs.
-  def CopyToStatTimeTuple(self):
+  def CopyToStatTimeTuple(self) -> Union[
+      Tuple[int, int], Tuple[int, None],
+      Tuple[None, None]]:
     """Copies the date time value to a stat timestamp tuple.
 
     Returns:
@@ -910,7 +924,7 @@ class DateTimeValues(object):
     return int(normalized_timestamp), None
 
   @abc.abstractmethod
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> Union[str, None]:
     """Copies the date time value to a date and time string.
 
     Returns:
@@ -918,7 +932,7 @@ class DateTimeValues(object):
           None if the timestamp cannot be copied to a date and time string.
     """
 
-  def CopyToDateTimeStringISO8601(self):
+  def CopyToDateTimeStringISO8601(self) -> Union[str, None]:
     """Copies the date time value to an ISO 8601 date and time string.
 
     Returns:
@@ -931,7 +945,8 @@ class DateTimeValues(object):
       date_time_string = '{0:s}Z'.format(date_time_string)
     return date_time_string
 
-  def GetDate(self):
+  def GetDate(self) -> Union[
+      Tuple[int, int, int], Tuple[None, None, None]]:
     """Retrieves the date represented by the date and time values.
 
     Returns:
@@ -952,7 +967,7 @@ class DateTimeValues(object):
       return None, None, None
 
   # TODO: remove this method when there is no more need for it in plaso.
-  def GetPlasoTimestamp(self):
+  def GetPlasoTimestamp(self) -> Union[int, None]:
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
@@ -968,7 +983,8 @@ class DateTimeValues(object):
         1, rounding=decimal.ROUND_HALF_UP)
     return int(normalized_timestamp)
 
-  def GetTimeOfDay(self):
+  def GetTimeOfDay(self) -> Union[
+      Tuple[int, int, int], Tuple[None, None, None]]:
     """Retrieves the time of day represented by the date and time values.
 
     Returns:

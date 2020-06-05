@@ -6,6 +6,8 @@ from __future__ import unicode_literals
 import decimal
 import time
 
+from typing import Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 from dfdatetime import posix_time
@@ -21,38 +23,38 @@ class FakeTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  _EPOCH = posix_time.PosixTimeEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = posix_time.PosixTimeEpoch()
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a fake timestamp."""
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
 
     super(FakeTime, self).__init__()
-    self._microseconds = int(
+    self._microseconds: 'Union[int, None]' = int(
         fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
-    self._number_of_seconds = int(timestamp)
-    self._precision = definitions.PRECISION_1_MICROSECOND
+    self._number_of_seconds: 'int' = int(timestamp)
+    self._precision: 'str' = definitions.PRECISION_1_MICROSECOND
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
         self._normalized_timestamp = (
-            decimal.Decimal(self._microseconds) /
+            decimal.Decimal(self._microseconds or 0) /
             definitions.MICROSECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a fake timestamp from a date and time string.
 
     Args:
@@ -76,11 +78,12 @@ class FakeTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     self._microseconds = date_time_values.get('microseconds', None)
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the fake timestamp to a date and time string.
 
     Returns:

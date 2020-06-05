@@ -17,9 +17,9 @@ then
 	then
 		TEST_COMMAND="tox -e ${TOXENV}";
 
-	elif test "${TARGET}" = "pylint";
+	elif test "${TARGET}" = "lint_and_type_check";
 	then
-		TEST_COMMAND="./config/travis/run_pylint.sh";
+		TEST_COMMAND="./config/travis/run_checks.sh";
 	else
 		TEST_COMMAND="./config/travis/run_python3.sh";
 	fi
@@ -51,9 +51,9 @@ then
 	then
 		TEST_COMMAND="./config/jenkins/linux/run_end_to_end_tests_py3.sh travis";
 
-	elif test "${TARGET}" = "pylint";
+	elif test "${TARGET}" = "lint_and_type_check";
 	then
-		TEST_COMMAND="./config/travis/run_pylint.sh";
+		TEST_COMMAND="./config/travis/run_checks.sh";
 	else
 		TEST_COMMAND="./config/travis/run_python3.sh";
 	fi

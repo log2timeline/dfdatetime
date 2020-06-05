@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Tuple, Type, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 
 
@@ -20,7 +22,8 @@ class DateTimePrecisionHelper(object):
   # pylint: disable=missing-raises-doc,redundant-returns-doc
 
   @classmethod
-  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
+  def CopyMicrosecondsToFractionOfSecond(
+      cls, microseconds: 'int') -> 'decimal.Decimal':
     """Copies the number of microseconds to a fraction of second value.
 
     Args:
@@ -33,7 +36,9 @@ class DateTimePrecisionHelper(object):
     raise NotImplementedError()
 
   @classmethod
-  def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
+  def CopyToDateTimeString(
+      cls, time_elements_tuple: 'Tuple[int, ...]',
+      fraction_of_second: 'decimal.Decimal') -> 'str':
     """Copies the time elements and fraction of second to a string.
 
     Args:
@@ -54,7 +59,8 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
   """Seconds precision helper."""
 
   @classmethod
-  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
+  def CopyMicrosecondsToFractionOfSecond(
+      cls, microseconds: 'int') -> 'decimal.Decimal':
     """Copies the number of microseconds to a fraction of second value.
 
     Args:
@@ -75,7 +81,9 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
     return decimal.Decimal(0.0)
 
   @classmethod
-  def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
+  def CopyToDateTimeString(
+      cls, time_elements_tuple: 'Tuple[int, ...]',
+      fraction_of_second: 'decimal.Decimal') -> 'str':
     """Copies the time elements and fraction of second to a string.
 
     Args:
@@ -105,7 +113,8 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
   """Milliseconds precision helper."""
 
   @classmethod
-  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
+  def CopyMicrosecondsToFractionOfSecond(
+      cls, microseconds: 'int') -> 'decimal.Decimal':
     """Copies the number of microseconds to a fraction of second value.
 
     Args:
@@ -128,7 +137,9 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
     return decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND
 
   @classmethod
-  def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
+  def CopyToDateTimeString(
+      cls, time_elements_tuple: 'Tuple[int, ...]',
+      fraction_of_second: 'decimal.Decimal') -> 'str':
     """Copies the time elements and fraction of second to a string.
 
     Args:
@@ -161,7 +172,8 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
   """Microseconds precision helper."""
 
   @classmethod
-  def CopyMicrosecondsToFractionOfSecond(cls, microseconds):
+  def CopyMicrosecondsToFractionOfSecond(
+      cls, microseconds: 'int') -> 'decimal.Decimal':
     """Copies the number of microseconds to a fraction of second value.
 
     Args:
@@ -182,7 +194,9 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
     return decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
   @classmethod
-  def CopyToDateTimeString(cls, time_elements_tuple, fraction_of_second):
+  def CopyToDateTimeString(
+      cls, time_elements_tuple: 'Tuple[int, ...]',
+      fraction_of_second: 'decimal.Decimal') -> 'str':
     """Copies the time elements and fraction of second to a string.
 
     Args:
@@ -221,7 +235,8 @@ class PrecisionHelperFactory(object):
   }
 
   @classmethod
-  def CreatePrecisionHelper(cls, precision):
+  def CreatePrecisionHelper(
+      cls, precision: 'str') -> 'Type[DateTimePrecisionHelper]':
     """Creates a precision helper.
 
     Args:

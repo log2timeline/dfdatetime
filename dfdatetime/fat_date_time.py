@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -12,7 +14,7 @@ from dfdatetime import interface
 class FATDateTimeEpoch(interface.DateTimeEpoch):
   """FAT date time time epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a FAT date time epoch."""
     super(FATDateTimeEpoch, self).__init__(1980, 1, 1)
 
@@ -39,33 +41,34 @@ class FATDateTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  _EPOCH = FATDateTimeEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = FATDateTimeEpoch()
 
   # The difference between January 1, 1980 and January 1, 1970 in seconds.
-  _FAT_DATE_TO_POSIX_BASE = 315532800
+  _FAT_DATE_TO_POSIX_BASE: 'int' = 315532800
 
-  def __init__(self, fat_date_time=None):
+  def __init__(self, fat_date_time: 'Optional[int]' = None) -> 'None':
     """Initializes a FAT date time.
 
     Args:
       fat_date_time (Optional[int]): FAT date time.
     """
-    number_of_seconds = None
-    if fat_date_time is not None:
+    if fat_date_time is None:
+      number_of_seconds = None
+    else:
       number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
 
     super(FATDateTime, self).__init__()
-    self._precision = definitions.PRECISION_2_SECONDS
-    self._number_of_seconds = number_of_seconds
+    self._number_of_seconds: 'Union[int, None]' = number_of_seconds
+    self._precision: 'str' = definitions.PRECISION_2_SECONDS
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None and self._number_of_seconds >= 0:
@@ -75,7 +78,7 @@ class FATDateTime(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def _GetNumberOfSeconds(self, fat_date_time):
+  def _GetNumberOfSeconds(self, fat_date_time: 'int') -> 'int':
     """Retrieves the number of seconds from a FAT date time.
 
     Args:
@@ -120,7 +123,7 @@ class FATDateTime(interface.DateTimeValues):
     number_of_seconds += number_of_days * definitions.SECONDS_PER_DAY
     return number_of_seconds
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a FAT date time from a date and time string.
 
     Args:
@@ -154,7 +157,7 @@ class FATDateTime(interface.DateTimeValues):
     self._number_of_seconds -= self._FAT_DATE_TO_POSIX_BASE
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the FAT date time to a date and time string.
 
     Returns:

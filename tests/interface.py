@@ -570,9 +570,8 @@ class DateTimeValuesTest(unittest.TestCase):
         1601, 1, 2, 0, 0, 0, None)
     self.assertEqual(number_of_seconds, -11644387200)
 
-    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        0, 1, 2, 0, 0, 0, None)
-    self.assertIsNone(number_of_seconds)
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfSecondsFromElements(0, 1, 2, 0, 0, 0, None)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(

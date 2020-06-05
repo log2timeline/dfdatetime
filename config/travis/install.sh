@@ -37,9 +37,9 @@ then
 	else
 		RPM_PACKAGES="";
 
-		if test ${TARGET} = "pylint";
+		if test ${TARGET} = "lint_and_type_check";
 		then
-			RPM_PACKAGES="${RPM_PACKAGES} findutils pylint";
+			RPM_PACKAGES="${RPM_PACKAGES} findutils pylint python3-mypy";
 		fi
 		RPM_PACKAGES="${RPM_PACKAGES} python3 ${RPM_PYTHON3_DEPENDENCIES} ${RPM_PYTHON3_TEST_DEPENDENCIES}";
 	fi
@@ -87,9 +87,9 @@ then
 		then
 			DPKG_PACKAGES="${DPKG_PACKAGES} sudo";
 
-		elif test ${TARGET} = "pylint";
+		elif test ${TARGET} = "lint_and_type_check";
 		then
-			DPKG_PACKAGES="${DPKG_PACKAGES} python3-distutils pylint";
+			DPKG_PACKAGES="${DPKG_PACKAGES} mypy pylint python3-distutils";
 		fi
 		if test "${TARGET}" != "jenkins3";
 		then

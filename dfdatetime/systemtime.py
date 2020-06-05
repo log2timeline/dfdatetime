@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Tuple, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -38,7 +40,8 @@ class Systemtime(interface.DateTimeValues):
 
   # TODO: make attributes read-only.
 
-  def __init__(self, system_time_tuple=None):
+  def __init__(self, system_time_tuple: (
+      'Optional[Tuple[int, int, int, int, int, int, int, int]]') = None):  # pylint: disable=bad-whitespace
     """Initializes a SYSTEMTIME structure.
 
     Args:
@@ -51,16 +54,16 @@ class Systemtime(interface.DateTimeValues):
       ValueError: if the system time is invalid.
     """
     super(Systemtime, self).__init__()
-    self._number_of_seconds = None
-    self._precision = definitions.PRECISION_1_MILLISECOND
-    self.day_of_month = None
-    self.day_of_week = None
-    self.hours = None
-    self.milliseconds = None
-    self.minutes = None
-    self.month = None
-    self.seconds = None
-    self.year = None
+    self._number_of_seconds: 'Union[int, None]' = None
+    self._precision: 'str' = definitions.PRECISION_1_MILLISECOND
+    self.day_of_month: 'Union[int, None]' = None
+    self.day_of_week: 'Union[int, None]' = None
+    self.hours: 'Union[int, None]' = None
+    self.milliseconds: 'Union[int, None]' = None
+    self.minutes: 'Union[int, None]' = None
+    self.month: 'Union[int, None]' = None
+    self.seconds: 'Union[int, None]' = None
+    self.year: 'Union[int, None]' = None
 
     if system_time_tuple:
       if len(system_time_tuple) < 8:
@@ -106,25 +109,25 @@ class Systemtime(interface.DateTimeValues):
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
           self.seconds, self._time_zone_offset)
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
         self._normalized_timestamp = (
-            decimal.Decimal(self.milliseconds) /
+            decimal.Decimal(self.milliseconds or 0) /
             definitions.MILLISECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a SYSTEMTIME structure from a date and time string.
 
     Args:
@@ -171,7 +174,7 @@ class Systemtime(interface.DateTimeValues):
     self.seconds = seconds
     self.milliseconds = milliseconds
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the SYSTEMTIME structure to a date and time string.
 
     Returns:
@@ -182,5 +185,6 @@ class Systemtime(interface.DateTimeValues):
       return None
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:03d}'.format(
-        self.year, self.month, self.day_of_month, self.hours, self.minutes,
-        self.seconds, self.milliseconds)
+        self.year or 0, self.month or 0, self.day_of_month or 0,
+        self.hours or 0, self.minutes or 0, self.seconds or 0,
+        self.milliseconds or 0)

@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import posix_time
 
@@ -23,14 +25,14 @@ class JavaTime(posix_time.PosixTimeInMilliseconds):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if (self._timestamp is not None and self._timestamp >= self._INT64_MIN and
@@ -41,7 +43,7 @@ class JavaTime(posix_time.PosixTimeInMilliseconds):
 
     return self._normalized_timestamp
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:

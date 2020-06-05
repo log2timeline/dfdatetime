@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -12,7 +14,7 @@ from dfdatetime import interface
 class PosixTimeEpoch(interface.DateTimeEpoch):
   """POSIX time epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a POSIX time epoch."""
     super(PosixTimeEpoch, self).__init__(1970, 1, 1)
 
@@ -31,31 +33,31 @@ class PosixTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  _EPOCH = PosixTimeEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[int]' = None) -> 'None':
     """Initializes a POSIX timestamp.
 
     Args:
       timestamp (Optional[int]): POSIX timestamp.
     """
     super(PosixTime, self).__init__()
-    self._precision = definitions.PRECISION_1_SECOND
-    self._timestamp = timestamp
+    self._precision: 'str' = definitions.PRECISION_1_SECOND
+    self._timestamp: 'Union[int, None]' = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[int, None]':
     """int: POSIX timestamp or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
@@ -63,7 +65,7 @@ class PosixTime(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a POSIX timestamp from a date and time string.
 
     Args:
@@ -86,10 +88,11 @@ class PosixTime(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     self._timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
@@ -120,29 +123,29 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[int]' = None) -> 'None':
     """Initializes a POSIX timestamp in milliseconds.
 
     Args:
       timestamp (Optional[int]): POSIX timestamp in milliseconds.
     """
     super(PosixTimeInMilliseconds, self).__init__()
-    self._precision = definitions.PRECISION_1_MILLISECOND
-    self._timestamp = timestamp
+    self._precision: str = definitions.PRECISION_1_MILLISECOND
+    self._timestamp: Union[int, None] = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[int, None]':
     """int: POSIX timestamp in milliseconds or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
@@ -152,7 +155,7 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a POSIX timestamp from a date and time string.
 
     Args:
@@ -176,7 +179,8 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     timestamp *= definitions.MILLISECONDS_PER_SECOND
 
     if microseconds:
@@ -187,7 +191,7 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
@@ -219,29 +223,29 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[int]' = None) -> 'None':
     """Initializes a POSIX timestamp in microseconds.
 
     Args:
       timestamp (Optional[int]): POSIX timestamp in microseconds.
     """
     super(PosixTimeInMicroseconds, self).__init__()
-    self._precision = definitions.PRECISION_1_MICROSECOND
-    self._timestamp = timestamp
+    self._precision: str = definitions.PRECISION_1_MICROSECOND
+    self._timestamp: Union[int, None] = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[int, None]':
     """int: POSIX timestamp in microseconds or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
@@ -251,7 +255,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a POSIX timestamp from a date and time string.
 
     Args:
@@ -275,14 +279,15 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += microseconds
 
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
@@ -314,29 +319,29 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[int]' = None) -> 'None':
     """Initializes a POSIX timestamp in nanoseconds.
 
     Args:
       timestamp (Optional[int]): POSIX timestamp in nanoseconds.
     """
     super(PosixTimeInNanoseconds, self).__init__()
-    self._precision = definitions.PRECISION_1_NANOSECOND
-    self._timestamp = timestamp
+    self._precision: str = definitions.PRECISION_1_NANOSECOND
+    self._timestamp: Union[int, None] = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[int, None]':
     """int: POSIX timestamp or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
@@ -346,7 +351,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def _CopyFromDateTimeString(self, time_string):
+  def _CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a POSIX timestamp from a date and time string.
 
     Args:
@@ -370,7 +375,8 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     timestamp *= definitions.NANOSECONDS_PER_SECOND
 
     if microseconds:
@@ -381,7 +387,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a POSIX timestamp from a date and time string.
 
     Args:
@@ -395,7 +401,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
     """
     self._CopyFromDateTimeString(time_string)
 
-  def _CopyToDateTimeString(self):
+  def _CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:
@@ -415,7 +421,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:09d}'.format(
         year, month, day_of_month, hours, minutes, seconds, nanoseconds)
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the POSIX timestamp to a date and time string.
 
     Returns:

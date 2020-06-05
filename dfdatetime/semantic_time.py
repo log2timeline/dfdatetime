@@ -3,7 +3,14 @@
 
 from __future__ import unicode_literals
 
+import typing
+
+from typing import Optional, Tuple, Union  # pylint: disable=unused-import
+
 from dfdatetime import interface
+
+if typing.TYPE_CHECKING:
+  import decimal  # pylint: disable=unused-import
 
 
 class SemanticTime(interface.DateTimeValues):
@@ -18,9 +25,9 @@ class SemanticTime(interface.DateTimeValues):
 
   # pylint: disable=redundant-returns-doc
 
-  _SORT_ORDER = 50
+  _SORT_ORDER: int = 50
 
-  def __init__(self, string=None):
+  def __init__(self, string: 'Optional[str]' = None) -> 'None':
     """Initializes a semantic time.
 
     Args:
@@ -28,14 +35,14 @@ class SemanticTime(interface.DateTimeValues):
           "Never", "Not set".
     """
     super(SemanticTime, self).__init__()
-    self._string = string
+    self._string: 'Union[str, None]' = string
 
   @property
-  def string(self):
+  def string(self) -> 'Union[str, None]':
     """str: semantic representation of the time, such as: "Never"."""
     return self._string
 
-  def __eq__(self, other):
+  def __eq__(self, other: 'object') -> 'bool':
     """Determines if the date time values are equal to other.
 
     Args:
@@ -49,7 +56,7 @@ class SemanticTime(interface.DateTimeValues):
 
     return self._SORT_ORDER == other._SORT_ORDER  # pylint: disable=protected-access
 
-  def __ge__(self, other):
+  def __ge__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than or equal to other.
 
     Args:
@@ -69,7 +76,7 @@ class SemanticTime(interface.DateTimeValues):
 
     return self._SORT_ORDER >= other._SORT_ORDER  # pylint: disable=protected-access
 
-  def __gt__(self, other):
+  def __gt__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than other.
 
     Args:
@@ -89,7 +96,7 @@ class SemanticTime(interface.DateTimeValues):
 
     return self._SORT_ORDER > other._SORT_ORDER  # pylint: disable=protected-access
 
-  def __le__(self, other):
+  def __le__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than or equal to other.
 
     Args:
@@ -109,7 +116,7 @@ class SemanticTime(interface.DateTimeValues):
 
     return self._SORT_ORDER <= other._SORT_ORDER  # pylint: disable=protected-access
 
-  def __lt__(self, other):
+  def __lt__(self, other: 'object') -> 'bool':
     """Determines if the date time values are less than other.
 
     Args:
@@ -129,7 +136,7 @@ class SemanticTime(interface.DateTimeValues):
 
     return self._SORT_ORDER < other._SORT_ORDER  # pylint: disable=protected-access
 
-  def __ne__(self, other):
+  def __ne__(self, other: 'object') -> 'bool':
     """Determines if the date time values are not equal to other.
 
     Args:
@@ -143,18 +150,18 @@ class SemanticTime(interface.DateTimeValues):
 
     return self._SORT_ORDER != other._SORT_ORDER  # pylint: disable=protected-access
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     return None
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies semantic time from a date and time string.
 
     Args:
@@ -166,7 +173,7 @@ class SemanticTime(interface.DateTimeValues):
     """
     self._string = time_string
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the date time value to a date and time string.
 
     Returns:
@@ -174,7 +181,7 @@ class SemanticTime(interface.DateTimeValues):
     """
     return self._string
 
-  def CopyToDateTimeStringISO8601(self):
+  def CopyToDateTimeStringISO8601(self) -> 'Union[str, None]':
     """Copies the date time value to an ISO 8601 date and time string.
 
     Returns:
@@ -184,7 +191,8 @@ class SemanticTime(interface.DateTimeValues):
     """
     return None
 
-  def CopyToStatTimeTuple(self):
+  def CopyToStatTimeTuple(self) -> (
+      'Union[Tuple[int, int], Tuple[int, None], Tuple[None, None]]'):
     """Copies the semantic timestamp to a stat timestamp tuple.
 
     Returns:
@@ -193,7 +201,7 @@ class SemanticTime(interface.DateTimeValues):
     """
     return None, None
 
-  def GetPlasoTimestamp(self):
+  def GetPlasoTimestamp(self) -> 'Union[int, None]':
     """Retrieves a timestamp that is compatible with plaso.
 
     Returns:
@@ -205,9 +213,9 @@ class SemanticTime(interface.DateTimeValues):
 class InvalidTime(SemanticTime):
   """Semantic time that represents invalid."""
 
-  _SORT_ORDER = 1
+  _SORT_ORDER: 'int' = 1
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a semantic time that represents invalid."""
     super(InvalidTime, self).__init__(string='Invalid')
 
@@ -215,13 +223,13 @@ class InvalidTime(SemanticTime):
 class Never(SemanticTime):
   """Semantic time that represents never."""
 
-  _SORT_ORDER = 99
+  _SORT_ORDER: 'int' = 99
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a semantic time that represents never."""
     super(Never, self).__init__(string='Never')
 
-  def __eq__(self, other):
+  def __eq__(self, other: 'object') -> 'bool':
     """Determines if the date time values are equal to other.
 
     Args:
@@ -232,7 +240,7 @@ class Never(SemanticTime):
     """
     return isinstance(other, Never)
 
-  def __ge__(self, other):
+  def __ge__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than or equal to other.
 
     Args:
@@ -249,7 +257,7 @@ class Never(SemanticTime):
 
     return True
 
-  def __gt__(self, other):
+  def __gt__(self, other: 'object') -> 'bool':
     """Determines if the date time values are greater than other.
 
     Args:
@@ -266,7 +274,7 @@ class Never(SemanticTime):
 
     return not isinstance(other, Never)
 
-  def __le__(self, other):
+  def __le__(self, other: 'object') -> 'bool':
     """Determines if the date time values are less than or equal to other.
 
     Args:
@@ -283,7 +291,7 @@ class Never(SemanticTime):
 
     return isinstance(other, Never)
 
-  def __lt__(self, other):
+  def __lt__(self, other: 'object') -> 'bool':
     """Determines if the date time values are less than other.
 
     Args:
@@ -300,7 +308,7 @@ class Never(SemanticTime):
 
     return False
 
-  def __ne__(self, other):
+  def __ne__(self, other: 'object') -> 'bool':
     """Determines if the date time values are not equal to other.
 
     Args:
@@ -315,8 +323,8 @@ class Never(SemanticTime):
 class NotSet(SemanticTime):
   """Semantic time that represents not set."""
 
-  _SORT_ORDER = 2
+  _SORT_ORDER: 'int' = 2
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a semantic time that represents not set."""
     super(NotSet, self).__init__(string='Not set')

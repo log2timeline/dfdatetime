@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import decimal
 
+from typing import Optional, Union  # pylint: disable=unused-import
+
 from dfdatetime import definitions
 from dfdatetime import interface
 
@@ -12,7 +14,7 @@ from dfdatetime import interface
 class HFSTimeEpoch(interface.DateTimeEpoch):
   """HFS time epoch."""
 
-  def __init__(self):
+  def __init__(self) -> 'None':
     """Initializes a HFS time epoch."""
     super(HFSTimeEpoch, self).__init__(1904, 1, 1)
 
@@ -27,34 +29,34 @@ class HFSTime(interface.DateTimeValues):
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
   """
-  _EPOCH = HFSTimeEpoch()
+  _EPOCH: 'interface.DateTimeEpoch' = HFSTimeEpoch()
 
   # The difference between Jan 1, 1904 and Jan 1, 1970 in seconds.
-  _HFS_TO_POSIX_BASE = 2082844800
+  _HFS_TO_POSIX_BASE: 'int' = 2082844800
 
-  def __init__(self, timestamp=None):
+  def __init__(self, timestamp: 'Optional[int]' = None) -> 'None':
     """Initializes a HFS timestamp.
 
     Args:
       timestamp (Optional[int]): HFS timestamp.
     """
     super(HFSTime, self).__init__()
-    self._precision = definitions.PRECISION_1_SECOND
-    self._timestamp = timestamp
+    self._precision: 'str' = definitions.PRECISION_1_SECOND
+    self._timestamp: 'Union[int, None]' = timestamp
 
   @property
-  def timestamp(self):
+  def timestamp(self) -> 'Union[int, None]':
     """int: HFS timestamp or None if timestamp is not set."""
     return self._timestamp
 
-  def _GetNormalizedTimestamp(self):
+  def _GetNormalizedTimestamp(self) -> 'Union[decimal.Decimal, None]':
     """Retrieves the normalized timestamp.
 
     Returns:
       decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
+          seconds since January 1, 1970 00:00:00 and a fraction of second
+          used for increased precision, or None if the normalized timestamp
+          cannot be determined.
     """
     if self._normalized_timestamp is None:
       if (self._timestamp is not None and self._timestamp >= 0 and
@@ -64,7 +66,7 @@ class HFSTime(interface.DateTimeValues):
 
     return self._normalized_timestamp
 
-  def CopyFromDateTimeString(self, time_string):
+  def CopyFromDateTimeString(self, time_string: 'str') -> 'None':
     """Copies a HFS timestamp from a date and time string.
 
     Args:
@@ -94,11 +96,12 @@ class HFSTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds,
+        time_zone_offset=time_zone_offset)
     self._timestamp += self._HFS_TO_POSIX_BASE
     self._time_zone_offset = time_zone_offset
 
-  def CopyToDateTimeString(self):
+  def CopyToDateTimeString(self) -> 'Union[str, None]':
     """Copies the HFS timestamp to a date and time string.
 
     Returns:

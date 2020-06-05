@@ -5,7 +5,7 @@ dist: bionic
 jobs:
   include:
   - name: "Pylint on Ubuntu Bionic (20.04) (Docker) with Python 3.8"
-    env: [TARGET="pylint", UBUNTU_VERSION="20.04"]
+    env: [TARGET="lint_and_type_check", UBUNTU_VERSION="20.04"]
     group: edge
     language: python
     python: 3.8
@@ -37,13 +37,6 @@ jobs:
     group: edge
     language: python
     python: 3.8
-    services:
-    - docker
-  - name: "Ubuntu Focal (20.04) (Docker) with Python 3.5 (tox)"
-    env: [TOXENV="py35", UBUNTU_VERSION="20.04"]
-    group: edge
-    language: python
-    python: 3.5
     services:
     - docker
   - name: "Ubuntu Focal (20.04) (Docker) with Python 3.6 (tox)"

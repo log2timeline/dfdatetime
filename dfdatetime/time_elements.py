@@ -296,6 +296,29 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
+  def CopyFromDatetime(self, datetime_object):
+    """Copies time elements from a Python datetime object.
+
+    A naive datetime object is considered in local time.
+
+    Args:
+      datetime_object (datetime.datetime): Python datetime object.
+    """
+    year, month, day_of_month, hours, minutes, seconds, _, _, _ = (
+        datetime_object.utctimetuple())
+
+    date_time_values = {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds}
+
+    self._CopyFromDateTimeValues(date_time_values)
+
+    self.is_local_time = bool(datetime_object.tzinfo is None)
+
   def CopyFromDateTimeString(self, time_string):
     """Copies time elements from a date and time string.
 
@@ -497,6 +520,24 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
 
+    self.fraction_of_second = fraction_of_second
+
+  def CopyFromDatetime(self, datetime_object):
+    """Copies time elements from a Python datetime object.
+
+    A naive datetime object is considered in local time.
+
+    Args:
+      datetime_object (datetime.datetime): Python datetime object.
+    """
+    super(TimeElementsWithFractionOfSecond, self).CopyFromDatetime(
+        datetime_object)
+
+    precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
+        self._precision)
+
+    fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
+        datetime_object.microsecond)
     self.fraction_of_second = fraction_of_second
 
   def CopyFromStringTuple(self, time_elements_tuple):

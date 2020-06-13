@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 
+import datetime
 import decimal
 import unittest
 
@@ -233,6 +234,33 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
     self.assertEqual(
         time_elements_object._number_of_seconds, expected_number_of_seconds)
+
+  def testCopyFromDatetime(self):
+    """Tests the CopyFromDatetime function."""
+    time_elements_object = time_elements.TimeElements()
+
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+
+    datetime_object = datetime.datetime(2010, 8, 12, 21, 6, 31, 546875)
+    time_elements_object.CopyFromDatetime(datetime_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertTrue(time_elements_object.is_local_time)
+
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+
+    datetime_object = datetime.datetime(
+        2010, 8, 12, 21, 6, 31, 546875, tzinfo=datetime.timezone.utc)
+    time_elements_object.CopyFromDatetime(datetime_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertFalse(time_elements_object.is_local_time)
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -531,6 +559,35 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
   # TODO: add tests for _CopyFromDateTimeValues
 
+  def testCopyFromDatetime(self):
+    """Tests the CopyFromDatetime function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds()
+
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+
+    datetime_object = datetime.datetime(2010, 8, 12, 21, 6, 31, 546875)
+    time_elements_object.CopyFromDatetime(datetime_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object.milliseconds, 546)
+    self.assertTrue(time_elements_object.is_local_time)
+
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+
+    datetime_object = datetime.datetime(
+        2010, 8, 12, 21, 6, 31, 546875, tzinfo=datetime.timezone.utc)
+    time_elements_object.CopyFromDatetime(datetime_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object.milliseconds, 546)
+    self.assertFalse(time_elements_object.is_local_time)
+
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
     time_elements_object = time_elements.TimeElementsInMilliseconds()
@@ -810,6 +867,35 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     self.assertIsNone(normalized_timestamp)
 
   # TODO: add tests for _CopyFromDateTimeValues
+
+  def testCopyFromDatetime(self):
+    """Tests the CopyFromDatetime function."""
+    time_elements_object = time_elements.TimeElementsInMicroseconds()
+
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+
+    datetime_object = datetime.datetime(2010, 8, 12, 21, 6, 31, 546875)
+    time_elements_object.CopyFromDatetime(datetime_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object.microseconds, 546875)
+    self.assertTrue(time_elements_object.is_local_time)
+
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+
+    datetime_object = datetime.datetime(
+        2010, 8, 12, 21, 6, 31, 546875, tzinfo=datetime.timezone.utc)
+    time_elements_object.CopyFromDatetime(datetime_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object.microseconds, 546875)
+    self.assertFalse(time_elements_object.is_local_time)
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""

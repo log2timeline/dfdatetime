@@ -99,6 +99,134 @@ class TimeElementsTest(unittest.TestCase):
       time_elements_object._CopyDateTimeFromStringISO8601(
           '2010-08-12 21:06:31.546875+01:00')
 
+  def testCopyDateTimeFromStringRFC822(self):
+    """Tests the _CopyDateTimeFromStringRFC822 function."""
+    time_elements_object = time_elements.TimeElements()
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': 0}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC822(
+        'Sun, 20 Jun 82 11:57:09 GMT')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': 0}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC822(
+        '20 Jun 82 11:57:09 GMT')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57,
+        'time_zone_offset': 0}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC822(
+        '20 Jun 82 11:57 GMT')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': -300}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC822(
+        'Sun, 20 Jun 82 11:57:09 EST')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': -300}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC822(
+        'Sun, 20 Jun 82 11:57:09 -0500')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC822(
+          'XXX, 20 Jun 82 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC822(
+          'Sun, XX Jun 82 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC822(
+          'Sun, 20 XXX 82 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC822(
+          'Sun, 20 Jun XX 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC822(
+          'Sun, 20 Jun 82 XX:XX:XX XXX')
+
+  def testCopyDateTimeFromStringRFC1123(self):
+    """Tests the _CopyDateTimeFromStringRFC1123 function."""
+    time_elements_object = time_elements.TimeElements()
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': 0}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC1123(
+        'Sun, 20 Jun 1982 11:57:09 GMT')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': 0}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC1123(
+        '20 Jun 1982 11:57:09 GMT')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57,
+        'time_zone_offset': 0}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC1123(
+        '20 Jun 1982 11:57 GMT')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': -300}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC1123(
+        'Sun, 20 Jun 1982 11:57:09 EST')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 1982, 'month': 6, 'day_of_month': 20,
+        'hours': 11, 'minutes': 57, 'seconds': 9,
+        'time_zone_offset': -300}
+    date_dict = time_elements_object._CopyDateTimeFromStringRFC1123(
+        'Sun, 20 Jun 1982 11:57:09 -0500')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC1123(
+          'XXX, 20 Jun 1982 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC1123(
+          'Sun, XX Jun 1982 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC1123(
+          'Sun, 20 XXX 1982 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC1123(
+          'Sun, 20 Jun XXXX 11:57:09 GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyDateTimeFromStringRFC1123(
+          'Sun, 20 Jun 1982 XX:XX:XX XXX')
+
   # TODO: add tests for _CopyFromDateTimeValues
 
   def testCopyTimeFromStringISO8601(self):
@@ -222,6 +350,57 @@ class TimeElementsTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringISO8601('12:00:00+01:60')
+
+  def testCopyTimeFromStringRFC(self):
+    """Tests the _CopyTimeFromStringRFC function."""
+    time_elements_object = time_elements.TimeElements()
+
+    expected_time_tuple = (11, 57, 9, 0)
+    time_tuple = time_elements_object._CopyTimeFromStringRFC('11:57:09', 'GMT')
+    self.assertEqual(time_tuple, expected_time_tuple)
+
+    expected_time_tuple = (11, 57, None, 0)
+    time_tuple = time_elements_object._CopyTimeFromStringRFC('11:57', 'GMT')
+    self.assertEqual(time_tuple, expected_time_tuple)
+
+    expected_time_tuple = (11, 57, None, -300)
+    time_tuple = time_elements_object._CopyTimeFromStringRFC('11:57', 'EST')
+    self.assertEqual(time_tuple, expected_time_tuple)
+
+    expected_time_tuple = (11, 57, None, -300)
+    time_tuple = time_elements_object._CopyTimeFromStringRFC('11:57', '-0500')
+    self.assertEqual(time_tuple, expected_time_tuple)
+
+    expected_time_tuple = (11, 57, None, 60)
+    time_tuple = time_elements_object._CopyTimeFromStringRFC('11:57', '+0100')
+    self.assertEqual(time_tuple, expected_time_tuple)
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57:', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('XX:57:09', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('24:57:09', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:XX:09', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:60:09', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57:XX', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57:60', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57:09', 'XXX')
 
   def testCopyFromString(self):
     """Tests the CopyFromString function."""

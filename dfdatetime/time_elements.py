@@ -20,6 +20,61 @@ class TimeElements(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
+  # Maps the RFC 822, RFC 1123 and RFC 2822 defintions to their corresponding
+  # integer values.
+  _RFC_MONTH_MAPPINGS = {
+      'Jan': 1,
+      'Feb': 2,
+      'Mar': 3,
+      'Apr': 4,
+      'May': 5,
+      'Jun': 6,
+      'Jul': 7,
+      'Aug': 8,
+      'Sep': 9,
+      'Oct': 10,
+      'Nov': 11,
+      'Dec': 12}
+
+  _RFC_TIME_ZONE_MAPPINGS = {
+      'UT': 0,
+      'GMT':  0,
+      'EST': -5,
+      'EDT': -4,
+      'CST': -6,
+      'CDT': -5,
+      'MST': -7,
+      'MDT': -6,
+      'PST': -8,
+      'PDT': -7,
+      'A': -1,
+      'B': -2,
+      'C': -3,
+      'D': -4,
+      'E': -5,
+      'F': -6,
+      'G': -7,
+      'H': -8,
+      'I': -9,
+      'K': -10,
+      'L': -11,
+      'M': -12,
+      'N': 1,
+      'O': 2,
+      'P': 3,
+      'Q': 4,
+      'R': 5,
+      'S': 6,
+      'T': 7,
+      'U': 8,
+      'V': 9,
+      'W': 10,
+      'X': 11,
+      'Y': 12,
+      'Z': 0}
+
+  _RFC_WEEKDAYS = frozenset(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+
   def __init__(self, time_elements_tuple=None):
     """Initializes time elements.
 
@@ -97,8 +152,7 @@ class TimeElements(interface.DateTimeValues):
     # If a time of day is specified the time string it should at least
     # contain 'YYYY-MM-DDThh'.
     if time_string[10] != 'T':
-      raise ValueError(
-          'Invalid time string - missing as date and time separator.')
+      raise ValueError('Invalid time string - missing date and time separator.')
 
     hours, minutes, seconds, microseconds, time_zone_offset = (
         self._CopyTimeFromStringISO8601(time_string[11:]))
@@ -115,6 +169,168 @@ class TimeElements(interface.DateTimeValues):
       date_time_values['microseconds'] = microseconds
     if time_zone_offset is not None:
       date_time_values['time_zone_offset'] = time_zone_offset
+
+    return date_time_values
+
+  def _CopyDateTimeFromStringRFC822(self, time_string):
+    """Copies a date and time from a RFC 822 date and time string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          DAY, D MONTH YY hh:mm:ss ZONE
+
+          Where weekday (DAY) and seconds (ss) are optional and day of
+          month (D) can consist of 1 or 2 digits.
+
+    Returns:
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds, time zone offset in minutes.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if not time_string:
+      raise ValueError('Invalid time string.')
+
+    string_segments = time_string.split(' ')
+
+    if len(string_segments) not in (5, 6):
+      raise ValueError('Unsupported number of time string segments.')
+
+    weekday_string = string_segments[0]
+    if weekday_string.endswith(','):
+      weekday_string = weekday_string[:-1]
+      if weekday_string not in self._RFC_WEEKDAYS:
+        raise ValueError('Invalid weekday: {0:s}.'.format(weekday_string))
+
+      string_segments.pop(0)
+
+    day_of_month_string = string_segments[0]
+
+    day_of_month = 0
+    if len(day_of_month_string) in (1, 2):
+      try:
+        day_of_month = int(day_of_month_string, 10)
+      except ValueError:
+        pass
+
+    if day_of_month == 0:
+      raise ValueError('Invalid day of month: {0:s}.'.format(
+          day_of_month_string))
+
+    month_string = string_segments[1]
+
+    month = self._RFC_MONTH_MAPPINGS.get(month_string)
+    if not month:
+      raise ValueError('Invalid month: {0:s}.'.format(month_string))
+
+    year_string = string_segments[2]
+
+    year = None
+    if len(year_string) == 2:
+      try:
+        year = int(year_string, 10)
+      except ValueError:
+        pass
+
+    if year is None:
+      raise ValueError('Invalid year: {0:s}.'.format(year_string))
+
+    year += 1900
+
+    hours, minutes, seconds, time_zone_offset = self._CopyTimeFromStringRFC(
+        string_segments[3], string_segments[4])
+
+    date_time_values = {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'time_zone_offset': time_zone_offset}
+
+    if seconds is not None:
+      date_time_values['seconds'] = seconds
+
+    return date_time_values
+
+  def _CopyDateTimeFromStringRFC1123(self, time_string):
+    """Copies a date and time from a RFC 1123 date and time string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          DAY, D MONTH YYYY hh:mm:ss ZONE
+
+          Where weekday (DAY) and seconds (ss) are optional and day of
+          month (D) can consist of 1 or 2 digits.
+
+    Returns:
+      dict[str, int]: date and time values, such as year, month, day of month,
+          hours, minutes, seconds, time zone offset in minutes.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    if not time_string:
+      raise ValueError('Invalid time string.')
+
+    string_segments = time_string.split(' ')
+
+    if len(string_segments) not in (5, 6):
+      raise ValueError('Unsupported number of time string segments.')
+
+    weekday_string = string_segments[0]
+    if weekday_string.endswith(','):
+      weekday_string = weekday_string[:-1]
+      if weekday_string not in self._RFC_WEEKDAYS:
+        raise ValueError('Invalid weekday: {0:s}.'.format(weekday_string))
+
+      string_segments.pop(0)
+
+    day_of_month_string = string_segments[0]
+
+    day_of_month = 0
+    if len(day_of_month_string) in (1, 2):
+      try:
+        day_of_month = int(day_of_month_string, 10)
+      except ValueError:
+        pass
+
+    if day_of_month == 0:
+      raise ValueError('Invalid day of month: {0:s}.'.format(
+          day_of_month_string))
+
+    month_string = string_segments[1]
+
+    month = self._RFC_MONTH_MAPPINGS.get(month_string)
+    if not month:
+      raise ValueError('Invalid month: {0:s}.'.format(month_string))
+
+    year_string = string_segments[2]
+
+    year = None
+    if len(year_string) == 4:
+      try:
+        year = int(year_string, 10)
+      except ValueError:
+        pass
+
+    if year is None:
+      raise ValueError('Invalid year: {0:s}.'.format(year_string))
+
+    hours, minutes, seconds, time_zone_offset = self._CopyTimeFromStringRFC(
+        string_segments[3], string_segments[4])
+
+    date_time_values = {
+        'year': year,
+        'month': month,
+        'day_of_month': day_of_month,
+        'hours': hours,
+        'minutes': minutes,
+        'time_zone_offset': time_zone_offset}
+
+    if seconds is not None:
+      date_time_values['seconds'] = seconds
 
     return date_time_values
 
@@ -142,7 +358,7 @@ class TimeElements(interface.DateTimeValues):
     self._time_zone_offset = time_zone_offset
 
   def _CopyTimeFromStringISO8601(self, time_string):
-    """Copies a time from an ISO 8601 date and time string.
+    """Copies a time from an ISO 8601 time string.
 
     Args:
       time_string (str): time value formatted as:
@@ -296,6 +512,106 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, microseconds, time_zone_offset
 
+  def _CopyTimeFromStringRFC(self, time_string, time_zone_string):
+    """Copies a time from a RFC 822, RFC 1123 or RFC 2822 time string.
+
+    Args:
+      time_string (str): time value formatted as: hh:mm[:ss], where seconds (ss)
+          are optional.
+      time_zone_string (str): time zone value formatted as predefined time zone
+          indicator or [+-]HHMM
+
+    Returns:
+      tuple[int, int, int, int]: hours, minutes, seconds, time zone offset in
+          minutes.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    time_string_length = len(time_string)
+
+    # The time string should at least contain 'hh:mm'.
+    if time_string_length < 5:
+      raise ValueError('Time string too short.')
+
+    if time_string_length > 8:
+      raise ValueError('Time string too long.')
+
+    if time_string[2] != ':':
+      raise ValueError('Invalid hours and minutes separator.')
+
+    try:
+      hours = int(time_string[0:2], 10)
+    except ValueError:
+      raise ValueError('Unable to parse hours.')
+
+    if hours not in range(0, 24):
+      raise ValueError('Hours value: {0:d} out of bounds.'.format(hours))
+
+    try:
+      minutes = int(time_string[3:5], 10)
+    except ValueError:
+      raise ValueError('Unable to parse minutes.')
+
+    if minutes not in range(0, 60):
+      raise ValueError('Minutes value: {0:d} out of bounds.'.format(minutes))
+
+    seconds = None
+
+    if time_string_length > 5:
+      if time_string_length < 8:
+        raise ValueError('Time string too short.')
+
+      if time_string[5] != ':':
+        raise ValueError('Invalid minutes and seconds separator.')
+
+      try:
+        seconds = int(time_string[6:8], 10)
+      except ValueError:
+        raise ValueError('Unable to parse seconds.')
+
+      if seconds not in range(0, 60):
+        raise ValueError('Seconds value: {0:d} out of bounds.'.format(seconds))
+
+    if time_string_length < 5:
+      raise ValueError('Time string too short.')
+
+    time_zone_string_length = len(time_zone_string)
+    if time_zone_string_length > 5:
+      raise ValueError('Time zone string too long.')
+
+    if time_zone_string_length < 5:
+      hours_from_utc = self._RFC_TIME_ZONE_MAPPINGS.get(time_zone_string, None)
+      minutes_from_utc = 0
+      if hours_from_utc is None:
+        raise ValueError('Invalid time zone: {0:s}.'.format(time_zone_string))
+
+    else:
+      if time_zone_string[0] not in ('+', '-'):
+        raise ValueError('Invalid time zone: {0:s}.'.format(time_zone_string))
+
+      try:
+        hours_from_utc = int(time_zone_string[1:3], 10)
+      except ValueError:
+        raise ValueError('Unable to parse time zone hours offset.')
+
+      if hours_from_utc not in range(0, 15):
+        raise ValueError('Time zone hours offset value out of bounds.')
+
+      try:
+        minutes_from_utc = int(time_zone_string[3:5], 10)
+      except ValueError:
+        raise ValueError('Unable to parse time zone minutes offset.')
+
+      if minutes_from_utc not in range(0, 60):
+        raise ValueError('Time zone minutes offset value out of bounds.')
+
+    time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
+    if time_zone_string[0] == '-':
+      time_zone_offset = -time_zone_offset
+
+    return hours, minutes, seconds, time_zone_offset
+
   def CopyFromDatetime(self, datetime_object):
     """Copies time elements from a Python datetime object.
 
@@ -358,6 +674,40 @@ class TimeElements(interface.DateTimeValues):
       ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromStringISO8601(time_string)
+
+    self._CopyFromDateTimeValues(date_time_values)
+
+  def CopyFromStringRFC822(self, time_string):
+    """Copies time elements from a RFC 822 date and time string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          DAY, D MONTH YY hh:mm:ss ZONE
+
+          Where weekday (DAY) and seconds (ss) are optional and day of
+          month (D) can consist of 1 or 2 digits.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    date_time_values = self._CopyDateTimeFromStringRFC822(time_string)
+
+    self._CopyFromDateTimeValues(date_time_values)
+
+  def CopyFromStringRFC1123(self, time_string):
+    """Copies time elements from a RFC 1123 date and time string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          DAY, D MONTH YYYY hh:mm:ss ZONE
+
+          Where weekday (DAY) and seconds (ss) are optional and day of
+          month (D) can consist of 1 or 2 digits.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    date_time_values = self._CopyDateTimeFromStringRFC1123(time_string)
 
     self._CopyFromDateTimeValues(date_time_values)
 

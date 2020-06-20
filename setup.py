@@ -176,7 +176,7 @@ setup(
         'Programming Language :: Python',
     ],
     packages=find_packages('.', exclude=[
-        'tests', 'tests.*', 'utils']),
+        'docs', 'tests', 'tests.*', 'utils']),
     package_dir={
         'dfdatetime': 'dfdatetime'
     },

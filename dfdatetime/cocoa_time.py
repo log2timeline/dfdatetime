@@ -24,10 +24,6 @@ class CocoaTime(interface.DateTimeValues):
   seconds since 2001-01-01 00:00:00 (also known as the Cocoa epoch).
   Negative values represent date and times predating the Cocoa epoch.
 
-  Also see:
-    https://developer.apple.com/library/ios/documentation/cocoa/Conceptual/
-        DatesAndTimes/Articles/dtDates.html
-
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
   """

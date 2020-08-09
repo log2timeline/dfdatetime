@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import decimal
 
 from dfdatetime import definitions
+from dfdatetime import factory
 from dfdatetime import interface
 
 
@@ -423,3 +424,9 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
           None if the timestamp is missing or invalid.
     """
     return self._CopyToDateTimeString()
+
+
+factory.Factory.RegisterDateTimeValues(PosixTime)
+factory.Factory.RegisterDateTimeValues(PosixTimeInMilliseconds)
+factory.Factory.RegisterDateTimeValues(PosixTimeInMicroseconds)
+factory.Factory.RegisterDateTimeValues(PosixTimeInNanoseconds)

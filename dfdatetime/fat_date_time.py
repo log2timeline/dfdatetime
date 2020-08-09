@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import decimal
 
 from dfdatetime import definitions
+from dfdatetime import factory
 from dfdatetime import interface
 
 
@@ -172,3 +173,6 @@ class FATDateTime(interface.DateTimeValues):
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
         year, month, day_of_month, hours, minutes, seconds)
+
+
+factory.Factory.RegisterDateTimeValues(FATDateTime)

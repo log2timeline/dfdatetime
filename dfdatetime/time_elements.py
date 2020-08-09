@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import decimal
 
 from dfdatetime import definitions
+from dfdatetime import factory
 from dfdatetime import interface
 from dfdatetime import precisions
 
@@ -1113,3 +1114,8 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
 
     super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
         time_elements_tuple)
+
+
+factory.Factory.RegisterDateTimeValues(TimeElements)
+factory.Factory.RegisterDateTimeValues(TimeElementsInMilliseconds)
+factory.Factory.RegisterDateTimeValues(TimeElementsInMicroseconds)

@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import decimal
 
 from dfdatetime import definitions
+from dfdatetime import factory
 from dfdatetime import posix_time
 
 
@@ -70,3 +71,6 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
       return None
 
     return super(APFSTime, self)._CopyToDateTimeString()
+
+
+factory.Factory.RegisterDateTimeValues(APFSTime)

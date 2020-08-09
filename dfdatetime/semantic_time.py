@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 
+from dfdatetime import factory
 from dfdatetime import interface
 
 
@@ -320,3 +321,9 @@ class NotSet(SemanticTime):
   def __init__(self):
     """Initializes a semantic time that represents not set."""
     super(NotSet, self).__init__(string='Not set')
+
+
+factory.Factory.RegisterDateTimeValues(SemanticTime)
+factory.Factory.RegisterDateTimeValues(InvalidTime)
+factory.Factory.RegisterDateTimeValues(Never)
+factory.Factory.RegisterDateTimeValues(NotSet)

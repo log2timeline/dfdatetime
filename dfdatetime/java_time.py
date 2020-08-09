@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import decimal
 
 from dfdatetime import definitions
+from dfdatetime import factory
 from dfdatetime import posix_time
 
 
@@ -53,3 +54,6 @@ class JavaTime(posix_time.PosixTimeInMilliseconds):
       return None
 
     return super(JavaTime, self).CopyToDateTimeString()
+
+
+factory.Factory.RegisterDateTimeValues(JavaTime)

@@ -27,6 +27,12 @@ class TimeElementsTest(unittest.TestCase):
     self.assertIsNotNone(time_elements_object)
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(time_elements_object.year, 2010)
+    self.assertEqual(time_elements_object.month, 8)
+    self.assertEqual(time_elements_object.day_of_month, 12)
+    self.assertEqual(time_elements_object.hours, 20)
+    self.assertEqual(time_elements_object.minutes, 6)
+    self.assertEqual(time_elements_object.seconds, 31)
 
     with self.assertRaises(ValueError):
       time_elements.TimeElements(

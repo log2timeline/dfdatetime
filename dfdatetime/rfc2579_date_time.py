@@ -59,15 +59,15 @@ class RFC2579DateTime(interface.DateTimeValues):
       ValueError: if the system time is invalid.
     """
     super(RFC2579DateTime, self).__init__()
+    self._day_of_month = None
+    self._deciseconds = None
+    self._hours = None
+    self._minutes = None
+    self._month = None
     self._number_of_seconds = None
     self._precision = definitions.PRECISION_100_MILLISECONDS
-    self.day_of_month = None
-    self.hours = None
-    self.deciseconds = None
-    self.minutes = None
-    self.month = None
-    self.seconds = None
-    self.year = None
+    self._seconds = None
+    self._year = None
 
     if rfc2579_date_time_tuple:
       if len(rfc2579_date_time_tuple) < 10:
@@ -116,17 +116,17 @@ class RFC2579DateTime(interface.DateTimeValues):
 
       self._time_zone_offset = time_zone_offset
 
-      self.year = rfc2579_date_time_tuple[0]
-      self.month = rfc2579_date_time_tuple[1]
-      self.day_of_month = rfc2579_date_time_tuple[2]
-      self.hours = rfc2579_date_time_tuple[3]
-      self.minutes = rfc2579_date_time_tuple[4]
-      self.seconds = rfc2579_date_time_tuple[5]
-      self.deciseconds = rfc2579_date_time_tuple[6]
+      self._year = rfc2579_date_time_tuple[0]
+      self._month = rfc2579_date_time_tuple[1]
+      self._day_of_month = rfc2579_date_time_tuple[2]
+      self._hours = rfc2579_date_time_tuple[3]
+      self._minutes = rfc2579_date_time_tuple[4]
+      self._seconds = rfc2579_date_time_tuple[5]
+      self._deciseconds = rfc2579_date_time_tuple[6]
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-          self.year, self.month, self.day_of_month, self.hours, self.minutes,
-          self.seconds, self._time_zone_offset)
+          self._year, self._month, self._day_of_month, self._hours,
+          self._minutes, self._seconds, self._time_zone_offset)
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -140,11 +140,46 @@ class RFC2579DateTime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
         self._normalized_timestamp = (
-            decimal.Decimal(self.deciseconds) /
+            decimal.Decimal(self._deciseconds) /
             definitions.DECISECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
 
     return self._normalized_timestamp
+
+  @property
+  def deciseconds(self):
+    """int: number of deciseconds or None if not set."""
+    return self._deciseconds
+
+  @property
+  def day_of_month(self):
+    """int: day of month or None if not set."""
+    return self._day_of_month
+
+  @property
+  def hours(self):
+    """int: number of hours or None if not set."""
+    return self._hours
+
+  @property
+  def minutes(self):
+    """int: number of minutes or None if not set."""
+    return self._minutes
+
+  @property
+  def month(self):
+    """int: month or None if not set."""
+    return self._month
+
+  @property
+  def seconds(self):
+    """int: number of seconds or None if not set."""
+    return self._seconds
+
+  @property
+  def year(self):
+    """int: year or None if not set."""
+    return self._year
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a RFC2579 date-time from a date and time string.
@@ -183,13 +218,13 @@ class RFC2579DateTime(interface.DateTimeValues):
         year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
     self._time_zone_offset = time_zone_offset
 
-    self.year = year
-    self.month = month
-    self.day_of_month = day_of_month
-    self.hours = hours
-    self.minutes = minutes
-    self.seconds = seconds
-    self.deciseconds = deciseconds
+    self._year = year
+    self._month = month
+    self._day_of_month = day_of_month
+    self._hours = hours
+    self._minutes = minutes
+    self._seconds = seconds
+    self._deciseconds = deciseconds
 
   def CopyToDateTimeString(self):
     """Copies the RFC2579 date-time to a date and time string.
@@ -202,8 +237,8 @@ class RFC2579DateTime(interface.DateTimeValues):
       return None
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:01d}'.format(
-        self.year, self.month, self.day_of_month, self.hours, self.minutes,
-        self.seconds, self.deciseconds)
+        self._year, self._month, self._day_of_month, self._hours, self._minutes,
+        self._seconds, self._deciseconds)
 
 
 factory.Factory.RegisterDateTimeValues(RFC2579DateTime)

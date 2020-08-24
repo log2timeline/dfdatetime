@@ -613,6 +613,48 @@ class TimeElements(interface.DateTimeValues):
 
     return hours, minutes, seconds, time_zone_offset
 
+  @property
+  def day_of_month(self):
+    """int: day of month or None if not set."""
+    if not self._time_elements_tuple:
+      return None
+    return self._time_elements_tuple[2]
+
+  @property
+  def hours(self):
+    """int: number of hours or None if not set."""
+    if not self._time_elements_tuple:
+      return None
+    return self._time_elements_tuple[3]
+
+  @property
+  def minutes(self):
+    """int: number of minutes or None if not set."""
+    if not self._time_elements_tuple:
+      return None
+    return self._time_elements_tuple[4]
+
+  @property
+  def month(self):
+    """int: month or None if not set."""
+    if not self._time_elements_tuple:
+      return None
+    return self._time_elements_tuple[1]
+
+  @property
+  def seconds(self):
+    """int: number of seconds or None if not set."""
+    if not self._time_elements_tuple:
+      return None
+    return self._time_elements_tuple[5]
+
+  @property
+  def year(self):
+    """int: year or None if not set."""
+    if not self._time_elements_tuple:
+      return None
+    return self._time_elements_tuple[0]
+
   def CopyFromDatetime(self, datetime_object):
     """Copies time elements from a Python datetime object.
 

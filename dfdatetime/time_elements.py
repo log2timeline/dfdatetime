@@ -21,7 +21,7 @@ class TimeElements(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  # Maps the RFC 822, RFC 1123 and RFC 2822 defintions to their corresponding
+  # Maps the RFC 822, RFC 1123 and RFC 2822 definitions to their corresponding
   # integer values.
   _RFC_MONTH_MAPPINGS = {
       'Jan': 1,

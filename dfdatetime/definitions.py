@@ -7,9 +7,6 @@ Also see:
   https://en.wikipedia.org/wiki/Minute
 """
 
-from __future__ import unicode_literals
-
-
 SECONDS_PER_DAY = 24 * 60 * 60
 
 DECISECONDS_PER_SECOND = 10

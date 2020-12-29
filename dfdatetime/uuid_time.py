@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """UUID version 1 time implementation."""
 
-from __future__ import unicode_literals
-
 import decimal
 
 from dfdatetime import definitions

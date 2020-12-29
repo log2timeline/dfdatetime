@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the fake time implementation."""
 
-from __future__ import unicode_literals
-
 import decimal
 import unittest
 

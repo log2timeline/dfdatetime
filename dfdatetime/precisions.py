@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Date and time precision helpers."""
 
-from __future__ import unicode_literals
-
 import decimal
 
 from dfdatetime import definitions

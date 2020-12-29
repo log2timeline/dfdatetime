@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Semantic time implementation."""
 
-from __future__ import unicode_literals
-
 from dfdatetime import factory
 from dfdatetime import interface
 

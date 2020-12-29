@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the SYSTEMTIME structure implementation."""
 
-from __future__ import unicode_literals
-
 import decimal
 import unittest
 

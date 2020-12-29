@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Fake timestamp implementation."""
 
-from __future__ import unicode_literals
-
 import decimal
 import time
 

@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the semantic time implementation."""
 
-from __future__ import unicode_literals
-
 import unittest
 
 from dfdatetime import semantic_time

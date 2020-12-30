@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the UUID version 1 time implementation."""
 
-from __future__ import unicode_literals
-
 import decimal
 import uuid
 import unittest

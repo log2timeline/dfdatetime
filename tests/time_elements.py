@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the time elements implementation."""
 
-from __future__ import unicode_literals
-
 import datetime
 import decimal
 import unittest

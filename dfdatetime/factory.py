@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """The date and time values factory."""
 
-from __future__ import unicode_literals
-
 
 class Factory(object):
   """Date and time values factory."""

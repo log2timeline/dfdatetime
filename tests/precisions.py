@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Tests for date and time precision helpers."""
 
-from __future__ import unicode_literals
-
 import decimal
 import unittest
 

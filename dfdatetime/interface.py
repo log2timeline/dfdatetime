@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Date and time interfaces."""
 
-from __future__ import unicode_literals
-
 import abc
 import calendar
 import decimal

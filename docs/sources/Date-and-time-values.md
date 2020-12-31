@@ -68,9 +68,9 @@ occurred during that specific hour.
 * [Wikipedia: Computer forensics](https://en.wikipedia.org/wiki/Computer_forensics)
 * [Wikipedia: Granularity - Data Granularity](https://en.wikipedia.org/wiki/Granularity#Data_granularity)
 * [Wikipedia: Semantics](https://en.wikipedia.org/wiki/Semantics)
-* [FILETIME structure](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724284(v=vs.85).aspx)
-* [File Times](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290(v=vs.85).aspx)
-* [Precision and accuracy of DateTime](https://blogs.msdn.microsoft.com/ericlippert/2010/04/08/precision-and-accuracy-of-datetime/), by Eric Lippert, April 8, 2010
+* [FILETIME structure](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
+* [File Times](https://docs.microsoft.com/en-us/windows/win32/sysinfo/file-times)
+* [Precision and accuracy of DateTime](https://docs.microsoft.com/en-us/archive/blogs/ericlippert/precision-and-accuracy-of-datetime), by Eric Lippert, April 8, 2010
 
 ## APFS timestamp
 ### Characteristics
@@ -104,8 +104,8 @@ Offset | Size | Description
 
 ### Also see
 
-* [Apple Developer: Dates](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/DatesAndTimes/Articles/dtDates.html)
-* [Apple Developer: NSDate](https://developer.apple.com/reference/foundation/nsdate)
+* [Apple Developer: Dates](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/DatesAndTimes/Articles/dtDates.html)
+* [Apple Developer: NSDate](https://developer.apple.com/documentation/foundation/nsdate)
 
 ## Delphi TDateTime
 ### Characteristics
@@ -159,7 +159,7 @@ Offset | Size | Description
 ### Also see
 
 * [Wikipedia: File Allocation Table](https://en.wikipedia.org/wiki/File_Allocation_Table)
-* [DosDateTimeToFileTime function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724247(v=vs.85).aspx)
+* [DosDateTimeToFileTime function](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-dosdatetimetofiletime)
 
 ## FILETIME
 ### Characteristics
@@ -171,7 +171,7 @@ Storage granularity | 100-nanosecond intervals
 Time zone | externally represented, typically UTC
 
 The actual upper bound of the supported date range is unclear. Also see:
-[Latest possible FILETIME](http://stackoverflow.com/questions/9999393/latest-possible-filetime)
+[Latest possible FILETIME](https://stackoverflow.com/questions/9999393/latest-possible-filetime)
 
 ### Format
 
@@ -195,7 +195,7 @@ SetFileTime Windows API function are overloaded with a special meaning.
 
 ### Also see
 
-* [MSDN: FILETIME](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724284(v=vs.85).aspx)
+* [MSDN: FILETIME](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
 
 ## HFS timestamp
 
@@ -348,7 +348,7 @@ An empty (or unset) SYSTEMTIME can be represented by 16x 0-byte values.
 
 ### Also see
 
-* [MSDN: SYSTEMTIME](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950(v=vs.85).aspx)
+* [MSDN: SYSTEMTIME](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-systemtime)
 
 ## UUID version 1 time
 ### Characteristics

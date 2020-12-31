@@ -44,6 +44,14 @@ dfdatetime.delphi\_date\_time module
    :undoc-members:
    :show-inheritance:
 
+dfdatetime.factory module
+-------------------------
+
+.. automodule:: dfdatetime.factory
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 dfdatetime.fake\_time module
 ----------------------------
 
@@ -163,7 +171,6 @@ dfdatetime.webkit\_time module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

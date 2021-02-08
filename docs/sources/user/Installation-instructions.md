@@ -48,7 +48,7 @@ The [l2tbinaries](https://github.com/log2timeline/l2tbinaries) contains the
 necessary packages for running dfDateTime. l2tbinaries provides the following
 branches:
 
-* master; branch intended for the "packaged release" of dfDateTime and dependencies;
+* main; branch intended for the "packaged release" of dfDateTime and dependencies;
 * dev; branch intended for the "development release" of dfDateTime;
 * testing; branch intended for testing newly created packages.
 

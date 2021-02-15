@@ -48,6 +48,12 @@ class TimeElementsTest(unittest.TestCase):
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591'))
 
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31), time_zone_offset=60)
+
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531'))
+
     time_elements_object = time_elements.TimeElements()
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
@@ -450,136 +456,117 @@ class TimeElementsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElements()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_number_of_seconds = 1281571200
     time_elements_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281571200)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281650791
     time_elements_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object.time_zone_offset, -60)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, -60)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281643591
     time_elements_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object.time_zone_offset, 60)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 60)
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0)
-    expected_number_of_seconds = -11644387200
     time_elements_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, -11644387200)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
   def testCopyFromStringISO8601(self):
     """Tests the CopyFromStringISO8601 function."""
     time_elements_object = time_elements.TimeElements()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_number_of_seconds = 1281571200
     time_elements_object.CopyFromStringISO8601('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281571200)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31Z')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31.5')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31,546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-
-    expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
-    expected_number_of_seconds = 1330980000
-    time_elements_object.CopyFromStringISO8601('2012-03-05T20:40:00.0000000Z')
-    self.assertEqual(
-        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281650791
     time_elements_object.CopyFromStringISO8601(
         '2010-08-12T21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object.time_zone_offset, -60)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, -60)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281643591
     time_elements_object.CopyFromStringISO8601(
         '2010-08-12T21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
+    self.assertEqual(time_elements_object._time_zone_offset, 60)
+
+    expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
+    time_elements_object.CopyFromStringISO8601('2012-03-05T20:40:00.0000000Z')
     self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object.time_zone_offset, 60)
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(time_elements_object._number_of_seconds, 1330980000)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringISO8601(None)
@@ -735,6 +722,12 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.429'))
 
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429), time_zone_offset=60)
+
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.429'))
+
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
@@ -776,151 +769,132 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_number_of_seconds = 1281571200
     time_elements_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281571200)
     self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 546)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281650791
     time_elements_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 546)
-    self.assertEqual(time_elements_object.time_zone_offset, -60)
+    self.assertEqual(time_elements_object._time_zone_offset, -60)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281643591
     time_elements_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 546)
-    self.assertEqual(time_elements_object.time_zone_offset, 60)
+    self.assertEqual(time_elements_object._time_zone_offset, 60)
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0)
-    expected_number_of_seconds = -11644387200
     time_elements_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, -11644387200)
     self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
   def testCopyFromStringISO8601(self):
     """Tests the CopyFromStringISO8601 function."""
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_number_of_seconds = 1281571200
     time_elements_object.CopyFromStringISO8601('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281571200)
     self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31Z')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31.5')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 500)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 546)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31,546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 546)
-
-    expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
-    expected_number_of_seconds = 1330980000
-    time_elements_object.CopyFromStringISO8601('2012-03-05T20:40:00.0000000Z')
-    self.assertEqual(
-        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281650791
     time_elements_object.CopyFromStringISO8601(
         '2010-08-12T21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 546)
-    self.assertEqual(time_elements_object.time_zone_offset, -60)
+    self.assertEqual(time_elements_object._time_zone_offset, -60)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281643591
     time_elements_object.CopyFromStringISO8601(
         '2010-08-12T21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.milliseconds, 546)
-    self.assertEqual(time_elements_object.time_zone_offset, 60)
+    self.assertEqual(time_elements_object._time_zone_offset, 60)
+
+    expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
+    time_elements_object.CopyFromStringISO8601('2012-03-05T20:40:00.0000000Z')
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(time_elements_object._number_of_seconds, 1330980000)
+    self.assertEqual(time_elements_object.milliseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringISO8601(None)
@@ -1044,6 +1018,13 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.429876'))
 
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876),
+        time_zone_offset=60)
+
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.429876'))
+
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
@@ -1085,151 +1066,132 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_number_of_seconds = 1281571200
     time_elements_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281571200)
     self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 546875)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281650791
     time_elements_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 546875)
-    self.assertEqual(time_elements_object.time_zone_offset, -60)
+    self.assertEqual(time_elements_object._time_zone_offset, -60)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281643591
     time_elements_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 546875)
-    self.assertEqual(time_elements_object.time_zone_offset, 60)
+    self.assertEqual(time_elements_object._time_zone_offset, 60)
 
     expected_time_elements_tuple = (1601, 1, 2, 0, 0, 0)
-    expected_number_of_seconds = -11644387200
     time_elements_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, -11644387200)
     self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
   def testCopyFromStringISO8601(self):
     """Tests the CopyFromStringISO8601 function."""
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 
     expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_number_of_seconds = 1281571200
     time_elements_object.CopyFromStringISO8601('2010-08-12')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281571200)
     self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31Z')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31.5')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 500000)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31.546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 546875)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281647191
     time_elements_object.CopyFromStringISO8601('2010-08-12T21:06:31,546875')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 546875)
-
-    expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
-    expected_number_of_seconds = 1330980000
-    time_elements_object.CopyFromStringISO8601('2012-03-05T20:40:00.0000000Z')
-    self.assertEqual(
-        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-    self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281650791
     time_elements_object.CopyFromStringISO8601(
         '2010-08-12T21:06:31.546875-01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 546875)
-    self.assertEqual(time_elements_object.time_zone_offset, -60)
+    self.assertEqual(time_elements_object._time_zone_offset, -60)
 
     expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
-    expected_number_of_seconds = 1281643591
     time_elements_object.CopyFromStringISO8601(
         '2010-08-12T21:06:31.546875+01:00')
     self.assertEqual(
         time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(time_elements_object._number_of_seconds, 1281647191)
     self.assertEqual(time_elements_object.microseconds, 546875)
-    self.assertEqual(time_elements_object.time_zone_offset, 60)
+    self.assertEqual(time_elements_object._time_zone_offset, 60)
+
+    expected_time_elements_tuple = (2012, 3, 5, 20, 40, 0)
+    time_elements_object.CopyFromStringISO8601('2012-03-05T20:40:00.0000000Z')
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(time_elements_object._number_of_seconds, 1330980000)
+    self.assertEqual(time_elements_object.microseconds, 0)
+    self.assertEqual(time_elements_object._time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       time_elements_object.CopyFromStringISO8601(None)

@@ -34,13 +34,15 @@ class Filetime(interface.DateTimeValues):
   # The difference between January 1, 1601 and January 1, 1970 in seconds.
   _FILETIME_TO_POSIX_BASE = 11644473600
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a FILETIME timestamp.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): FILETIME timestamp.
     """
-    super(Filetime, self).__init__()
+    super(Filetime, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_100_NANOSECONDS
     self._timestamp = timestamp
 
@@ -64,6 +66,9 @@ class Filetime(interface.DateTimeValues):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) / self._100NS_PER_SECOND)
         self._normalized_timestamp -= self._FILETIME_TO_POSIX_BASE
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -96,7 +101,7 @@ class Filetime(interface.DateTimeValues):
       raise ValueError('Year value not supported: {0!s}.'.format(year))
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     timestamp += self._FILETIME_TO_POSIX_BASE
     timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += date_time_values.get('microseconds', 0)

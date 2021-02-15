@@ -29,6 +29,12 @@ class FATDateTime(unittest.TestCase):
     normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281647192.0'))
 
+    fat_date_time_object = fat_date_time.FATDateTime(
+        fat_date_time=0xa8d03d0c, time_zone_offset=60)
+
+    normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281647132.0'))
+
     fat_date_time_object = fat_date_time.FATDateTime()
 
     normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
@@ -38,37 +44,31 @@ class FATDateTime(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     fat_date_time_object = fat_date_time.FATDateTime()
 
-    expected_number_of_seconds = 966038400
     fat_date_time_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(
-        fat_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(fat_date_time_object._number_of_seconds, 966038400)
+    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
 
-    expected_number_of_seconds = 966114391
     fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(
-        fat_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(fat_date_time_object._number_of_seconds, 966114391)
+    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
 
-    expected_number_of_seconds = 966114391
     fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
-    self.assertEqual(
-        fat_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(fat_date_time_object._number_of_seconds, 966114391)
+    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
 
-    expected_number_of_seconds = 966117991
     fat_date_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875-01:00')
-    self.assertEqual(
-        fat_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(fat_date_time_object._number_of_seconds, 966114391)
+    self.assertEqual(fat_date_time_object._time_zone_offset, -60)
 
-    expected_number_of_seconds = 966110791
     fat_date_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(
-        fat_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(fat_date_time_object._number_of_seconds, 966114391)
+    self.assertEqual(fat_date_time_object._time_zone_offset, 60)
 
-    expected_number_of_seconds = 86400
     fat_date_time_object.CopyFromDateTimeString('1980-01-02 00:00:00')
-    self.assertEqual(
-        fat_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(fat_date_time_object._number_of_seconds, 86400)
+    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       fat_date_time_object.CopyFromDateTimeString('2200-01-02 00:00:00')

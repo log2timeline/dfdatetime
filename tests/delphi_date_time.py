@@ -72,6 +72,14 @@ class DelphiDateTimeTest(unittest.TestCase):
     normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        time_zone_offset=60, timestamp=41443.8263953)
+
+    expected_normalized_timestamp = decimal.Decimal(
+        '1371584940.553919887170195579')
+    normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
+
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 
     normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
@@ -81,31 +89,31 @@ class DelphiDateTimeTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 
-    expected_timestamp = 41443.0
     delphi_date_time_object.CopyFromDateTimeString('2013-06-18')
-    self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
+    self.assertEqual(delphi_date_time_object._timestamp, 41443.0)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 41443.82638888889
     delphi_date_time_object.CopyFromDateTimeString('2013-06-18 19:50:00')
-    self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
+    self.assertEqual(delphi_date_time_object._timestamp, 41443.82638888889)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 41443.826395218464
     delphi_date_time_object.CopyFromDateTimeString('2013-06-18 19:50:00.546875')
-    self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
+    self.assertEqual(delphi_date_time_object._timestamp, 41443.826395218464)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 41443.86806188513
     delphi_date_time_object.CopyFromDateTimeString(
         '2013-06-18 19:50:00.546875-01:00')
-    self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
+    self.assertEqual(delphi_date_time_object._timestamp, 41443.826395218464)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, -60)
 
-    expected_timestamp = 41443.78472855179
     delphi_date_time_object.CopyFromDateTimeString(
         '2013-06-18 19:50:00.546875+01:00')
-    self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
+    self.assertEqual(delphi_date_time_object._timestamp, 41443.826395218464)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, 60)
 
-    expected_timestamp = 1.0
     delphi_date_time_object.CopyFromDateTimeString('1899-12-31 00:00:00')
-    self.assertEqual(delphi_date_time_object.timestamp, expected_timestamp)
+    self.assertEqual(delphi_date_time_object._timestamp, 1.0)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
 
     delphi_date_time_object = DelphiDateTimeInvalidYear()
 

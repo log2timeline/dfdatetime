@@ -37,6 +37,12 @@ class HFSTimeTest(unittest.TestCase):
     normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1375370728.0'))
 
+    hfs_time_object = hfs_time.HFSTime(
+        time_zone_offset=60, timestamp=3458215528)
+
+    normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1375370668.0'))
+
     hfs_time_object = hfs_time.HFSTime(timestamp=0x1ffffffff)
 
     normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
@@ -56,29 +62,29 @@ class HFSTimeTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     hfs_time_object = hfs_time.HFSTime()
 
-    expected_timestamp = 3458160000
     hfs_time_object.CopyFromDateTimeString('2013-08-01')
-    self.assertEqual(hfs_time_object.timestamp, expected_timestamp)
+    self.assertEqual(hfs_time_object._timestamp, 3458160000)
+    self.assertEqual(hfs_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 3458215528
     hfs_time_object.CopyFromDateTimeString('2013-08-01 15:25:28')
-    self.assertEqual(hfs_time_object.timestamp, expected_timestamp)
+    self.assertEqual(hfs_time_object._timestamp, 3458215528)
+    self.assertEqual(hfs_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 3458215528
     hfs_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875')
-    self.assertEqual(hfs_time_object.timestamp, expected_timestamp)
+    self.assertEqual(hfs_time_object._timestamp, 3458215528)
+    self.assertEqual(hfs_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 3458219128
     hfs_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875-01:00')
-    self.assertEqual(hfs_time_object.timestamp, expected_timestamp)
+    self.assertEqual(hfs_time_object._timestamp, 3458215528)
+    self.assertEqual(hfs_time_object._time_zone_offset, -60)
 
-    expected_timestamp = 3458211928
     hfs_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875+01:00')
-    self.assertEqual(hfs_time_object.timestamp, expected_timestamp)
+    self.assertEqual(hfs_time_object._timestamp, 3458215528)
+    self.assertEqual(hfs_time_object._time_zone_offset, 60)
 
-    expected_timestamp = 86400
     hfs_time_object.CopyFromDateTimeString('1904-01-02 00:00:00')
-    self.assertEqual(hfs_time_object.timestamp, expected_timestamp)
+    self.assertEqual(hfs_time_object._timestamp, 86400)
+    self.assertEqual(hfs_time_object._time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       hfs_time_object.CopyFromDateTimeString('1600-01-02 00:00:00')

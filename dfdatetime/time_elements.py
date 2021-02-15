@@ -74,18 +74,20 @@ class TimeElements(interface.DateTimeValues):
 
   _RFC_WEEKDAYS = frozenset(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
 
-  def __init__(self, time_elements_tuple=None):
+  def __init__(self, time_elements_tuple=None, time_zone_offset=None):
     """Initializes time elements.
 
     Args:
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
 
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
-    super(TimeElements, self).__init__()
+    super(TimeElements, self).__init__(time_zone_offset=time_zone_offset)
     self._number_of_seconds = None
     self._precision = definitions.PRECISION_1_SECOND
     self._time_elements_tuple = time_elements_tuple
@@ -99,8 +101,7 @@ class TimeElements(interface.DateTimeValues):
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           time_elements_tuple[0], time_elements_tuple[1],
           time_elements_tuple[2], time_elements_tuple[3],
-          time_elements_tuple[4], time_elements_tuple[5],
-          self._time_zone_offset)
+          time_elements_tuple[4], time_elements_tuple[5])
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -114,6 +115,9 @@ class TimeElements(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
         self._normalized_timestamp = decimal.Decimal(self._number_of_seconds)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -351,7 +355,7 @@ class TimeElements(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
@@ -806,8 +810,7 @@ class TimeElements(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds,
-        self._time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
 
@@ -836,7 +839,9 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     is_local_time (bool): True if the date and time value is in local time.
   """
 
-  def __init__(self, fraction_of_second=None, time_elements_tuple=None):
+  def __init__(
+      self, fraction_of_second=None, time_elements_tuple=None,
+      time_zone_offset=None):
     """Initializes time elements.
 
     Args:
@@ -845,6 +850,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
 
     Raises:
       ValueError: if the time elements tuple is invalid or fraction of second
@@ -857,7 +864,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
                 fraction_of_second))
 
     super(TimeElementsWithFractionOfSecond, self).__init__(
-        time_elements_tuple=time_elements_tuple)
+        time_elements_tuple=time_elements_tuple,
+        time_zone_offset=time_zone_offset)
     self._precision = None
     self.fraction_of_second = fraction_of_second
 
@@ -875,6 +883,9 @@ class TimeElementsWithFractionOfSecond(TimeElements):
           self.fraction_of_second is not None):
         self._normalized_timestamp = (
             decimal.Decimal(self._number_of_seconds) + self.fraction_of_second)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -906,7 +917,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._time_elements_tuple = (
         year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
@@ -993,13 +1004,15 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         represents 1 millisecond (PRECISION_1_MILLISECOND).
   """
 
-  def __init__(self, time_elements_tuple=None):
+  def __init__(self, time_elements_tuple=None, time_zone_offset=None):
     """Initializes time elements.
 
     Args:
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes,
           seconds and milliseconds.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
 
     Raises:
       ValueError: if the time elements tuple is invalid.
@@ -1023,7 +1036,8 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
 
     super(TimeElementsInMilliseconds, self).__init__(
         fraction_of_second=fraction_of_second,
-        time_elements_tuple=time_elements_tuple)
+        time_elements_tuple=time_elements_tuple,
+        time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_MILLISECOND
 
   @property
@@ -1080,13 +1094,15 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         represents 1 microsecond (PRECISION_1_MICROSECOND).
   """
 
-  def __init__(self, time_elements_tuple=None):
+  def __init__(self, time_elements_tuple=None, time_zone_offset=None):
     """Initializes time elements.
 
     Args:
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes,
           seconds and microseconds.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
 
     Raises:
       ValueError: if the time elements tuple is invalid.
@@ -1110,7 +1126,8 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
 
     super(TimeElementsInMicroseconds, self).__init__(
         fraction_of_second=fraction_of_second,
-        time_elements_tuple=time_elements_tuple)
+        time_elements_tuple=time_elements_tuple,
+        time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_MICROSECOND
 
   @property

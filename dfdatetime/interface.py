@@ -73,12 +73,17 @@ class DateTimeValues(object):
   _UINT60_MAX = (1 << 60) - 1
   _UINT64_MAX = (1 << 64) - 1
 
-  def __init__(self):
-    """Initializes date time values."""
+  def __init__(self, time_zone_offset=None):
+    """Initializes date time values.
+
+    Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
+    """
     super(DateTimeValues, self).__init__()
     self._normalized_timestamp = None
     self._precision = None
-    self._time_zone_offset = None
+    self._time_zone_offset = time_zone_offset
 
     self.is_local_time = False
 
@@ -245,65 +250,6 @@ class DateTimeValues(object):
       return True
 
     return normalized_timestamp != other_normalized_timestamp
-
-  def _AdjustForTimeZoneOffset(
-      self, year, month, day_of_month, hours, minutes, time_zone_offset):
-    """Adjusts the date and time values for a time zone offset.
-
-    Args:
-      year (int): year e.g. 1970.
-      month (int): month, where 1 represents January.
-      day_of_month (int): day of the month, where 1 represents the first day.
-      hours (int): hours.
-      minutes (int): minutes.
-      time_zone_offset (int): time zone offset in number of minutes from UTC.
-
-    Returns:
-      tuple[int, int, int, int, int, int]: time zone correct year, month,
-         day_of_month, hours and minutes values.
-    """
-    # Note that when the sign of the time zone offset is negative
-    # the difference needs to be added. We do so by flipping the sign.
-    time_zone_offset = -time_zone_offset
-
-    hours_from_utc, minutes_from_utc = divmod(time_zone_offset, 60)
-
-    minutes += minutes_from_utc
-
-    # Since divmod makes sure the sign of minutes_from_utc is positive
-    # we only need to check the upper bound here, because hours_from_utc
-    # remains signed it is corrected accordingly.
-    if minutes >= 60:
-      minutes -= 60
-      hours += 1
-
-    hours += hours_from_utc
-    if hours < 0:
-      hours += 24
-      day_of_month -= 1
-
-    elif hours >= 24:
-      hours -= 24
-      day_of_month += 1
-
-    days_per_month = self._GetDaysPerMonth(year, month)
-    if day_of_month < 1:
-      month -= 1
-      if month < 1:
-        month = 12
-        year -= 1
-
-      day_of_month += self._GetDaysPerMonth(year, month)
-
-    elif day_of_month > days_per_month:
-      month += 1
-      if month > 12:
-        month = 1
-        year += 1
-
-      day_of_month -= days_per_month
-
-    return year, month, day_of_month, hours, minutes
 
   def _CopyDateFromString(self, date_string):
     """Copies a date from a string.
@@ -751,8 +697,7 @@ class DateTimeValues(object):
     return 365
 
   def _GetNumberOfSecondsFromElements(
-      self, year, month, day_of_month, hours, minutes, seconds,
-      time_zone_offset):
+      self, year, month, day_of_month, hours, minutes, seconds):
     """Retrieves the number of seconds from the date and time elements.
 
     Args:
@@ -762,8 +707,6 @@ class DateTimeValues(object):
       hours (int): hours.
       minutes (int): minutes.
       seconds (int): seconds.
-      time_zone_offset (int): time zone offset in number of minutes from UTC
-          or None if not set.
 
     Returns:
       int: number of seconds since January 1, 1970 00:00:00 or None if year,
@@ -796,10 +739,6 @@ class DateTimeValues(object):
     days_per_month = self._GetDaysPerMonth(year, month)
     if day_of_month < 1 or day_of_month > days_per_month:
       raise ValueError('Day of month value out of bounds.')
-
-    if time_zone_offset:
-      year, month, day_of_month, hours, minutes = self._AdjustForTimeZoneOffset(
-          year, month, day_of_month, hours, minutes, time_zone_offset)
 
     # calendar.timegm requires the time tuple to contain at least
     # 6 integer values.

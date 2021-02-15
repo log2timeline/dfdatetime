@@ -33,10 +33,12 @@ class UUIDTime(interface.DateTimeValues):
   # The difference between October 15, 1582 and January 1, 1970 in seconds.
   _UUID_TO_POSIX_BASE = 12219292800
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes an UUID version 1 timestamp.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): UUID version 1 timestamp.
 
     Raises:
@@ -45,7 +47,7 @@ class UUIDTime(interface.DateTimeValues):
     if timestamp and (timestamp < 0 or timestamp > self._UINT60_MAX):
       raise ValueError('Invalid UUID version 1 timestamp.')
 
-    super(UUIDTime, self).__init__()
+    super(UUIDTime, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_100_NANOSECONDS
     self._timestamp = timestamp
 
@@ -69,6 +71,9 @@ class UUIDTime(interface.DateTimeValues):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) / self._100NS_PER_SECOND)
         self._normalized_timestamp -= self._UUID_TO_POSIX_BASE
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -101,7 +106,7 @@ class UUIDTime(interface.DateTimeValues):
       raise ValueError('Year value not supported.')
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     timestamp += self._UUID_TO_POSIX_BASE
     timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += date_time_values.get('microseconds', 0)

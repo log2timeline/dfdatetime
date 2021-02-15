@@ -43,17 +43,19 @@ class FATDateTime(interface.DateTimeValues):
   # The difference between January 1, 1980 and January 1, 1970 in seconds.
   _FAT_DATE_TO_POSIX_BASE = 315532800
 
-  def __init__(self, fat_date_time=None):
+  def __init__(self, fat_date_time=None, time_zone_offset=None):
     """Initializes a FAT date time.
 
     Args:
       fat_date_time (Optional[int]): FAT date time.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
     """
     number_of_seconds = None
     if fat_date_time is not None:
       number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
 
-    super(FATDateTime, self).__init__()
+    super(FATDateTime, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_2_SECONDS
     self._number_of_seconds = number_of_seconds
 
@@ -71,6 +73,9 @@ class FATDateTime(interface.DateTimeValues):
         self._normalized_timestamp = (
             decimal.Decimal(self._number_of_seconds) +
             self._FAT_DATE_TO_POSIX_BASE)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -149,7 +154,7 @@ class FATDateTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._number_of_seconds -= self._FAT_DATE_TO_POSIX_BASE
     self._time_zone_offset = time_zone_offset
 

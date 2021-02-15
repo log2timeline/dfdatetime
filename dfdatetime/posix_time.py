@@ -32,13 +32,15 @@ class PosixTime(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp.
     """
-    super(PosixTime, self).__init__()
+    super(PosixTime, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_SECOND
     self._timestamp = timestamp
 
@@ -59,6 +61,9 @@ class PosixTime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
         self._normalized_timestamp = decimal.Decimal(self._timestamp)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -85,7 +90,7 @@ class PosixTime(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     self._timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
 
   def CopyToDateTimeString(self):
@@ -119,13 +124,16 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp in milliseconds.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp in milliseconds.
     """
-    super(PosixTimeInMilliseconds, self).__init__()
+    super(PosixTimeInMilliseconds, self).__init__(
+        time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_MILLISECOND
     self._timestamp = timestamp
 
@@ -148,6 +156,9 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) /
             definitions.MILLISECONDS_PER_SECOND)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -175,7 +186,7 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.MILLISECONDS_PER_SECOND
 
     if microseconds:
@@ -218,13 +229,16 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp in microseconds.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp in microseconds.
     """
-    super(PosixTimeInMicroseconds, self).__init__()
+    super(PosixTimeInMicroseconds, self).__init__(
+        time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_MICROSECOND
     self._timestamp = timestamp
 
@@ -247,6 +261,9 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) /
             definitions.MICROSECONDS_PER_SECOND)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -274,7 +291,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += microseconds
 
@@ -313,13 +330,16 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp in nanoseconds.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp in nanoseconds.
     """
-    super(PosixTimeInNanoseconds, self).__init__()
+    super(PosixTimeInNanoseconds, self).__init__(
+        time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_NANOSECOND
     self._timestamp = timestamp
 
@@ -342,6 +362,9 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) /
             definitions.NANOSECONDS_PER_SECOND)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -369,7 +392,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.NANOSECONDS_PER_SECOND
 
     if microseconds:

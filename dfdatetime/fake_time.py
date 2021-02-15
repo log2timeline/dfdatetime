@@ -21,12 +21,17 @@ class FakeTime(interface.DateTimeValues):
 
   _EPOCH = posix_time.PosixTimeEpoch()
 
-  def __init__(self):
-    """Initializes a fake timestamp."""
+  def __init__(self, time_zone_offset=None):
+    """Initializes a fake timestamp.
+
+    Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
+    """
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
 
-    super(FakeTime, self).__init__()
+    super(FakeTime, self).__init__(time_zone_offset=time_zone_offset)
     self._microseconds = int(
         fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
     self._number_of_seconds = int(timestamp)
@@ -47,6 +52,9 @@ class FakeTime(interface.DateTimeValues):
             decimal.Decimal(self._microseconds) /
             definitions.MICROSECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -74,7 +82,7 @@ class FakeTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._microseconds = date_time_values.get('microseconds', None)
     self._time_zone_offset = time_zone_offset
 

@@ -37,13 +37,15 @@ class DelphiDateTime(interface.DateTimeValues):
 
   _EPOCH = DelphiDateTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a Delphi TDateTime timestamp.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[float]): Delphi TDateTime timestamp.
     """
-    super(DelphiDateTime, self).__init__()
+    super(DelphiDateTime, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_MILLISECOND
     self._timestamp = timestamp
 
@@ -66,6 +68,9 @@ class DelphiDateTime(interface.DateTimeValues):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) - self._DELPHI_TO_POSIX_BASE)
         self._normalized_timestamp *= definitions.SECONDS_PER_DAY
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -99,7 +104,7 @@ class DelphiDateTime(interface.DateTimeValues):
       raise ValueError('Unsupported year value: {0:d}.'.format(year))
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
 
     timestamp = float(timestamp) / definitions.SECONDS_PER_DAY
     timestamp += self._DELPHI_TO_POSIX_BASE

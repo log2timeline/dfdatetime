@@ -117,7 +117,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 1, 0))
 
     normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.6'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.6'))
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 

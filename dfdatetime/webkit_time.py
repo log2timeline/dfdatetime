@@ -65,7 +65,7 @@ class WebKitTime(interface.DateTimeValues):
         self._normalized_timestamp -= self._WEBKIT_TO_POSIX_BASE
 
         if self._time_zone_offset:
-          self._normalized_timestamp -= self._time_zone_offset
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 

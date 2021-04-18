@@ -124,7 +124,7 @@ class Systemtime(interface.DateTimeValues):
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
 
         if self._time_zone_offset:
-          self._normalized_timestamp -= self._time_zone_offset
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 

@@ -41,7 +41,7 @@ class PosixTimeTest(unittest.TestCase):
         time_zone_offset=60, timestamp=1281643591)
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.0'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.0'))
 
     posix_time_object = posix_time.PosixTime()
 
@@ -159,7 +159,7 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
         time_zone_offset=60, timestamp=1281643591546)
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.546'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.546'))
 
     posix_time_object = posix_time.PosixTimeInMilliseconds()
 
@@ -284,7 +284,7 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         time_zone_offset=60, timestamp=1281643591546875)
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.546875'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.546875'))
 
     posix_time_object = posix_time.PosixTimeInMicroseconds()
 
@@ -411,7 +411,7 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
     self.assertEqual(
-        normalized_timestamp, decimal.Decimal('1281643531.987654321'))
+        normalized_timestamp, decimal.Decimal('1281639991.987654321'))
 
     posix_time_object = posix_time.PosixTimeInNanoseconds()
 

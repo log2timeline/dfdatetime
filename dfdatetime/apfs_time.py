@@ -35,7 +35,7 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
             definitions.NANOSECONDS_PER_SECOND)
 
         if self._time_zone_offset:
-          self._normalized_timestamp -= self._time_zone_offset
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 

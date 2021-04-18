@@ -45,7 +45,7 @@ class OLEAutomationDateTest(unittest.TestCase):
         time_zone_offset=60, timestamp=43044.480556)
 
     expected_normalized_timestamp = decimal.Decimal(
-        '1509881460.038400194607675076')
+        '1509877920.038400194607675076')
     normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 

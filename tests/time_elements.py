@@ -52,7 +52,7 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_tuple=(2010, 8, 12, 20, 6, 31), time_zone_offset=60)
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991'))
 
     time_elements_object = time_elements.TimeElements()
 
@@ -726,7 +726,7 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429), time_zone_offset=60)
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.429'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.429'))
 
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
@@ -1023,7 +1023,7 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_zone_offset=60)
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.429876'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.429876'))
 
     time_elements_object = time_elements.TimeElementsInMicroseconds()
 

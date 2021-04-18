@@ -63,7 +63,7 @@ class PosixTime(interface.DateTimeValues):
         self._normalized_timestamp = decimal.Decimal(self._timestamp)
 
         if self._time_zone_offset:
-          self._normalized_timestamp -= self._time_zone_offset
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 
@@ -158,7 +158,7 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
             definitions.MILLISECONDS_PER_SECOND)
 
         if self._time_zone_offset:
-          self._normalized_timestamp -= self._time_zone_offset
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 
@@ -263,7 +263,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
             definitions.MICROSECONDS_PER_SECOND)
 
         if self._time_zone_offset:
-          self._normalized_timestamp -= self._time_zone_offset
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 
@@ -364,7 +364,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
             definitions.NANOSECONDS_PER_SECOND)
 
         if self._time_zone_offset:
-          self._normalized_timestamp -= self._time_zone_offset
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 

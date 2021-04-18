@@ -120,6 +120,19 @@ class HFSTimeTest(unittest.TestCase):
     date_tuple = hfs_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetDateWithTimeOfDay(self):
+    """Tests the GetDateWithTimeOfDay function."""
+    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
+
+    date_with_time_of_day_tuple = hfs_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(date_with_time_of_day_tuple, (2013, 8, 1, 15, 25, 28))
+
+    hfs_time_object = hfs_time.HFSTime()
+
+    date_with_time_of_day_tuple = hfs_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(
+        date_with_time_of_day_tuple, (None, None, None, None, None, None))
+
   def testGetTimeOfDay(self):
     """Tests the GetTimeOfDay function."""
     hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)

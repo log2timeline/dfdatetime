@@ -154,6 +154,20 @@ class DelphiDateTimeTest(unittest.TestCase):
     date_tuple = delphi_date_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetDateWithTimeOfDay(self):
+    """Tests the GetDateWithTimeOfDay function."""
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+
+    date_with_time_of_day_tuple = delphi_date_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(date_with_time_of_day_tuple, (2013, 6, 18, 19, 50, 0))
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime()
+
+    date_with_time_of_day_tuple = delphi_date_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(
+        date_with_time_of_day_tuple, (None, None, None, None, None, None))
+
   def testGetTimeOfDay(self):
     """Tests the GetTimeOfDay function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime(

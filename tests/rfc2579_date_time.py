@@ -238,6 +238,22 @@ class RFC2579DateTimeTest(unittest.TestCase):
     date_tuple = rfc2579_date_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetDateWithTimeOfDay(self):
+    """Tests the GetDateWithTimeOfDay function."""
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
+
+    date_with_time_of_day_tuple = (
+        rfc2579_date_time_object.GetDateWithTimeOfDay())
+    self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
+
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
+
+    date_with_time_of_day_tuple = (
+        rfc2579_date_time_object.GetDateWithTimeOfDay())
+    self.assertEqual(
+        date_with_time_of_day_tuple, (None, None, None, None, None, None))
+
   def testGetTimeOfDay(self):
     """Tests the GetTimeOfDay function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(

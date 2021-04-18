@@ -115,6 +115,19 @@ class CocoaTimeTest(unittest.TestCase):
     date_tuple = cocoa_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetDateWithTimeOfDay(self):
+    """Tests the GetDateWithTimeOfDay function."""
+    cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
+
+    date_with_time_of_day_tuple = cocoa_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(date_with_time_of_day_tuple, (2013, 7, 8, 21, 30, 45))
+
+    cocoa_time_object = cocoa_time.CocoaTime()
+
+    date_with_time_of_day_tuple = cocoa_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(
+        date_with_time_of_day_tuple, (None, None, None, None, None, None))
+
   # TODO: remove this method when there is no more need for it in plaso.
   def testGetPlasoTimestamp(self):
     """Tests the GetPlasoTimestamp function."""

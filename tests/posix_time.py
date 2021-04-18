@@ -37,6 +37,12 @@ class PosixTimeTest(unittest.TestCase):
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.0'))
 
+    posix_time_object = posix_time.PosixTime(
+        time_zone_offset=60, timestamp=1281643591)
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.0'))
+
     posix_time_object = posix_time.PosixTime()
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
@@ -46,29 +52,29 @@ class PosixTimeTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     posix_time_object = posix_time.PosixTime()
 
-    expected_timestamp = 1281571200
     posix_time_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281571200)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281650791
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191)
+    self.assertEqual(posix_time_object._time_zone_offset, -60)
 
-    expected_timestamp = 1281643591
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191)
+    self.assertEqual(posix_time_object._time_zone_offset, 60)
 
-    expected_timestamp = -11644387200
     posix_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, -11644387200)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -149,6 +155,12 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546'))
 
+    posix_time_object = posix_time.PosixTimeInMilliseconds(
+        time_zone_offset=60, timestamp=1281643591546)
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.546'))
+
     posix_time_object = posix_time.PosixTimeInMilliseconds()
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
@@ -160,29 +172,29 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     posix_time_object = posix_time.PosixTimeInMilliseconds()
 
-    expected_timestamp = 1281571200000
     posix_time_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281571200000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191000
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191546
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191546)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281650791546
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546-01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191546)
+    self.assertEqual(posix_time_object._time_zone_offset, -60)
 
-    expected_timestamp = 1281643591546
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546+01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191546)
+    self.assertEqual(posix_time_object._time_zone_offset, 60)
 
-    expected_timestamp = -11644387200000
     posix_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, -11644387200000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -262,11 +274,17 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
 
   def testGetNormalizedTimestamp(self):
     """Tests the _GetNormalizedTimestamp function."""
-    posix_time_object = posix_time.PosixTimeInMicroseconds(
-        timestamp=1281643591546875)
+    posix_time_object = posix_time.PosixTimeInMilliseconds(
+        timestamp=1281643591546)
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546875'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546'))
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        time_zone_offset=60, timestamp=1281643591546875)
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.546875'))
 
     posix_time_object = posix_time.PosixTimeInMicroseconds()
 
@@ -279,29 +297,29 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     posix_time_object = posix_time.PosixTimeInMicroseconds()
 
-    expected_timestamp = 1281571200000000
     posix_time_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281571200000000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191000000
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191000000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191546875
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191546875)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281650791546875
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191546875)
+    self.assertEqual(posix_time_object._time_zone_offset, -60)
 
-    expected_timestamp = 1281643591546875
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, 1281647191546875)
+    self.assertEqual(posix_time_object._time_zone_offset, 60)
 
-    expected_timestamp = -11644387200000000
     posix_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object._timestamp, -11644387200000000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -388,6 +406,13 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
     self.assertEqual(
         normalized_timestamp, decimal.Decimal('1281643591.987654321'))
 
+    posix_time_object = posix_time.PosixTimeInNanoseconds(
+        time_zone_offset=60, timestamp=1281643591987654321)
+
+    normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1281643531.987654321'))
+
     posix_time_object = posix_time.PosixTimeInNanoseconds()
 
     normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
@@ -397,31 +422,31 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     posix_time_object = posix_time.PosixTimeInNanoseconds()
 
-    expected_timestamp = 1281571200000000000
     posix_time_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object.timestamp, 1281571200000000000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191000000000
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object.timestamp, 1281647191000000000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281647191654321000
     posix_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.654321')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object.timestamp, 1281647191654321000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 1281650791654321000
     posix_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.654321-01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object.timestamp, 1281647191654321000)
+    self.assertEqual(posix_time_object._time_zone_offset, -60)
 
-    expected_timestamp = 1281643591654321000
     posix_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.654321+01:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object.timestamp, 1281647191654321000)
+    self.assertEqual(posix_time_object._time_zone_offset, 60)
 
-    expected_timestamp = -11644387200000000000
     posix_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
-    self.assertEqual(posix_time_object.timestamp, expected_timestamp)
+    self.assertEqual(posix_time_object.timestamp, -11644387200000000000)
+    self.assertEqual(posix_time_object._time_zone_offset, 0)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

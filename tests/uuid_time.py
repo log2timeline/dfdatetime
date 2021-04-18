@@ -58,6 +58,14 @@ class UUIDTimeTest(unittest.TestCase):
     self.assertEqual(
         normalized_timestamp, decimal.Decimal('1337130661.6544084'))
 
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
+    uuid_time_object = uuid_time.UUIDTime(
+        time_zone_offset=60, timestamp=uuid_object.time)
+
+    normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1337130601.6544084'))
+
     uuid_time_object = uuid_time.UUIDTime()
     uuid_time_object._timestamp = 0x1fffffffffffffff
 
@@ -79,29 +87,29 @@ class UUIDTimeTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     uuid_time_object = uuid_time.UUIDTime()
 
-    expected_timestamp = 135946080000000000
     uuid_time_object.CopyFromDateTimeString('2013-08-01')
-    self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
+    self.assertEqual(uuid_time_object._timestamp, 135946080000000000)
+    self.assertEqual(uuid_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 135946635280000000
     uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28')
-    self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
+    self.assertEqual(uuid_time_object._timestamp, 135946635280000000)
+    self.assertEqual(uuid_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 135946635285468750
     uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875')
-    self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
+    self.assertEqual(uuid_time_object._timestamp, 135946635285468750)
+    self.assertEqual(uuid_time_object._time_zone_offset, 0)
 
-    expected_timestamp = 135946671285468750
     uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875-01:00')
-    self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
+    self.assertEqual(uuid_time_object._timestamp, 135946635285468750)
+    self.assertEqual(uuid_time_object._time_zone_offset, -60)
 
-    expected_timestamp = 135946599285468750
     uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875+01:00')
-    self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
+    self.assertEqual(uuid_time_object._timestamp, 135946635285468750)
+    self.assertEqual(uuid_time_object._time_zone_offset, 60)
 
-    expected_timestamp = 864000000000
     uuid_time_object.CopyFromDateTimeString('1582-10-16 00:00:00')
-    self.assertEqual(uuid_time_object.timestamp, expected_timestamp)
+    self.assertEqual(uuid_time_object._timestamp, 864000000000)
+    self.assertEqual(uuid_time_object._time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       uuid_time_object.CopyFromDateTimeString('1570-01-02 00:00:00')

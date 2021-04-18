@@ -111,28 +111,6 @@ class DateTimeValuesTest(unittest.TestCase):
 
     self.assertTrue(date_time_values1 != 0.0)
 
-  def testAdjustForTimeZoneOffset(self):
-    """Tests the _AdjustForTimeZoneOffset function."""
-    date_time_values = interface.DateTimeValues()
-
-    year, month, day_of_month, hours, minutes = (
-        date_time_values._AdjustForTimeZoneOffset(
-            2009, 12, 31, 23, 45, -30))
-    self.assertEqual(year, 2010)
-    self.assertEqual(month, 1)
-    self.assertEqual(day_of_month, 1)
-    self.assertEqual(hours, 0)
-    self.assertEqual(minutes, 15)
-
-    year, month, day_of_month, hours, minutes = (
-        date_time_values._AdjustForTimeZoneOffset(
-            2010, 1, 1, 1, 15, 90))
-    self.assertEqual(year, 2009)
-    self.assertEqual(month, 12)
-    self.assertEqual(day_of_month, 31)
-    self.assertEqual(hours, 23)
-    self.assertEqual(minutes, 45)
-
   def testCopyDateFromString(self):
     """Tests the _CopyDateFromString function."""
     date_time_values = interface.DateTimeValues()
@@ -545,52 +523,44 @@ class DateTimeValuesTest(unittest.TestCase):
     date_time_values = interface.DateTimeValues()
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, 0, 0, 0, -60)
-    self.assertEqual(number_of_seconds, 1281574800)
-
-    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, 0, 0, 0, 60)
-    self.assertEqual(number_of_seconds, 1281567600)
-
-    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, 0, 0, 0, None)
+        2010, 8, 12, 0, 0, 0)
     self.assertEqual(number_of_seconds, 1281571200)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, None, None, None, None)
+        2010, 8, 12, None, None, None)
     self.assertEqual(number_of_seconds, 1281571200)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        2010, 8, 12, 21, 6, 31, None)
+        2010, 8, 12, 21, 6, 31)
     self.assertEqual(number_of_seconds, 1281647191)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        1601, 1, 2, 0, 0, 0, None)
+        1601, 1, 2, 0, 0, 0)
     self.assertEqual(number_of_seconds, -11644387200)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
-        0, 1, 2, 0, 0, 0, None)
+        0, 1, 2, 0, 0, 0)
     self.assertIsNone(number_of_seconds)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(
-          2010, 13, 12, 21, 6, 31, None)
+          2010, 13, 12, 21, 6, 31)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(
-          2010, 13, 12, 24, 6, 31, None)
+          2010, 13, 12, 24, 6, 31)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(
-          2010, 13, 12, 21, 99, 31, None)
+          2010, 13, 12, 21, 99, 31)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(
-          2010, 13, 12, 21, 6, 65, None)
+          2010, 13, 12, 21, 6, 65)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(
-          2013, 2, 29, 1, 4, 25, None)
+          2013, 2, 29, 1, 4, 25)
 
   def testGetTimeValues(self):
     """Tests the _GetTimeValues function."""

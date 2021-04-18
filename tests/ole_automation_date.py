@@ -41,6 +41,14 @@ class OLEAutomationDateTest(unittest.TestCase):
     normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 
+    ole_automation_date_object = ole_automation_date.OLEAutomationDate(
+        time_zone_offset=60, timestamp=43044.480556)
+
+    expected_normalized_timestamp = decimal.Decimal(
+        '1509881460.038400194607675076')
+    normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
+
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 
     normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
@@ -50,32 +58,32 @@ class OLEAutomationDateTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 
-    expected_timestamp = 43044.0
     ole_automation_date_object.CopyFromDateTimeString('2017-11-05')
-    self.assertEqual(ole_automation_date_object.timestamp, expected_timestamp)
+    self.assertEqual(ole_automation_date_object._timestamp, 43044.0)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
 
-    expected_timestamp = 43044.48055555555
     ole_automation_date_object.CopyFromDateTimeString('2017-11-05 11:32:00')
-    self.assertEqual(ole_automation_date_object.timestamp, expected_timestamp)
+    self.assertEqual(ole_automation_date_object._timestamp, 43044.48055555555)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
 
-    expected_timestamp = 43044.480561885124
     ole_automation_date_object.CopyFromDateTimeString(
         '2017-11-05 11:32:00.546875')
-    self.assertEqual(ole_automation_date_object.timestamp, expected_timestamp)
+    self.assertEqual(ole_automation_date_object._timestamp, 43044.480561885124)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
 
-    expected_timestamp = 43044.522228551796
     ole_automation_date_object.CopyFromDateTimeString(
         '2017-11-05 11:32:00.546875-01:00')
-    self.assertEqual(ole_automation_date_object.timestamp, expected_timestamp)
+    self.assertEqual(ole_automation_date_object._timestamp, 43044.480561885124)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, -60)
 
-    expected_timestamp = 43044.43889521846
     ole_automation_date_object.CopyFromDateTimeString(
         '2017-11-05 11:32:00.546875+01:00')
-    self.assertEqual(ole_automation_date_object.timestamp, expected_timestamp)
+    self.assertEqual(ole_automation_date_object._timestamp, 43044.480561885124)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, 60)
 
-    expected_timestamp = 2.0
     ole_automation_date_object.CopyFromDateTimeString('1900-01-01 00:00:00')
-    self.assertEqual(ole_automation_date_object.timestamp, expected_timestamp)
+    self.assertEqual(ole_automation_date_object._timestamp, 2.0)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

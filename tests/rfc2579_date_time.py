@@ -113,6 +113,12 @@ class RFC2579DateTimeTest(unittest.TestCase):
     normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.6'))
 
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 1, 0))
+
+    normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.6'))
+
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 
     normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
@@ -122,10 +128,9 @@ class RFC2579DateTimeTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime()
 
-    expected_number_of_seconds = 1281571200
     rfc2579_date_time_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(
-        rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(rfc2579_date_time_object._number_of_seconds, 1281571200)
+    self.assertEqual(rfc2579_date_time_object._time_zone_offset, 0)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
@@ -134,10 +139,9 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.seconds, 0)
     self.assertEqual(rfc2579_date_time_object.deciseconds, 0)
 
-    expected_number_of_seconds = 1281647191
     rfc2579_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(
-        rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(rfc2579_date_time_object._number_of_seconds, 1281647191)
+    self.assertEqual(rfc2579_date_time_object._time_zone_offset, 0)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
@@ -146,11 +150,10 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.seconds, 31)
     self.assertEqual(rfc2579_date_time_object.deciseconds, 0)
 
-    expected_number_of_seconds = 1281647191
     rfc2579_date_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875')
-    self.assertEqual(
-        rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(rfc2579_date_time_object._number_of_seconds, 1281647191)
+    self.assertEqual(rfc2579_date_time_object._time_zone_offset, 0)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
@@ -159,11 +162,10 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.seconds, 31)
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
 
-    expected_number_of_seconds = 1281650791
     rfc2579_date_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875-01:00')
-    self.assertEqual(
-        rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(rfc2579_date_time_object._number_of_seconds, 1281647191)
+    self.assertEqual(rfc2579_date_time_object._time_zone_offset, -60)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
@@ -173,11 +175,10 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
     self.assertEqual(rfc2579_date_time_object.time_zone_offset, -60)
 
-    expected_number_of_seconds = 1281643591
     rfc2579_date_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(
-        rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(rfc2579_date_time_object._number_of_seconds, 1281647191)
+    self.assertEqual(rfc2579_date_time_object._time_zone_offset, 60)
     self.assertEqual(rfc2579_date_time_object.year, 2010)
     self.assertEqual(rfc2579_date_time_object.month, 8)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 12)
@@ -187,10 +188,9 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 5)
     self.assertEqual(rfc2579_date_time_object.time_zone_offset, 60)
 
-    expected_number_of_seconds = -11644387200
     rfc2579_date_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
-    self.assertEqual(
-        rfc2579_date_time_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(rfc2579_date_time_object._number_of_seconds, -11644387200)
+    self.assertEqual(rfc2579_date_time_object._time_zone_offset, 0)
     self.assertEqual(rfc2579_date_time_object.year, 1601)
     self.assertEqual(rfc2579_date_time_object.month, 1)
     self.assertEqual(rfc2579_date_time_object.day_of_month, 2)

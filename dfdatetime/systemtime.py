@@ -37,7 +37,7 @@ class Systemtime(interface.DateTimeValues):
 
   # TODO: make attributes read-only.
 
-  def __init__(self, system_time_tuple=None):
+  def __init__(self, system_time_tuple=None, time_zone_offset=None):
     """Initializes a SYSTEMTIME structure.
 
     Args:
@@ -45,11 +45,13 @@ class Systemtime(interface.DateTimeValues):
           (Optional[tuple[int, int, int, int, int, int, int, int]]):
           system time, contains year, month, day of week, day of month,
           hours, minutes, seconds and milliseconds.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
 
     Raises:
       ValueError: if the system time is invalid.
     """
-    super(Systemtime, self).__init__()
+    super(Systemtime, self).__init__(time_zone_offset=time_zone_offset)
     self._number_of_seconds = None
     self._precision = definitions.PRECISION_1_MILLISECOND
     self.day_of_month = None
@@ -103,7 +105,7 @@ class Systemtime(interface.DateTimeValues):
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           self.year, self.month, self.day_of_month, self.hours, self.minutes,
-          self.seconds, self._time_zone_offset)
+          self.seconds)
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -120,6 +122,9 @@ class Systemtime(interface.DateTimeValues):
             decimal.Decimal(self.milliseconds) /
             definitions.MILLISECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -157,7 +162,7 @@ class Systemtime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
 
     self.year = year

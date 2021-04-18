@@ -31,13 +31,15 @@ class CocoaTime(interface.DateTimeValues):
 
   _EPOCH = CocoaTimeEpoch()
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a Cocoa timestamp.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[float]): Cocoa timestamp.
     """
-    super(CocoaTime, self).__init__()
+    super(CocoaTime, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_SECOND
     self._timestamp = timestamp
 
@@ -58,6 +60,9 @@ class CocoaTime(interface.DateTimeValues):
       if self._timestamp is not None:
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) - self._COCOA_TO_POSIX_BASE)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -88,7 +93,7 @@ class CocoaTime(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     timestamp += self._COCOA_TO_POSIX_BASE
 
     timestamp = float(timestamp)

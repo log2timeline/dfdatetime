@@ -31,13 +31,15 @@ class HFSTime(interface.DateTimeValues):
   # The difference between Jan 1, 1904 and Jan 1, 1970 in seconds.
   _HFS_TO_POSIX_BASE = 2082844800
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a HFS timestamp.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): HFS timestamp.
     """
-    super(HFSTime, self).__init__()
+    super(HFSTime, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_SECOND
     self._timestamp = timestamp
 
@@ -60,6 +62,9 @@ class HFSTime(interface.DateTimeValues):
           self._timestamp <= self._UINT32_MAX):
         self._normalized_timestamp = (
             decimal.Decimal(self._timestamp) - self._HFS_TO_POSIX_BASE)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -93,7 +98,7 @@ class HFSTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._timestamp += self._HFS_TO_POSIX_BASE
     self._time_zone_offset = time_zone_offset
 

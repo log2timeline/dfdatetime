@@ -35,13 +35,15 @@ class OLEAutomationDate(interface.DateTimeValues):
   # The difference between December 30, 1899 and January 1, 1970 in days.
   _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25569
 
-  def __init__(self, timestamp=None):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes an OLE Automation date.
 
     Args:
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[float]): OLE Automation date.
     """
-    super(OLEAutomationDate, self).__init__()
+    super(OLEAutomationDate, self).__init__(time_zone_offset=time_zone_offset)
     self._precision = definitions.PRECISION_1_MICROSECOND
     self._timestamp = timestamp
 
@@ -65,6 +67,9 @@ class OLEAutomationDate(interface.DateTimeValues):
             decimal.Decimal(self._timestamp) -
             self._OLE_AUTOMATION_DATE_TO_POSIX_BASE)
         self._normalized_timestamp *= definitions.SECONDS_PER_DAY
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -95,7 +100,7 @@ class OLEAutomationDate(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
 
     timestamp = float(timestamp)
     if microseconds is not None:

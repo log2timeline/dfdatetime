@@ -37,6 +37,12 @@ class FiletimeTest(unittest.TestCase):
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281647191.546875'))
 
+    filetime_object = filetime.Filetime(
+        time_zone_offset=60, timestamp=0x01cb3a623d0a17ce)
+
+    normalized_timestamp = filetime_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281647131.546875'))
+
     filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
 
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
@@ -51,29 +57,29 @@ class FiletimeTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     filetime_object = filetime.Filetime()
 
-    expected_timestamp = 0x1cb39b14e8c4000
     filetime_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(filetime_object.timestamp, expected_timestamp)
+    self.assertEqual(filetime_object._timestamp, 0x1cb39b14e8c4000)
+    self.assertEqual(filetime_object._time_zone_offset, 0)
 
-    expected_timestamp = 0x1cb3a623cb6a580
     filetime_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(filetime_object.timestamp, expected_timestamp)
+    self.assertEqual(filetime_object._timestamp, 0x1cb3a623cb6a580)
+    self.assertEqual(filetime_object._time_zone_offset, 0)
 
-    expected_timestamp = 0x01cb3a623d0a17ce
     filetime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
-    self.assertEqual(filetime_object.timestamp, expected_timestamp)
+    self.assertEqual(filetime_object._timestamp, 0x01cb3a623d0a17ce)
+    self.assertEqual(filetime_object._time_zone_offset, 0)
 
-    expected_timestamp = 0x1cb3a6a9ece7fce
     filetime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
-    self.assertEqual(filetime_object.timestamp, expected_timestamp)
+    self.assertEqual(filetime_object._timestamp, 0x01cb3a623d0a17ce)
+    self.assertEqual(filetime_object._time_zone_offset, -60)
 
-    expected_timestamp = 0x1cb3a59db45afce
     filetime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(filetime_object.timestamp, expected_timestamp)
+    self.assertEqual(filetime_object._timestamp, 0x01cb3a623d0a17ce)
+    self.assertEqual(filetime_object._time_zone_offset, 60)
 
-    expected_timestamp = 86400 * 10000000
     filetime_object.CopyFromDateTimeString('1601-01-02 00:00:00')
-    self.assertEqual(filetime_object.timestamp, expected_timestamp)
+    self.assertEqual(filetime_object._timestamp, 86400 * 10000000)
+    self.assertEqual(filetime_object._time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       filetime_object.CopyFromDateTimeString('1500-01-02 00:00:00')

@@ -38,6 +38,9 @@ class JavaTime(posix_time.PosixTimeInMilliseconds):
             decimal.Decimal(self._timestamp) /
             definitions.MILLISECONDS_PER_SECOND)
 
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
+
     return self._normalized_timestamp
 
   def CopyToDateTimeString(self):

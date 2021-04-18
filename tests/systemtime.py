@@ -73,6 +73,13 @@ class SystemtimeTest(unittest.TestCase):
     normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.142'))
 
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142),
+        time_zone_offset=60)
+
+    normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.142'))
+
     systemtime_object = systemtime.Systemtime()
 
     normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
@@ -82,10 +89,9 @@ class SystemtimeTest(unittest.TestCase):
     """Tests the CopyFromDateTimeString function."""
     systemtime_object = systemtime.Systemtime()
 
-    expected_number_of_seconds = 1281571200
     systemtime_object.CopyFromDateTimeString('2010-08-12')
-    self.assertEqual(
-        systemtime_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(systemtime_object._number_of_seconds, 1281571200)
+    self.assertEqual(systemtime_object._time_zone_offset, 0)
     self.assertEqual(systemtime_object.year, 2010)
     self.assertEqual(systemtime_object.month, 8)
     self.assertEqual(systemtime_object.day_of_month, 12)
@@ -94,10 +100,9 @@ class SystemtimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.seconds, 0)
     self.assertEqual(systemtime_object.milliseconds, 0)
 
-    expected_number_of_seconds = 1281647191
     systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31')
-    self.assertEqual(
-        systemtime_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(systemtime_object._number_of_seconds, 1281647191)
+    self.assertEqual(systemtime_object._time_zone_offset, 0)
     self.assertEqual(systemtime_object.year, 2010)
     self.assertEqual(systemtime_object.month, 8)
     self.assertEqual(systemtime_object.day_of_month, 12)
@@ -106,10 +111,9 @@ class SystemtimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.seconds, 31)
     self.assertEqual(systemtime_object.milliseconds, 0)
 
-    expected_number_of_seconds = 1281647191
     systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
-    self.assertEqual(
-        systemtime_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(systemtime_object._number_of_seconds, 1281647191)
+    self.assertEqual(systemtime_object._time_zone_offset, 0)
     self.assertEqual(systemtime_object.year, 2010)
     self.assertEqual(systemtime_object.month, 8)
     self.assertEqual(systemtime_object.day_of_month, 12)
@@ -118,10 +122,9 @@ class SystemtimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.seconds, 31)
     self.assertEqual(systemtime_object.milliseconds, 546)
 
-    expected_number_of_seconds = 1281650791
     systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
-    self.assertEqual(
-        systemtime_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(systemtime_object._number_of_seconds, 1281647191)
+    self.assertEqual(systemtime_object._time_zone_offset, -60)
     self.assertEqual(systemtime_object.year, 2010)
     self.assertEqual(systemtime_object.month, 8)
     self.assertEqual(systemtime_object.day_of_month, 12)
@@ -131,10 +134,9 @@ class SystemtimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
     self.assertEqual(systemtime_object.time_zone_offset, -60)
 
-    expected_number_of_seconds = 1281643591
     systemtime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875+01:00')
-    self.assertEqual(
-        systemtime_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(systemtime_object._number_of_seconds, 1281647191)
+    self.assertEqual(systemtime_object._time_zone_offset, 60)
     self.assertEqual(systemtime_object.year, 2010)
     self.assertEqual(systemtime_object.month, 8)
     self.assertEqual(systemtime_object.day_of_month, 12)
@@ -144,10 +146,9 @@ class SystemtimeTest(unittest.TestCase):
     self.assertEqual(systemtime_object.milliseconds, 546)
     self.assertEqual(systemtime_object.time_zone_offset, 60)
 
-    expected_number_of_seconds = -11644387200
     systemtime_object.CopyFromDateTimeString('1601-01-02 00:00:00')
-    self.assertEqual(
-        systemtime_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(systemtime_object._number_of_seconds, -11644387200)
+    self.assertEqual(systemtime_object._time_zone_offset, 0)
     self.assertEqual(systemtime_object.year, 1601)
     self.assertEqual(systemtime_object.month, 1)
     self.assertEqual(systemtime_object.day_of_month, 2)

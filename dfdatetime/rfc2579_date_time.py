@@ -49,9 +49,10 @@ class RFC2579DateTime(interface.DateTimeValues):
 
     Args:
       rfc2579_date_time_tuple:
-          (Optional[tuple[int, int, int, int, int, int, int]]):
+          (Optional[tuple[int, int, int, int, int, int, int, int, int, int]]):
           RFC2579 date-time time, contains year, month, day of month, hours,
-          minutes, seconds and deciseconds.
+          minutes, seconds and deciseconds, and time zone offset in hours and
+          minutes from UTC.
 
     Raises:
       ValueError: if the system time is invalid.
@@ -124,7 +125,7 @@ class RFC2579DateTime(interface.DateTimeValues):
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           self._year, self._month, self._day_of_month, self._hours,
-          self._minutes, self._seconds, self._time_zone_offset)
+          self._minutes, self._seconds)
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -141,6 +142,9 @@ class RFC2579DateTime(interface.DateTimeValues):
             decimal.Decimal(self._deciseconds) /
             definitions.DECISECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
+
+      if self._time_zone_offset:
+        self._normalized_timestamp -= self._time_zone_offset
 
     return self._normalized_timestamp
 
@@ -213,7 +217,7 @@ class RFC2579DateTime(interface.DateTimeValues):
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds, time_zone_offset)
+        year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
 
     self._year = year

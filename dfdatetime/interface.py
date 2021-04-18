@@ -888,6 +888,30 @@ class DateTimeValues(object):
     except ValueError:
       return None, None, None
 
+  def GetDateWithTimeOfDay(self):
+    """Retrieves the date with time of day.
+
+    Returns:
+       tuple[int, int, int, int, int, int]: year, month, day of month, hours,
+           minutes, seconds or (None, None, None, None, None, None)
+           if the date and time values do not represent a date or time of day.
+    """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None, None, None, None, None, None
+
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        normalized_timestamp)
+
+    try:
+      year, month, day_of_month = self._GetDateValuesWithEpoch(
+          number_of_days, self._EPOCH_NORMALIZED_TIME)
+
+    except ValueError:
+      return None, None, None, None, None, None
+
+    return year, month, day_of_month, hours, minutes, seconds
+
   # TODO: remove this method when there is no more need for it in plaso.
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.

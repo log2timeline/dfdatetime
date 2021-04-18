@@ -98,6 +98,19 @@ class JavaTimeTest(unittest.TestCase):
     date_tuple = java_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetDateWithTimeOfDay(self):
+    """Tests the GetDateWithTimeOfDay function."""
+    java_time_object = java_time.JavaTime(timestamp=1281643591546)
+
+    date_with_time_of_day_tuple = java_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
+
+    java_time_object = java_time.JavaTime()
+
+    date_with_time_of_day_tuple = java_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(
+        date_with_time_of_day_tuple, (None, None, None, None, None, None))
+
   def testGetTimeOfDay(self):
     """Tests the GetTimeOfDay function."""
     java_time_object = java_time.JavaTime(timestamp=1281643591546)

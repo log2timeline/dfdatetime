@@ -148,6 +148,20 @@ class UUIDTimeTest(unittest.TestCase):
     date_tuple = uuid_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetDateWithTimeOfDay(self):
+    """Tests the GetDateWithTimeOfDay function."""
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
+    uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
+
+    date_with_time_of_day_tuple = uuid_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(date_with_time_of_day_tuple, (2012, 5, 16, 1, 11, 1))
+
+    uuid_time_object = uuid_time.UUIDTime()
+
+    date_with_time_of_day_tuple = uuid_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(
+        date_with_time_of_day_tuple, (None, None, None, None, None, None))
+
   def testGetTimeOfDay(self):
     """Tests the GetTimeOfDay function."""
     uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')

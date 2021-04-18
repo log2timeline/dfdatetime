@@ -99,6 +99,14 @@ class SemanticTimeTest(unittest.TestCase):
     date_tuple = semantic_time_object.GetDate()
     self.assertEqual(date_tuple, (None, None, None))
 
+  def testGetDateWithTimeOfDay(self):
+    """Tests the GetDateWithTimeOfDay function."""
+    semantic_time_object = semantic_time.SemanticTime()
+
+    date_with_time_of_day_tuple = semantic_time_object.GetDateWithTimeOfDay()
+    self.assertEqual(
+        date_with_time_of_day_tuple, (None, None, None, None, None, None))
+
   def testGetTimeOfDay(self):
     """Tests the GetTimeOfDay function."""
     semantic_time_object = semantic_time.SemanticTime()

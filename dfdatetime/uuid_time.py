@@ -72,8 +72,8 @@ class UUIDTime(interface.DateTimeValues):
             decimal.Decimal(self._timestamp) / self._100NS_PER_SECOND)
         self._normalized_timestamp -= self._UUID_TO_POSIX_BASE
 
-      if self._time_zone_offset:
-        self._normalized_timestamp -= self._time_zone_offset
+        if self._time_zone_offset:
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 

@@ -26,7 +26,7 @@ class APFSTimeTest(unittest.TestCase):
 
     normalized_timestamp = apfs_time_object._GetNormalizedTimestamp()
     self.assertEqual(
-        normalized_timestamp, decimal.Decimal('1281643531.987654321'))
+        normalized_timestamp, decimal.Decimal('1281639991.987654321'))
 
     apfs_time_object = apfs_time.APFSTime()
 

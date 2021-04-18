@@ -32,7 +32,7 @@ class JavaTimeTest(unittest.TestCase):
         time_zone_offset=60, timestamp=1281643591546)
 
     normalized_timestamp = java_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643531.546'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.546'))
 
     java_time_object = java_time.JavaTime()
 

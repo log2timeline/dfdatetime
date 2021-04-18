@@ -64,7 +64,7 @@ class UUIDTimeTest(unittest.TestCase):
 
     normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
     self.assertEqual(
-        normalized_timestamp, decimal.Decimal('1337130601.6544084'))
+        normalized_timestamp, decimal.Decimal('1337127061.6544084'))
 
     uuid_time_object = uuid_time.UUIDTime()
     uuid_time_object._timestamp = 0x1fffffffffffffff

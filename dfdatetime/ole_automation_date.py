@@ -68,8 +68,8 @@ class OLEAutomationDate(interface.DateTimeValues):
             self._OLE_AUTOMATION_DATE_TO_POSIX_BASE)
         self._normalized_timestamp *= definitions.SECONDS_PER_DAY
 
-      if self._time_zone_offset:
-        self._normalized_timestamp -= self._time_zone_offset
+        if self._time_zone_offset:
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 

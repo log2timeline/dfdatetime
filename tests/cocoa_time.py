@@ -41,7 +41,7 @@ class CocoaTimeTest(unittest.TestCase):
         time_zone_offset=60, timestamp=395011845.0)
 
     normalized_timestamp = cocoa_time_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1373318985.0'))
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1373315445.0'))
 
     cocoa_time_object = cocoa_time.CocoaTime()
 

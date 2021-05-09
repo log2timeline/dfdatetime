@@ -45,7 +45,7 @@ class HFSTime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """int: HFS timestamp or None if timestamp is not set."""
+    """int: HFS timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):

@@ -46,7 +46,7 @@ class PosixTime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """int: POSIX timestamp or None if timestamp is not set."""
+    """int: POSIX timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):
@@ -139,7 +139,7 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """int: POSIX timestamp in milliseconds or None if timestamp is not set."""
+    """int: POSIX timestamp in milliseconds or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):
@@ -244,7 +244,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """int: POSIX timestamp in microseconds or None if timestamp is not set."""
+    """int: POSIX timestamp in microseconds or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):
@@ -345,7 +345,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """int: POSIX timestamp or None if timestamp is not set."""
+    """int: POSIX timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):

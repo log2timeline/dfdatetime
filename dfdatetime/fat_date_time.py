@@ -56,8 +56,14 @@ class FATDateTime(interface.DateTimeValues):
       number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
 
     super(FATDateTime, self).__init__(time_zone_offset=time_zone_offset)
-    self._precision = definitions.PRECISION_2_SECONDS
+    self._fat_date_time = fat_date_time
     self._number_of_seconds = number_of_seconds
+    self._precision = definitions.PRECISION_2_SECONDS
+
+  @property
+  def fat_date_time(self):
+    """int: FAT date time or None if not set."""
+    return self._fat_date_time
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.

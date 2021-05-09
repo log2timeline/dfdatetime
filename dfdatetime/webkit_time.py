@@ -45,7 +45,7 @@ class WebKitTime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """decimal.Decimal: WebKit timestamp or None if timestamp is not set."""
+    """decimal.Decimal: WebKit timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):

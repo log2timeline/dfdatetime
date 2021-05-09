@@ -53,7 +53,7 @@ class UUIDTime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """int: UUID timestamp or None if timestamp is not set."""
+    """int: UUID timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):

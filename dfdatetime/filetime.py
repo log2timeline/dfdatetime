@@ -48,7 +48,7 @@ class Filetime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """int: FILETIME timestamp or None if timestamp is not set."""
+    """int: FILETIME timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):

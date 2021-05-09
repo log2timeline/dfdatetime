@@ -45,7 +45,7 @@ class CocoaTime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """float: Cocoa timestamp or None if timestamp is not set."""
+    """float: Cocoa timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):

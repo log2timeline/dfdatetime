@@ -51,7 +51,7 @@ class DelphiDateTime(interface.DateTimeValues):
 
   @property
   def timestamp(self):
-    """float: Delphi TDateTime timestamp or None if timestamp is not set."""
+    """float: Delphi TDateTime timestamp or None if not set."""
     return self._timestamp
 
   def _GetNormalizedTimestamp(self):

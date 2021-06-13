@@ -81,6 +81,7 @@ class DateTimeValues(object):
           from UTC or None if not set.
     """
     super(DateTimeValues, self).__init__()
+    self._cached_date_time_values = None
     self._normalized_timestamp = None
     self._precision = None
     self._time_zone_offset = time_zone_offset
@@ -602,6 +603,36 @@ class DateTimeValues(object):
         number_of_days, date_time_epoch.year, date_time_epoch.month,
         date_time_epoch.day_of_month)
 
+  def _GetDateWithTimeOfDay(self):
+    """Retrieves the date with time of day.
+
+    Returns:
+       tuple[int, int, int, int, int, int]: year, month, day of month, hours,
+           minutes, seconds or (None, None, None, None, None, None)
+           if the date and time values do not represent a date or time of day.
+    """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None, None, None, None, None, None
+
+    if (not self._cached_date_time_values or
+        self._cached_date_time_values[0] != normalized_timestamp):
+      number_of_days, hours, minutes, seconds = self._GetTimeValues(
+          normalized_timestamp)
+
+      try:
+        year, month, day_of_month = self._GetDateValuesWithEpoch(
+            number_of_days, self._EPOCH_NORMALIZED_TIME)
+
+      except ValueError:
+        return None, None, None, None, None, None
+
+      self._cached_date_time_values = (
+          normalized_timestamp, year, month, day_of_month, hours, minutes,
+          seconds)
+
+    return self._cached_date_time_values[1:]
+
   def _GetDayOfYear(self, year, month, day_of_month):
     """Retrieves the day of the year for a specific day of a month in a year.
 
@@ -875,18 +906,8 @@ class DateTimeValues(object):
        tuple[int, int, int]: year, month, day of month or (None, None, None)
            if the date and time values do not represent a date.
     """
-    normalized_timestamp = self._GetNormalizedTimestamp()
-    if normalized_timestamp is None:
-      return None, None, None
-
-    number_of_days, _, _, _ = self._GetTimeValues(normalized_timestamp)
-
-    try:
-      return self._GetDateValuesWithEpoch(
-          number_of_days, self._EPOCH_NORMALIZED_TIME)
-
-    except ValueError:
-      return None, None, None
+    year, month, day_of_month, _, _, _ = self._GetDateWithTimeOfDay()
+    return year, month, day_of_month
 
   def GetDateWithTimeOfDay(self):
     """Retrieves the date with time of day.
@@ -896,21 +917,7 @@ class DateTimeValues(object):
            minutes, seconds or (None, None, None, None, None, None)
            if the date and time values do not represent a date or time of day.
     """
-    normalized_timestamp = self._GetNormalizedTimestamp()
-    if normalized_timestamp is None:
-      return None, None, None, None, None, None
-
-    number_of_days, hours, minutes, seconds = self._GetTimeValues(
-        normalized_timestamp)
-
-    try:
-      year, month, day_of_month = self._GetDateValuesWithEpoch(
-          number_of_days, self._EPOCH_NORMALIZED_TIME)
-
-    except ValueError:
-      return None, None, None, None, None, None
-
-    return year, month, day_of_month, hours, minutes, seconds
+    return self._GetDateWithTimeOfDay()
 
   # TODO: remove this method when there is no more need for it in plaso.
   def GetPlasoTimestamp(self):
@@ -936,9 +943,5 @@ class DateTimeValues(object):
        tuple[int, int, int]: hours, minutes, seconds or (None, None, None)
            if the date and time values do not represent a time of day.
     """
-    normalized_timestamp = self._GetNormalizedTimestamp()
-    if normalized_timestamp is None:
-      return None, None, None
-
-    _, hours, minutes, seconds = self._GetTimeValues(normalized_timestamp)
+    _, _, _, hours, minutes, seconds = self._GetDateWithTimeOfDay()
     return hours, minutes, seconds

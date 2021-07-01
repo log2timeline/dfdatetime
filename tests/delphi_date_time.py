@@ -139,7 +139,7 @@ class DelphiDateTimeTest(unittest.TestCase):
         timestamp=41443.8263953)
 
     date_time_string = delphi_date_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2013-06-18T19:50:00.553919Z')
+    self.assertEqual(date_time_string, '2013-06-18T19:50:00.553919+00:00')
 
   def testGetDate(self):
     """Tests the GetDate function."""

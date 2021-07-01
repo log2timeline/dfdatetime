@@ -223,7 +223,7 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 0, 0))
 
     date_time_string = rfc2579_date_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T20:06:31.6Z')
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.6+00:00')
 
   def testGetDate(self):
     """Tests the GetDate function."""

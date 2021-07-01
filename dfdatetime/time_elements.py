@@ -379,7 +379,7 @@ class TimeElements(interface.DateTimeValues):
       ValueError: if the time string is invalid or not supported.
     """
     if time_string.endswith('Z'):
-      time_string = time_string[:-1]
+      time_string = ''.join([time_string[:-1], '+00:00'])
 
     time_string_length = len(time_string)
 

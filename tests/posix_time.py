@@ -93,7 +93,7 @@ class PosixTimeTest(unittest.TestCase):
     posix_time_object = posix_time.PosixTime(timestamp=1281643591)
 
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T20:06:31Z')
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31+00:00')
 
   # TODO: remove this method when there is no more need for it in dfvfs.
   def testCopyToStatTimeTuple(self):
@@ -228,7 +228,7 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
         timestamp=1281643591546)
 
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T20:06:31.546Z')
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.546+00:00')
 
   # TODO: remove this method when there is no more need for it in dfvfs.
   def testCopyToStatTimeTuple(self):
@@ -367,7 +367,7 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         timestamp=1281643591546875)
 
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T20:06:31.546875Z')
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.546875+00:00')
 
   # TODO: remove this method when there is no more need for it in dfvfs.
   def testCopyToStatTimeTuple(self):
@@ -508,7 +508,7 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
         timestamp=1281643591987654321)
 
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T20:06:31.987654321Z')
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.987654321+00:00')
 
   def testGetDate(self):
     """Tests the GetDate function."""

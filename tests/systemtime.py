@@ -179,7 +179,7 @@ class SystemtimeTest(unittest.TestCase):
         system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
     date_time_string = systemtime_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T20:06:31.142Z')
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31.142+00:00')
 
   def testGetDate(self):
     """Tests the GetDate function."""

@@ -95,7 +95,7 @@ class FakeTimeTest(unittest.TestCase):
     fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
 
     date_time_string = fake_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2010-08-12T21:06:31.546875Z')
+    self.assertEqual(date_time_string, '2010-08-12T21:06:31.546875+00:00')
 
   def testGetDate(self):
     """Tests the GetDate function."""

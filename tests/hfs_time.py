@@ -106,7 +106,7 @@ class HFSTimeTest(unittest.TestCase):
     hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
 
     date_time_string = hfs_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2013-08-01T15:25:28Z')
+    self.assertEqual(date_time_string, '2013-08-01T15:25:28+00:00')
 
   def testGetDate(self):
     """Tests the GetDate function."""

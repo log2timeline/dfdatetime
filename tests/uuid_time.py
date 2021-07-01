@@ -133,7 +133,7 @@ class UUIDTimeTest(unittest.TestCase):
     uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
 
     date_time_string = uuid_time_object.CopyToDateTimeStringISO8601()
-    self.assertEqual(date_time_string, '2012-05-16T01:11:01.6544084Z')
+    self.assertEqual(date_time_string, '2012-05-16T01:11:01.6544084+00:00')
 
   def testGetDate(self):
     """Tests the GetDate function."""

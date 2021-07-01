@@ -897,17 +897,18 @@ class DateTimeValues(object):
     if date_time_string:
       date_time_string = date_time_string.replace(' ', 'T')
 
-      time_zone_offset_hours, time_zone_offset_minutes = divmod(
-          self._time_zone_offset or 0, 60)
-      if time_zone_offset_hours > 0:
-        time_zone_offset_sign = '-'
-      else:
-        time_zone_offset_sign = '+'
-        time_zone_offset_hours *= -1
+      if self._time_zone_offset is not None or not self.is_local_time:
+        time_zone_offset_hours, time_zone_offset_minutes = divmod(
+            self._time_zone_offset or 0, 60)
+        if time_zone_offset_hours > 0:
+          time_zone_offset_sign = '-'
+        else:
+          time_zone_offset_sign = '+'
+          time_zone_offset_hours *= -1
 
-      date_time_string = '{0:s}{1:s}{2:02d}:{3:02d}'.format(
-          date_time_string, time_zone_offset_sign, time_zone_offset_hours,
-          time_zone_offset_minutes)
+        date_time_string = '{0:s}{1:s}{2:02d}:{3:02d}'.format(
+            date_time_string, time_zone_offset_sign, time_zone_offset_hours,
+            time_zone_offset_minutes)
 
     return date_time_string
 

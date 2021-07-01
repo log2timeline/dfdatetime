@@ -654,6 +654,11 @@ class TimeElementsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31+00:00')
 
+    time_elements_object.is_local_time = True
+
+    date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '2010-08-12T20:06:31')
+
     time_elements_object = time_elements.TimeElements(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31),
         time_zone_offset=-120)

@@ -606,6 +606,8 @@ class DateTimeValues(object):
   def _GetDateWithTimeOfDay(self):
     """Retrieves the date with time of day.
 
+    Note that the date and time are adjusted to UTC.
+
     Returns:
        tuple[int, int, int, int, int, int]: year, month, day of month, hours,
            minutes, seconds or (None, None, None, None, None, None)
@@ -915,6 +917,8 @@ class DateTimeValues(object):
   def GetDate(self):
     """Retrieves the date represented by the date and time values.
 
+    Note that the date is adjusted to UTC.
+
     Returns:
        tuple[int, int, int]: year, month, day of month or (None, None, None)
            if the date and time values do not represent a date.
@@ -925,6 +929,8 @@ class DateTimeValues(object):
   def GetDateWithTimeOfDay(self):
     """Retrieves the date with time of day.
 
+    Note that the date and time are adjusted to UTC.
+
     Returns:
        tuple[int, int, int, int, int, int]: year, month, day of month, hours,
            minutes, seconds or (None, None, None, None, None, None)
@@ -934,7 +940,7 @@ class DateTimeValues(object):
 
   # TODO: remove this method when there is no more need for it in plaso.
   def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
+    """Retrieves a timestamp that is compatible with Plaso.
 
     Returns:
       int: a POSIX timestamp in microseconds or None if no timestamp is
@@ -951,6 +957,8 @@ class DateTimeValues(object):
 
   def GetTimeOfDay(self):
     """Retrieves the time of day represented by the date and time values.
+
+    Note that the time is adjusted to UTC.
 
     Returns:
        tuple[int, int, int]: hours, minutes, seconds or (None, None, None)

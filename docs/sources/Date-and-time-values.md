@@ -124,7 +124,7 @@ Offset | Size | Description
 
 ### Also see
 
-* [Embarcadero: System.TDateTime](http://docwiki.embarcadero.com/Libraries/XE3/en/System.TDateTime)
+* [Embarcadero: System.TDateTime](https://docwiki.embarcadero.com/Libraries/XE3/en/System.TDateTime)
 
 ## FAT date and time
 ### Characteristics
@@ -240,7 +240,7 @@ Offset | Size | Description
 --- | --- | ---
 0 | 8 | timestamp, integer value containing the number of milliseconds before (when negative) or after (when positive) 1970-01-01 00:00:00.000 (or POSIX or Unix epoch)
 
-### Also see:
+### Also see
 
 * [Class java.util.Date](https://docs.oracle.com/javase/8/docs/api/java/util/Date.html)
 
@@ -318,7 +318,7 @@ Offset | Size | Description
 
 ### Also see
 
-* [RFC2579](https://tools.ietf.org/html/rfc2579)
+* [RFC2579](https://datatracker.ietf.org/doc/html/rfc2579)
 
 ## SYSTEMTIME
 ### Characteristics
@@ -349,6 +349,29 @@ An empty (or unset) SYSTEMTIME can be represented by 16x 0-byte values.
 ### Also see
 
 * [MSDN: SYSTEMTIME](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-systemtime)
+
+## Time element strings
+
+### ISO 8601 / RFC 3339
+
+Example `2020-05-31T00:00:47.044800+00:00`
+
+### RFC 822
+
+Example `Tue, 15 Nov 94 08:12:31 GMT`
+
+### RFC 1123
+
+Example `Tue, 15 Nov 1994 08:12:31 GMT`
+
+### RFC 2822
+
+### Also see
+
+* [RFC 822 - Date and time specification](https://datatracker.ietf.org/doc/html/rfc822#section-5)
+* [RFC 1123 - RFC-822 date and time specification](https://datatracker.ietf.org/doc/html/rfc1123#section-5)
+* [RFC 2822 - Date and time specification](https://datatracker.ietf.org/doc/html/rfc2822#section-3.3)
+* [RFC 3339 - Internet date/time format](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6)
 
 ## UUID version 1 time
 ### Characteristics
@@ -389,4 +412,4 @@ Offset | Size | Description
 
 ### Also see
 
-* [Chromium source: time.h](https://chromium.googlesource.com/chromium/src/base/+/master/time/time.h#5)
+* [Chromium source: time.h](https://chromium.googlesource.com/chromium/src/base/+/refs/heads/main/time/time.h#5)

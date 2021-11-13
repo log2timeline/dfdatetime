@@ -140,6 +140,14 @@ dfdatetime.semantic\_time module
    :undoc-members:
    :show-inheritance:
 
+dfdatetime.serializer module
+----------------------------
+
+.. automodule:: dfdatetime.serializer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 dfdatetime.systemtime module
 ----------------------------
 

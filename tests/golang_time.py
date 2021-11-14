@@ -25,14 +25,23 @@ class GolangEpochTest(unittest.TestCase):
 class GolangTest(unittest.TestCase):
   """Tests for the Golang timestamp."""
 
+  # pylint: disable=protected-access
+    
   def testProperties(self):
     """Tests the Golang timestamp properties."""
     golang_object = golang_time.GolangTime(
         seconds=100, nanoseconds=100, time_zone_offset=-1)
-    # pylint: disable=protected-access
     self.assertEqual(golang_object._seconds, 100)
     self.assertEqual(golang_object._nanoseconds, 100)
-    self.assertEqual(golang_object._time_zone_offset, -1)
+    self.assertEqual(golang_object.is_local_time, False)
+    self.assertEqual(golang_object._time_zone_offset, 0)
+
+    golang_object = golang_time.GolangTime(
+        seconds=100, nanoseconds=100, time_zone_offset=0)
+    self.assertEqual(golang_object._seconds, 100)
+    self.assertEqual(golang_object._nanoseconds, 100)
+    self.assertEqual(golang_object.is_local_time, True)
+    self.assertEqual(golang_object._time_zone_offset, 0)
 
   def testGetNormalizedTimestamp(self):
     """Test the _GetNormalizedTimestamp function."""

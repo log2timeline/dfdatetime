@@ -28,7 +28,12 @@ class GolangTime(interface.DateTimeValues):
   * bytes 9-12 - nanoseconds as a little-endian signed integer
   * bytes 13-14 - timezone offset in minutes as a 16-bit little endian integer,
       where -1 represents UTC
+
+  Attributes:
+    is_local_time (bool): True if the date and time value is in local time
   """
+
+  # The delta between January 1, 1970 (unix epoch) and January 1, 0001 (Golang epoch)
   _GOLANG_TO_POSIX_BASE = (
       (1969*365 + 1969//4 - 1969//100 + 1969//400) *
       definitions.SECONDS_PER_DAY
@@ -40,11 +45,15 @@ class GolangTime(interface.DateTimeValues):
     """Initializes a Golang timestamp.
 
     Args:
-      seconds (int): seconds since epoch
+      seconds (Optional[int]): seconds since epoch
+      nanoseconds (Optional[int]): nanoseconds component
+      time_zone_offset (Optional[int]): the timezone in minutes, -1 is a 
+          special value for UTC (no Location set) 
     """
     super(GolangTime, self).__init__(time_zone_offset=time_zone_offset)
 
     self._precision = definitions.PRECISION_1_NANOSECOND
+
     if time_zone_offset == -1:
       self.is_local_time = False
       self._time_zone_offset = 0

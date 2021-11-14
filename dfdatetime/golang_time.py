@@ -33,7 +33,8 @@ class GolangTime(interface.DateTimeValues):
     is_local_time (bool): True if the date and time value is in local time
   """
 
-  # The delta between January 1, 1970 (unix epoch) and January 1, 0001 (Golang epoch)
+  # The delta between January 1, 1970 (unix epoch) and January 1, 0001
+  # (Golang epoch)
   _GOLANG_TO_POSIX_BASE = (
       (1969*365 + 1969//4 - 1969//100 + 1969//400) *
       definitions.SECONDS_PER_DAY
@@ -47,8 +48,8 @@ class GolangTime(interface.DateTimeValues):
     Args:
       seconds (Optional[int]): seconds since epoch
       nanoseconds (Optional[int]): nanoseconds component
-      time_zone_offset (Optional[int]): the timezone in minutes, -1 is a 
-          special value for UTC (no Location set) 
+      time_zone_offset (Optional[int]): the timezone in minutes, -1 is a
+          special value for UTC (no Location set)
     """
     super(GolangTime, self).__init__(time_zone_offset=time_zone_offset)
 

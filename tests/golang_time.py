@@ -16,6 +16,7 @@ class GolangEpochTest(unittest.TestCase):
     self.assertIsNotNone(golang_epoch)
 
   def testEpochDate(self):
+    """Tests the Golang epoch properties."""
     golang_epoch = golang_time.GolangTimeEpoch()
     self.assertEqual(golang_epoch.year, 1)
     self.assertEqual(golang_epoch.month, 1)

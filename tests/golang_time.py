@@ -26,7 +26,7 @@ class GolangTest(unittest.TestCase):
   """Tests for the Golang timestamp."""
 
   # pylint: disable=protected-access
-    
+
   def testProperties(self):
     """Tests the Golang timestamp properties."""
     golang_object = golang_time.GolangTime(
@@ -53,13 +53,15 @@ class GolangTest(unittest.TestCase):
     golang_object = golang_time.GolangTime(
         seconds=63772480949, nanoseconds=711098348, time_zone_offset=0
     )
-    
+
     normalized_timestamp = golang_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('1636884149.711098348'))
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1636884149.711098348')
+    )
 
     golang_object = golang_time.GolangTime(
         seconds=golang_time.GolangTime._GOLANG_TO_POSIX_BASE,
-        nanoseconds=0, 
+        nanoseconds=0,
         time_zone_offset=0
     )
 
@@ -68,7 +70,7 @@ class GolangTest(unittest.TestCase):
 
     golang_object = golang_time.GolangTime(
         seconds=golang_time.GolangTime._GOLANG_TO_POSIX_BASE - 1,
-        nanoseconds=0, 
+        nanoseconds=0,
         time_zone_offset=0
     )
 
@@ -98,12 +100,12 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_object._seconds, 63082281600)
     self.assertEqual(golang_object._nanoseconds, 0)
     self.assertEqual(golang_object._time_zone_offset, 0)
-  
+
     golang_object.CopyFromDateTimeString('2000-01-01 12:23:45.567890')
     self.assertEqual(golang_object._seconds, 63082326225)
     self.assertEqual(golang_object._nanoseconds, 567890000)
     self.assertEqual(golang_object._time_zone_offset, 0)
-  
+
     golang_object.CopyFromDateTimeString('2000-01-01 12:23:45.567890+01:00')
     self.assertEqual(golang_object._seconds, 63082326225)
     self.assertEqual(golang_object._nanoseconds, 567890000)
@@ -113,8 +115,8 @@ class GolangTest(unittest.TestCase):
   def testCopyToDateTimeString(self):
     """Test the CopyToDateTimeString function."""
     golang_object = golang_time.GolangTime(
-        seconds=63082326225, 
-        nanoseconds=567890000, 
+        seconds=63082326225,
+        nanoseconds=567890000,
         time_zone_offset=-1
     )
 
@@ -122,11 +124,11 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(date_time_string, '2000-01-01 12:23:45.567890')
 
     golang_object = golang_time.GolangTime(
-        seconds=63082326225, 
-        nanoseconds=56789, 
+        seconds=63082326225,
+        nanoseconds=56789,
         time_zone_offset=-1
     )
 
     date_time_string = golang_object.CopyToDateTimeString()
-    self.assertEqual(date_time_string, '2000-01-01 12:23:45.000056')    # Round down?
+    self.assertEqual(date_time_string, '2000-01-01 12:23:45.000056')
 

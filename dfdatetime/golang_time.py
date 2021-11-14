@@ -44,11 +44,15 @@ class GolangTime(interface.DateTimeValues):
     super(GolangTime, self).__init__(time_zone_offset=time_zone_offset)
 
     self._precision = definitions.PRECISION_1_NANOSECOND
-    self.is_local_time = False
+    if time_zone_offset == -1:
+      self.is_local_time = False
+      self._time_zone_offset = 0
+    else:
+      self.is_local_time = True
+      self._time_zone_offset = time_zone_offset
     self._seconds = seconds
     self._nanoseconds = nanoseconds
-    self._time_zone_offset = time_zone_offset
-
+    
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.

@@ -31,7 +31,8 @@ class GolangTime(interface.DateTimeValues):
   """
   _GOLANG_TO_POSIX_BASE = (
       (1969*365 + 1969//4 - 1969//100 + 1969//400) * 
-      definitions.SECONDS_PER_DAY)
+      definitions.SECONDS_PER_DAY
+  )
 
   _EPOCH = GolangTimeEpoch()
 
@@ -64,14 +65,18 @@ class GolangTime(interface.DateTimeValues):
           determined.
     """
     if self._normalized_timestamp is None:
-      if (self._seconds is not None and self._seconds >= self._GOLANG_TO_POSIX_BASE and
+      if (self._seconds is not None and 
+          self._seconds >= self._GOLANG_TO_POSIX_BASE and
           self._nanoseconds is not None and self._nanoseconds >= 0):
         
         self._normalized_timestamp = decimal.Decimal(
             self._seconds - GolangTime._GOLANG_TO_POSIX_BASE)
 
         if self._nanoseconds is not None and self._nanoseconds >= 0:
-          self._normalized_timestamp += (decimal.Decimal(self._nanoseconds) / definitions.NANOSECONDS_PER_SECOND)
+          self._normalized_timestamp += (
+              decimal.Decimal(self._nanoseconds) / 
+              definitions.NANOSECONDS_PER_SECOND
+          )
 
     return self._normalized_timestamp
 
@@ -104,8 +109,8 @@ class GolangTime(interface.DateTimeValues):
       raise ValueError('Year value not supported: {0!s}.'.format(year))
 
     seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds)
-    print(seconds)
+        year, month, day_of_month, hours, minutes, seconds
+    )
     seconds += self._GOLANG_TO_POSIX_BASE
     nanoseconds = microseconds * definitions.NANOSECONDS_PER_MICROSECOND
 
@@ -125,17 +130,21 @@ class GolangTime(interface.DateTimeValues):
       return None
 
     seconds = self._seconds
-    nanoseconds_seconds, remainder = divmod(self._nanoseconds, definitions.NANOSECONDS_PER_SECOND)
+    nanoseconds_seconds, remainder = divmod(self._nanoseconds, 
+        definitions.NANOSECONDS_PER_SECOND
+    )
+
     seconds += nanoseconds_seconds
     remainder = remainder // definitions.NANOSECONDS_PER_MICROSECOND
-    print(remainder)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(seconds)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
-        number_of_days, self._EPOCH)
+        number_of_days, self._EPOCH
+    )
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, remainder)
+        year, month, day_of_month, hours, minutes, seconds, remainder
+    )
 
 
 factory.Factory.RegisterDateTimeValues(GolangTime)

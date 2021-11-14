@@ -18,11 +18,11 @@ class GolangTimeEpoch(interface.DateTimeEpoch):
 
 class GolangTime(interface.DateTimeValues):
   """Golang time.Time timestamp.
-  
+
   A Golang timestamp is a value with precision of nanoseconds since 1/1/1.
 
   A marshalled Golang timestamp is a 15 byte value consisting of 4 values:
-  
+
   * byte 0 - version as an 8-bit integer
   * bytes 1-8 - seconds as a little-endian signed integer
   * bytes 9-12 - nanoseconds as a little-endian signed integer
@@ -30,7 +30,7 @@ class GolangTime(interface.DateTimeValues):
       where -1 represents UTC
   """
   _GOLANG_TO_POSIX_BASE = (
-      (1969*365 + 1969//4 - 1969//100 + 1969//400) * 
+      (1969*365 + 1969//4 - 1969//100 + 1969//400) *
       definitions.SECONDS_PER_DAY
   )
 
@@ -53,7 +53,7 @@ class GolangTime(interface.DateTimeValues):
       self._time_zone_offset = time_zone_offset
     self._seconds = seconds
     self._nanoseconds = nanoseconds
-    
+
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -65,16 +65,16 @@ class GolangTime(interface.DateTimeValues):
           determined.
     """
     if self._normalized_timestamp is None:
-      if (self._seconds is not None and 
+      if (self._seconds is not None and
           self._seconds >= self._GOLANG_TO_POSIX_BASE and
           self._nanoseconds is not None and self._nanoseconds >= 0):
-        
+
         self._normalized_timestamp = decimal.Decimal(
             self._seconds - GolangTime._GOLANG_TO_POSIX_BASE)
 
         if self._nanoseconds is not None and self._nanoseconds >= 0:
           self._normalized_timestamp += (
-              decimal.Decimal(self._nanoseconds) / 
+              decimal.Decimal(self._nanoseconds) /
               definitions.NANOSECONDS_PER_SECOND
           )
 
@@ -130,7 +130,7 @@ class GolangTime(interface.DateTimeValues):
       return None
 
     seconds = self._seconds
-    nanoseconds_seconds, remainder = divmod(self._nanoseconds, 
+    nanoseconds_seconds, remainder = divmod(self._nanoseconds,
         definitions.NANOSECONDS_PER_SECOND
     )
 

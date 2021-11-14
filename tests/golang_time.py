@@ -17,9 +17,9 @@ class GolangEpochTest(unittest.TestCase):
 
   def testEpochDate(self):
     golang_epoch = golang_time.GolangTimeEpoch()
-    self.assertEquals(golang_epoch.year, 1)
-    self.assertEquals(golang_epoch.month, 1)
-    self.assertEquals(golang_epoch.day_of_month, 1)
+    self.assertEqual(golang_epoch.year, 1)
+    self.assertEqual(golang_epoch.month, 1)
+    self.assertEqual(golang_epoch.day_of_month, 1)
 
 
 class GolangTest(unittest.TestCase):
@@ -131,4 +131,3 @@ class GolangTest(unittest.TestCase):
 
     date_time_string = golang_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2000-01-01 12:23:45.000056')
-

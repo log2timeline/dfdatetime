@@ -12,6 +12,8 @@ class Serializer(object):
   def ConvertDictToDateTimeValues(cls, json_dict):
     """Converts a JSON dict into a date time values object.
 
+    This method is deprecated use ConvertJSONToDateTimeValues instead.
+
     The dictionary of the JSON serialized objects consists of:
     {
         '__type__': 'DateTimeValues'
@@ -29,31 +31,13 @@ class Serializer(object):
     Returns:
       dfdatetime.DateTimeValues: date and time values.
     """
-    class_name = json_dict.get('__class_name__', None)
-    if class_name:
-      del json_dict['__class_name__']
-
-    # Remove the class type from the JSON dict since we cannot pass it.
-    del json_dict['__type__']
-
-    is_local_time = json_dict.get('is_local_time', None)
-    if is_local_time is not None:
-      del json_dict['is_local_time']
-
-    if class_name in ('InvalidTime', 'Never', 'NotSet'):
-      string = json_dict.get('string', None)
-      if string is not None:
-        del json_dict['string']
-
-    date_time = factory.Factory.NewDateTimeValues(class_name, **json_dict)
-    if is_local_time:
-      date_time.is_local_time = is_local_time
-
-    return date_time
+    return cls.ConvertJSONToDateTimeValues(json_dict)
 
   @classmethod
   def ConvertDateTimeValuesToDict(cls, date_time_values):
     """Converts a date and time values object into a JSON dictionary.
+
+    This method is deprecated use ConvertDateTimeValuesToJSON instead.
 
     The resulting dictionary of the JSON serialized objects consists of:
     {
@@ -78,6 +62,29 @@ class Serializer(object):
     if not isinstance(date_time_values, interface.DateTimeValues):
       raise TypeError
 
+    return cls.ConvertDateTimeValuesToJSON(date_time_values)
+
+  @classmethod
+  def ConvertDateTimeValuesToJSON(cls, date_time_values):
+    """Converts a date and time values object into a JSON dictionary.
+
+    The resulting dictionary of the JSON serialized objects consists of:
+    {
+        '__type__': 'DateTimeValues'
+        '__class_name__': 'RFC2579DateTime'
+        ...
+    }
+
+    Here '__type__' indicates the object base type. In this case
+    'DateTimeValues'. The rest of the elements of the dictionary make up the
+    date and time value object properties.
+
+    Args:
+      date_time_values (dfdatetime.DateTimeValues): date and time values.
+
+    Returns:
+      dict[str, object]: JSON serialized objects.
+    """
     class_name = type(date_time_values).__name__
 
     json_dict = {
@@ -127,3 +134,46 @@ class Serializer(object):
       json_dict['is_local_time'] = True
 
     return json_dict
+
+  @classmethod
+  def ConvertJSONToDateTimeValues(cls, json_dict):
+    """Converts a JSON dict into a date time values object.
+
+    The dictionary of the JSON serialized objects consists of:
+    {
+        '__type__': 'DateTimeValues'
+        '__class_name__': 'RFC2579DateTime'
+        ...
+    }
+
+    Here '__type__' indicates the object base type. In this case this should
+    be 'DateTimeValues'. The rest of the elements of the dictionary make up the
+    date time values object properties.
+
+    Args:
+      json_dict (dict[str, object]): JSON serialized objects.
+
+    Returns:
+      dfdatetime.DateTimeValues: date and time values.
+    """
+    class_name = json_dict.get('__class_name__', None)
+    if class_name:
+      del json_dict['__class_name__']
+
+    # Remove the class type from the JSON dict since we cannot pass it.
+    del json_dict['__type__']
+
+    is_local_time = json_dict.get('is_local_time', None)
+    if is_local_time is not None:
+      del json_dict['is_local_time']
+
+    if class_name in ('InvalidTime', 'Never', 'NotSet'):
+      string = json_dict.get('string', None)
+      if string is not None:
+        del json_dict['string']
+
+    date_time = factory.Factory.NewDateTimeValues(class_name, **json_dict)
+    if is_local_time:
+      date_time.is_local_time = is_local_time
+
+    return date_time

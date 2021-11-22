@@ -15,8 +15,8 @@ from dfdatetime import time_elements
 class SerializerTest(unittest.TestCase):
   """Tests for the date and time values serializer."""
 
-  def testConvertDateTimeValuesToDict(self):
-    """Test ConvertDateTimeValuesToDict function."""
+  def testConvertDateTimeValuesToJSON(self):
+    """Test ConvertDateTimeValuesToJSON function."""
     posix_time_object = posix_time.PosixTime(timestamp=1281643591)
 
     expected_json_dict = {
@@ -24,7 +24,7 @@ class SerializerTest(unittest.TestCase):
         '__type__': 'DateTimeValues',
         'timestamp': 1281643591}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         posix_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
@@ -36,7 +36,7 @@ class SerializerTest(unittest.TestCase):
         'is_local_time': True,
         'timestamp': 1281643591}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         posix_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
@@ -47,7 +47,7 @@ class SerializerTest(unittest.TestCase):
         '__type__': 'DateTimeValues',
         'string': 'Never'}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         never_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
@@ -58,7 +58,7 @@ class SerializerTest(unittest.TestCase):
         '__type__': 'DateTimeValues',
         'fat_date_time': 2832219404}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         fat_date_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
@@ -71,7 +71,7 @@ class SerializerTest(unittest.TestCase):
         'rfc2579_date_time_tuple': (2010, 8, 12, 20, 6, 31, 6),
         'time_zone_offset': 120}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         rfc2579_date_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
@@ -83,7 +83,7 @@ class SerializerTest(unittest.TestCase):
         '__type__': 'DateTimeValues',
         'time_elements_tuple': (2010, 8, 12, 20, 6, 31)}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         time_elements_object)
     self.assertEqual(json_dict, expected_json_dict)
 
@@ -95,7 +95,7 @@ class SerializerTest(unittest.TestCase):
         '__type__': 'DateTimeValues',
         'time_elements_tuple': (2010, 8, 12, 20, 6, 31, 546)}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         time_elements_object)
     self.assertEqual(json_dict, expected_json_dict)
 
@@ -107,9 +107,11 @@ class SerializerTest(unittest.TestCase):
         '__type__': 'DateTimeValues',
         'time_elements_tuple': (2010, 8, 12, 20, 6, 31, 429876)}
 
-    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         time_elements_object)
     self.assertEqual(json_dict, expected_json_dict)
+
+  # TODO: add tests for ConvertJSONToDateTimeValues
 
 
 if __name__ == '__main__':

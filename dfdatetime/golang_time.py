@@ -23,14 +23,19 @@ class GolangTime(interface.DateTimeValues):
   Depending on the version of the timestamp, the timezone is stored with
   precision in minutes or seconds relative to UTC.
 
-  A marshalled Golang timestamp is a 15 byte value consisting of 4 values:
+  A marshalled version 1 Golang timestamp is a 15 byte value consisting of 4
+  values:
 
   * byte 0 - version as an 8-bit integer.
   * bytes 1-8 - seconds as a little-endian signed integer.
   * bytes 9-12 - nanoseconds as a little-endian signed integer.
   * bytes 13-14 - timezone offset in minutes as a 16-bit little endian integer,
       where -1 represents UTC.
-  * bytes 15 - timezone offset in seconds as an 8-bit integer.
+
+  A marshalled version 2 Golang timestamp has the same values as version 1 with
+  the following additional value:
+
+  * byte 15 - timezone offset in seconds as an 8-bit integer.
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time

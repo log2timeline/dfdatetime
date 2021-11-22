@@ -20,7 +20,7 @@ class GolangTime(interface.DateTimeValues):
   """Golang time.Time timestamp.
 
   A Golang timestamp is a UTC value with precision of nanoseconds since 1/1/1.
-  Depending on the version of the timestamp, the timezone is stored with 
+  Depending on the version of the timestamp, the timezone is stored with
   precision in minutes or seconds relative to UTC.
 
   A marshalled Golang timestamp is a 15 byte value consisting of 4 values:
@@ -45,10 +45,10 @@ class GolangTime(interface.DateTimeValues):
 
   _EPOCH = GolangTimeEpoch()
 
-  def __init__(self, 
-      seconds=None, 
-      nanoseconds=None, 
-      time_zone_offset=None, 
+  def __init__(self,
+      seconds=None,
+      nanoseconds=None,
+      time_zone_offset=None,
       time_zone_seconds=None):
     """Initializes a Golang timestamp.
 

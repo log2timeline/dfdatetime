@@ -208,7 +208,7 @@ Storage granularity | 1 nanosecond
 Time zone | internally represented.
 
 The granularity of the time zone value depends on the version of the timestamp.
-Version 1 timestamps are stored in minutes and version 2 timestamps add a 
+Version 1 timestamps are stored in minutes and version 2 timestamps add a
 seconds component.
 
 ### Format
@@ -218,11 +218,11 @@ Offset | Size | Description
 0 | 1 | version (valid values are 1 or 2)
 1 | 8 | seconds since epoch as a 64-bit big-endian signed integer
 9 | 4 | nanoseconds as a 32-bit big-endian signed integer
-13 | 2 | timezone offset in minutes as a 16-bit big endian signed integer. 
+13 | 2 | timezone offset in minutes as a 16-bit big endian signed integer.
 14 | 1 | timezone offset in seconds (only for version 2)
 
 A value of -1 is a special value when the Time instance is initialised as UTC
-(e.g. ```time.Date(1970, time.January, 1, 0, 0, 0, 0, time.UTC)```). 
+(e.g. ```time.Date(1970, time.January, 1, 0, 0, 0, 0, time.UTC)```).
 
  ### Also see
 

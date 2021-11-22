@@ -76,6 +76,14 @@ dfdatetime.filetime module
    :undoc-members:
    :show-inheritance:
 
+dfdatetime.golang\_time module
+------------------------------
+
+.. automodule:: dfdatetime.golang_time
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 dfdatetime.hfs\_time module
 ---------------------------
 

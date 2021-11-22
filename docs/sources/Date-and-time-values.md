@@ -197,6 +197,37 @@ SetFileTime Windows API function are overloaded with a special meaning.
 
 * [MSDN: FILETIME](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
 
+## Golang timestamp
+
+### Characteristics
+
+Attribute | Description
+--- | ---
+Supported date range | 0001-01-01 00:00:00.0000000 through ...
+Storage granularity | 1 nanosecond
+Time zone | internally represented.
+
+The granularity of the time zone value depends on the version of the timestamp.
+Version 1 timestamps are stored in minutes and version 2 timestamps add a 
+seconds component.
+
+### Format
+
+Offset | Size | Description
+--- | --- | ---
+0 | 1 | version (valid values are 1 or 2)
+1 | 8 | seconds since epoch as a 64-bit big-endian signed integer
+9 | 4 | nanoseconds as a 32-bit big-endian signed integer
+13 | 2 | timezone offset in minutes as a 16-bit big endian signed integer. 
+14 | 1 | timezone offset in seconds (only for version 2)
+
+A value of -1 is a special value when the Time instance is initialised as UTC
+(e.g. ```time.Date(1970, time.January, 1, 0, 0, 0, 0, time.UTC)```). 
+
+ ### Also see
+
+ * [Golang time.go](https://cs.opensource.google/go/go/+/master:src/time/time.go)
+
 ## HFS timestamp
 
 Sometimes a distinction is made between HFS and HFS+ timestamps is that the

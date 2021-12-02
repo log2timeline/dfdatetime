@@ -34,7 +34,7 @@ class GolangTime(interface.DateTimeValues):
   * bytes 13-14 - time zone offset in minutes as a 16-bit little endian integer,
       where -1 represents UTC.
 
-  A serialized version 1 Golang time.Time timestamp is a 16 byte value
+  A serialized version 2 Golang time.Time timestamp is a 16 byte value
   that consists of:
 
   * byte 0 - version as an 8-bit integer.

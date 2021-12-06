@@ -19,67 +19,66 @@ class GolangTimeEpoch(interface.DateTimeEpoch):
 class GolangTime(interface.DateTimeValues):
   """Golang time.Time timestamp.
 
-  A Golang timestamp is a UTC value with precision of nanoseconds since 1/1/1.
-  Depending on the version of the timestamp, the timezone is stored with
-  precision in minutes or seconds relative to UTC.
+  A Golang time.Time timestamp contans the number of nanoseconds since
+  January 1, 1 UTC. Depending on the version of the timestamp, the time
+  zone is stored in minutes or seconds relative to UTC.
 
-  A marshalled version 1 Golang timestamp is a 15 byte value consisting of 4
-  values:
+  A serialized version 1 Golang time.Time timestamp is a 15 byte value
+  that consists of:
 
   * byte 0 - version as an 8-bit integer.
-  * bytes 1-8 - seconds as a little-endian signed integer.
-  * bytes 9-12 - nanoseconds as a little-endian signed integer.
-  * bytes 13-14 - timezone offset in minutes as a 16-bit little endian integer,
+  * bytes 1-8 - number of seconds since January 1, 1 as a little-endian signed
+      integer.
+  * bytes 9-12 - faction of second, number of nanoseconds as a little-endian
+      signed integer.
+  * bytes 13-14 - time zone offset in minutes as a 16-bit little endian integer,
       where -1 represents UTC.
 
-  A marshalled version 2 Golang timestamp has the same values as version 1 with
-  the following additional value:
+  A serialized version 2 Golang time.Time timestamp is a 16 byte value
+  that consists of:
 
-  * byte 15 - timezone offset in seconds as an 8-bit integer.
+  * byte 0 - version as an 8-bit integer.
+  * bytes 1-8 - number of seconds since January 1, 1 as a little-endian signed
+      integer.
+  * bytes 9-12 - faction of second, number of nanoseconds as a little-endian
+      signed integer.
+  * bytes 13-14 - time zone offset in minutes as a 16-bit little endian integer,
+      where -1 represents UTC.
+  * byte 15 - time zone offset in seconds as an 8-bit integer.
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time
   """
 
-  # The delta between January 1, 1970 (unix epoch) and January 1, 0001
+  # The delta between January 1, 1970 (unix epoch) and January 1, 1
   # (Golang epoch)
   _GOLANG_TO_POSIX_BASE = (
-      (1969*365 + 1969//4 - 1969//100 + 1969//400) *
-      definitions.SECONDS_PER_DAY
-  )
+      ((1969 * 365) + (1969 // 4) - (1969 // 100) + (1969 // 400)) *
+      definitions.SECONDS_PER_DAY)
 
   _EPOCH = GolangTimeEpoch()
 
   def __init__(self,
-      seconds=None,
-      nanoseconds=None,
-      time_zone_offset=None,
+      seconds=None, nanoseconds=None, time_zone_offset=None,
       time_zone_seconds=None):
-    """Initializes a Golang timestamp.
+    """Initializes a Golang time.Time timestamp.
 
     Args:
       seconds (Optional[int]): seconds since epoch.
       nanoseconds (Optional[int]): nanoseconds component.
-      time_zone_offset (Optional[int]): the timezone in minutes, -1 is a
+      time_zone_offset (Optional[int]): the time zone in minutes, -1 is a
           special value for UTC (no Location set).
-      time_zone_seconds (Optional[int]): the timezone in seconds.  Only valid
-          for version 2 timezones.
+      time_zone_seconds (Optional[int]): the time zone in seconds. Only valid
+          for version 2 time zones.
     """
-    super(GolangTime, self).__init__(time_zone_offset=time_zone_offset)
-
-    self._precision = definitions.PRECISION_1_NANOSECOND
-
-    if time_zone_offset == -1:
-      self.is_local_time = False
-      self._time_zone_offset = 0
-      self._time_zone_seconds = 0
-    else:
-      self.is_local_time = True
-      self._time_zone_offset = time_zone_offset
-      self._time_zone_seconds = time_zone_seconds
-    self._seconds = seconds
+    super(GolangTime, self).__init__(time_zone_offset=time_zone_offset or 0)
     self._nanoseconds = nanoseconds
+    self._precision = definitions.PRECISION_1_NANOSECOND
+    self._seconds = seconds
+    self._time_zone_seconds = 0
 
+    if time_zone_offset != -1:
+      self._time_zone_seconds = time_zone_seconds
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -101,8 +100,7 @@ class GolangTime(interface.DateTimeValues):
         if self._nanoseconds is not None and self._nanoseconds >= 0:
           self._normalized_timestamp += (
               decimal.Decimal(self._nanoseconds) /
-              definitions.NANOSECONDS_PER_SECOND
-          )
+              definitions.NANOSECONDS_PER_SECOND)
 
     return self._normalized_timestamp
 
@@ -135,8 +133,8 @@ class GolangTime(interface.DateTimeValues):
       raise ValueError('Year value not supported: {0!s}.'.format(year))
 
     seconds = self._GetNumberOfSecondsFromElements(
-        year, month, day_of_month, hours, minutes, seconds
-    )
+        year, month, day_of_month, hours, minutes, seconds)
+
     seconds += self._GOLANG_TO_POSIX_BASE
     nanoseconds = microseconds * definitions.NANOSECONDS_PER_MICROSECOND
 
@@ -157,20 +155,17 @@ class GolangTime(interface.DateTimeValues):
 
     seconds = self._seconds
     nanoseconds_seconds, remainder = divmod(
-        self._nanoseconds, definitions.NANOSECONDS_PER_SECOND
-    )
+        self._nanoseconds, definitions.NANOSECONDS_PER_SECOND)
 
     seconds += nanoseconds_seconds
     remainder = remainder // definitions.NANOSECONDS_PER_MICROSECOND
     number_of_days, hours, minutes, seconds = self._GetTimeValues(seconds)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
-        number_of_days, self._EPOCH
-    )
+        number_of_days, self._EPOCH)
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, remainder
-    )
+        year, month, day_of_month, hours, minutes, seconds, remainder)
 
 
 factory.Factory.RegisterDateTimeValues(GolangTime)

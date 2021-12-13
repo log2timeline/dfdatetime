@@ -2,6 +2,7 @@
 """Golang time.Time time implementation."""
 
 import decimal
+import struct
 
 from dfdatetime import definitions
 from dfdatetime import factory
@@ -27,22 +28,22 @@ class GolangTime(interface.DateTimeValues):
   that consists of:
 
   * byte 0 - version as an 8-bit integer.
-  * bytes 1-8 - number of seconds since January 1, 1 as a little-endian signed
+  * bytes 1-8 - number of seconds since January 1, 1 as a big-endian signed
       integer.
-  * bytes 9-12 - faction of second, number of nanoseconds as a little-endian
+  * bytes 9-12 - fraction of second, number of nanoseconds as a big-endian
       signed integer.
-  * bytes 13-14 - time zone offset in minutes as a 16-bit little endian integer,
+  * bytes 13-14 - time zone offset in minutes as a 16-bit big endian integer,
       where -1 represents UTC.
 
   A serialized version 2 Golang time.Time timestamp is a 16 byte value
   that consists of:
 
   * byte 0 - version as an 8-bit integer.
-  * bytes 1-8 - number of seconds since January 1, 1 as a little-endian signed
+  * bytes 1-8 - number of seconds since January 1, 1 as a big-endian signed
       integer.
-  * bytes 9-12 - faction of second, number of nanoseconds as a little-endian
+  * bytes 9-12 - fraction of second, number of nanoseconds as a big-endian
       signed integer.
-  * bytes 13-14 - time zone offset in minutes as a 16-bit little endian integer,
+  * bytes 13-14 - time zone offset in minutes as a 16-bit big endian integer,
       where -1 represents UTC.
   * byte 15 - time zone offset in seconds as an 8-bit integer.
 
@@ -58,19 +59,23 @@ class GolangTime(interface.DateTimeValues):
 
   _EPOCH = GolangTimeEpoch()
 
-  def __init__(self,
-      seconds=None, nanoseconds=None, time_zone_offset=None,
-      time_zone_seconds=None):
+  def __init__(self, timestamp):
     """Initializes a Golang time.Time timestamp.
 
     Args:
-      seconds (Optional[int]): seconds since epoch.
-      nanoseconds (Optional[int]): nanoseconds component.
-      time_zone_offset (Optional[int]): the time zone in minutes, -1 is a
-          special value for UTC (no Location set).
-      time_zone_seconds (Optional[int]): the time zone in seconds. Only valid
-          for version 2 time zones.
+      timestamp (bytes): the serialized time.Time timestamp
     """
+    if timestamp[0] == 1 and len(timestamp) >= 15:
+      try:
+        values = struct.unpack('>Bqih', timestamp)
+        version, seconds, nanoseconds, time_zone_offset = values
+      except struct.error as err:
+        raise ValueError('Error unpacking timestamp: {0:s}'.format(err))
+    elif timestamp[0] == 2 and len(timestamp) >= 16:
+      raise ValueError('Unsupported Golang timestamp version.')
+    else:
+      raise ValueError('Invalid timestamp.')
+
     super(GolangTime, self).__init__(time_zone_offset=time_zone_offset or 0)
     self._nanoseconds = nanoseconds
     self._precision = definitions.PRECISION_1_NANOSECOND
@@ -78,7 +83,8 @@ class GolangTime(interface.DateTimeValues):
     self._time_zone_seconds = 0
 
     if time_zone_offset != -1:
-      self._time_zone_seconds = time_zone_seconds
+      self._time_zone_seconds = time_zone_offset
+      self.is_local_time = True
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.

@@ -9,6 +9,7 @@ objects to preserve accuracy and precision.
 from dfdatetime import apfs_time
 from dfdatetime import cocoa_time
 from dfdatetime import delphi_date_time
+from dfdatetime import dotnet_datetime
 from dfdatetime import fat_date_time
 from dfdatetime import filetime
 from dfdatetime import hfs_time

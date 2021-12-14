@@ -12,8 +12,8 @@ class DotNetDateTimeEpoch(interface.DateTimeEpoch):
   """.NET DateTime epoch."""
 
   def __init__(self):
-	"""Initializes a .NET DateTime epoch."""
-	super(DotNetDateTimeEpoch, self).__init__(1, 1, 1)
+    """Initializes a .NET DateTime epoch."""
+    super(DotNetDateTimeEpoch, self).__init__(1, 1, 1)
 
 
 class DotNetDateTime(interface.DateTimeValues):
@@ -30,19 +30,19 @@ class DotNetDateTime(interface.DateTimeValues):
 
   # The difference between January 1, 0001 and January 1, 1970 in seconds.
   _DOTNET_TO_POSIX_BASE =  (
-  	  ((1969 * 365) + (1969 // 4) - (1969 // 100) + (1969 // 400)) *
+      ((1969 * 365) + (1969 // 4) - (1969 // 100) + (1969 // 400)) *
       definitions.SECONDS_PER_DAY)
 
 
   def __init__(self, timestamp=None):
-	super(DotNetDateTime, self).__init__(time_zone_offset=0)
-	self._precision = definitions.PRECISION_100_NANOSECONDS
-	self._timestamp = timestamp
+    super(DotNetDateTime, self).__init__(time_zone_offset=0)
+    self._precision = definitions.PRECISION_100_NANOSECONDS
+    self._timestamp = timestamp or 0
 
   @property
   def timestamp(self):
-	"""integer: .NET DateTime timestamp or None if not set."""
-	return self._timestamp
+    """integer: .NET DateTime timestamp or None if not set."""
+    return self._timestamp
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -55,12 +55,12 @@ class DotNetDateTime(interface.DateTimeValues):
     """
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
-	    self._normalized_timestamp = (
-	    	decimal.Decimal(self._timestamp) / self._100NS_PER_SECOND)
-	    self._normalized_timestamp -= self._DOTNET_TO_POSIX_BASE
+        self._normalized_timestamp = (
+            decimal.Decimal(self._timestamp) / self._100NS_PER_SECOND)
+        self._normalized_timestamp -= self._DOTNET_TO_POSIX_BASE
 
-	    if self._time_zone_offset:
-	    	self._normalized_timestamp -= self._time_zone_offset * 60
+        if self._time_zone_offset:
+            self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 
@@ -96,14 +96,14 @@ class DotNetDateTime(interface.DateTimeValues):
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
 
-     timestamp += self._DOTNET_TO_POSIX_BASE
-     timestamp += definitions.MICROSECONDS_PER_SECOND
-     timestamp += microseconds
-     timestamp += self._100NS_PER_MICROSECOND
+    timestamp += self._DOTNET_TO_POSIX_BASE
+    timestamp += definitions.MICROSECONDS_PER_SECOND
+    timestamp += microseconds
+    timestamp += self._100NS_PER_MICROSECOND
 
-     self._normalized_timestamp = None
-     self._timestamp = timestamp
-     self._time_zone_offset = time_zone_offset
+    self._normalized_timestamp = None
+    self._timestamp = timestamp
+    self._time_zone_offset = time_zone_offset
 
   def CopyToDateTimeString(self):
     """Copies the .NET DateTime timestamp to a date and time string.
@@ -112,7 +112,7 @@ class DotNetDateTime(interface.DateTimeValues):
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
           None if the timestamp is missing.
     """
-    if self._timestamp is None or self._timestamp < 0 or
+    if (self._timestamp is None or self._timestamp < 0 or
         self._timestamp > self._UINT64_MAX):
       return None
 

@@ -72,6 +72,15 @@ occurred during that specific hour.
 * [File Times](https://docs.microsoft.com/en-us/windows/win32/sysinfo/file-times)
 * [Precision and accuracy of DateTime](https://docs.microsoft.com/en-us/archive/blogs/ericlippert/precision-and-accuracy-of-datetime), by Eric Lippert, April 8, 2010
 
+## .NET DateTime
+### Characteristics
+
+### Format
+
+### Also see
+
+* [Microsoft: DateTime.Ticks](https://docs.microsoft.com/en-us/dotnet/api/system.datetime.ticks)
+
 ## APFS timestamp
 ### Characteristics
 

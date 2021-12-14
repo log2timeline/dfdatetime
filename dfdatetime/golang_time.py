@@ -66,7 +66,8 @@ class GolangTime(interface.DateTimeValues):
       timestamp (bytes): the serialized time.Time timestamp
 
     Raises:
-      ValueError: when parsing an unsupported or invalid timestamp value.
+      ValueError: when parsing an unsupported (version 2) or invalid timestamp
+          value.
     """
     if timestamp[0] == 1 and len(timestamp) >= 15:
       try:

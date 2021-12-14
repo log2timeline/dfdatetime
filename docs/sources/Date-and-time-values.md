@@ -209,7 +209,7 @@ Time zone | internally represented.
 
 The granularity of the time zone value depends on the version of the timestamp.
 Version 1 timestamps are stored in minutes and version 2 timestamps add a
-seconds component.
+seconds component.  *Note: Version 2 is currently not supported.*
 
 ### Format
 

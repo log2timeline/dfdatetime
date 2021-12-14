@@ -23,7 +23,7 @@ class DotNetDateTimeTest(unittest.TestCase):
   # pylint; disable-protected-access
 
   def testProperties(self):
-  	"""Tests the properties."""
+    """Tests the properties."""
     dotnet_date_time = dotnet_datetime.DotNetDateTime()
     self.assertEqual(dotnet_date_time.timestamp, 0)
 
@@ -33,14 +33,29 @@ class DotNetDateTimeTest(unittest.TestCase):
 
   def testGetNormalizedTimestamp(self):
   	"""Tests the _GetNormalizedTimestamp function."""
-  	pass
+  	dotnet_date_time = dotnet_datetime.DotNetDateTime(
+  		timestamp=637433719321230000)
+  	expected_normalized_timestamp = decimal.Decimal(1607775132123) / 1000
+  	normalized_timestamp = dotnet_date_time._GetNormalizedTimestamp()
+  	self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
-    pass
+    dotnet_date_time = dotnet_datetime.DotNetDateTime()
+
+    dotnet_date_time.CopyFromDateTimeString('2020-12-12')
+    self.assertEqual(dotnet_date_time._timestamp, 637433280000000000)
+    self.assertEqual(dotnet_date_time._time_zone_offset, 0)
+
+    dotnet_date_time.CopyFromDateTimeString('2020-12-12 12:12:12')
+    self.assertEqual(dotnet_date_time._timestamp, 637433719320000000)
+    self.assertEqual(dotnet_date_time._time_zone_offset, 0)
+
+    dotnet_date_time.CopyFromDateTimeString('2020-12-12 12:12:12.123')
+    self.assertEqual(dotnet_date_time._timestamp, 637433719321230000)
+    self.assertEqual(dotnet_date_time._time_zone_offset, 0)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
     pass
 
-  

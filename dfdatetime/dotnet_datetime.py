@@ -87,7 +87,7 @@ class DotNetDateTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', None)
+    microseconds = date_time_values.get('microseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year > 9999:
@@ -95,11 +95,10 @@ class DotNetDateTime(interface.DateTimeValues):
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
-
     timestamp += self._DOTNET_TO_POSIX_BASE
-    timestamp += definitions.MICROSECONDS_PER_SECOND
+    timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += microseconds
-    timestamp += self._100NS_PER_MICROSECOND
+    timestamp *= self._100NS_PER_MICROSECOND
 
     self._normalized_timestamp = None
     self._timestamp = timestamp

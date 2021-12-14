@@ -64,11 +64,14 @@ class GolangTime(interface.DateTimeValues):
 
     Args:
       timestamp (bytes): the serialized time.Time timestamp
+
+    Raises:
+      ValueError: when parsing an unsupported or invalid timestamp value.
     """
     if timestamp[0] == 1 and len(timestamp) >= 15:
       try:
         values = struct.unpack('>Bqih', timestamp)
-        version, seconds, nanoseconds, time_zone_offset = values
+        _, seconds, nanoseconds, time_zone_offset = values
       except struct.error as err:
         raise ValueError('Error unpacking timestamp: {0:s}'.format(err))
     elif timestamp[0] == 2 and len(timestamp) >= 16:
@@ -172,6 +175,6 @@ class GolangTime(interface.DateTimeValues):
 
     return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
         year, month, day_of_month, hours, minutes, seconds, remainder)
-
+ 
 
 factory.Factory.RegisterDateTimeValues(GolangTime)

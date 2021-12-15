@@ -28,7 +28,7 @@ class DotNetDateTimeTest(unittest.TestCase):
     self.assertEqual(dotnet_date_time.timestamp, 0)
 
     dotnet_date_time = dotnet_datetime.DotNetDateTime(
-	    timestamp=637751130027210000)
+        timestamp=637751130027210000)
     self.assertEqual(dotnet_date_time.timestamp, 637751130027210000)
 
   def testGetNormalizedTimestamp(self):
@@ -57,4 +57,20 @@ class DotNetDateTimeTest(unittest.TestCase):
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
-    # TODO
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(
+        timestamp=637433280000000000)
+
+    dotnet_date_string = dotnet_date_time.CopyToDateTimeString()
+    self.assertEqual(dotnet_date_string, '2020-12-12 00:00:00.0000000')
+
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(
+        timestamp=637433719320000000)
+
+    dotnet_date_string = dotnet_date_time.CopyToDateTimeString()
+    self.assertEqual(dotnet_date_string, '2020-12-12 12:12:12.0000000')
+
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(
+        timestamp=637433719321230000)
+
+    dotnet_date_string = dotnet_date_time.CopyToDateTimeString()
+    self.assertEqual(dotnet_date_string, '2020-12-12 12:12:12.1230000')

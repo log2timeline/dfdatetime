@@ -20,7 +20,7 @@ class DotNetDateTimeEpochTest(unittest.TestCase):
 class DotNetDateTimeTest(unittest.TestCase):
   """Tests for the ,NET DateTime timestamp."""
 
-  # pylint; disable-protected-access
+  # pylint: disable=protected-access
 
   def testProperties(self):
     """Tests the properties."""
@@ -32,12 +32,12 @@ class DotNetDateTimeTest(unittest.TestCase):
     self.assertEqual(dotnet_date_time.timestamp, 637751130027210000)
 
   def testGetNormalizedTimestamp(self):
-  	"""Tests the _GetNormalizedTimestamp function."""
-  	dotnet_date_time = dotnet_datetime.DotNetDateTime(
-  		timestamp=637433719321230000)
-  	expected_normalized_timestamp = decimal.Decimal(1607775132123) / 1000
-  	normalized_timestamp = dotnet_date_time._GetNormalizedTimestamp()
-  	self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
+    """Tests the _GetNormalizedTimestamp function."""
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(
+        timestamp=637433719321230000)
+    expected_normalized_timestamp = decimal.Decimal(1607775132123) / 1000
+    normalized_timestamp = dotnet_date_time._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 
   def testCopyFromDateTimeString(self):
     """Tests the CopyFromDateTimeString function."""
@@ -57,5 +57,4 @@ class DotNetDateTimeTest(unittest.TestCase):
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
-    pass
-
+    # TODO

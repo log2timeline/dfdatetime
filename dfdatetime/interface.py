@@ -855,6 +855,19 @@ class DateTimeValues(object):
 
     return int(normalized_timestamp)
 
+  def CopyToPosixTimestampWithFractionOfSecond(self):
+    """Copies the date time value to a POSIX timestamp with fraction of second.
+
+    Returns:
+      float: a POSIX timestamp in seconds with fraction of second or None if no
+          timestamp is available.
+    """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None
+
+    return float(normalized_timestamp)
+
   # TODO: remove this method when there is no more need for it in dfvfs.
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.

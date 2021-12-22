@@ -686,6 +686,21 @@ class TimeElementsTest(unittest.TestCase):
     posix_timestamp = time_elements_object.CopyToPosixTimestamp()
     self.assertIsNone(posix_timestamp)
 
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    posix_timestamp = (
+        time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, 1281643591.0)
+
+    time_elements_object = time_elements.TimeElements()
+
+    posix_timestamp = (
+        time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
+
   def testGetDate(self):
     """Tests the GetDate function."""
     time_elements_object = time_elements.TimeElements(
@@ -996,6 +1011,34 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
     date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31.429+00:00')
+
+  def testCopyToPosixTimestamp(self):
+    """Tests the CopyToPosixTimestamp function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
+
+    posix_timestamp = time_elements_object.CopyToPosixTimestamp()
+    self.assertEqual(posix_timestamp, 1281643591)
+
+    time_elements_object = time_elements.TimeElements()
+
+    posix_timestamp = time_elements_object.CopyToPosixTimestamp()
+    self.assertIsNone(posix_timestamp)
+
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
+
+    posix_timestamp = (
+        time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, 1281643591.429)
+
+    time_elements_object = time_elements.TimeElements()
+
+    posix_timestamp = (
+        time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
 
   def testGetDate(self):
     """Tests the GetDate function."""
@@ -1308,6 +1351,34 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31.429876+00:00')
+
+  def testCopyToPosixTimestamp(self):
+    """Tests the CopyToPosixTimestamp function."""
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
+
+    posix_timestamp = time_elements_object.CopyToPosixTimestamp()
+    self.assertEqual(posix_timestamp, 1281643591)
+
+    time_elements_object = time_elements.TimeElements()
+
+    posix_timestamp = time_elements_object.CopyToPosixTimestamp()
+    self.assertIsNone(posix_timestamp)
+
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
+
+    posix_timestamp = (
+        time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, 1281643591.429876)
+
+    time_elements_object = time_elements.TimeElements()
+
+    posix_timestamp = (
+        time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
 
   def testGetDate(self):
     """Tests the GetDate function."""

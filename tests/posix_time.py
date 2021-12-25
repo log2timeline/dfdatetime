@@ -95,6 +95,22 @@ class PosixTimeTest(unittest.TestCase):
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31+00:00')
 
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, 1281643591)
+    self.assertIsNone(fraction_of_second)
+
+    posix_time_object = posix_time.PosixTime()
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
+
   # TODO: remove this method when there is no more need for it in dfvfs.
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
@@ -229,6 +245,23 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
 
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31.546+00:00')
+
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    posix_time_object = posix_time.PosixTimeInMilliseconds(
+        timestamp=1281643591546)
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, 1281643591)
+    self.assertEqual(fraction_of_second, 546)
+
+    posix_time_object = posix_time.PosixTime()
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
 
   # TODO: remove this method when there is no more need for it in dfvfs.
   def testCopyToStatTimeTuple(self):
@@ -368,6 +401,23 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
 
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31.546875+00:00')
+
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=1281643591546875)
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, 1281643591)
+    self.assertEqual(fraction_of_second, 546875)
+
+    posix_time_object = posix_time.PosixTime()
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
 
   # TODO: remove this method when there is no more need for it in dfvfs.
   def testCopyToStatTimeTuple(self):

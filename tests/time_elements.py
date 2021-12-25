@@ -691,15 +691,17 @@ class TimeElementsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElements(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
-    posix_timestamp = (
+    posix_timestamp, fraction_of_second = (
         time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
-    self.assertEqual(posix_timestamp, 1281643591.0)
+    self.assertEqual(posix_timestamp, 1281643591)
+    self.assertIsNone(fraction_of_second)
 
     time_elements_object = time_elements.TimeElements()
 
-    posix_timestamp = (
+    posix_timestamp, fraction_of_second = (
         time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
 
   def testGetDate(self):
     """Tests the GetDate function."""
@@ -1030,15 +1032,17 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElementsInMilliseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
 
-    posix_timestamp = (
+    posix_timestamp, fraction_of_second = (
         time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
-    self.assertEqual(posix_timestamp, 1281643591.429)
+    self.assertEqual(posix_timestamp, 1281643591)
+    self.assertEqual(fraction_of_second, 429)
 
     time_elements_object = time_elements.TimeElements()
 
-    posix_timestamp = (
+    posix_timestamp, fraction_of_second = (
         time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
 
   def testGetDate(self):
     """Tests the GetDate function."""
@@ -1370,15 +1374,17 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElementsInMicroseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
 
-    posix_timestamp = (
+    posix_timestamp, fraction_of_second = (
         time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
-    self.assertEqual(posix_timestamp, 1281643591.429876)
+    self.assertEqual(posix_timestamp, 1281643591)
+    self.assertEqual(fraction_of_second, 429876)
 
     time_elements_object = time_elements.TimeElements()
 
-    posix_timestamp = (
+    posix_timestamp, fraction_of_second = (
         time_elements_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
 
   def testGetDate(self):
     """Tests the GetDate function."""

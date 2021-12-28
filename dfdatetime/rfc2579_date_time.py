@@ -27,7 +27,7 @@ class RFC2579DateTime(interface.DateTimeValues):
   }
 
   Also see:
-    https://tools.ietf.org/html/rfc2579
+    https://datatracker.ietf.org/doc/html/rfc2579
 
   Attributes:
     year (int): year, 0 through 65536.

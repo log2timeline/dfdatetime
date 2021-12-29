@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Golang time.Time time implementation."""
+"""Golang time.Time timestamp implementation."""
 
 import decimal
 import struct

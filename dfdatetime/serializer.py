@@ -100,6 +100,9 @@ class Serializer(object):
     elif class_name == 'FATDateTime':
       json_dict['fat_date_time'] = date_time_values.fat_date_time
 
+    elif class_name == 'GolangTime':
+      json_dict['golang_timestamp'] = date_time_values.golang_timestamp
+
     elif class_name == 'RFC2579DateTime':
       json_dict['rfc2579_date_time_tuple'] = (
           date_time_values.year, date_time_values.month,

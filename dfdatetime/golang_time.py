@@ -52,46 +52,30 @@ class GolangTime(interface.DateTimeValues):
   """
 
   # The delta between January 1, 1970 (unix epoch) and January 1, 1
-  # (Golang epoch)
+  # (Golang epoch).
   _GOLANG_TO_POSIX_BASE = (
       ((1969 * 365) + (1969 // 4) - (1969 // 100) + (1969 // 400)) *
       definitions.SECONDS_PER_DAY)
 
   _EPOCH = GolangTimeEpoch()
 
-  def __init__(self, time_zone_offset=None, timestamp=None):
+  def __init__(self, golang_timestamp=None):
     """Initializes a Golang time.Time timestamp.
 
     Args:
-      time_zone_offset (Optional[int]): time zone offset in number of minutes
-          from UTC or None if not set.
-      timestamp (Optional[bytes]): the serialized time.Time timestamp.
-
-    Raises:
-      ValueError: when parsing an unsupported (version 2) or invalid timestamp
-          value.
+      golang_timestamp (Optional[bytes]): the Golang time.Time timestamp.
     """
-    if timestamp and timestamp[0] == 1 and len(timestamp) >= 15:
-      try:
-        values = struct.unpack('>Bqih', timestamp)
-        _, seconds, nanoseconds, time_zone_offset = values
-      except struct.error as exception:
-        raise ValueError('Error unpacking timestamp: {0:s}'.format(exception))
-        
-    elif timestamp[0] == 2 and len(timestamp) >= 16:
-      raise ValueError('Unsupported Golang timestamp version.')
-      
-    else:
-      raise ValueError('Invalid timestamp.')
+    number_of_seconds, nanoseconds, time_zone_offset = (None, None, None)
+    if golang_timestamp is not None:
+      number_of_seconds, nanoseconds, time_zone_offset = (
+          self._GetNumberOfSeconds(golang_timestamp))
 
-    super(GolangTime, self).__init__(time_zone_offset=time_zone_offset or 0)
+    super(GolangTime, self).__init__(time_zone_offset=time_zone_offset)
     self._nanoseconds = nanoseconds
+    self._number_of_seconds = number_of_seconds
     self._precision = definitions.PRECISION_1_NANOSECOND
-    self._seconds = seconds
-    self._time_zone_seconds = 0
 
     if time_zone_offset != -1:
-      self._time_zone_seconds = time_zone_offset
       self.is_local_time = True
 
   def _GetNormalizedTimestamp(self):
@@ -104,12 +88,12 @@ class GolangTime(interface.DateTimeValues):
           determined.
     """
     if self._normalized_timestamp is None:
-      if (self._seconds is not None and
-          self._seconds >= self._GOLANG_TO_POSIX_BASE and
+      if (self._number_of_seconds is not None and
+          self._number_of_seconds >= self._GOLANG_TO_POSIX_BASE and
           self._nanoseconds is not None and self._nanoseconds >= 0):
 
         self._normalized_timestamp = decimal.Decimal(
-            self._seconds - GolangTime._GOLANG_TO_POSIX_BASE)
+            self._number_of_seconds - GolangTime._GOLANG_TO_POSIX_BASE)
 
         if self._nanoseconds is not None and self._nanoseconds >= 0:
           self._normalized_timestamp += (
@@ -117,6 +101,45 @@ class GolangTime(interface.DateTimeValues):
               definitions.NANOSECONDS_PER_SECOND)
 
     return self._normalized_timestamp
+
+  def _GetNumberOfSeconds(self, golang_timestamp):
+    """Retrieves the number of seconds from a Golang time.Time timestamp.
+
+    Args:
+      golang_timestamp (bytes): the Golang time.Time timestamp.
+
+    Returns:
+      tuple[int, int, int]: number of seconds since January 1, 1 00:00:00,
+          fraction of second in nanoseconds and time zone offset.
+
+    Raises:
+      ValueError: if the Golang time.Time timestamp could not be parsed.
+    """
+    byte_size = len(golang_timestamp)
+    if byte_size < 15:
+      raise ValueError('Unsupported Golang time.Time timestamp.')
+
+    version = golang_timestamp[0]
+    if version not in (1, 2):
+      raise ValueError(
+          'Unsupported Golang time.Time timestamp version: {0:d}.'.format(
+              version))
+
+    if (version == 1 and byte_size != 15) or (version == 2 and byte_size != 16):
+      raise ValueError('Unsupported Golang time.Time timestamp.')
+
+    try:
+      number_of_seconds, nanoseconds, time_zone_offset = struct.unpack(
+          '>qih', golang_timestamp[1:15])
+
+      # TODO: add support for version 2 time zone offset in seconds
+
+    except struct.error as exception:
+      raise ValueError((
+          'Unable to unpacke Golang time.Time timestamp with error: '
+          '{0:s}').format(exception))
+
+    return number_of_seconds, nanoseconds, time_zone_offset
 
   def CopyFromDateTimeString(self, time_string):
     """Copies a date time value from a date and time string.
@@ -153,7 +176,7 @@ class GolangTime(interface.DateTimeValues):
     nanoseconds = microseconds * definitions.NANOSECONDS_PER_MICROSECOND
 
     self._normalized_timestamp = None
-    self._seconds = seconds
+    self._number_of_seconds = seconds
     self._nanoseconds = nanoseconds
     self._time_zone_offset = time_zone_offset
 
@@ -164,10 +187,10 @@ class GolangTime(interface.DateTimeValues):
       str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.######" or
           None if the timestamp cannot be copied to a date and time string.
     """
-    if self._seconds is None or self._seconds < 0:
+    if self._number_of_seconds is None or self._number_of_seconds < 0:
       return None
 
-    seconds = self._seconds
+    seconds = self._number_of_seconds
     nanoseconds_seconds, remainder = divmod(
         self._nanoseconds, definitions.NANOSECONDS_PER_SECOND)
 

@@ -37,17 +37,17 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_time_object._number_of_seconds, 0)
     self.assertEqual(golang_time_object._nanoseconds, 0)
     self.assertEqual(golang_time_object.is_local_time, False)
-    self.assertEqual(golang_time_object._time_zone_offset, -1)
+    self.assertEqual(golang_time_object._time_zone_offset, 0)
 
     golang_timestamp = struct.pack(
-        '>Bqih', 1, golang_time.GolangTime._GOLANG_TO_POSIX_BASE, 0, 0)
+        '>Bqih', 1, golang_time.GolangTime._GOLANG_TO_POSIX_BASE, 0, 1)
     golang_time_object = golang_time.GolangTime(
         golang_timestamp=golang_timestamp)
     self.assertEqual(golang_time_object._number_of_seconds,
                      golang_time.GolangTime._GOLANG_TO_POSIX_BASE)
     self.assertEqual(golang_time_object._nanoseconds, 0)
     self.assertEqual(golang_time_object.is_local_time, True)
-    self.assertEqual(golang_time_object._time_zone_offset, 0)
+    self.assertEqual(golang_time_object._time_zone_offset, 1)
 
     golang_timestamp = bytes.fromhex('010000000e7791f70000000000ffff')
     golang_time_object = golang_time.GolangTime(
@@ -56,7 +56,7 @@ class GolangTest(unittest.TestCase):
                      golang_time.GolangTime._GOLANG_TO_POSIX_BASE)
     self.assertEqual(golang_time_object._nanoseconds, 0)
     self.assertEqual(golang_time_object.is_local_time, False)
-    self.assertEqual(golang_time_object._time_zone_offset, -1)
+    self.assertEqual(golang_time_object._time_zone_offset, 0)
 
   def testGetNormalizedTimestamp(self):
     """Test the _GetNormalizedTimestamp function."""
@@ -100,12 +100,12 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(nanoseconds, 3)
     self.assertEqual(time_zone_offset, 4)
 
-    golang_timestamp = bytes.fromhex('02000000000000000500000006000708')
+    golang_timestamp = bytes.fromhex('02000000000000000500000006ffff08')
     number_of_seconds, nanoseconds, time_zone_offset = (
         golang_time_object._GetNumberOfSeconds(golang_timestamp))
     self.assertEqual(number_of_seconds, 5)
     self.assertEqual(nanoseconds, 6)
-    self.assertEqual(time_zone_offset, 7)
+    self.assertEqual(time_zone_offset, 0)
 
     with self.assertRaises(ValueError):
       golang_timestamp = bytes.fromhex('0100')
@@ -162,7 +162,7 @@ class GolangTest(unittest.TestCase):
 
     self.assertEqual(golang_time_object._number_of_seconds, 63082326225)
     self.assertEqual(golang_time_object._nanoseconds, 567890000)
-    self.assertEqual(golang_time_object._time_zone_offset, -1)
+    self.assertEqual(golang_time_object._time_zone_offset, 0)
 
     date_time_string = golang_time_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2000-01-01 12:23:45.567890')
@@ -173,7 +173,7 @@ class GolangTest(unittest.TestCase):
 
     self.assertEqual(golang_time_object._number_of_seconds, 63082326225)
     self.assertEqual(golang_time_object._nanoseconds, 56789)
-    self.assertEqual(golang_time_object._time_zone_offset, -1)
+    self.assertEqual(golang_time_object._time_zone_offset, 0)
 
     date_time_string = golang_time_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2000-01-01 12:23:45.000056')

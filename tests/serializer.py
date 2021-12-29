@@ -5,6 +5,7 @@
 import unittest
 
 from dfdatetime import fat_date_time
+from dfdatetime import golang_time
 from dfdatetime import posix_time
 from dfdatetime import rfc2579_date_time
 from dfdatetime import semantic_time
@@ -60,6 +61,21 @@ class SerializerTest(unittest.TestCase):
 
     json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         fat_date_time_object)
+    self.assertEqual(json_dict, expected_json_dict)
+
+    golang_timestamp = bytes.fromhex('01000000000000000200000003ffff')
+    golang_time_object = golang_time.GolangTime(
+        golang_timestamp=golang_timestamp)
+
+    expected_json_dict = {
+        '__class_name__': 'GolangTime',
+        '__type__': 'DateTimeValues',
+        'golang_timestamp': (
+            b'\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00\x03\xff\xff'),
+        'time_zone_offset': 0}
+
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
+        golang_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
     rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(

@@ -71,12 +71,18 @@ class GolangTime(interface.DateTimeValues):
           self._GetNumberOfSeconds(golang_timestamp))
 
     super(GolangTime, self).__init__(time_zone_offset=time_zone_offset)
+    self._golang_timestamp = golang_timestamp
     self._nanoseconds = nanoseconds
     self._number_of_seconds = number_of_seconds
     self._precision = definitions.PRECISION_1_NANOSECOND
 
-    if time_zone_offset != -1:
+    if time_zone_offset:
       self.is_local_time = True
+
+  @property
+  def golang_timestamp(self):
+    """int: Golang time.Time timestamp or None if not set."""
+    return self._golang_timestamp
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -110,7 +116,7 @@ class GolangTime(interface.DateTimeValues):
 
     Returns:
       tuple[int, int, int]: number of seconds since January 1, 1 00:00:00,
-          fraction of second in nanoseconds and time zone offset.
+          fraction of second in nanoseconds and time zone offset in minutes.
 
     Raises:
       ValueError: if the Golang time.Time timestamp could not be parsed.
@@ -138,6 +144,10 @@ class GolangTime(interface.DateTimeValues):
       raise ValueError((
           'Unable to unpacke Golang time.Time timestamp with error: '
           '{0:s}').format(exception))
+
+    # A time zone offset of -1 minute is a special representation for UTC.
+    if time_zone_offset == -1:
+      time_zone_offset = 0
 
     return number_of_seconds, nanoseconds, time_zone_offset
 

@@ -59,24 +59,28 @@ class GolangTime(interface.DateTimeValues):
 
   _EPOCH = GolangTimeEpoch()
 
-  def __init__(self, timestamp):
+  def __init__(self, time_zone_offset=None, timestamp=None):
     """Initializes a Golang time.Time timestamp.
 
     Args:
-      timestamp (bytes): the serialized time.Time timestamp
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
+      timestamp (Optional[bytes]): the serialized time.Time timestamp.
 
     Raises:
       ValueError: when parsing an unsupported (version 2) or invalid timestamp
           value.
     """
-    if timestamp[0] == 1 and len(timestamp) >= 15:
+    if timestamp and timestamp[0] == 1 and len(timestamp) >= 15:
       try:
         values = struct.unpack('>Bqih', timestamp)
         _, seconds, nanoseconds, time_zone_offset = values
-      except struct.error as err:
-        raise ValueError('Error unpacking timestamp: {0:s}'.format(err))
+      except struct.error as exception:
+        raise ValueError('Error unpacking timestamp: {0:s}'.format(exception))
+        
     elif timestamp[0] == 2 and len(timestamp) >= 16:
       raise ValueError('Unsupported Golang timestamp version.')
+      
     else:
       raise ValueError('Invalid timestamp.')
 

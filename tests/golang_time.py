@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Tests for the Golang timestamp implementation."""
+"""Tests for the Golang time.Time timestamp implementation."""
 
 import decimal
 import struct
@@ -68,8 +68,7 @@ class GolangTest(unittest.TestCase):
 
     normalized_timestamp = golang_object._GetNormalizedTimestamp()
     self.assertEqual(
-        normalized_timestamp, decimal.Decimal('1636884149.711098348')
-    )
+        normalized_timestamp, decimal.Decimal('1636884149.711098348'))
 
     timestamp = bytes.fromhex('010000000e7791f70000000000ffff')
     golang_object = golang_time.GolangTime(timestamp)
@@ -117,7 +116,6 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_object._seconds, 63082326225)
     self.assertEqual(golang_object._nanoseconds, 567890000)
     self.assertEqual(golang_object._time_zone_offset, 60)
-
 
   def testCopyToDateTimeString(self):
     """Test the CopyToDateTimeString function."""

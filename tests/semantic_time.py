@@ -85,6 +85,22 @@ class SemanticTimeTest(unittest.TestCase):
     date_time_string = semantic_time_object.CopyToDateTimeStringISO8601()
     self.assertIsNone(date_time_string)
 
+  def testCopyToPosixTimestamp(self):
+    """Tests the CopyToPosixTimestamp function."""
+    semantic_time_object = semantic_time.SemanticTime()
+
+    posix_timestamp = semantic_time_object.CopyToPosixTimestamp()
+    self.assertIsNone(posix_timestamp)
+
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    semantic_time_object = semantic_time.SemanticTime()
+
+    posix_timestamp, fraction_of_second = (
+        semantic_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
+
   def testCopyToStatTimeTuple(self):
     """Tests the CopyToStatTimeTuple function."""
     semantic_time_object = semantic_time.SemanticTime()

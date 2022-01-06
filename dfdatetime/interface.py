@@ -61,10 +61,9 @@ class DateTimeValues(object):
 
   _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()
 
-  _100NS_PER_SECOND = 10000000
-  _100NS_PER_DECISECOND = 1000000
-  _100NS_PER_MILLISECOND = 10000
-  _100NS_PER_MICROSECOND = 10
+  _100_MILLISECONDS_PER_SECOND = 10
+  _100_NANOSECONDS_PER_SECOND = 10000000
+  _100_NANOSECONDS_PER_MICROSECOND = 10
 
   _INT64_MIN = -(1 << 63)
   _INT64_MAX = (1 << 63) - 1
@@ -855,6 +854,36 @@ class DateTimeValues(object):
 
     return int(normalized_timestamp)
 
+  def CopyToPosixTimestampWithFractionOfSecond(self):
+    """Copies the date time value to a POSIX timestamp with fraction of second.
+
+    Returns:
+      tuple[int, int]: a POSIX timestamp in seconds with fraction of second or
+          None, None if no timestamp is available.
+    """
+    normalized_timestamp = self._GetNormalizedTimestamp()
+    if normalized_timestamp is None:
+      return None, None
+
+    remainder = None
+    if self._precision == definitions.PRECISION_1_NANOSECOND:
+      remainder = int(
+          (normalized_timestamp % 1) * definitions.NANOSECONDS_PER_SECOND)
+    elif self._precision == definitions.PRECISION_100_NANOSECONDS:
+      remainder = int(
+          (normalized_timestamp % 1) * self._100_NANOSECONDS_PER_SECOND)
+    elif self._precision == definitions.PRECISION_1_MICROSECOND:
+      remainder = int(
+          (normalized_timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
+    elif self._precision == definitions.PRECISION_1_MILLISECOND:
+      remainder = int(
+          (normalized_timestamp % 1) * definitions.MILLISECONDS_PER_SECOND)
+    elif self._precision == definitions.PRECISION_100_MILLISECONDS:
+      remainder = int(
+          (normalized_timestamp % 1) * self._100_MILLISECONDS_PER_SECOND)
+
+    return int(normalized_timestamp), remainder
+
   # TODO: remove this method when there is no more need for it in dfvfs.
   def CopyToStatTimeTuple(self):
     """Copies the date time value to a stat timestamp tuple.
@@ -873,7 +902,8 @@ class DateTimeValues(object):
         definitions.PRECISION_1_MICROSECOND,
         definitions.PRECISION_1_MILLISECOND,
         definitions.PRECISION_100_MILLISECONDS):
-      remainder = int((normalized_timestamp % 1) * self._100NS_PER_SECOND)
+      remainder = int(
+          (normalized_timestamp % 1) * self._100_NANOSECONDS_PER_SECOND)
 
       return int(normalized_timestamp), remainder
 

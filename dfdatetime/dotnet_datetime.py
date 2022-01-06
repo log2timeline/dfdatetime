@@ -115,7 +115,8 @@ class DotNetDateTime(interface.DateTimeValues):
         self._timestamp > self._UINT64_MAX):
       return None
 
-    timestamp, remainder = divmod(self._timestamp, self._100_NANOSECONDS_PER_SECOND)
+    timestamp, remainder = divmod(
+        self._timestamp, self._100_NANOSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(

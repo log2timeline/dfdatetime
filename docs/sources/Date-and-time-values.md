@@ -75,7 +75,16 @@ occurred during that specific hour.
 ## .NET DateTime
 ### Characteristics
 
+Attribute | Description
+--- | ---
+Supported date range | ...
+Storage granularity | 100 nanoseconds
+Time zone | externally represented, typically UTC
+
 ### Format
+
+Offset | Size | Description
+0 | 4 or 8 | timestamp, little endian integer value containing the number of 100 nanosecond intervals since 1/1/0001 00:00:00.0000000
 
 ### Also see
 

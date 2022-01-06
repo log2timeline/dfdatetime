@@ -56,7 +56,7 @@ class DotNetDateTime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if self._timestamp is not None:
         self._normalized_timestamp = (
-            decimal.Decimal(self._timestamp) / self._100NS_PER_SECOND)
+            decimal.Decimal(self._timestamp) / self._100_NANOSECONDS_PER_SECOND)
         self._normalized_timestamp -= self._DOTNET_TO_POSIX_BASE
 
         if self._time_zone_offset:
@@ -98,7 +98,7 @@ class DotNetDateTime(interface.DateTimeValues):
     timestamp += self._DOTNET_TO_POSIX_BASE
     timestamp *= definitions.MICROSECONDS_PER_SECOND
     timestamp += microseconds
-    timestamp *= self._100NS_PER_MICROSECOND
+    timestamp *= self._100_NANOSECONDS_PER_MICROSECOND
 
     self._normalized_timestamp = None
     self._timestamp = timestamp
@@ -115,7 +115,7 @@ class DotNetDateTime(interface.DateTimeValues):
         self._timestamp > self._UINT64_MAX):
       return None
 
-    timestamp, remainder = divmod(self._timestamp, self._100NS_PER_SECOND)
+    timestamp, remainder = divmod(self._timestamp, self._100_NANOSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(

@@ -19,7 +19,7 @@ environment:
     HOMEBREW_NO_INSTALL_CLEANUP: 1
 
 install:
-- cmd: "%PYTHON%\\python.exe -m pip install -U pip setuptools wheel"
+- cmd: "%PYTHON%\\python.exe -m pip install -U pip setuptools twine wheel"
 - cmd: "%PYTHON%\\python.exe -m pip install pywin32 WMI"
 - cmd: "%PYTHON%\\python.exe %PYTHON%\\Scripts\\pywin32_postinstall.py -install"
 - ps: If ($isWindows) { .\config\appveyor\install.ps1 }
@@ -39,6 +39,5 @@ artifacts:
 - path: dist\*.whl
 
 deploy_script:
-- ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -And $isWindows) {
+- ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -And $isWindows -And $env:MACHINE_TYPE -eq "x86") {
     Invoke-Expression "${env:PYTHON}\\python.exe -m twine upload dist/*.whl --username __token__ --password ${env:PYPI_TOKEN} --skip-existing" }
-

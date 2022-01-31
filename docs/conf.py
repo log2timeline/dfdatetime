@@ -58,7 +58,7 @@ napoleon_include_special_with_doc = True
 # General information about the project.
 # pylint: disable=redefined-builtin
 project = 'dfDateTime'
-copyright = 'The dfDateTime Project Authors'
+copyright = 'The dfDateTime authors'
 version = dfdatetime.__version__
 release = dfdatetime.__version__
 

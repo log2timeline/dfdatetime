@@ -20,7 +20,7 @@ class GolangTimeEpoch(interface.DateTimeEpoch):
 class GolangTime(interface.DateTimeValues):
   """Golang time.Time timestamp.
 
-  A Golang time.Time timestamp contans the number of nanoseconds since
+  A Golang time.Time timestamp contains the number of nanoseconds since
   January 1, 1 UTC. Depending on the version of the timestamp, the time
   zone is stored in minutes or seconds relative to UTC.
 
@@ -142,7 +142,7 @@ class GolangTime(interface.DateTimeValues):
 
     except struct.error as exception:
       raise ValueError((
-          'Unable to unpacke Golang time.Time timestamp with error: '
+          'Unable to unpacked Golang time.Time timestamp with error: '
           '{0:s}').format(exception))
 
     # A time zone offset of -1 minute is a special representation for UTC.

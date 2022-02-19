@@ -74,3 +74,7 @@ class DotNetDateTimeTest(unittest.TestCase):
 
     dotnet_date_string = dotnet_date_time.CopyToDateTimeString()
     self.assertEqual(dotnet_date_string, '2020-12-12 12:12:12.1230000')
+
+
+if __name__ == '__main__':
+  unittest.main()

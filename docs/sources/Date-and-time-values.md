@@ -72,6 +72,25 @@ occurred during that specific hour.
 * [File Times](https://docs.microsoft.com/en-us/windows/win32/sysinfo/file-times)
 * [Precision and accuracy of DateTime](https://docs.microsoft.com/en-us/archive/blogs/ericlippert/precision-and-accuracy-of-datetime), by Eric Lippert, April 8, 2010
 
+## .NET DateTime
+### Characteristics
+
+Attribute | Description
+--- | ---
+Supported date range | 0001-01-01 00:00:00 through 9999-12-31 23:59:59
+Storage granularity | 100 nanoseconds
+Time zone | externally represented, typically UTC
+
+### Format
+
+Offset | Size | Description
+0 | 4 or 8 | timestamp, little endian integer value containing the number of 100 nanosecond intervals since January 1, 0001 00:00:00.0000000
+
+### Also see
+
+* [Microsoft: DateTime struct](https://docs.microsoft.com/en-us/dotnet/api/system.datetime?view=net-6.0)
+* [Microsoft: DateTime.Ticks](https://docs.microsoft.com/en-us/dotnet/api/system.datetime.ticks)
+
 ## APFS timestamp
 ### Characteristics
 

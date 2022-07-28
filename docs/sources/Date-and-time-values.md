@@ -180,6 +180,21 @@ Offset | Size | Description
 * [Wikipedia: File Allocation Table](https://en.wikipedia.org/wiki/File_Allocation_Table)
 * [DosDateTimeToFileTime function](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-dosdatetimetofiletime)
 
+## FAT timestamp
+### Characteristics
+
+Attribute | Description
+--- | ---
+Supported date range | 1980-01-01 00:00:00.00 through 2107-12-31 23:59:58.99
+Storage granularity | 10 milliseconds
+Time zone | externally represented
+
+### Format
+
+Offset | Size | Description
+--- | --- | ---
+0 | 8 | timestamp, integer value containing the number of 10 milliseconds intervals after 1980-01-01 00:00:00.00 (or FAT date time epoch)
+
 ## FILETIME
 ### Characteristics
 

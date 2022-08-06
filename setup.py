@@ -188,6 +188,7 @@ setup(
     version=dfdatetime.__version__,
     description=dfdatetime_description,
     long_description=dfdatetime_long_description,
+    long_description_content_type='text/plain',
     license='Apache License, Version 2.0',
     url='https://github.com/log2timeline/dfdatetime',
     maintainer='Log2Timeline maintainers',

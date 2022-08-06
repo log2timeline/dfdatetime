@@ -44,6 +44,14 @@ dfdatetime.delphi\_date\_time module
    :undoc-members:
    :show-inheritance:
 
+dfdatetime.dotnet\_datetime module
+----------------------------------
+
+.. automodule:: dfdatetime.dotnet_datetime
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 dfdatetime.factory module
 -------------------------
 

@@ -251,7 +251,7 @@ class FATTimestampTest(unittest.TestCase):
     fat_timestamp, fraction_of_second = (
         fat_timestamp_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertEqual(fat_timestamp, 1625868690)
-    self.assertIsNone(fraction_of_second)
+    self.assertEqual(fraction_of_second, 24)
 
     fat_timestamp_object = fat_date_time.FATTimestamp()
 

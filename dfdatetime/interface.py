@@ -62,7 +62,15 @@ class DateTimeValues(object):
   _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()
 
   _100_MILLISECONDS_PER_SECOND = 10
+  _10_MILLISECONDS_PER_SECOND = 100
+  _1_MILLISECOND_PER_SECOND = 1000
+  _100_MICROSECONDS_PER_SECOND = 10000
+  _10_MICROSECONDS_PER_SECOND = 100000
+  _1_MICROSECOND_PER_SECOND = 1000000
   _100_NANOSECONDS_PER_SECOND = 10000000
+  _10_NANOSECONDS_PER_SECOND = 100000000
+  _1_NANOSECOND_PER_SECOND = definitions.NANOSECONDS_PER_SECOND
+
   _100_NANOSECONDS_PER_MICROSECOND = 10
 
   _INT64_MIN = -(1 << 63)
@@ -71,6 +79,17 @@ class DateTimeValues(object):
   _UINT32_MAX = (1 << 32) - 1
   _UINT60_MAX = (1 << 60) - 1
   _UINT64_MAX = (1 << 64) - 1
+
+  _REMAINDER_MULTIPLIER = {
+      definitions.PRECISION_1_MILLISECOND: _1_MILLISECOND_PER_SECOND,
+      definitions.PRECISION_10_MILLISECONDS: _10_MILLISECONDS_PER_SECOND,
+      definitions.PRECISION_100_MILLISECONDS: _100_MILLISECONDS_PER_SECOND,
+      definitions.PRECISION_1_MICROSECOND: _1_MICROSECOND_PER_SECOND,
+      definitions.PRECISION_10_MICROSECONDS: _10_MICROSECONDS_PER_SECOND,
+      definitions.PRECISION_100_MICROSECONDS: _100_MICROSECONDS_PER_SECOND,
+      definitions.PRECISION_1_NANOSECOND: _1_NANOSECOND_PER_SECOND,
+      definitions.PRECISION_10_NANOSECONDS: _10_NANOSECONDS_PER_SECOND,
+      definitions.PRECISION_100_NANOSECONDS: _100_NANOSECONDS_PER_SECOND}
 
   def __init__(self, time_zone_offset=None):
     """Initializes date time values.
@@ -865,22 +884,11 @@ class DateTimeValues(object):
     if normalized_timestamp is None:
       return None, None
 
-    remainder = None
-    if self._precision == definitions.PRECISION_1_NANOSECOND:
-      remainder = int(
-          (normalized_timestamp % 1) * definitions.NANOSECONDS_PER_SECOND)
-    elif self._precision == definitions.PRECISION_100_NANOSECONDS:
-      remainder = int(
-          (normalized_timestamp % 1) * self._100_NANOSECONDS_PER_SECOND)
-    elif self._precision == definitions.PRECISION_1_MICROSECOND:
-      remainder = int(
-          (normalized_timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
-    elif self._precision == definitions.PRECISION_1_MILLISECOND:
-      remainder = int(
-          (normalized_timestamp % 1) * definitions.MILLISECONDS_PER_SECOND)
-    elif self._precision == definitions.PRECISION_100_MILLISECONDS:
-      remainder = int(
-          (normalized_timestamp % 1) * self._100_MILLISECONDS_PER_SECOND)
+    remainder_multiplier = self._REMAINDER_MULTIPLIER.get(self._precision, None)
+    if remainder_multiplier:
+      remainder = int((normalized_timestamp % 1) * remainder_multiplier)
+    else:
+      remainder = None
 
     return int(normalized_timestamp), remainder
 

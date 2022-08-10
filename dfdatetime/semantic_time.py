@@ -183,15 +183,6 @@ class SemanticTime(interface.DateTimeValues):
     """
     return None
 
-  def CopyToStatTimeTuple(self):
-    """Copies the semantic timestamp to a stat timestamp tuple.
-
-    Returns:
-      tuple[int, int]: a POSIX timestamp in seconds and the remainder in
-          100 nano seconds, which will always be None, None.
-    """
-    return None, None
-
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with plaso.
 

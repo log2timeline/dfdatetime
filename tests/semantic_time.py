@@ -101,13 +101,6 @@ class SemanticTimeTest(unittest.TestCase):
     self.assertIsNone(posix_timestamp)
     self.assertIsNone(fraction_of_second)
 
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    semantic_time_object = semantic_time.SemanticTime()
-
-    stat_time_tuple = semantic_time_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testGetDate(self):
     """Tests the GetDate function."""
     semantic_time_object = semantic_time.SemanticTime()

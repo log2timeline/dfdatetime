@@ -260,19 +260,6 @@ class FATTimestampTest(unittest.TestCase):
     self.assertIsNone(fat_timestamp)
     self.assertIsNone(fraction_of_second)
 
-  # TODO: remove this method when there is no more need for it in dfvfs.
-  def testCopyToStatTimeTuple(self):
-    """Tests the CopyToStatTimeTuple function."""
-    fat_timestamp_object = fat_date_time.FATTimestamp(timestamp=131033589024)
-
-    stat_time_tuple = fat_timestamp_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (1625868690, None))
-
-    fat_timestamp_object = fat_date_time.FATTimestamp()
-
-    stat_time_tuple = fat_timestamp_object.CopyToStatTimeTuple()
-    self.assertEqual(stat_time_tuple, (None, None))
-
   def testGetDate(self):
     """Tests the GetDate function."""
     fat_timestamp_object = fat_date_time.FATTimestamp(timestamp=131033589024)

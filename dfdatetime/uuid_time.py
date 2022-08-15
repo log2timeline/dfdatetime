@@ -33,10 +33,12 @@ class UUIDTime(interface.DateTimeValues):
   # The difference between October 15, 1582 and January 1, 1970 in seconds.
   _UUID_TO_POSIX_BASE = 12219292800
 
-  def __init__(self, time_zone_offset=None, timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes an UUID version 1 timestamp.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
       timestamp (Optional[int]): UUID version 1 timestamp.
@@ -47,8 +49,9 @@ class UUIDTime(interface.DateTimeValues):
     if timestamp and (timestamp < 0 or timestamp > self._UINT60_MAX):
       raise ValueError('Invalid UUID version 1 timestamp.')
 
-    super(UUIDTime, self).__init__(time_zone_offset=time_zone_offset)
-    self._precision = definitions.PRECISION_100_NANOSECONDS
+    super(UUIDTime, self).__init__(
+        precision=precision or definitions.PRECISION_100_NANOSECONDS,
+        time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
 
   @property

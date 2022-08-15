@@ -35,16 +35,19 @@ class OLEAutomationDate(interface.DateTimeValues):
   # The difference between December 30, 1899 and January 1, 1970 in days.
   _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25569
 
-  def __init__(self, time_zone_offset=None, timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes an OLE Automation date.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
       timestamp (Optional[float]): OLE Automation date.
     """
-    super(OLEAutomationDate, self).__init__(time_zone_offset=time_zone_offset)
-    self._precision = definitions.PRECISION_1_MICROSECOND
+    super(OLEAutomationDate, self).__init__(
+        precision=precision or definitions.PRECISION_1_MICROSECOND,
+        time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
 
   @property

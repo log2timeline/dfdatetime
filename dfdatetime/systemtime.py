@@ -37,10 +37,13 @@ class Systemtime(interface.DateTimeValues):
 
   # TODO: make attributes read-only.
 
-  def __init__(self, system_time_tuple=None, time_zone_offset=None):
+  def __init__(
+      self, precision=None, system_time_tuple=None, time_zone_offset=None):
     """Initializes a SYSTEMTIME structure.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       system_time_tuple
           (Optional[tuple[int, int, int, int, int, int, int, int]]):
           system time, contains year, month, day of week, day of month,
@@ -51,9 +54,10 @@ class Systemtime(interface.DateTimeValues):
     Raises:
       ValueError: if the system time is invalid.
     """
-    super(Systemtime, self).__init__(time_zone_offset=time_zone_offset)
+    super(Systemtime, self).__init__(
+        precision=precision or definitions.PRECISION_1_MILLISECOND,
+        time_zone_offset=time_zone_offset)
     self._number_of_seconds = None
-    self._precision = definitions.PRECISION_1_MILLISECOND
     self.day_of_month = None
     self.day_of_week = None
     self.hours = None

@@ -37,16 +37,19 @@ class DelphiDateTime(interface.DateTimeValues):
 
   _EPOCH = DelphiDateTimeEpoch()
 
-  def __init__(self, time_zone_offset=None, timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes a Delphi TDateTime timestamp.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
       timestamp (Optional[float]): Delphi TDateTime timestamp.
     """
-    super(DelphiDateTime, self).__init__(time_zone_offset=time_zone_offset)
-    self._precision = definitions.PRECISION_1_MILLISECOND
+    super(DelphiDateTime, self).__init__(
+        precision=precision or definitions.PRECISION_1_MILLISECOND,
+        time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
 
   @property

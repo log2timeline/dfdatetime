@@ -417,18 +417,6 @@ class TimeElementsTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringRFC('11:57:09', 'XXX')
 
-  def testCopyFromString(self):
-    """Tests the CopyFromString function."""
-    time_elements_object = time_elements.TimeElements()
-
-    expected_time_elements_tuple = (2010, 8, 12, 0, 0, 0)
-    expected_number_of_seconds = 1281571200
-    time_elements_object.CopyFromString('2010-08-12')
-    self.assertEqual(
-        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
-    self.assertEqual(
-        time_elements_object._number_of_seconds, expected_number_of_seconds)
-
   def testCopyFromDatetime(self):
     """Tests the CopyFromDatetime function."""
     time_elements_object = time_elements.TimeElements()

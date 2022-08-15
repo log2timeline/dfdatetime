@@ -183,6 +183,12 @@ dfdatetime_long_description = (
     'dfDateTime, or Digital Forensics date and time, provides date and time '
     'objects to preserve accuracy and precision.')
 
+command_classes = {}
+if BdistMSICommand:
+  command_classes['bdist_msi'] = BdistMSICommand
+if BdistRPMCommand:
+  command_classes['bdist_rpm'] = BdistRPMCommand
+
 setup(
     name='dfdatetime',
     version=dfdatetime.__version__,
@@ -193,9 +199,7 @@ setup(
     url='https://github.com/log2timeline/dfdatetime',
     maintainer='Log2Timeline maintainers',
     maintainer_email='log2timeline-maintainers@googlegroups.com',
-    cmdclass={
-        'bdist_msi': BdistMSICommand,
-        'bdist_rpm': BdistRPMCommand},
+    cmdclass=command_classes,
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',

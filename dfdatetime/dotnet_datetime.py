@@ -19,25 +19,28 @@ class DotNetDateTimeEpoch(interface.DateTimeEpoch):
 class DotNetDateTime(interface.DateTimeValues):
   """.NET DateTime ticks.
 
-  The .NET DateTime timestamp is a 64-bit signed integer that
-  contains the date and time as the number of 100 nanoseconds since
-  12:00 AM January 1, year 1 A.D. in the proleptic Gregorian Calendar.
+  The .NET DateTime timestamp is a 64-bit signed integer that contains the date
+  and time as the number of 100 nanoseconds since 12:00 AM January 1, year
+  1 A.D. in the proleptic Gregorian Calendar.
   """
   _EPOCH = DotNetDateTimeEpoch()
 
-  # The difference between January 1, 0001 and January 1, 1970 in seconds.
+  # The difference between January 1, 1 and January 1, 1970 in seconds.
   _DOTNET_TO_POSIX_BASE =  (
       ((1969 * 365) + (1969 // 4) - (1969 // 100) + (1969 // 400)) *
       definitions.SECONDS_PER_DAY)
 
-  def __init__(self, timestamp=None):
+  def __init__(self, precision=None, timestamp=None):
     """Initializes a .NET DateTime timestamp.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       timestamp (Optional[int]): .NET DateTime ticks.
     """
-    super(DotNetDateTime, self).__init__(time_zone_offset=0)
-    self._precision = definitions.PRECISION_100_NANOSECONDS
+    super(DotNetDateTime, self).__init__(
+        precision=precision or definitions.PRECISION_100_NANOSECONDS,
+        time_zone_offset=0)
     self._timestamp = timestamp or 0
 
   @property

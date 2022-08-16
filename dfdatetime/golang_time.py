@@ -59,22 +59,25 @@ class GolangTime(interface.DateTimeValues):
 
   _EPOCH = GolangTimeEpoch()
 
-  def __init__(self, golang_timestamp=None):
+  def __init__(self, golang_timestamp=None, precision=None):
     """Initializes a Golang time.Time timestamp.
 
     Args:
       golang_timestamp (Optional[bytes]): the Golang time.Time timestamp.
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
     """
     number_of_seconds, nanoseconds, time_zone_offset = (None, None, None)
     if golang_timestamp is not None:
       number_of_seconds, nanoseconds, time_zone_offset = (
           self._GetNumberOfSeconds(golang_timestamp))
 
-    super(GolangTime, self).__init__(time_zone_offset=time_zone_offset)
+    super(GolangTime, self).__init__(
+        precision=precision or definitions.PRECISION_1_NANOSECOND,
+        time_zone_offset=time_zone_offset)
     self._golang_timestamp = golang_timestamp
     self._nanoseconds = nanoseconds
     self._number_of_seconds = number_of_seconds
-    self._precision = definitions.PRECISION_1_NANOSECOND
 
     if time_zone_offset:
       self.is_local_time = True

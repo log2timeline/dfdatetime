@@ -31,16 +31,19 @@ class WebKitTime(interface.DateTimeValues):
   # The difference between January 1, 1601 and January 1, 1970 in seconds.
   _WEBKIT_TO_POSIX_BASE = 11644473600
 
-  def __init__(self, time_zone_offset=None, timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes a WebKit timestamp.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
       timestamp (Optional[int]): WebKit timestamp.
     """
-    super(WebKitTime, self).__init__(time_zone_offset=time_zone_offset)
-    self._precision = definitions.PRECISION_1_MICROSECOND
+    super(WebKitTime, self).__init__(
+        precision=precision or definitions.PRECISION_1_MICROSECOND,
+        time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
 
   @property

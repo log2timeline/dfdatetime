@@ -74,10 +74,13 @@ class TimeElements(interface.DateTimeValues):
 
   _RFC_WEEKDAYS = frozenset(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
 
-  def __init__(self, time_elements_tuple=None, time_zone_offset=None):
+  def __init__(
+      self, precision=None, time_elements_tuple=None, time_zone_offset=None):
     """Initializes time elements.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
@@ -87,9 +90,10 @@ class TimeElements(interface.DateTimeValues):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
-    super(TimeElements, self).__init__(time_zone_offset=time_zone_offset)
+    super(TimeElements, self).__init__(
+        precision=precision or definitions.PRECISION_1_SECOND,
+        time_zone_offset=time_zone_offset)
     self._number_of_seconds = None
-    self._precision = definitions.PRECISION_1_SECOND
     self._time_elements_tuple = time_elements_tuple
 
     if time_elements_tuple:
@@ -840,13 +844,15 @@ class TimeElementsWithFractionOfSecond(TimeElements):
   """
 
   def __init__(
-      self, fraction_of_second=None, time_elements_tuple=None,
+      self, fraction_of_second=None, precision=None, time_elements_tuple=None,
       time_zone_offset=None):
     """Initializes time elements.
 
     Args:
       fraction_of_second (Optional[decimal.Decimal]): fraction of second, which
           must be a value between 0.0 and 1.0.
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
@@ -864,9 +870,9 @@ class TimeElementsWithFractionOfSecond(TimeElements):
                 fraction_of_second))
 
     super(TimeElementsWithFractionOfSecond, self).__init__(
+        precision=precision or definitions.PRECISION_1_SECOND,
         time_elements_tuple=time_elements_tuple,
         time_zone_offset=time_zone_offset)
-    self._precision = None
     self.fraction_of_second = fraction_of_second
 
   def _GetNormalizedTimestamp(self):
@@ -1004,10 +1010,13 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         represents 1 millisecond (PRECISION_1_MILLISECOND).
   """
 
-  def __init__(self, time_elements_tuple=None, time_zone_offset=None):
+  def __init__(
+      self, precision=None, time_elements_tuple=None, time_zone_offset=None):
     """Initializes time elements.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes,
           seconds and milliseconds.
@@ -1036,9 +1045,9 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
 
     super(TimeElementsInMilliseconds, self).__init__(
         fraction_of_second=fraction_of_second,
+        precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_elements_tuple=time_elements_tuple,
         time_zone_offset=time_zone_offset)
-    self._precision = definitions.PRECISION_1_MILLISECOND
 
   @property
   def milliseconds(self):
@@ -1094,10 +1103,13 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         represents 1 microsecond (PRECISION_1_MICROSECOND).
   """
 
-  def __init__(self, time_elements_tuple=None, time_zone_offset=None):
+  def __init__(
+      self, precision=None, time_elements_tuple=None, time_zone_offset=None):
     """Initializes time elements.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
           time elements, contains year, month, day of month, hours, minutes,
           seconds and microseconds.
@@ -1126,9 +1138,9 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
 
     super(TimeElementsInMicroseconds, self).__init__(
         fraction_of_second=fraction_of_second,
+        precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_elements_tuple=time_elements_tuple,
         time_zone_offset=time_zone_offset)
-    self._precision = definitions.PRECISION_1_MICROSECOND
 
   @property
   def microseconds(self):

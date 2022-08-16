@@ -21,21 +21,24 @@ class FakeTime(interface.DateTimeValues):
 
   _EPOCH = posix_time.PosixTimeEpoch()
 
-  def __init__(self, time_zone_offset=None):
+  def __init__(self, precision=None, time_zone_offset=None):
     """Initializes a fake timestamp.
 
     Args:
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
     """
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
 
-    super(FakeTime, self).__init__(time_zone_offset=time_zone_offset)
+    super(FakeTime, self).__init__(
+        precision=precision or definitions.PRECISION_1_MICROSECOND,
+        time_zone_offset=time_zone_offset)
     self._microseconds = int(
         fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
     self._number_of_seconds = int(timestamp)
-    self._precision = definitions.PRECISION_1_MICROSECOND
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.

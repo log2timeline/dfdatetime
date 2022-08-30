@@ -4,6 +4,7 @@
 
 import unittest
 
+from dfdatetime import dotnet_datetime
 from dfdatetime import fat_date_time
 from dfdatetime import golang_time
 from dfdatetime import posix_time
@@ -52,6 +53,18 @@ class SerializerTest(unittest.TestCase):
         never_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
+    dotnet_datetime_object = dotnet_datetime.DotNetDateTime(
+        timestamp=637433719321230000)
+
+    expected_json_dict = {
+        '__class_name__': 'DotNetDateTime',
+        '__type__': 'DateTimeValues',
+        'timestamp': 637433719321230000}
+
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
+        dotnet_datetime_object)
+    self.assertEqual(json_dict, expected_json_dict)
+
     fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
 
     expected_json_dict = {
@@ -71,8 +84,7 @@ class SerializerTest(unittest.TestCase):
         '__class_name__': 'GolangTime',
         '__type__': 'DateTimeValues',
         'golang_timestamp': (
-            b'\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00\x03\xff\xff'),
-        'time_zone_offset': 0}
+            b'\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00\x03\xff\xff')}
 
     json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         golang_time_object)
@@ -84,8 +96,7 @@ class SerializerTest(unittest.TestCase):
     expected_json_dict = {
         '__class_name__': 'RFC2579DateTime',
         '__type__': 'DateTimeValues',
-        'rfc2579_date_time_tuple': (2010, 8, 12, 20, 6, 31, 6),
-        'time_zone_offset': 120}
+        'rfc2579_date_time_tuple': (2010, 8, 12, 20, 6, 31, 6, '+', 2, 0)}
 
     json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         rfc2579_date_time_object)

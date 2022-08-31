@@ -30,17 +30,19 @@ class DotNetDateTime(interface.DateTimeValues):
       ((1969 * 365) + (1969 // 4) - (1969 // 100) + (1969 // 400)) *
       definitions.SECONDS_PER_DAY)
 
-  def __init__(self, precision=None, timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes a .NET DateTime timestamp.
 
     Args:
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
       timestamp (Optional[int]): .NET DateTime ticks.
     """
     super(DotNetDateTime, self).__init__(
         precision=precision or definitions.PRECISION_100_NANOSECONDS,
-        time_zone_offset=0)
+        time_zone_offset=time_zone_offset)
     self._timestamp = timestamp or 0
 
   @property

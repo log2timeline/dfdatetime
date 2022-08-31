@@ -104,11 +104,21 @@ class Serializer(object):
       json_dict['golang_timestamp'] = date_time_values.golang_timestamp
 
     elif class_name == 'RFC2579DateTime':
+      time_zone_hours, time_zone_minutes = divmod(
+          date_time_values.time_zone_offset, 60)
+
+      if date_time_values.time_zone_offset < 0:
+        time_zone_sign = '-'
+        time_zone_hours *= -1
+      else:
+        time_zone_sign = '+'
+
       json_dict['rfc2579_date_time_tuple'] = (
           date_time_values.year, date_time_values.month,
           date_time_values.day_of_month, date_time_values.hours,
           date_time_values.minutes, date_time_values.seconds,
-          date_time_values.deciseconds)
+          date_time_values.deciseconds, time_zone_sign, time_zone_hours,
+          time_zone_minutes)
 
     elif class_name == 'TimeElements':
       json_dict['time_elements_tuple'] = (
@@ -130,7 +140,8 @@ class Serializer(object):
           date_time_values.minutes, date_time_values.seconds,
           date_time_values.microseconds)
 
-    if date_time_values.time_zone_offset is not None:
+    if date_time_values.time_zone_offset is not None and class_name not in (
+        'GolangTime', 'RFC2579DateTime'):
       json_dict['time_zone_offset'] = date_time_values.time_zone_offset
 
     if date_time_values.is_local_time:
@@ -174,6 +185,11 @@ class Serializer(object):
       string = json_dict.get('string', None)
       if string is not None:
         del json_dict['string']
+
+    if class_name in ('GolangTime', 'RFC2579DateTime'):
+      time_zone_offset = json_dict.get('time_zone_offset', None)
+      if time_zone_offset is not None:
+        del json_dict['time_zone_offset']
 
     date_time = factory.Factory.NewDateTimeValues(class_name, **json_dict)
     if is_local_time:

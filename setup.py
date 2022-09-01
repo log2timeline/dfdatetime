@@ -22,9 +22,9 @@ except ImportError:
   bdist_rpm = None
 
 version_tuple = (sys.version_info[0], sys.version_info[1])
-if version_tuple < (3, 6):
+if version_tuple < (3, 7):
   print((
-      'Unsupported Python version: {0:s}, version 3.6 or higher '
+      'Unsupported Python version: {0:s}, version 3.7 or higher '
       'required.').format(sys.version))
   sys.exit(1)
 

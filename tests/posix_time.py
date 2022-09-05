@@ -95,6 +95,11 @@ class PosixTimeTest(unittest.TestCase):
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31+00:00')
 
+    posix_time_object = posix_time.PosixTime(timestamp=-11644468446)
+
+    date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '1601-01-01T01:25:54+00:00')
+
   def testCopyToPosixTimestampWithFractionOfSecond(self):
     """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
     posix_time_object = posix_time.PosixTime(timestamp=1281643591)
@@ -102,6 +107,13 @@ class PosixTimeTest(unittest.TestCase):
     posix_timestamp, fraction_of_second = (
         posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertEqual(posix_timestamp, 1281643591)
+    self.assertIsNone(fraction_of_second)
+
+    posix_time_object = posix_time.PosixTime(timestamp=-11644468446)
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, -11644468446)
     self.assertIsNone(fraction_of_second)
 
     posix_time_object = posix_time.PosixTime()
@@ -233,6 +245,12 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31.546+00:00')
 
+    posix_time_object = posix_time.PosixTimeInMilliseconds(
+        timestamp=-11644468446327)
+
+    date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '1601-01-01T01:25:53.673+00:00')
+
   def testCopyToPosixTimestampWithFractionOfSecond(self):
     """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
     posix_time_object = posix_time.PosixTimeInMilliseconds(
@@ -242,6 +260,14 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
         posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertEqual(posix_timestamp, 1281643591)
     self.assertEqual(fraction_of_second, 546)
+
+    posix_time_object = posix_time.PosixTimeInMilliseconds(
+        timestamp=-11644468446327)
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, -11644468446)
+    self.assertEqual(fraction_of_second, -327)
 
     posix_time_object = posix_time.PosixTime()
 
@@ -375,6 +401,12 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T20:06:31.546875+00:00')
 
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=-11644468446327447)
+
+    date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
+    self.assertEqual(date_time_string, '1601-01-01T01:25:53.672553+00:00')
+
   def testCopyToPosixTimestampWithFractionOfSecond(self):
     """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
     posix_time_object = posix_time.PosixTimeInMicroseconds(
@@ -384,6 +416,14 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertEqual(posix_timestamp, 1281643591)
     self.assertEqual(fraction_of_second, 546875)
+
+    posix_time_object = posix_time.PosixTimeInMicroseconds(
+        timestamp=-11644468446327447)
+
+    posix_timestamp, fraction_of_second = (
+        posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, -11644468446)
+    self.assertEqual(fraction_of_second, -327447)
 
     posix_time_object = posix_time.PosixTime()
 

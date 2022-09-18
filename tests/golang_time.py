@@ -165,7 +165,7 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_time_object._time_zone_offset, 0)
 
     date_time_string = golang_time_object.CopyToDateTimeString()
-    self.assertEqual(date_time_string, '2000-01-01 12:23:45.567890')
+    self.assertEqual(date_time_string, '2000-01-01 12:23:45.567890000')
 
     golang_timestamp = bytes.fromhex('010000000eafffe8d10000ddd5ffff')
     golang_time_object = golang_time.GolangTime(
@@ -176,4 +176,4 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_time_object._time_zone_offset, 0)
 
     date_time_string = golang_time_object.CopyToDateTimeString()
-    self.assertEqual(date_time_string, '2000-01-01 12:23:45.000056')
+    self.assertEqual(date_time_string, '2000-01-01 12:23:45.000056789')

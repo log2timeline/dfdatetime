@@ -67,8 +67,7 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
     """
     if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
       raise ValueError(
-          'Number of microseconds value: {0:d} out of bounds.'.format(
-              microseconds))
+          f'Number of microseconds value: {microseconds:d} out of bounds.')
 
     return decimal.Decimal(0.0)
 
@@ -91,12 +90,13 @@ class SecondsPrecisionHelper(DateTimePrecisionHelper):
       ValueError: if the fraction of second is out of bounds.
     """
     if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
-      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
-          fraction_of_second))
+      raise ValueError(
+          f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
-        time_elements_tuple[0], time_elements_tuple[1], time_elements_tuple[2],
-        time_elements_tuple[3], time_elements_tuple[4], time_elements_tuple[5])
+    year, month, day_of_month, hours, minutes, seconds = time_elements_tuple
+
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}')
 
 
 class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
@@ -118,8 +118,7 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
     """
     if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
       raise ValueError(
-          'Number of microseconds value: {0:d} out of bounds.'.format(
-              microseconds))
+          f'Number of microseconds value: {microseconds:d} out of bounds.')
 
     milliseconds, _ = divmod(
         microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
@@ -144,15 +143,14 @@ class MillisecondsPrecisionHelper(DateTimePrecisionHelper):
       ValueError: if the fraction of second is out of bounds.
     """
     if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
-      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
-          fraction_of_second))
+      raise ValueError(
+          f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
+    year, month, day_of_month, hours, minutes, seconds = time_elements_tuple
     milliseconds = int(fraction_of_second * definitions.MILLISECONDS_PER_SECOND)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:03d}'.format(
-        time_elements_tuple[0], time_elements_tuple[1], time_elements_tuple[2],
-        time_elements_tuple[3], time_elements_tuple[4], time_elements_tuple[5],
-        milliseconds)
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}')
 
 
 class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
@@ -174,8 +172,7 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
     """
     if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
       raise ValueError(
-          'Number of microseconds value: {0:d} out of bounds.'.format(
-              microseconds))
+          f'Number of microseconds value: {microseconds:d} out of bounds.')
 
     return decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND
 
@@ -198,15 +195,14 @@ class MicrosecondsPrecisionHelper(DateTimePrecisionHelper):
       ValueError: if the fraction of second is out of bounds.
     """
     if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
-      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
-          fraction_of_second))
+      raise ValueError(
+          f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
+    year, month, day_of_month, hours, minutes, seconds = time_elements_tuple
     microseconds = int(fraction_of_second * definitions.MICROSECONDS_PER_SECOND)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
-        time_elements_tuple[0], time_elements_tuple[1], time_elements_tuple[2],
-        time_elements_tuple[3], time_elements_tuple[4], time_elements_tuple[5],
-        microseconds)
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}.{microseconds:06d}')
 
 
 class PrecisionHelperFactory(object):
@@ -215,8 +211,7 @@ class PrecisionHelperFactory(object):
   _PRECISION_CLASSES = {
       definitions.PRECISION_1_MICROSECOND: MicrosecondsPrecisionHelper,
       definitions.PRECISION_1_MILLISECOND: MillisecondsPrecisionHelper,
-      definitions.PRECISION_1_SECOND: SecondsPrecisionHelper,
-  }
+      definitions.PRECISION_1_SECOND: SecondsPrecisionHelper}
 
   @classmethod
   def CreatePrecisionHelper(cls, precision):
@@ -234,6 +229,6 @@ class PrecisionHelperFactory(object):
     """
     precision_helper_class = cls._PRECISION_CLASSES.get(precision, None)
     if not precision_helper_class:
-      raise ValueError('Unsupported precision: {0!s}'.format(precision))
+      raise ValueError(f'Unsupported precision: {precision!s}')
 
     return precision_helper_class

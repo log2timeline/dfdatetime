@@ -159,7 +159,7 @@ class FATDateTime(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 1980 or year > (1980 + 0x7f):
-      raise ValueError('Year value not supported: {0!s}.'.format(year))
+      raise ValueError(f'Year value not supported: {year!s}.')
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
@@ -183,8 +183,8 @@ class FATDateTime(interface.DateTimeValues):
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
-        year, month, day_of_month, hours, minutes, seconds)
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}')
 
 
 class FATTimestamp(interface.DateTimeValues):
@@ -270,7 +270,7 @@ class FATTimestamp(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 1980 or year > (1980 + 0x7f):
-      raise ValueError('Year value not supported: {0!s}.'.format(year))
+      raise ValueError(f'Year value not supported: {year!s}.')
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
@@ -300,8 +300,8 @@ class FATTimestamp(interface.DateTimeValues):
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:02d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, milliseconds)
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:02d}')
 
 
 factory.Factory.RegisterDateTimeValues(FATDateTime)

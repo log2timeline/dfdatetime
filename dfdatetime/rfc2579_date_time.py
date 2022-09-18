@@ -215,7 +215,7 @@ class RFC2579DateTime(interface.DateTimeValues):
         microseconds, definitions.MICROSECONDS_PER_DECISECOND)
 
     if year < 0 or year > 65536:
-      raise ValueError('Unsupported year value: {0:d}.'.format(year))
+      raise ValueError(f'Unsupported year value: {year:d}.')
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
@@ -240,9 +240,9 @@ class RFC2579DateTime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return None
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:01d}'.format(
-        self._year, self._month, self._day_of_month, self._hours, self._minutes,
-        self._seconds, self._deciseconds)
+    return (f'{self._year:04d}-{self._month:02d}-{self._day_of_month:02d} '
+            f'{self._hours:02d}:{self._minutes:02d}:{self._seconds:02d}'
+            f'.{self._deciseconds:01d}')
 
 
 factory.Factory.RegisterDateTimeValues(RFC2579DateTime)

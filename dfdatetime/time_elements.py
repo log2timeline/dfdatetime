@@ -97,10 +97,11 @@ class TimeElements(interface.DateTimeValues):
     self._time_elements_tuple = time_elements_tuple
 
     if time_elements_tuple:
-      if len(time_elements_tuple) < 6:
+      number_of_elements = len(time_elements_tuple)
+      if number_of_elements < 6:
         raise ValueError((
-            'Invalid time elements tuple at least 6 elements required,'
-            'got: {0:d}').format(len(time_elements_tuple)))
+            f'Invalid time elements tuple at least 6 elements required,'
+            f'got: {number_of_elements:d}'))
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
           time_elements_tuple[0], time_elements_tuple[1],
@@ -208,7 +209,7 @@ class TimeElements(interface.DateTimeValues):
     if weekday_string.endswith(','):
       weekday_string = weekday_string[:-1]
       if weekday_string not in self._RFC_WEEKDAYS:
-        raise ValueError('Invalid weekday: {0:s}.'.format(weekday_string))
+        raise ValueError(f'Invalid weekday: {weekday_string:s}.')
 
       string_segments.pop(0)
 
@@ -222,14 +223,13 @@ class TimeElements(interface.DateTimeValues):
         pass
 
     if day_of_month == 0:
-      raise ValueError('Invalid day of month: {0:s}.'.format(
-          day_of_month_string))
+      raise ValueError(f'Invalid day of month: {day_of_month_string:s}.')
 
     month_string = string_segments[1]
 
     month = self._RFC_MONTH_MAPPINGS.get(month_string)
     if not month:
-      raise ValueError('Invalid month: {0:s}.'.format(month_string))
+      raise ValueError(f'Invalid month: {month_string:s}.')
 
     year_string = string_segments[2]
 
@@ -241,7 +241,7 @@ class TimeElements(interface.DateTimeValues):
         pass
 
     if year is None:
-      raise ValueError('Invalid year: {0:s}.'.format(year_string))
+      raise ValueError(f'Invalid year: {0:s}.')
 
     year += 1900
 
@@ -290,7 +290,7 @@ class TimeElements(interface.DateTimeValues):
     if weekday_string.endswith(','):
       weekday_string = weekday_string[:-1]
       if weekday_string not in self._RFC_WEEKDAYS:
-        raise ValueError('Invalid weekday: {0:s}.'.format(weekday_string))
+        raise ValueError(f'Invalid weekday: {weekday_string:s}.')
 
       string_segments.pop(0)
 
@@ -304,14 +304,13 @@ class TimeElements(interface.DateTimeValues):
         pass
 
     if day_of_month == 0:
-      raise ValueError('Invalid day of month: {0:s}.'.format(
-          day_of_month_string))
+      raise ValueError(f'Invalid day of month: {day_of_month_string:s}.')
 
     month_string = string_segments[1]
 
     month = self._RFC_MONTH_MAPPINGS.get(month_string)
     if not month:
-      raise ValueError('Invalid month: {0:s}.'.format(month_string))
+      raise ValueError(f'Invalid month: {month_string:s}.')
 
     year_string = string_segments[2]
 
@@ -323,7 +322,7 @@ class TimeElements(interface.DateTimeValues):
         pass
 
     if year is None:
-      raise ValueError('Invalid year: {0:s}.'.format(year_string))
+      raise ValueError(f'Invalid year: {year_string:s}.')
 
     hours, minutes, seconds, time_zone_offset = self._CopyTimeFromStringRFC(
         string_segments[3], string_segments[4])
@@ -397,7 +396,7 @@ class TimeElements(interface.DateTimeValues):
       raise ValueError('Unable to parse hours.')
 
     if hours not in range(0, 24):
-      raise ValueError('Hours value: {0:d} out of bounds.'.format(hours))
+      raise ValueError(f'Hours value: {hours:d} out of bounds.')
 
     minutes = None
     seconds = None
@@ -482,11 +481,11 @@ class TimeElements(interface.DateTimeValues):
       microseconds = int(time_fraction)
 
     if minutes is not None and minutes not in range(0, 60):
-      raise ValueError('Minutes value: {0:d} out of bounds.'.format(minutes))
+      raise ValueError(f'Minutes value: {minutes:d} out of bounds.')
 
     # TODO: support a leap second?
     if seconds is not None and seconds not in range(0, 60):
-      raise ValueError('Seconds value: {0:d} out of bounds.'.format(seconds))
+      raise ValueError(f'Seconds value: {seconds:d} out of bounds.')
 
     if time_zone_string_index < time_string_length:
       if (time_string_length - time_zone_string_index != 6 or
@@ -553,7 +552,7 @@ class TimeElements(interface.DateTimeValues):
       raise ValueError('Unable to parse hours.')
 
     if hours not in range(0, 24):
-      raise ValueError('Hours value: {0:d} out of bounds.'.format(hours))
+      raise ValueError(f'Hours value: {hours:d} out of bounds.')
 
     try:
       minutes = int(time_string[3:5], 10)
@@ -561,7 +560,7 @@ class TimeElements(interface.DateTimeValues):
       raise ValueError('Unable to parse minutes.')
 
     if minutes not in range(0, 60):
-      raise ValueError('Minutes value: {0:d} out of bounds.'.format(minutes))
+      raise ValueError(f'Minutes value: {minutes:d} out of bounds.')
 
     seconds = None
 
@@ -578,7 +577,7 @@ class TimeElements(interface.DateTimeValues):
         raise ValueError('Unable to parse seconds.')
 
       if seconds not in range(0, 60):
-        raise ValueError('Seconds value: {0:d} out of bounds.'.format(seconds))
+        raise ValueError(f'Seconds value: {seconds:d} out of bounds.')
 
     if time_string_length < 5:
       raise ValueError('Time string too short.')
@@ -591,11 +590,11 @@ class TimeElements(interface.DateTimeValues):
       hours_from_utc = self._RFC_TIME_ZONE_MAPPINGS.get(time_zone_string, None)
       minutes_from_utc = 0
       if hours_from_utc is None:
-        raise ValueError('Invalid time zone: {0:s}.'.format(time_zone_string))
+        raise ValueError(f'Invalid time zone: {time_zone_string:s}.')
 
     else:
       if time_zone_string[0] not in ('+', '-'):
-        raise ValueError('Invalid time zone: {0:s}.'.format(time_zone_string))
+        raise ValueError(f'Invalid time zone: {time_zone_string:s}.')
 
       try:
         hours_from_utc = int(time_zone_string[1:3], 10)
@@ -771,46 +770,48 @@ class TimeElements(interface.DateTimeValues):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
-    if len(time_elements_tuple) < 6:
+    number_of_elements = len(time_elements_tuple)
+    if number_of_elements < 6:
       raise ValueError((
-          'Invalid time elements tuple at least 6 elements required,'
-          'got: {0:d}').format(len(time_elements_tuple)))
+          f'Invalid time elements tuple at least 6 elements required,'
+          f'got: {number_of_elements:d}'))
+
+    year_string = time_elements_tuple[0]
+    month_string = time_elements_tuple[1]
+    day_of_month_string = time_elements_tuple[2]
+    hours_string = time_elements_tuple[3]
+    minutes_string = time_elements_tuple[4]
+    seconds_string = time_elements_tuple[5]
 
     try:
-      year = int(time_elements_tuple[0], 10)
+      year = int(year_string, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid year value: {0!s}'.format(
-          time_elements_tuple[0]))
+      raise ValueError(f'Invalid year value: {year_string!s}')
 
     try:
-      month = int(time_elements_tuple[1], 10)
+      month = int(month_string, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid month value: {0!s}'.format(
-          time_elements_tuple[1]))
+      raise ValueError(f'Invalid month value: {month_string!s}')
 
     try:
-      day_of_month = int(time_elements_tuple[2], 10)
+      day_of_month = int(day_of_month_string, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid day of month value: {0!s}'.format(
-          time_elements_tuple[2]))
+      raise ValueError(f'Invalid day of month value: {day_of_month_string!s}')
 
     try:
-      hours = int(time_elements_tuple[3], 10)
+      hours = int(hours_string, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid hours value: {0!s}'.format(
-          time_elements_tuple[3]))
+      raise ValueError(f'Invalid hours value: {hours_string!s}')
 
     try:
-      minutes = int(time_elements_tuple[4], 10)
+      minutes = int(minutes_string, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid minutes value: {0!s}'.format(
-          time_elements_tuple[4]))
+      raise ValueError(f'Invalid minutes value: {minutes_string!s}')
 
     try:
-      seconds = int(time_elements_tuple[5], 10)
+      seconds = int(seconds_string, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid seconds value: {0!s}'.format(
-          time_elements_tuple[5]))
+      raise ValueError(f'Invalid seconds value: {seconds_string!s}')
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
@@ -828,10 +829,12 @@ class TimeElements(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return None
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
-        self._time_elements_tuple[0], self._time_elements_tuple[1],
-        self._time_elements_tuple[2], self._time_elements_tuple[3],
-        self._time_elements_tuple[4], self._time_elements_tuple[5])
+    year, month, day_of_month, hours, minutes, seconds = (
+        self._time_elements_tuple)
+
+    return (
+        f'{year:04d}-{month:02d}-{day_of_month:02d} '
+        f'{hours:02d}:{minutes:02d}:{seconds:02d}')
 
 
 class TimeElementsWithFractionOfSecond(TimeElements):
@@ -866,8 +869,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     if fraction_of_second is not None:
       if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
         raise ValueError(
-            'Fraction of second value: {0:f} out of bounds.'.format(
-                fraction_of_second))
+            f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
     super(TimeElementsWithFractionOfSecond, self).__init__(
         precision=precision or definitions.PRECISION_1_SECOND,
@@ -959,23 +961,26 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
-    if len(time_elements_tuple) < 7:
+    number_of_elements = len(time_elements_tuple)
+    if number_of_elements < 7:
       raise ValueError((
-          'Invalid time elements tuple at least 7 elements required,'
-          'got: {0:d}').format(len(time_elements_tuple)))
+          f'Invalid time elements tuple at least 7 elements required,'
+          f'got: {number_of_elements:d}'))
 
     super(TimeElementsWithFractionOfSecond, self).CopyFromStringTuple(
         time_elements_tuple)
 
+    fraction_of_second_string = time_elements_tuple[6]
+
     try:
-      fraction_of_second = decimal.Decimal(time_elements_tuple[6])
+      fraction_of_second = decimal.Decimal(fraction_of_second_string)
     except (TypeError, ValueError):
-      raise ValueError('Invalid fraction of second value: {0!s}'.format(
-          time_elements_tuple[6]))
+      raise ValueError(
+          f'Invalid fraction of second value: {fraction_of_second_string!s}')
 
     if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
-      raise ValueError('Fraction of second value: {0:f} out of bounds.'.format(
-          fraction_of_second))
+      raise ValueError(
+          f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
     self.fraction_of_second = fraction_of_second
 
@@ -1028,10 +1033,11 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     """
     fraction_of_second = None
     if time_elements_tuple:
-      if len(time_elements_tuple) < 7:
+      number_of_elements = len(time_elements_tuple)
+      if number_of_elements < 7:
         raise ValueError((
-            'Invalid time elements tuple at least 7 elements required,'
-            'got: {0:d}').format(len(time_elements_tuple)))
+            f'Invalid time elements tuple at least 7 elements required,'
+            f'got: {number_of_elements:d}'))
 
       milliseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
@@ -1065,10 +1071,11 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
+    number_of_elements = len(time_elements_tuple)
     if len(time_elements_tuple) < 7:
       raise ValueError((
-          'Invalid time elements tuple at least 7 elements required,'
-          'got: {0:d}').format(len(time_elements_tuple)))
+          f'Invalid time elements tuple at least 7 elements required,'
+          f'got: {number_of_elements:d}'))
 
     year, month, day_of_month, hours, minutes, seconds, milliseconds = (
         time_elements_tuple)
@@ -1076,7 +1083,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     try:
       milliseconds = int(milliseconds, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid millisecond value: {0!s}'.format(milliseconds))
+      raise ValueError(f'Invalid millisecond value: {milliseconds!s}')
 
     if milliseconds < 0 or milliseconds >= definitions.MILLISECONDS_PER_SECOND:
       raise ValueError('Invalid number of milliseconds.')
@@ -1121,10 +1128,11 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     """
     fraction_of_second = None
     if time_elements_tuple:
-      if len(time_elements_tuple) < 7:
+      number_of_elements = len(time_elements_tuple)
+      if number_of_elements < 7:
         raise ValueError((
-            'Invalid time elements tuple at least 7 elements required,'
-            'got: {0:d}').format(len(time_elements_tuple)))
+            f'Invalid time elements tuple at least 7 elements required,'
+            f'got: {number_of_elements:d}'))
 
       microseconds = time_elements_tuple[6]
       time_elements_tuple = time_elements_tuple[:6]
@@ -1158,10 +1166,11 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
+    number_of_elements = len(time_elements_tuple)
     if len(time_elements_tuple) < 7:
       raise ValueError((
-          'Invalid time elements tuple at least 7 elements required,'
-          'got: {0:d}').format(len(time_elements_tuple)))
+          f'Invalid time elements tuple at least 7 elements required,'
+          f'got: {number_of_elements:d}'))
 
     year, month, day_of_month, hours, minutes, seconds, microseconds = (
         time_elements_tuple)
@@ -1169,7 +1178,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     try:
       microseconds = int(microseconds, 10)
     except (TypeError, ValueError):
-      raise ValueError('Invalid microsecond value: {0!s}'.format(microseconds))
+      raise ValueError(f'Invalid microsecond value: {microseconds!s}')
 
     if microseconds < 0 or microseconds >= definitions.MICROSECONDS_PER_SECOND:
       raise ValueError('Invalid number of microseconds.')

@@ -162,7 +162,7 @@ class Systemtime(interface.DateTimeValues):
         microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
 
     if year < 1601 or year > 30827:
-      raise ValueError('Unsupported year value: {0:d}.'.format(year))
+      raise ValueError(f'Unsupported year value: {year:d}.')
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
@@ -189,9 +189,9 @@ class Systemtime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return None
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:03d}'.format(
-        self.year, self.month, self.day_of_month, self.hours, self.minutes,
-        self.seconds, self.milliseconds)
+    return (f'{self.year:04d}-{self.month:02d}-{self.day_of_month:02d} '
+            f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
+            f'.{self.milliseconds:03d}')
 
 
 factory.Factory.RegisterDateTimeValues(Systemtime)

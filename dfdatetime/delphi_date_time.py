@@ -104,7 +104,7 @@ class DelphiDateTime(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year > 9999:
-      raise ValueError('Unsupported year value: {0:d}.'.format(year))
+      raise ValueError(f'Unsupported year value: {year:d}.')
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
@@ -139,8 +139,8 @@ class DelphiDateTime(interface.DateTimeValues):
     microseconds = int(
         (number_of_seconds % 1) * definitions.MICROSECONDS_PER_SECOND)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, microseconds)
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}.{microseconds:06d}')
 
 
 factory.Factory.RegisterDateTimeValues(DelphiDateTime)

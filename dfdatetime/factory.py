@@ -19,8 +19,7 @@ class Factory(object):
     """
     class_name = date_time_values_type.__name__
     if class_name not in cls._date_time_values_types:
-      raise KeyError('Date and time values type: {0:s} not set.'.format(
-          class_name))
+      raise KeyError(f'Date and time values type: {class_name:s} not set.')
 
     del cls._date_time_values_types[class_name]
 
@@ -39,8 +38,7 @@ class Factory(object):
       KeyError: if date and time values is not registered.
     """
     if class_name not in cls._date_time_values_types:
-      raise KeyError('Date and time values type: {0:s} not set.'.format(
-          class_name))
+      raise KeyError(f'Date and time values type: {class_name:s} not set.')
 
     date_time_values_type = cls._date_time_values_types[class_name]
     return date_time_values_type(**kwargs)
@@ -57,7 +55,6 @@ class Factory(object):
     """
     class_name = date_time_values_type.__name__
     if class_name in cls._date_time_values_types:
-      raise KeyError('Date and time values type: {0:s} already set.'.format(
-          class_name))
+      raise KeyError(f'Date and time values type: {class_name:s} already set.')
 
     cls._date_time_values_types[class_name] = date_time_values_type

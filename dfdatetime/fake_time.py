@@ -106,10 +106,12 @@ class FakeTime(interface.DateTimeValues):
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 
-    if self._microseconds is None:
-      return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'.format(
-          year, month, day_of_month, hours, minutes, seconds)
+    date_time_string = (
+        f'{year:04d}-{month:02d}-{day_of_month:02d} '
+        f'{hours:02d}:{minutes:02d}:{seconds:02d}')
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
-        year, month, day_of_month, hours, minutes, seconds,
-        self._microseconds)
+    if self._microseconds is not None:
+      date_time_string = '.'.join([
+          date_time_string, f'{self._microseconds:06d}'])
+
+    return date_time_string

@@ -402,7 +402,7 @@ class DateTimeValues(object):
       raise ValueError('Unable to parse hours.')
 
     if hours not in range(0, 24):
-      raise ValueError('Hours value: {0:d} out of bounds.'.format(hours))
+      raise ValueError(f'Hours value: {hours:d} out of bounds.')
 
     try:
       minutes = int(time_string[3:5], 10)
@@ -410,7 +410,7 @@ class DateTimeValues(object):
       raise ValueError('Unable to parse minutes.')
 
     if minutes not in range(0, 60):
-      raise ValueError('Minutes value: {0:d} out of bounds.'.format(minutes))
+      raise ValueError(f'Minutes value: {minutes:d} out of bounds.')
 
     try:
       seconds = int(time_string[6:8], 10)
@@ -419,7 +419,7 @@ class DateTimeValues(object):
 
     # TODO: support a leap second?
     if seconds not in range(0, 60):
-      raise ValueError('Seconds value: {0:d} out of bounds.'.format(seconds))
+      raise ValueError(f'Seconds value: {seconds:d} out of bounds.')
 
     microseconds = None
     time_zone_offset = None
@@ -503,17 +503,15 @@ class DateTimeValues(object):
           of bounds.
     """
     if epoch_year < 0:
-      raise ValueError('Epoch year value: {0:d} out of bounds.'.format(
-          epoch_year))
+      raise ValueError(f'Epoch year value: {epoch_year:d} out of bounds.')
 
     if epoch_month not in range(1, 13):
-      raise ValueError('Epoch month value: {0:d} out of bounds.'.format(
-          epoch_month))
+      raise ValueError(f'Epoch month value: {epoch_month:d} out of bounds.')
 
     epoch_days_per_month = self._GetDaysPerMonth(epoch_year, epoch_month)
     if epoch_day_of_month < 1 or epoch_day_of_month > epoch_days_per_month:
-      raise ValueError('Epoch day of month value: {0:d} out of bounds.'.format(
-          epoch_day_of_month))
+      raise ValueError(
+          f'Epoch day of month value: {epoch_day_of_month:d} out of bounds.')
 
     before_epoch = number_of_days < 0
 
@@ -774,23 +772,23 @@ class DateTimeValues(object):
     if hours is None:
       hours = 0
     elif hours not in range(0, 24):
-      raise ValueError('Hours value: {0!s} out of bounds.'.format(hours))
+      raise ValueError(f'Hours value: {hours!s} out of bounds.')
 
     if minutes is None:
       minutes = 0
     elif minutes not in range(0, 60):
-      raise ValueError('Minutes value: {0!s} out of bounds.'.format(minutes))
+      raise ValueError(f'Minutes value: {minutes!s} out of bounds.')
 
     # TODO: support a leap second?
     if seconds is None:
       seconds = 0
     elif seconds not in range(0, 60):
-      raise ValueError('Seconds value: {0!s} out of bounds.'.format(seconds))
+      raise ValueError(f'Seconds value: {seconds!s} out of bounds.')
 
     # Note that calendar.timegm() does not raise when date is: 2013-02-29.
     days_per_month = self._GetDaysPerMonth(year, month)
     if day_of_month < 1 or day_of_month > days_per_month:
-      raise ValueError('Day of month value out of bounds.')
+      raise ValueError(f'Day of month value: {day_of_month:d} out of bounds.')
 
     # calendar.timegm requires the time tuple to contain at least
     # 6 integer values.
@@ -904,9 +902,10 @@ class DateTimeValues(object):
           time_zone_offset_sign = '+'
           time_zone_offset_hours *= -1
 
-        date_time_string = '{0:s}{1:s}{2:02d}:{3:02d}'.format(
-            date_time_string, time_zone_offset_sign, time_zone_offset_hours,
-            time_zone_offset_minutes)
+        time_zone_string = (
+            f'{time_zone_offset_hours:02d}:{time_zone_offset_minutes:02d}')
+        date_time_string = time_zone_offset_sign.join([
+            date_time_string, time_zone_string])
 
     return date_time_string
 

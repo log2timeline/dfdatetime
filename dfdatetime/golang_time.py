@@ -131,8 +131,7 @@ class GolangTime(interface.DateTimeValues):
     version = golang_timestamp[0]
     if version not in (1, 2):
       raise ValueError(
-          'Unsupported Golang time.Time timestamp version: {0:d}.'.format(
-              version))
+          f'Unsupported Golang time.Time timestamp version: {version:d}.')
 
     if (version == 1 and byte_size != 15) or (version == 2 and byte_size != 16):
       raise ValueError('Unsupported Golang time.Time timestamp.')
@@ -145,8 +144,8 @@ class GolangTime(interface.DateTimeValues):
 
     except struct.error as exception:
       raise ValueError((
-          'Unable to unpacked Golang time.Time timestamp with error: '
-          '{0:s}').format(exception))
+          f'Unable to unpacked Golang time.Time timestamp with error: '
+          f'{exception!s}'))
 
     # A time zone offset of -1 minute is a special representation for UTC.
     if time_zone_offset == -1:
@@ -180,7 +179,7 @@ class GolangTime(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 0:
-      raise ValueError('Year value not supported: {0!s}.'.format(year))
+      raise ValueError(f'Year value not supported: {year!s}.')
 
     seconds = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
@@ -203,19 +202,14 @@ class GolangTime(interface.DateTimeValues):
     if self._number_of_seconds is None or self._number_of_seconds < 0:
       return None
 
-    seconds = self._number_of_seconds
-    nanoseconds_seconds, remainder = divmod(
-        self._nanoseconds, definitions.NANOSECONDS_PER_SECOND)
-
-    seconds += nanoseconds_seconds
-    remainder = remainder // definitions.NANOSECONDS_PER_MICROSECOND
-    number_of_days, hours, minutes, seconds = self._GetTimeValues(seconds)
+    number_of_days, hours, minutes, seconds = self._GetTimeValues(
+        self._number_of_seconds)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, remainder)
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}.{self._nanoseconds:09d}')
 
 
 factory.Factory.RegisterDateTimeValues(GolangTime)

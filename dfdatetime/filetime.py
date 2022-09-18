@@ -101,7 +101,7 @@ class Filetime(interface.DateTimeValues):
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 1601:
-      raise ValueError('Year value not supported: {0!s}.'.format(year))
+      raise ValueError(f'Year value not supported: {year!s}.')
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
@@ -125,15 +125,15 @@ class Filetime(interface.DateTimeValues):
         self._timestamp > self._UINT64_MAX):
       return None
 
-    timestamp, remainder = divmod(
+    timestamp, fraction_of_second = divmod(
         self._timestamp, self._100_NANOSECONDS_PER_SECOND)
     number_of_days, hours, minutes, seconds = self._GetTimeValues(timestamp)
 
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 
-    return '{0:04d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:07d}'.format(
-        year, month, day_of_month, hours, minutes, seconds, remainder)
+    return (f'{year:04d}-{month:02d}-{day_of_month:02d} '
+            f'{hours:02d}:{minutes:02d}:{seconds:02d}.{fraction_of_second:07d}')
 
 
 factory.Factory.RegisterDateTimeValues(Filetime)

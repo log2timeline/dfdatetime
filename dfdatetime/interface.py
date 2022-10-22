@@ -2,7 +2,6 @@
 """Date and time interfaces."""
 
 import abc
-import calendar
 import decimal
 
 from dfdatetime import definitions
@@ -55,8 +54,6 @@ class DateTimeValues(object):
   """
 
   # pylint: disable=redundant-returns-doc
-
-  _DAYS_PER_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
   _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()
 
@@ -695,7 +692,7 @@ class DateTimeValues(object):
     if month not in range(1, 13):
       raise ValueError('Month value out of bounds.')
 
-    days_per_month = self._DAYS_PER_MONTH[month - 1]
+    days_per_month = definitions.DAYS_PER_MONTH[month - 1]
     if month == 2 and self._IsLeapYear(year):
       days_per_month += 1
 
@@ -728,6 +725,11 @@ class DateTimeValues(object):
       raise ValueError('Year value out of bounds.')
 
     year, _ = divmod(year, 100)
+    year *= 100
+
+    number_of_days = definitions.DAYS_PER_CENTURY.get(year, None)
+    if number_of_days is not None:
+      return number_of_days
 
     if self._IsLeapYear(year):
       return 36525
@@ -742,6 +744,10 @@ class DateTimeValues(object):
     Returns:
       int: number of days in the year.
     """
+    number_of_days = definitions.DAYS_PER_YEAR.get(year, None)
+    if number_of_days is not None:
+      return number_of_days
+
     if self._IsLeapYear(year):
       return 366
     return 365
@@ -765,10 +771,9 @@ class DateTimeValues(object):
     Raises:
       ValueError: if the time elements are invalid.
     """
-    if not year or not month or not day_of_month:
+    if not month or not day_of_month:
       return None
 
-    # calendar.timegm does not sanity check the time elements.
     if hours is None:
       hours = 0
     elif hours not in range(0, 24):
@@ -785,18 +790,25 @@ class DateTimeValues(object):
     elif seconds not in range(0, 60):
       raise ValueError(f'Seconds value: {seconds!s} out of bounds.')
 
-    # Note that calendar.timegm() does not raise when date is: 2013-02-29.
+    number_of_days = definitions.DAYS_PER_YEAR_IN_POSIX_EPOCH.get(year, None)
+    if number_of_days is None:
+      raise ValueError(f'Year value: {year!s} out of bounds.')
+
+    number_of_days += sum([
+        definitions.DAYS_PER_MONTH[index] for index in range(month - 1)])
+    if month > 2 and self._IsLeapYear(year):
+      number_of_days += 1
+
     days_per_month = self._GetDaysPerMonth(year, month)
     if day_of_month < 1 or day_of_month > days_per_month:
       raise ValueError(f'Day of month value: {day_of_month:d} out of bounds.')
 
-    # calendar.timegm requires the time tuple to contain at least
-    # 6 integer values.
-    time_elements_tuple = (year, month, day_of_month, hours, minutes, seconds)
+    number_of_days += day_of_month - 1
+    number_of_hours = (number_of_days * 24) + hours
+    number_of_minutes = (number_of_hours * 60) + minutes
+    number_of_seconds = (number_of_minutes * 60) + seconds
 
-    number_of_seconds = calendar.timegm(time_elements_tuple)
-
-    return int(number_of_seconds)
+    return number_of_seconds
 
   def _GetTimeValues(self, number_of_seconds):
     """Determines time values.

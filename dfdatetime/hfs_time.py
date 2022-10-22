@@ -24,8 +24,11 @@ class HFSTime(interface.DateTimeValues):
   in local time and in HFS+/HFSX in UTC.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
+
   _EPOCH = HFSTimeEpoch()
 
   # The difference between Jan 1, 1904 and Jan 1, 1970 in seconds.

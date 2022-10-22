@@ -27,6 +27,8 @@ class PosixTime(interface.DateTimeValues):
   are known to be used.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -122,6 +124,8 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
   Variant of the POSIX timestamp in milliseconds.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -229,6 +233,8 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
   Variant of the POSIX timestamp in microseconds.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -332,6 +338,8 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
   Variant of the POSIX timestamp in nanoseconds.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 

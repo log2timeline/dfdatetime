@@ -16,6 +16,8 @@ class TimeElements(interface.DateTimeValues):
   hours, minutes and seconds.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -843,6 +845,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
   Attributes:
     fraction_of_second (decimal.Decimal): fraction of second, which must be a
         value between 0.0 and 1.0.
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -1010,6 +1014,8 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
   Attributes:
     fraction_of_second (decimal.Decimal): fraction of second, which must be a
         value between 0.0 and 1.0.
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date of the date and time value, that
         represents 1 millisecond (PRECISION_1_MILLISECOND).
@@ -1105,6 +1111,8 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
   Attributes:
     fraction_of_second (decimal.Decimal): fraction of second, which must be a
         value between 0.0 and 1.0.
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date of the date and time value, that
         represents 1 microsecond (PRECISION_1_MICROSECOND).

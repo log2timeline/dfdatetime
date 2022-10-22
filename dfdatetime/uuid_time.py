@@ -26,8 +26,11 @@ class UUIDTime(interface.DateTimeValues):
     https://en.wikipedia.org/wiki/Universally_unique_identifier
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
+
   _EPOCH = UUIDTimeEpoch()
 
   # The difference between October 15, 1582 and January 1, 1970 in seconds.

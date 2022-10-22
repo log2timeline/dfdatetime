@@ -23,6 +23,8 @@ class WebKitTime(interface.DateTimeValues):
   microseconds since 1601-01-01 00:00:00.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 

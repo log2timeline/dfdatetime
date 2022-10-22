@@ -48,6 +48,8 @@ class GolangTime(interface.DateTimeValues):
   * byte 15 - time zone offset in seconds as an 8-bit integer.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time
   """
 

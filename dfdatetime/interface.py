@@ -51,6 +51,8 @@ class DateTimeValues(object):
   This is the super class of different date and time representations.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -105,6 +107,7 @@ class DateTimeValues(object):
     self._precision = precision
     self._time_zone_offset = time_zone_offset
 
+    self.is_delta = False
     self.is_local_time = False
 
   @property

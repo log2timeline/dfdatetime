@@ -28,6 +28,8 @@ class OLEAutomationDate(interface.DateTimeValues):
     https://docs.microsoft.com/en-us/dotnet/api/system.datetime.tooadate
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
   _EPOCH = OLEAutomationDateEpoch()

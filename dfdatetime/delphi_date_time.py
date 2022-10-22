@@ -30,6 +30,8 @@ class DelphiDateTime(interface.DateTimeValues):
     https://docwiki.embarcadero.com/Libraries/XE3/en/System.TDateTime
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
   # The difference between December 30, 1899 and January 1, 1970 in days.

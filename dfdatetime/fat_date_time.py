@@ -35,6 +35,8 @@ class FATDateTime(interface.DateTimeValues):
   in the local time of the computer.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -195,6 +197,8 @@ class FATTimestamp(interface.DateTimeValues):
   the FAT date time epoch).
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 

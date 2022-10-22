@@ -342,7 +342,8 @@ class DependencyHelper(object):
         continue
 
       result, status_message = self._CheckPythonModule(dependency)
-      if not result:
+
+      if not result and not dependency.is_optional:
         check_result = False
 
       self._PrintCheckDependencyStatus(

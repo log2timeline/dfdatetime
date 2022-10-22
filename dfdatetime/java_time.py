@@ -19,6 +19,8 @@ class JavaTime(posix_time.PosixTimeInMilliseconds):
     https://docs.oracle.com/javase/8/docs/api/java/util/Date.html
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 

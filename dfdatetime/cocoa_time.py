@@ -24,8 +24,11 @@ class CocoaTime(interface.DateTimeValues):
   Negative values represent date and times predating the Cocoa epoch.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
+
   # The difference between January 1, 2001 and January 1, 1970 in seconds.
   _COCOA_TO_POSIX_BASE = -978307200
 

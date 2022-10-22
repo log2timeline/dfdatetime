@@ -16,6 +16,8 @@ class FakeTime(interface.DateTimeValues):
   it contains the current time in UTC in microsecond precision.
 
   Attributes:
+    is_delta (bool): True if the date and time value is relative to another
+        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 

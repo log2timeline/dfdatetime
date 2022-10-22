@@ -629,6 +629,12 @@ class TimeElementsTest(unittest.TestCase):
     date_time_string = time_elements_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2010-08-12 20:06:31')
 
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(0, 8, 12, 20, 6, 31))
+
+    date_time_string = time_elements_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '0000-08-12 20:06:31')
+
     time_elements_object = time_elements.TimeElements()
 
     date_time_string = time_elements_object.CopyToDateTimeString()

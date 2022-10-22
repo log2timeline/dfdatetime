@@ -4,6 +4,7 @@
 
 import unittest
 
+from dfdatetime import definitions
 from dfdatetime import interface
 
 
@@ -478,7 +479,7 @@ class DateTimeValuesTest(unittest.TestCase):
     """Tests the _GetDaysPerMonth function."""
     date_time_values = interface.DateTimeValues()
 
-    expected_days_per_month = list(interface.DateTimeValues._DAYS_PER_MONTH)
+    expected_days_per_month = list(definitions.DAYS_PER_MONTH)
 
     days_per_month = []
     for month in range(1, 13):
@@ -523,6 +524,10 @@ class DateTimeValuesTest(unittest.TestCase):
     date_time_values = interface.DateTimeValues()
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        1970, 1, 1, 0, 1, 0)
+    self.assertEqual(number_of_seconds, 60)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
         2010, 8, 12, 0, 0, 0)
     self.assertEqual(number_of_seconds, 1281571200)
 
@@ -535,12 +540,16 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertEqual(number_of_seconds, 1281647191)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
+        2012, 3, 5, 20, 40, 0)
+    self.assertEqual(number_of_seconds, 1330980000)
+
+    number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
         1601, 1, 2, 0, 0, 0)
     self.assertEqual(number_of_seconds, -11644387200)
 
     number_of_seconds = date_time_values._GetNumberOfSecondsFromElements(
         0, 1, 2, 0, 0, 0)
-    self.assertIsNone(number_of_seconds)
+    self.assertEqual(number_of_seconds, -62167132800)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(

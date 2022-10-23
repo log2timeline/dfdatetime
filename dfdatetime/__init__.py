@@ -25,4 +25,4 @@ from dfdatetime import uuid_time
 from dfdatetime import webkit_time
 
 
-__version__ = '20221022'
+__version__ = '20221023'

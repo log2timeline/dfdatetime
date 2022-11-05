@@ -862,9 +862,13 @@ class TimeElements(interface.DateTimeValues):
     time_elements_tuple = (
         year + delta_year, month, day_of_month, hours, minutes, seconds)
 
-    return TimeElements(
+    date_time = TimeElements(
         precision=self._precision, time_elements_tuple=time_elements_tuple,
         time_zone_offset=self._time_zone_offset)
+
+    date_time.is_local_time = self.is_local_time
+
+    return date_time
 
 
 class TimeElementsWithFractionOfSecond(TimeElements):

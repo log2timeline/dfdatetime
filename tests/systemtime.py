@@ -80,6 +80,13 @@ class SystemtimeTest(unittest.TestCase):
     normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.142'))
 
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
+    systemtime_object.time_zone_offset = 60
+
+    normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.142'))
+
     systemtime_object = systemtime.Systemtime()
 
     normalized_timestamp = systemtime_object._GetNormalizedTimestamp()

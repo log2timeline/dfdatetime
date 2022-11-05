@@ -80,6 +80,15 @@ class DelphiDateTimeTest(unittest.TestCase):
     normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+    delphi_date_time_object.time_zone_offset = 60
+
+    expected_normalized_timestamp = decimal.Decimal(
+        '1371581400.553919887170195579')
+    normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
+
     delphi_date_time_object = delphi_date_time.DelphiDateTime()
 
     normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()

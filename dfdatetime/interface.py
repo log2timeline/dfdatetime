@@ -121,6 +121,17 @@ class DateTimeValues(object):
     """
     return self._time_zone_offset
 
+  @time_zone_offset.setter
+  def time_zone_offset(self, time_zone_offset):
+    """Sets the time zone offset.
+
+    Args:
+      time_zone_offset (int): time zone offset in number of minutes from UTC or
+          None if not set.
+    """
+    self._normalized_timestamp = None
+    self._time_zone_offset = time_zone_offset
+
   def __eq__(self, other):
     """Determines if the date time values are equal to other.
 

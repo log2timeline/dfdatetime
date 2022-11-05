@@ -40,14 +40,14 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_time_object._time_zone_offset, 0)
 
     golang_timestamp = struct.pack(
-        '>Bqih', 1, golang_time.GolangTime._GOLANG_TO_POSIX_BASE, 0, 1)
+        '>Bqih', 1, golang_time.GolangTime._GOLANG_TO_POSIX_BASE, 0, 60)
     golang_time_object = golang_time.GolangTime(
         golang_timestamp=golang_timestamp)
     self.assertEqual(golang_time_object._number_of_seconds,
                      golang_time.GolangTime._GOLANG_TO_POSIX_BASE)
     self.assertEqual(golang_time_object._nanoseconds, 0)
-    self.assertEqual(golang_time_object.is_local_time, True)
-    self.assertEqual(golang_time_object._time_zone_offset, 1)
+    self.assertEqual(golang_time_object.is_local_time, False)
+    self.assertEqual(golang_time_object._time_zone_offset, 60)
 
     golang_timestamp = bytes.fromhex('010000000e7791f70000000000ffff')
     golang_time_object = golang_time.GolangTime(
@@ -74,6 +74,23 @@ class GolangTest(unittest.TestCase):
     normalized_timestamp = golang_time_object._GetNormalizedTimestamp()
     self.assertEqual(
         normalized_timestamp, decimal.Decimal('1636884149.711098348'))
+
+    golang_timestamp = struct.pack('>Bqih', 1, 63772480949, 711098348, 60)
+    golang_time_object = golang_time.GolangTime(
+        golang_timestamp=golang_timestamp)
+
+    normalized_timestamp = golang_time_object._GetNormalizedTimestamp()
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1636880549.711098348'))
+
+    golang_timestamp = struct.pack('>Bqih', 1, 63772480949, 711098348, 0)
+    golang_time_object = golang_time.GolangTime(
+        golang_timestamp=golang_timestamp)
+    golang_time_object.time_zone_offset = 60
+
+    normalized_timestamp = golang_time_object._GetNormalizedTimestamp()
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1636880549.711098348'))
 
     golang_timestamp = bytes.fromhex('010000000e7791f70000000000ffff')
     golang_time_object = golang_time.GolangTime(
@@ -177,3 +194,7 @@ class GolangTest(unittest.TestCase):
 
     date_time_string = golang_time_object.CopyToDateTimeString()
     self.assertEqual(date_time_string, '2000-01-01 12:23:45.000056789')
+
+
+if __name__ == '__main__':
+  unittest.main()

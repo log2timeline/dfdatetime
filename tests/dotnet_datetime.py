@@ -35,7 +35,26 @@ class DotNetDateTimeTest(unittest.TestCase):
     """Tests the _GetNormalizedTimestamp function."""
     dotnet_date_time = dotnet_datetime.DotNetDateTime(
         timestamp=637433719321230000)
+
     expected_normalized_timestamp = decimal.Decimal(1607775132123) / 1000
+
+    normalized_timestamp = dotnet_date_time._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
+
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(
+        time_zone_offset=60, timestamp=637433719321230000)
+
+    expected_normalized_timestamp = decimal.Decimal(1607771532123) / 1000
+
+    normalized_timestamp = dotnet_date_time._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
+
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(
+        timestamp=637433719321230000)
+    dotnet_date_time.time_zone_offset = 60
+
+    expected_normalized_timestamp = decimal.Decimal(1607771532123) / 1000
+
     normalized_timestamp = dotnet_date_time._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
 

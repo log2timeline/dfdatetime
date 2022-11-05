@@ -66,6 +66,14 @@ class UUIDTimeTest(unittest.TestCase):
     self.assertEqual(
         normalized_timestamp, decimal.Decimal('1337127061.6544084'))
 
+    uuid_object = uuid.UUID('00911b54-9ef4-11e1-be53-525400123456')
+    uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
+    uuid_time_object.time_zone_offset = 60
+
+    normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('1337127061.6544084'))
+
     uuid_time_object = uuid_time.UUIDTime()
     uuid_time_object._timestamp = 0x1fffffffffffffff
 

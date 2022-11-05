@@ -43,6 +43,12 @@ class FiletimeTest(unittest.TestCase):
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546875'))
 
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+    filetime_object.time_zone_offset = 60
+
+    normalized_timestamp = filetime_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546875'))
+
     filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
 
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()

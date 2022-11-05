@@ -43,6 +43,12 @@ class WebKitTimeTest(unittest.TestCase):
     normalized_timestamp = webkit_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546875'))
 
+    webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
+    webkit_time_object.time_zone_offset = 60
+
+    normalized_timestamp = webkit_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546875'))
+
     webkit_time_object = webkit_time.WebKitTime(timestamp=0x1ffffffffffffffff)
 
     normalized_timestamp = webkit_time_object._GetNormalizedTimestamp()

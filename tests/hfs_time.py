@@ -43,6 +43,12 @@ class HFSTimeTest(unittest.TestCase):
     normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1375367128.0'))
 
+    hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
+    hfs_time_object.time_zone_offset = 60
+
+    normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1375367128.0'))
+
     hfs_time_object = hfs_time.HFSTime(timestamp=0x1ffffffff)
 
     normalized_timestamp = hfs_time_object._GetNormalizedTimestamp()

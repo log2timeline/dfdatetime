@@ -32,7 +32,7 @@ class GolangTime(interface.DateTimeValues):
       integer.
   * bytes 9-12 - fraction of second, number of nanoseconds as a big-endian
       signed integer.
-  * bytes 13-14 - time zone offset in minutes as a 16-bit big endian integer,
+  * bytes 13-14 - time zone offset in minutes as a 16-bit big-endian integer,
       where -1 represents UTC.
 
   A serialized version 2 Golang time.Time timestamp is a 16 byte value
@@ -43,7 +43,7 @@ class GolangTime(interface.DateTimeValues):
       integer.
   * bytes 9-12 - fraction of second, number of nanoseconds as a big-endian
       signed integer.
-  * bytes 13-14 - time zone offset in minutes as a 16-bit big endian integer,
+  * bytes 13-14 - time zone offset in minutes as a 16-bit big-endian integer,
       where -1 represents UTC.
   * byte 15 - time zone offset in seconds as an 8-bit integer.
 
@@ -81,9 +81,6 @@ class GolangTime(interface.DateTimeValues):
     self._nanoseconds = nanoseconds
     self._number_of_seconds = number_of_seconds
 
-    if time_zone_offset:
-      self.is_local_time = True
-
   @property
   def golang_timestamp(self):
     """int: Golang time.Time timestamp or None if not set."""
@@ -110,6 +107,9 @@ class GolangTime(interface.DateTimeValues):
           self._normalized_timestamp += (
               decimal.Decimal(self._nanoseconds) /
               definitions.NANOSECONDS_PER_SECOND)
+
+        if self._time_zone_offset:
+          self._normalized_timestamp -= self._time_zone_offset * 60
 
     return self._normalized_timestamp
 

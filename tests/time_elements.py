@@ -54,6 +54,13 @@ class TimeElementsTest(unittest.TestCase):
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991'))
 
+    time_elements_object = time_elements.TimeElements(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+    time_elements_object.time_zone_offset = 60
+
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991'))
+
     time_elements_object = time_elements.TimeElements()
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
@@ -800,6 +807,13 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.429'))
 
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429))
+    time_elements_object.time_zone_offset = 60
+
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.429'))
+
     time_elements_object = time_elements.TimeElementsInMilliseconds()
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
@@ -1161,6 +1175,13 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
     time_elements_object = time_elements.TimeElementsInMicroseconds(
         time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876),
         time_zone_offset=60)
+
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.429876'))
+
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876))
+    time_elements_object.time_zone_offset = 60
 
     normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.429876'))

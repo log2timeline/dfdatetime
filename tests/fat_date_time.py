@@ -35,6 +35,12 @@ class FATDateTime(unittest.TestCase):
     normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643592.0'))
 
+    fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xa8d03d0c)
+    fat_date_time_object.time_zone_offset = 60
+
+    normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643592.0'))
+
     fat_date_time_object = fat_date_time.FATDateTime()
 
     normalized_timestamp = fat_date_time_object._GetNormalizedTimestamp()

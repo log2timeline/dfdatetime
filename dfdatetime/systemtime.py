@@ -23,25 +23,16 @@ class Systemtime(interface.DateTimeValues):
       WORD second,
       WORD millisecond
   }
-
-  Attributes:
-    year (int): year, 1601 through 30827.
-    month (int): month of year, 1 through 12.
-    day_of_week (int): day of week, 0 through 6.
-    day_of_month (int): day of month, 1 through 31.
-    hours (int): hours, 0 through 23.
-    minutes (int): minutes, 0 through 59.
-    seconds (int): seconds, 0 through 59.
-    milliseconds (int): milliseconds, 0 through 999.
   """
 
-  # TODO: make attributes read-only.
-
   def __init__(
-      self, precision=None, system_time_tuple=None, time_zone_offset=None):
+      self, is_delta=False, precision=None, system_time_tuple=None,
+      time_zone_offset=None):
     """Initializes a SYSTEMTIME structure.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       system_time_tuple
@@ -55,17 +46,18 @@ class Systemtime(interface.DateTimeValues):
       ValueError: if the system time is invalid.
     """
     super(Systemtime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_zone_offset=time_zone_offset)
     self._number_of_seconds = None
-    self.day_of_month = None
-    self.day_of_week = None
-    self.hours = None
-    self.milliseconds = None
-    self.minutes = None
-    self.month = None
-    self.seconds = None
-    self.year = None
+    self._day_of_month = None
+    self._day_of_week = None
+    self._hours = None
+    self._milliseconds = None
+    self._minutes = None
+    self._month = None
+    self._seconds = None
+    self._year = None
 
     if system_time_tuple:
       if len(system_time_tuple) < 8:
@@ -98,18 +90,58 @@ class Systemtime(interface.DateTimeValues):
       if system_time_tuple[7] < 0 or system_time_tuple[7] > 999:
         raise ValueError('Milliseconds value out of bounds.')
 
-      self.day_of_month = system_time_tuple[3]
-      self.day_of_week = system_time_tuple[2]
-      self.hours = system_time_tuple[4]
-      self.milliseconds = system_time_tuple[7]
-      self.minutes = system_time_tuple[5]
-      self.month = system_time_tuple[1]
-      self.seconds = system_time_tuple[6]
-      self.year = system_time_tuple[0]
+      self._day_of_month = system_time_tuple[3]
+      self._day_of_week = system_time_tuple[2]
+      self._hours = system_time_tuple[4]
+      self._milliseconds = system_time_tuple[7]
+      self._minutes = system_time_tuple[5]
+      self._month = system_time_tuple[1]
+      self._seconds = system_time_tuple[6]
+      self._year = system_time_tuple[0]
 
       self._number_of_seconds = self._GetNumberOfSecondsFromElements(
-          self.year, self.month, self.day_of_month, self.hours, self.minutes,
-          self.seconds)
+          self._year, self._month, self._day_of_month, self._hours,
+          self._minutes, self._seconds)
+
+  @property
+  def day_of_month(self):
+    """day_of_month (int): day of month, 1 through 31."""
+    return self._day_of_month
+
+  @property
+  def day_of_week(self):
+    """day_of_week (int): day of week, 0 through 6."""
+    return self._day_of_week
+
+  @property
+  def hours(self):
+    """hours (int): hours, 0 through 23."""
+    return self._hours
+
+  @property
+  def milliseconds(self):
+    """milliseconds (int): milliseconds, 0 through 999."""
+    return self._milliseconds
+
+  @property
+  def minutes(self):
+    """minutes (int): minutes, 0 through 59."""
+    return self._minutes
+
+  @property
+  def month(self):
+    """month (int): month of year, 1 through 12."""
+    return self._month
+
+  @property
+  def seconds(self):
+    """seconds (int): seconds, 0 through 59."""
+    return self._seconds
+
+  @property
+  def year(self):
+    """year (int): year, 1601 through 30827."""
+    return self._year
 
   def _GetNormalizedTimestamp(self):
     """Retrieves the normalized timestamp.
@@ -123,7 +155,7 @@ class Systemtime(interface.DateTimeValues):
     if self._normalized_timestamp is None:
       if self._number_of_seconds is not None:
         self._normalized_timestamp = (
-            decimal.Decimal(self.milliseconds) /
+            decimal.Decimal(self._milliseconds) /
             definitions.MILLISECONDS_PER_SECOND)
         self._normalized_timestamp += decimal.Decimal(self._number_of_seconds)
 
@@ -169,15 +201,15 @@ class Systemtime(interface.DateTimeValues):
         year, month, day_of_month, hours, minutes, seconds)
     self._time_zone_offset = time_zone_offset
 
-    self.year = year
-    self.month = month
-    self.day_of_month = day_of_month
+    self._year = year
+    self._month = month
+    self._day_of_month = day_of_month
     # TODO: calculate day of week on demand.
-    self.day_of_week = None
-    self.hours = hours
-    self.minutes = minutes
-    self.seconds = seconds
-    self.milliseconds = milliseconds
+    self._day_of_week = None
+    self._hours = hours
+    self._minutes = minutes
+    self._seconds = seconds
+    self._milliseconds = milliseconds
 
   def CopyToDateTimeString(self):
     """Copies the SYSTEMTIME structure to a date and time string.
@@ -189,9 +221,9 @@ class Systemtime(interface.DateTimeValues):
     if self._number_of_seconds is None:
       return None
 
-    return (f'{self.year:04d}-{self.month:02d}-{self.day_of_month:02d} '
-            f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
-            f'.{self.milliseconds:03d}')
+    return (f'{self._year:04d}-{self._month:02d}-{self._day_of_month:02d} '
+            f'{self._hours:02d}:{self._minutes:02d}:{self._seconds:02d}'
+            f'.{self._milliseconds:03d}')
 
 
 factory.Factory.RegisterDateTimeValues(Systemtime)

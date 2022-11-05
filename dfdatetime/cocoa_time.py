@@ -24,8 +24,6 @@ class CocoaTime(interface.DateTimeValues):
   Negative values represent date and times predating the Cocoa epoch.
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -34,10 +32,14 @@ class CocoaTime(interface.DateTimeValues):
 
   _EPOCH = CocoaTimeEpoch()
 
-  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
+  def __init__(
+      self, is_delta=False, precision=None, time_zone_offset=None,
+      timestamp=None):
     """Initializes a Cocoa timestamp.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -45,6 +47,7 @@ class CocoaTime(interface.DateTimeValues):
       timestamp (Optional[float]): Cocoa timestamp.
     """
     super(CocoaTime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_SECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

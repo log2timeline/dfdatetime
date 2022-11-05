@@ -26,8 +26,6 @@ class Filetime(interface.DateTimeValues):
   2 x 32-bit integers and is presumed to be unsigned.
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -36,10 +34,14 @@ class Filetime(interface.DateTimeValues):
   # The difference between January 1, 1601 and January 1, 1970 in seconds.
   _FILETIME_TO_POSIX_BASE = 11644473600
 
-  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
+  def __init__(
+      self, is_delta=False, precision=None, time_zone_offset=None,
+      timestamp=None):
     """Initializes a FILETIME timestamp.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -47,6 +49,7 @@ class Filetime(interface.DateTimeValues):
       timestamp (Optional[int]): FILETIME timestamp.
     """
     super(Filetime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_100_NANOSECONDS,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

@@ -23,6 +23,7 @@ class DotNetDateTime(interface.DateTimeValues):
   and time as the number of 100 nanoseconds since 12:00 AM January 1, year
   1 A.D. in the proleptic Gregorian Calendar.
   """
+
   _EPOCH = DotNetDateTimeEpoch()
 
   # The difference between January 1, 1 and January 1, 1970 in seconds.
@@ -30,10 +31,14 @@ class DotNetDateTime(interface.DateTimeValues):
       ((1969 * 365) + (1969 // 4) - (1969 // 100) + (1969 // 400)) *
       definitions.SECONDS_PER_DAY)
 
-  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
+  def __init__(
+      self, is_delta=False, precision=None, time_zone_offset=None,
+      timestamp=None):
     """Initializes a .NET DateTime timestamp.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -41,6 +46,7 @@ class DotNetDateTime(interface.DateTimeValues):
       timestamp (Optional[int]): .NET DateTime ticks.
     """
     super(DotNetDateTime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_100_NANOSECONDS,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp or 0

@@ -50,8 +50,6 @@ class DateTimeValues(object):
   This is the super class of different date and time representations.
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -89,10 +87,12 @@ class DateTimeValues(object):
       definitions.PRECISION_10_NANOSECONDS: _10_NANOSECONDS_PER_SECOND,
       definitions.PRECISION_100_NANOSECONDS: _100_NANOSECONDS_PER_SECOND}
 
-  def __init__(self, precision=None, time_zone_offset=None):
+  def __init__(self, is_delta=False, precision=None, time_zone_offset=None):
     """Initializes date time values.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -100,12 +100,19 @@ class DateTimeValues(object):
     """
     super(DateTimeValues, self).__init__()
     self._cached_date_time_values = None
+    self._is_delta = is_delta
     self._normalized_timestamp = None
     self._precision = precision
     self._time_zone_offset = time_zone_offset
 
-    self.is_delta = False
     self.is_local_time = False
+
+  @property
+  def is_delta(self):
+    """is_delta (bool): True if the date and time value is relative to another
+        date and time value.
+    """
+    return self._is_delta
 
   @property
   def precision(self):
@@ -707,7 +714,7 @@ class DateTimeValues(object):
       raise ValueError('Month value out of bounds.')
 
     days_per_month = definitions.DAYS_PER_MONTH[month - 1]
-    if month == 2 and self._IsLeapYear(year):
+    if month == 2 and (self._is_delta or self._IsLeapYear(year)):
       days_per_month += 1
 
     return days_per_month

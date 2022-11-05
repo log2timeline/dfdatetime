@@ -116,11 +116,12 @@ class SerializerTest(unittest.TestCase):
     self.assertEqual(json_dict, expected_json_dict)
 
     time_elements_object = time_elements.TimeElements(
-        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+        is_delta=True, time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
     expected_json_dict = {
         '__class_name__': 'TimeElements',
         '__type__': 'DateTimeValues',
+        'is_delta': True,
         'time_elements_tuple': (2010, 8, 12, 20, 6, 31)}
 
     json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
@@ -253,14 +254,16 @@ class SerializerTest(unittest.TestCase):
     json_dict = {
         '__class_name__': 'TimeElements',
         '__type__': 'DateTimeValues',
+        'is_delta': True,
         'time_elements_tuple': (2010, 8, 12, 20, 6, 31)}
 
     expected_date_time_object = time_elements.TimeElements(
-        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+        is_delta=True, time_elements_tuple=(2010, 8, 12, 20, 6, 31))
 
     date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(
         json_dict)
     self.assertEqual(date_time_object, expected_date_time_object)
+    self.assertTrue(date_time_object.is_delta)
 
     json_dict = {
         '__class_name__': 'TimeElementsInMilliseconds',

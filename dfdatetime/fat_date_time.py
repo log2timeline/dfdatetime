@@ -35,8 +35,6 @@ class FATDateTime(interface.DateTimeValues):
   in the local time of the computer.
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -45,25 +43,29 @@ class FATDateTime(interface.DateTimeValues):
   # The difference between January 1, 1980 and January 1, 1970 in seconds.
   _FAT_DATE_TO_POSIX_BASE = 315532800
 
-  def __init__(self, fat_date_time=None, precision=None, time_zone_offset=None):
+  def __init__(
+      self, fat_date_time=None, is_delta=False, precision=None,
+      time_zone_offset=None):
     """Initializes a FAT date time.
 
     Args:
       fat_date_time (Optional[int]): FAT date time.
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
     """
-    number_of_seconds = None
-    if fat_date_time is not None:
-      number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
-
     super(FATDateTime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_2_SECONDS,
         time_zone_offset=time_zone_offset)
     self._fat_date_time = fat_date_time
-    self._number_of_seconds = number_of_seconds
+    self._number_of_seconds = None
+
+    if fat_date_time is not None:
+      self._number_of_seconds = self._GetNumberOfSeconds(fat_date_time)
 
   @property
   def fat_date_time(self):
@@ -197,8 +199,6 @@ class FATTimestamp(interface.DateTimeValues):
   the FAT date time epoch).
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -207,10 +207,14 @@ class FATTimestamp(interface.DateTimeValues):
   # The difference between January 1, 1980 and January 1, 1970 in seconds.
   _FAT_DATE_TO_POSIX_BASE = 315532800
 
-  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
+  def __init__(
+      self, is_delta=False, precision=None, time_zone_offset=None,
+      timestamp=None):
     """Initializes a FAT timestamp.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -218,6 +222,7 @@ class FATTimestamp(interface.DateTimeValues):
       timestamp (Optional[int]): FAT timestamp.
     """
     super(FATTimestamp, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_10_MILLISECONDS,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

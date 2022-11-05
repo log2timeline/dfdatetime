@@ -30,19 +30,22 @@ class DelphiDateTime(interface.DateTimeValues):
     https://docwiki.embarcadero.com/Libraries/XE3/en/System.TDateTime
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
+
   # The difference between December 30, 1899 and January 1, 1970 in days.
   _DELPHI_TO_POSIX_BASE = 25569
 
   _EPOCH = DelphiDateTimeEpoch()
 
-  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
+  def __init__(
+      self, is_delta=False, precision=None, time_zone_offset=None,
+      timestamp=None):
     """Initializes a Delphi TDateTime timestamp.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -50,6 +53,7 @@ class DelphiDateTime(interface.DateTimeValues):
       timestamp (Optional[float]): Delphi TDateTime timestamp.
     """
     super(DelphiDateTime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

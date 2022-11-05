@@ -16,8 +16,6 @@ class TimeElements(interface.DateTimeValues):
   hours, minutes and seconds.
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
@@ -77,10 +75,13 @@ class TimeElements(interface.DateTimeValues):
   _RFC_WEEKDAYS = frozenset(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
 
   def __init__(
-      self, precision=None, time_elements_tuple=None, time_zone_offset=None):
+      self, is_delta=False, precision=None, time_elements_tuple=None,
+      time_zone_offset=None):
     """Initializes time elements.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
@@ -93,6 +94,7 @@ class TimeElements(interface.DateTimeValues):
       ValueError: if the time elements tuple is invalid.
     """
     super(TimeElements, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_SECOND,
         time_zone_offset=time_zone_offset)
     self._number_of_seconds = None
@@ -850,7 +852,7 @@ class TimeElements(interface.DateTimeValues):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self.is_delta:
+    if not self._is_delta:
       raise ValueError('Not a date time delta.')
 
     if self._number_of_seconds is None:
@@ -877,19 +879,19 @@ class TimeElementsWithFractionOfSecond(TimeElements):
   Attributes:
     fraction_of_second (decimal.Decimal): fraction of second, which must be a
         value between 0.0 and 1.0.
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
   def __init__(
-      self, fraction_of_second=None, precision=None, time_elements_tuple=None,
-      time_zone_offset=None):
+      self, fraction_of_second=None, is_delta=False, precision=None,
+      time_elements_tuple=None, time_zone_offset=None):
     """Initializes time elements.
 
     Args:
       fraction_of_second (Optional[decimal.Decimal]): fraction of second, which
           must be a value between 0.0 and 1.0.
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int]]):
@@ -908,6 +910,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
             f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
     super(TimeElementsWithFractionOfSecond, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_SECOND,
         time_elements_tuple=time_elements_tuple,
         time_zone_offset=time_zone_offset)
@@ -1052,7 +1055,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self.is_delta:
+    if not self._is_delta:
       raise ValueError('Not a date time delta.')
 
     if self._number_of_seconds is None:
@@ -1076,18 +1079,19 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
   Attributes:
     fraction_of_second (decimal.Decimal): fraction of second, which must be a
         value between 0.0 and 1.0.
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date of the date and time value, that
         represents 1 millisecond (PRECISION_1_MILLISECOND).
   """
 
   def __init__(
-      self, precision=None, time_elements_tuple=None, time_zone_offset=None):
+      self, is_delta=False, precision=None, time_elements_tuple=None,
+      time_zone_offset=None):
     """Initializes time elements.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
@@ -1118,7 +1122,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
           decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
 
     super(TimeElementsInMilliseconds, self).__init__(
-        fraction_of_second=fraction_of_second,
+        fraction_of_second=fraction_of_second, is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_elements_tuple=time_elements_tuple,
         time_zone_offset=time_zone_offset)
@@ -1179,7 +1183,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self.is_delta:
+    if not self._is_delta:
       raise ValueError('Not a date time delta.')
 
     if self._number_of_seconds is None:
@@ -1203,18 +1207,19 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
   Attributes:
     fraction_of_second (decimal.Decimal): fraction of second, which must be a
         value between 0.0 and 1.0.
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
     precision (str): precision of the date of the date and time value, that
         represents 1 microsecond (PRECISION_1_MICROSECOND).
   """
 
   def __init__(
-      self, precision=None, time_elements_tuple=None, time_zone_offset=None):
+      self, is_delta=False, precision=None, time_elements_tuple=None,
+      time_zone_offset=None):
     """Initializes time elements.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
@@ -1245,7 +1250,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
           decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND)
 
     super(TimeElementsInMicroseconds, self).__init__(
-        fraction_of_second=fraction_of_second,
+        fraction_of_second=fraction_of_second, is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_elements_tuple=time_elements_tuple,
         time_zone_offset=time_zone_offset)
@@ -1306,7 +1311,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self.is_delta:
+    if not self._is_delta:
       raise ValueError('Not a date time delta.')
 
     if self._number_of_seconds is None:

@@ -32,14 +32,10 @@ class PosixTime(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(
-      self, is_delta=False, precision=None, time_zone_offset=None,
-      timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp.
 
     Args:
-      is_delta (Optional[bool]): True if the date and time value is relative to
-          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -47,7 +43,6 @@ class PosixTime(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp.
     """
     super(PosixTime, self).__init__(
-        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_SECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
@@ -132,14 +127,10 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(
-      self, is_delta=False, precision=None, time_zone_offset=None,
-      timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp in milliseconds.
 
     Args:
-      is_delta (Optional[bool]): True if the date and time value is relative to
-          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -147,7 +138,6 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp in milliseconds.
     """
     super(PosixTimeInMilliseconds, self).__init__(
-        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
@@ -244,14 +234,10 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(
-      self, is_delta=False, precision=None, time_zone_offset=None,
-      timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp in microseconds.
 
     Args:
-      is_delta (Optional[bool]): True if the date and time value is relative to
-          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -259,7 +245,6 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp in microseconds.
     """
     super(PosixTimeInMicroseconds, self).__init__(
-        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
@@ -352,14 +337,10 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
 
   _EPOCH = PosixTimeEpoch()
 
-  def __init__(
-      self, is_delta=False, precision=None, time_zone_offset=None,
-      timestamp=None):
+  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
     """Initializes a POSIX timestamp in nanoseconds.
 
     Args:
-      is_delta (Optional[bool]): True if the date and time value is relative to
-          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -367,7 +348,6 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
       timestamp (Optional[int]): POSIX timestamp in nanoseconds.
     """
     super(PosixTimeInNanoseconds, self).__init__(
-        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_NANOSECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

@@ -44,13 +44,10 @@ class RFC2579DateTime(interface.DateTimeValues):
 
   # pylint: disable=missing-type-doc
 
-  def __init__(
-      self, is_delta=False, precision=None, rfc2579_date_time_tuple=None):
+  def __init__(self, precision=None, rfc2579_date_time_tuple=None):
     """Initializes a RFC2579 date-time.
 
     Args:
-      is_delta (Optional[bool]): True if the date and time value is relative to
-          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       rfc2579_date_time_tuple:
@@ -63,7 +60,6 @@ class RFC2579DateTime(interface.DateTimeValues):
       ValueError: if the system time is invalid.
     """
     super(RFC2579DateTime, self).__init__(
-        is_delta=is_delta,
         precision=precision or definitions.PRECISION_100_MILLISECONDS)
     self._day_of_month = None
     self._deciseconds = None

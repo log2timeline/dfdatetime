@@ -12,8 +12,6 @@ class SemanticTime(interface.DateTimeValues):
   meaning such as: "Never", "Yesterday", "Not set".
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 

@@ -28,8 +28,6 @@ class OLEAutomationDate(interface.DateTimeValues):
     https://docs.microsoft.com/en-us/dotnet/api/system.datetime.tooadate
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
   _EPOCH = OLEAutomationDateEpoch()
@@ -37,10 +35,14 @@ class OLEAutomationDate(interface.DateTimeValues):
   # The difference between December 30, 1899 and January 1, 1970 in days.
   _OLE_AUTOMATION_DATE_TO_POSIX_BASE = 25569
 
-  def __init__(self, precision=None, time_zone_offset=None, timestamp=None):
+  def __init__(
+      self, is_delta=False, precision=None, time_zone_offset=None,
+      timestamp=None):
     """Initializes an OLE Automation date.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -48,6 +50,7 @@ class OLEAutomationDate(interface.DateTimeValues):
       timestamp (Optional[float]): OLE Automation date.
     """
     super(OLEAutomationDate, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

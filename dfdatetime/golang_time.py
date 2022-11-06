@@ -48,8 +48,6 @@ class GolangTime(interface.DateTimeValues):
   * byte 15 - time zone offset in seconds as an 8-bit integer.
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time
   """
 
@@ -61,11 +59,13 @@ class GolangTime(interface.DateTimeValues):
 
   _EPOCH = GolangTimeEpoch()
 
-  def __init__(self, golang_timestamp=None, precision=None):
+  def __init__(self, golang_timestamp=None, is_delta=False, precision=None):
     """Initializes a Golang time.Time timestamp.
 
     Args:
       golang_timestamp (Optional[bytes]): the Golang time.Time timestamp.
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
     """
@@ -75,6 +75,7 @@ class GolangTime(interface.DateTimeValues):
           self._GetNumberOfSeconds(golang_timestamp))
 
     super(GolangTime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_NANOSECOND,
         time_zone_offset=time_zone_offset)
     self._golang_timestamp = golang_timestamp

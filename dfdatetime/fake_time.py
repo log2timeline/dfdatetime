@@ -16,17 +16,17 @@ class FakeTime(interface.DateTimeValues):
   it contains the current time in UTC in microsecond precision.
 
   Attributes:
-    is_delta (bool): True if the date and time value is relative to another
-        date and time value.
     is_local_time (bool): True if the date and time value is in local time.
   """
 
   _EPOCH = posix_time.PosixTimeEpoch()
 
-  def __init__(self, precision=None, time_zone_offset=None):
+  def __init__(self, is_delta=False, precision=None, time_zone_offset=None):
     """Initializes a fake timestamp.
 
     Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       time_zone_offset (Optional[int]): time zone offset in number of minutes
@@ -36,6 +36,7 @@ class FakeTime(interface.DateTimeValues):
     timestamp, fraction_of_second = divmod(time.time(), 1)
 
     super(FakeTime, self).__init__(
+        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_zone_offset=time_zone_offset)
     self._microseconds = int(

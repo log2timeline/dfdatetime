@@ -26,13 +26,10 @@ class Systemtime(interface.DateTimeValues):
   """
 
   def __init__(
-      self, is_delta=False, precision=None, system_time_tuple=None,
-      time_zone_offset=None):
+      self, precision=None, system_time_tuple=None, time_zone_offset=None):
     """Initializes a SYSTEMTIME structure.
 
     Args:
-      is_delta (Optional[bool]): True if the date and time value is relative to
-          another date and time value.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
       system_time_tuple
@@ -46,7 +43,6 @@ class Systemtime(interface.DateTimeValues):
       ValueError: if the system time is invalid.
     """
     super(Systemtime, self).__init__(
-        is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_zone_offset=time_zone_offset)
     self._number_of_seconds = None

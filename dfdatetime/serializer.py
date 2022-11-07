@@ -144,8 +144,9 @@ class Serializer(object):
         'GolangTime', 'RFC2579DateTime'):
       json_dict['time_zone_offset'] = date_time_values.time_zone_offset
 
-    if date_time_values.is_delta and class_name not in (
-        'InvalidTime', 'Never', 'NotSet', 'SemanticTime'):
+    if date_time_values.is_delta and class_name in (
+        'TimeElements', 'TimeElementsInMilliseconds',
+        'TimeElementsInMicroseconds'):
       json_dict['is_delta'] = True
 
     if date_time_values.is_local_time:
@@ -181,14 +182,16 @@ class Serializer(object):
     # Remove the class type from the JSON dict since we cannot pass it.
     del json_dict['__type__']
 
-    is_local_time = json_dict.get('is_local_time', None)
-    if is_local_time is not None:
-      del json_dict['is_local_time']
-
-    if class_name in ('InvalidTime', 'Never', 'NotSet', 'SemanticTime'):
+    if class_name not in (
+        'TimeElements', 'TimeElementsInMilliseconds',
+        'TimeElementsInMicroseconds'):
       is_delta = json_dict.get('is_delta', None)
       if is_delta is not None:
         del json_dict['is_delta']
+
+    is_local_time = json_dict.get('is_local_time', None)
+    if is_local_time is not None:
+      del json_dict['is_local_time']
 
     if class_name in ('InvalidTime', 'Never', 'NotSet'):
       string = json_dict.get('string', None)

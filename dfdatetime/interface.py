@@ -51,6 +51,8 @@ class DateTimeValues(object):
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
+    time_zone_hint (str): time zone hint, such as "Europe/Amsterdam", "CET" or
+        "UTC+1", or None if not set.
   """
 
   # pylint: disable=redundant-returns-doc
@@ -106,6 +108,7 @@ class DateTimeValues(object):
     self._time_zone_offset = time_zone_offset
 
     self.is_local_time = False
+    self.time_zone_hint = False
 
   @property
   def is_delta(self):

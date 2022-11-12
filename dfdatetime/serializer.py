@@ -151,6 +151,8 @@ class Serializer(object):
 
     if date_time_values.is_local_time:
       json_dict['is_local_time'] = True
+    if date_time_values.time_zone_hint:
+      json_dict['time_zone_hint'] = date_time_values.time_zone_hint
 
     return json_dict
 
@@ -193,6 +195,10 @@ class Serializer(object):
     if is_local_time is not None:
       del json_dict['is_local_time']
 
+    time_zone_hint = json_dict.get('time_zone_hint', None)
+    if time_zone_hint is not None:
+      del json_dict['time_zone_hint']
+
     if class_name in ('InvalidTime', 'Never', 'NotSet'):
       string = json_dict.get('string', None)
       if string is not None:
@@ -206,5 +212,7 @@ class Serializer(object):
     date_time = factory.Factory.NewDateTimeValues(class_name, **json_dict)
     if is_local_time:
       date_time.is_local_time = is_local_time
+    if time_zone_hint:
+      date_time.time_zone_hint = time_zone_hint
 
     return date_time

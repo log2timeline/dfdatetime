@@ -31,11 +31,13 @@ class SerializerTest(unittest.TestCase):
     self.assertEqual(json_dict, expected_json_dict)
 
     posix_time_object.is_local_time = True
+    posix_time_object.time_zone_hint = 'Europe/Amsterdam'
 
     expected_json_dict = {
         '__class_name__': 'PosixTime',
         '__type__': 'DateTimeValues',
         'is_local_time': True,
+        'time_zone_hint': 'Europe/Amsterdam',
         'timestamp': 1281643591}
 
     json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
@@ -169,9 +171,11 @@ class SerializerTest(unittest.TestCase):
         '__class_name__': 'PosixTime',
         '__type__': 'DateTimeValues',
         'is_local_time': True,
+        'time_zone_hint': 'Europe/Amsterdam',
         'timestamp': 1281643591}
 
     expected_date_time_object.is_local_time = True
+    expected_date_time_object.time_zone_hint = 'Europe/Amsterdam'
 
     date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(
         json_dict)

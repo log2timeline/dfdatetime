@@ -818,8 +818,8 @@ class DateTimeValues(object):
     if number_of_days is None:
       raise ValueError(f'Year value: {year!s} out of bounds.')
 
-    number_of_days += sum([
-        definitions.DAYS_PER_MONTH[index] for index in range(month - 1)])
+    number_of_days += sum(
+        definitions.DAYS_PER_MONTH[index] for index in range(month - 1))
     if month > 2 and self._IsLeapYear(year):
       number_of_days += 1
 

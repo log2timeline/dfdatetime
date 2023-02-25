@@ -969,21 +969,30 @@ class DateTimeValues(object):
     """
     return self._GetDateWithTimeOfDay()
 
-  # TODO: remove this method when there is no more need for it in plaso.
+  # TODO: remove this method when there is no more need for it in Plaso.
   def GetPlasoTimestamp(self):
     """Retrieves a timestamp that is compatible with Plaso.
 
     Returns:
       int: a POSIX timestamp in microseconds or None if no timestamp is
           available.
+
+    Raises:
+      ValueError: if the timestamp cannot be determined.
     """
     normalized_timestamp = self._GetNormalizedTimestamp()
     if normalized_timestamp is None:
       return None
 
     normalized_timestamp *= definitions.MICROSECONDS_PER_SECOND
-    normalized_timestamp = normalized_timestamp.quantize(
-        1, rounding=decimal.ROUND_HALF_UP)
+
+    try:
+      normalized_timestamp = normalized_timestamp.quantize(
+          1, rounding=decimal.ROUND_HALF_UP)
+    except decimal.InvalidOperation as exception:
+      raise ValueError(
+          f'Unable to round normalized timestamp with error: {exception!s}')
+
     return int(normalized_timestamp)
 
   def GetTimeOfDay(self):

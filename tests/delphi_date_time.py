@@ -177,6 +177,26 @@ class DelphiDateTimeTest(unittest.TestCase):
     self.assertEqual(
         date_with_time_of_day_tuple, (None, None, None, None, None, None))
 
+  # TODO: remove this method when there is no more need for it in Plaso.
+  def testGetPlasoTimestamp(self):
+    """Tests the GetPlasoTimestamp function."""
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=41443.8263953)
+
+    micro_posix_timestamp = delphi_date_time_object.GetPlasoTimestamp()
+    self.assertEqual(micro_posix_timestamp, 1371585000553920)
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime()
+
+    micro_posix_timestamp = delphi_date_time_object.GetPlasoTimestamp()
+    self.assertIsNone(micro_posix_timestamp)
+
+    delphi_date_time_object = delphi_date_time.DelphiDateTime(
+        timestamp=8.0e+174)
+
+    with self.assertRaises(ValueError):
+      delphi_date_time_object.GetPlasoTimestamp()
+
   def testGetTimeOfDay(self):
     """Tests the GetTimeOfDay function."""
     delphi_date_time_object = delphi_date_time.DelphiDateTime(

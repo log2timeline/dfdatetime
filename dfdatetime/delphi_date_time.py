@@ -134,6 +134,13 @@ class DelphiDateTime(interface.DateTimeValues):
     number_of_days, hours, minutes, seconds = self._GetTimeValues(
         int(number_of_seconds))
 
+    # The maximum date supported by TDateTime values is limited to:
+    # 9999-12-31 23:59:59.999 (approximate 2958465 days since epoch).
+    # The minimum date is unknown hence assuming it is limited to:
+    # 0001-01-01 00:00:00.000 (approximate -693593 days since epoch).
+    if number_of_days < -693593 or number_of_days > 2958465:
+      return None
+
     year, month, day_of_month = self._GetDateValuesWithEpoch(
         number_of_days, self._EPOCH)
 

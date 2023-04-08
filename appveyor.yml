@@ -2,17 +2,17 @@ environment:
   PYPI_TOKEN:
     secure: /FwQrmudDyj+Mu3DaxLEo23Y6/OEgdHJqyWyZTjkJKje8pxCOrUorN8ZlXRGXbd3UA60emClt0M+SI+xqyA/qkpqZTgd5CKohpVAGH2EfzRc/zwJSGJ4tmZmMVAG8ayk6N9zFxCeC+y0BgZPQnj/Eq/RfuS4YIuaKutIUa5gTMmhWpODFKGV/2Wx1w67xWxAoONfEC5j0Gu3R274SS7FfBb4qWyIiBIJMwHGjlgp1Onk8KlpCLauZv8/hGfQDmWEdZ+mjcsTYyQYr1xfr1/FjQ==
   matrix:
-  - DESCRIPTION: "Windows with 32-bit Python 3.10"
+  - DESCRIPTION: "Windows with 32-bit Python 3.11"
     MACHINE_TYPE: "x86"
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
     PYTHON: "C:\\Python310"
-    PYTHON_VERSION: "3.10"
+    PYTHON_VERSION: "3.11"
     L2TBINARIES_TRACK: "dev"
-  - DESCRIPTION: "Windows with 64-bit Python 3.10"
+  - DESCRIPTION: "Windows with 64-bit Python 3.11"
     MACHINE_TYPE: "amd64"
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
     PYTHON: "C:\\Python310-x64"
-    PYTHON_VERSION: "3.10"
+    PYTHON_VERSION: "3.11"
     L2TBINARIES_TRACK: "dev"
   - DESCRIPTION: "Mac OS with Python 3.11"
     APPVEYOR_BUILD_WORKER_IMAGE: macos-monterey

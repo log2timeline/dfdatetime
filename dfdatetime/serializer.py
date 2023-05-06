@@ -120,6 +120,13 @@ class Serializer(object):
           date_time_values.deciseconds, time_zone_sign, time_zone_hours,
           time_zone_minutes)
 
+    elif class_name == 'Systemtime':
+      json_dict['system_time_tuple'] = (
+          date_time_values.year, date_time_values.month,
+          date_time_values.day_of_week, date_time_values.day_of_month,
+          date_time_values.hours, date_time_values.minutes,
+          date_time_values.seconds, date_time_values.milliseconds)
+
     elif class_name == 'TimeElements':
       json_dict['time_elements_tuple'] = (
           date_time_values.year, date_time_values.month,

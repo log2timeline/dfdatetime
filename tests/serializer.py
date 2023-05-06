@@ -11,6 +11,7 @@ from dfdatetime import posix_time
 from dfdatetime import rfc2579_date_time
 from dfdatetime import semantic_time
 from dfdatetime import serializer
+from dfdatetime import systemtime
 from dfdatetime import time_elements
 
 
@@ -115,6 +116,18 @@ class SerializerTest(unittest.TestCase):
 
     json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
         rfc2579_date_time_object)
+    self.assertEqual(json_dict, expected_json_dict)
+
+    systemtime_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
+
+    expected_json_dict = {
+        '__class_name__': 'Systemtime',
+        '__type__': 'DateTimeValues',
+        'system_time_tuple': (2010, 8, 4, 12, 20, 6, 31, 142)}
+
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
+        systemtime_object)
     self.assertEqual(json_dict, expected_json_dict)
 
     time_elements_object = time_elements.TimeElements(
@@ -250,6 +263,18 @@ class SerializerTest(unittest.TestCase):
 
     expected_date_time_object = rfc2579_date_time.RFC2579DateTime(
         rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '+', 2, 0))
+
+    date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(
+        json_dict)
+    self.assertEqual(date_time_object, expected_date_time_object)
+
+    json_dict = {
+        '__class_name__': 'Systemtime',
+        '__type__': 'DateTimeValues',
+        'system_time_tuple': (2010, 8, 4, 12, 20, 6, 31, 142)}
+
+    expected_date_time_object = systemtime.Systemtime(
+        system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
     date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(
         json_dict)

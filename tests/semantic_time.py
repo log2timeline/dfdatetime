@@ -17,10 +17,10 @@ class SemanticTimeTest(unittest.TestCase):
   def testComparison(self):
     """Tests the comparison functions."""
     semantic_time_object1 = semantic_time.SemanticTime()
-    semantic_time_object1._SORT_ORDER = 1
+    setattr(semantic_time_object1, '_SORT_ORDER', 1)
 
     semantic_time_object2 = semantic_time.SemanticTime()
-    semantic_time_object2._SORT_ORDER = 1
+    setattr(semantic_time_object2, '_SORT_ORDER', 1)
 
     self.assertTrue(semantic_time_object1 == semantic_time_object2)
     self.assertTrue(semantic_time_object1 >= semantic_time_object2)
@@ -30,7 +30,7 @@ class SemanticTimeTest(unittest.TestCase):
     self.assertFalse(semantic_time_object1 != semantic_time_object2)
 
     semantic_time_object2 = semantic_time.SemanticTime()
-    semantic_time_object2._SORT_ORDER = 2
+    setattr(semantic_time_object2, '_SORT_ORDER', 2)
 
     self.assertFalse(semantic_time_object1 == semantic_time_object2)
     self.assertFalse(semantic_time_object1 >= semantic_time_object2)
@@ -164,7 +164,7 @@ class NeverTest(unittest.TestCase):
     self.assertFalse(never_time_object1 != never_time_object2)
 
     semantic_time_object2 = semantic_time.SemanticTime()
-    semantic_time_object2._SORT_ORDER = 1
+    setattr(semantic_time_object2, '_SORT_ORDER', 1)
 
     self.assertFalse(never_time_object1 == semantic_time_object2)
     self.assertTrue(never_time_object1 >= semantic_time_object2)

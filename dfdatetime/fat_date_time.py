@@ -100,8 +100,8 @@ class FATDateTime(interface.DateTimeValues):
       ValueError: if the month, day of month, hours, minutes or seconds
           value is out of bounds.
     """
-    day_of_month = (fat_date_time & 0x1f)
-    month = ((fat_date_time >> 5) & 0x0f)
+    day_of_month = fat_date_time & 0x1f
+    month = (fat_date_time >> 5) & 0x0f
     year = (fat_date_time >> 9) & 0x7f
 
     days_per_month = self._GetDaysPerMonth(year, month)

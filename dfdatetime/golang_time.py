@@ -152,7 +152,102 @@ class GolangTime(interface.DateTimeValues):
       time_zone_offset = 0
 
     return number_of_seconds, nanoseconds, time_zone_offset
+  
+  def _CopyNanosecondTimeFromString(self, time_string):
+    """Copies a time from a string.
 
+    Args:
+      time_string (str): time value formatted as:
+          hh:mm:ss.#########Z
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction is 9 digits (nanosecond precision). A timezone value of Z
+          represents UTC.
+
+    Returns:
+      tuple[int, int, int, int, int]: hours, minutes, seconds, nanoseconds,
+          time zone offset in minutes.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    time_string_length = len(time_string)
+
+    # The time string should at least contain 'hh:mm:ss'.
+    if time_string_length != 19:
+      raise ValueError('Incorrect time string size.')
+
+    if (time_string[2] != ':' or
+        time_string[5] != ':' or
+        time_string[8] != '.' or
+        time_string[18] != 'Z'):
+      raise ValueError('Invalid time string.')
+
+    try:
+      hours = int(time_string[0:2], 10)
+    except ValueError:
+      raise ValueError('Unable to parse hours.')
+
+    if hours not in range(0, 24):
+      raise ValueError(f'Hours value: {hours:d} out of bounds.')
+
+    try:
+      minutes = int(time_string[3:5], 10)
+    except ValueError:
+      raise ValueError('Unable to parse minutes.')
+
+    if minutes not in range(0, 60):
+      raise ValueError(f'Minutes value: {minutes:d} out of bounds.')
+
+    try:
+      seconds = int(time_string[6:8], 10)
+    except ValueError:
+      raise ValueError('Unable to parse day of seconds.')
+
+    # TODO: support a leap second?
+    if seconds not in range(0, 60):
+      raise ValueError(f'Seconds value: {seconds:d} out of bounds.')
+
+    nanoseconds = None
+    time_zone_offset = 0
+
+    try:
+      nanoseconds = time_string[9:18]
+      nanoseconds = int(nanoseconds, 10)
+    except ValueError:
+      raise ValueError('Unable to parse nanoseconds.')
+
+    return hours, minutes, seconds, nanoseconds, time_zone_offset
+ 
+  def CopyFromNanosecondDateTimeString(self, time_string):
+    """Copies a date time value from a date and time string.
+
+    Args:
+      time_string (str): date and time value formatted as:
+          YYYY-MM-DDThh:mm:ss.##########Z
+
+          Where # are numeric digits ranging from 0 to 9 and the seconds
+          fraction is 9 digits.
+
+    Raises:
+      ValueError: if the time string is invalid or not supported.
+    """
+    year, month, day_of_month = self._CopyDateFromString(time_string)
+
+    hours, minutes, seconds, nanoseconds, time_zone_offset = (
+        self._CopyNanosecondTimeFromString(time_string[11:]))
+
+    seconds = self._GetNumberOfSecondsFromElements(
+        year, month, day_of_month, hours, minutes, seconds)
+
+    seconds += self._GOLANG_TO_POSIX_BASE
+    nanoseconds = nanoseconds  
+
+    self._normalized_timestamp = None
+    self._number_of_seconds = seconds
+    self._nanoseconds = nanoseconds
+    self._time_zone_offset = 0
+  
   def CopyFromDateTimeString(self, time_string):
     """Copies a date time value from a date and time string.
 
@@ -165,7 +260,7 @@ class GolangTime(interface.DateTimeValues):
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
-    Raises:
+    Raises: 
       ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromString(time_string)

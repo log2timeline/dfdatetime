@@ -199,7 +199,7 @@ class GolangTest(unittest.TestCase):
     """Test the CopyToNanosecondDateTimeString"""
     date_time_string = '2000-01-01T12:23:45.567890000Z'
     golang_time_object = golang_time.GolangTime(
-      golang_timestamp=None, precision=None)
+        golang_timestamp=None, precision=None)
     golang_time_object.CopyFromNanosecondDateTimeString(date_time_string)
     self.assertEqual(golang_time_object._number_of_seconds, 63082326225)
     self.assertEqual(golang_time_object._nanoseconds, 567890000)
@@ -212,6 +212,14 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_time_object._number_of_seconds, 63082326225)
     self.assertEqual(golang_time_object._nanoseconds, 56789)
     self.assertEqual(golang_time_object._time_zone_offset, 0)
+
+    date_time_string = '2000-01-01 12:23:45.567890000+01:00'
+    golang_time_object = golang_time.GolangTime(
+        golang_timestamp=None, precision=None)
+    golang_time_object.CopyFromNanosecondDateTimeString(date_time_string)
+    self.assertEqual(golang_time_object._number_of_seconds, 63082326225)
+    self.assertEqual(golang_time_object._nanoseconds, 567890000)
+    self.assertEqual(golang_time_object._time_zone_offset, 60)
 
 
 if __name__ == '__main__':

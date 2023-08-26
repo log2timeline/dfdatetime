@@ -159,6 +159,7 @@ class GolangTime(interface.DateTimeValues):
     Args:
       time_string (str): time value formatted as:
           hh:mm:ss.#########Z
+          hh:mm:ss.#########[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction is 9 digits (nanosecond precision). A timezone value of Z
@@ -173,14 +174,14 @@ class GolangTime(interface.DateTimeValues):
     """
     time_string_length = len(time_string)
 
-    # The time string should at least contain 'hh:mm:ss'.
-    if time_string_length != 19:
+    if time_string_length != 19 and time_string_length != 24:
       raise ValueError('Incorrect time string size.')
 
     if (time_string[2] != ':' or
         time_string[5] != ':' or
         time_string[8] != '.' or
-        time_string[18] != 'Z'):
+        time_string[18] not in ('Z', '+', '-') or
+        (time_string_length == 24 and time_string[21] != ':')):
       raise ValueError('Invalid time string.')
 
     try:
@@ -209,13 +210,37 @@ class GolangTime(interface.DateTimeValues):
       raise ValueError(f'Seconds value: {seconds:d} out of bounds.')
 
     nanoseconds = None
-    time_zone_offset = 0
 
     try:
       nanoseconds = time_string[9:18]
       nanoseconds = int(nanoseconds, 10)
     except ValueError:
       raise ValueError('Unable to parse nanoseconds.')
+
+    time_zone_offset = 0
+
+    if time_string[18] in ('+', '-'):
+      try:
+        hours_from_utc = int(time_string[19:21])
+      except ValueError:
+        raise ValueError('Unable to parse time zone hours offset.')
+
+      if hours_from_utc not in range(0, 15):
+        raise ValueError('Time zone hours offset value out of bounds.')
+
+      try:
+        minutes_from_utc = int(time_string[22:24])
+      except ValueError:
+        raise ValueError('Unable to parse time zone minutes offset.')
+
+      if minutes_from_utc not in range(0, 60):
+        raise ValueError('Time zone minutes offset value out of bounds.')
+
+      # pylint: disable=invalid-unary-operand-type
+      time_zone_offset = (hours_from_utc * 60) + minutes_from_utc
+
+      if time_string[18] == '-':
+        time_zone_offset = -time_zone_offset
 
     return hours, minutes, seconds, nanoseconds, time_zone_offset
  
@@ -225,6 +250,7 @@ class GolangTime(interface.DateTimeValues):
     Args:
       time_string (str): date and time value formatted as:
           YYYY-MM-DDThh:mm:ss.##########Z
+          YYYY-MM-DDThh:mm:ss.##########[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
           fraction is 9 digits.
@@ -246,7 +272,7 @@ class GolangTime(interface.DateTimeValues):
     self._normalized_timestamp = None
     self._number_of_seconds = seconds
     self._nanoseconds = nanoseconds
-    self._time_zone_offset = 0
+    self._time_zone_offset = time_zone_offset
   
   def CopyFromDateTimeString(self, time_string):
     """Copies a date time value from a date and time string.
@@ -256,11 +282,11 @@ class GolangTime(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3, 6 or 9 digits. The time of day, seconds
+          fraction can be either 3 or 6 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
-    Raises: 
+    Raises:
       ValueError: if the time string is invalid or not supported.
     """
     date_time_values = self._CopyDateTimeFromString(time_string)

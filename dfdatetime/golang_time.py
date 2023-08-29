@@ -152,7 +152,7 @@ class GolangTime(interface.DateTimeValues):
       time_zone_offset = 0
 
     return number_of_seconds, nanoseconds, time_zone_offset
-  
+
   def _CopyNanosecondTimeFromString(self, time_string):
     """Copies a time from a string.
 
@@ -174,7 +174,7 @@ class GolangTime(interface.DateTimeValues):
     """
     time_string_length = len(time_string)
 
-    if time_string_length != 19 and time_string_length != 24:
+    if time_string_length in (19, 24):
       raise ValueError('Incorrect time string size.')
 
     if (time_string[2] != ':' or
@@ -243,7 +243,7 @@ class GolangTime(interface.DateTimeValues):
         time_zone_offset = -time_zone_offset
 
     return hours, minutes, seconds, nanoseconds, time_zone_offset
- 
+
   def CopyFromNanosecondDateTimeString(self, time_string):
     """Copies a date time value from a date and time string.
 
@@ -267,13 +267,12 @@ class GolangTime(interface.DateTimeValues):
         year, month, day_of_month, hours, minutes, seconds)
 
     seconds += self._GOLANG_TO_POSIX_BASE
-    nanoseconds = nanoseconds  
 
     self._normalized_timestamp = None
     self._number_of_seconds = seconds
     self._nanoseconds = nanoseconds
     self._time_zone_offset = time_zone_offset
-  
+
   def CopyFromDateTimeString(self, time_string):
     """Copies a date time value from a date and time string.
 

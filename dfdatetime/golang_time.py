@@ -174,7 +174,7 @@ class GolangTime(interface.DateTimeValues):
     """
     time_string_length = len(time_string)
 
-    if time_string_length in (19, 24):
+    if time_string_length not in (19, 24):
       raise ValueError('Incorrect time string size.')
 
     if (time_string[2] != ':' or

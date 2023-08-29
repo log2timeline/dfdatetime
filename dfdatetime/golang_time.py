@@ -154,7 +154,7 @@ class GolangTime(interface.DateTimeValues):
     return number_of_seconds, nanoseconds, time_zone_offset
 
   def _CopyNanosecondTimeFromString(self, time_string):
-    """Copies a time from a string.
+    """Copies a nanosecond time from a string.
 
     Args:
       time_string (str): time value formatted as:
@@ -245,7 +245,8 @@ class GolangTime(interface.DateTimeValues):
     return hours, minutes, seconds, nanoseconds, time_zone_offset
 
   def CopyFromNanosecondDateTimeString(self, time_string):
-    """Copies a date time value from a date and time string.
+    """Copies a date time value from a nanosecond precision date and time 
+    string.
 
     Args:
       time_string (str): date and time value formatted as:

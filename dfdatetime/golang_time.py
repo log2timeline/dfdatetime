@@ -59,25 +59,34 @@ class GolangTime(interface.DateTimeValues):
 
   _EPOCH = GolangTimeEpoch()
 
-  def __init__(self, golang_timestamp=None, precision=None):
+  def __init__(
+      self, golang_timestamp=None, golang_timestring=None, precision=None):
     """Initializes a Golang time.Time timestamp.
 
     Args:
       golang_timestamp (Optional[bytes]): the Golang time.Time timestamp.
+      golang_timestring (Optional[string]): the Golang time.Time formatted time
+          string.
       precision (Optional[str]): precision of the date and time value, which
           should be one of the PRECISION_VALUES in definitions.
     """
+    super(GolangTime, self).__init__(
+        precision=precision or definitions.PRECISION_1_NANOSECOND,
+        time_zone_offset=0)
+
+    if golang_timestring is not None:
+      self.CopyFromNanosecondDateTimeString(golang_timestring)
+      return
+
     number_of_seconds, nanoseconds, time_zone_offset = (None, None, None)
     if golang_timestamp is not None:
       number_of_seconds, nanoseconds, time_zone_offset = (
           self._GetNumberOfSeconds(golang_timestamp))
 
-    super(GolangTime, self).__init__(
-        precision=precision or definitions.PRECISION_1_NANOSECOND,
-        time_zone_offset=time_zone_offset)
     self._golang_timestamp = golang_timestamp
     self._nanoseconds = nanoseconds
     self._number_of_seconds = number_of_seconds
+    self._time_zone_offset = time_zone_offset
 
   @property
   def golang_timestamp(self):
@@ -154,15 +163,15 @@ class GolangTime(interface.DateTimeValues):
     return number_of_seconds, nanoseconds, time_zone_offset
 
   def _CopyNanosecondTimeFromString(self, time_string):
-    """Copies a nanosecond time from a string.
+    """Copies a nanosecond precision time from a string.
 
     Args:
       time_string (str): time value formatted as:
           hh:mm:ss.#########Z
           hh:mm:ss.#########[+-]##:##
 
-          Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction is 9 digits (nanosecond precision). A timezone value of Z
+          Where # are digits ranging from 0 to 9 and the seconds
+          fraction is 9 digits (nanosecond precision). A time zone value of Z
           represents UTC.
 
     Returns:
@@ -175,14 +184,14 @@ class GolangTime(interface.DateTimeValues):
     time_string_length = len(time_string)
 
     if time_string_length not in (19, 24):
-      raise ValueError('Incorrect time string size.')
+      raise ValueError('Unsupported time string size.')
 
     if (time_string[2] != ':' or
         time_string[5] != ':' or
         time_string[8] != '.' or
         time_string[18] not in ('Z', '+', '-') or
         (time_string_length == 24 and time_string[21] != ':')):
-      raise ValueError('Invalid time string.')
+      raise ValueError('Unsupported time string.')
 
     try:
       hours = int(time_string[0:2], 10)
@@ -245,7 +254,7 @@ class GolangTime(interface.DateTimeValues):
     return hours, minutes, seconds, nanoseconds, time_zone_offset
 
   def CopyFromNanosecondDateTimeString(self, time_string):
-    """Copies a date time value from a nanosecond precision date and time 
+    """Copies a date time value from a nanosecond precision date and time
     string.
 
     Args:

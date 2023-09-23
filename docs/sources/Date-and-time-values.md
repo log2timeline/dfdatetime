@@ -66,7 +66,7 @@ occurred during that specific hour.
 
 * [Wikipedia: Accuracy and precision](https://en.wikipedia.org/wiki/Accuracy_and_precision)
 * [Wikipedia: Computer forensics](https://en.wikipedia.org/wiki/Computer_forensics)
-* [Wikipedia: Granularity - Data Granularity](https://en.wikipedia.org/wiki/Granularity#Data_granularity)
+* [Wikipedia: Granularity - Data and information](https://en.wikipedia.org/wiki/Granularity#Data_and_information)
 * [Wikipedia: Semantics](https://en.wikipedia.org/wiki/Semantics)
 * [FILETIME structure](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
 * [File Times](https://docs.microsoft.com/en-us/windows/win32/sysinfo/file-times)

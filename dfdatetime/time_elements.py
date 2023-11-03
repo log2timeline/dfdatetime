@@ -861,6 +861,11 @@ class TimeElements(interface.DateTimeValues):
     delta_year, month, day_of_month, hours, minutes, seconds = (
         self._time_elements_tuple)
 
+    if (month == 2 and day_of_month == 29):
+        while (not ((year+delta_year)%4 == 0 and (year+delta_year)%100 != 0 or \
+                (year+delta_year)%400 == 0)):
+            year -= 1
+
     time_elements_tuple = (
         year + delta_year, month, day_of_month, hours, minutes, seconds)
 

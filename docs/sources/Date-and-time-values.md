@@ -21,7 +21,7 @@ close to the mean solar time.
 value;
 * **precision** is the closeness of agreement among a set of results.
 
-In NTFS data and time values are stored using a [FILETIME structure](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime).
+In NTFS data and time values are stored using a [FILETIME structure](https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime).
 The FILETIME structure stores a date and time value as a 64-bit integer that
 represents the number of 100-nanosecond intervals since "January 1, 1601
 00:00:00.0000000 UTC". This provides an upper bound of a 100-nanosecond
@@ -68,9 +68,9 @@ occurred during that specific hour.
 * [Wikipedia: Computer forensics](https://en.wikipedia.org/wiki/Computer_forensics)
 * [Wikipedia: Granularity - Data and information](https://en.wikipedia.org/wiki/Granularity#Data_and_information)
 * [Wikipedia: Semantics](https://en.wikipedia.org/wiki/Semantics)
-* [FILETIME structure](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
-* [File Times](https://docs.microsoft.com/en-us/windows/win32/sysinfo/file-times)
-* [Precision and accuracy of DateTime](https://docs.microsoft.com/en-us/archive/blogs/ericlippert/precision-and-accuracy-of-datetime), by Eric Lippert, April 8, 2010
+* [FILETIME structure](https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
+* [File Times](https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times)
+* [Precision and accuracy of DateTime](https://learn.microsoft.com/en-us/archive/blogs/ericlippert/precision-and-accuracy-of-datetime), by Eric Lippert, April 8, 2010
 
 ## .NET DateTime
 ### Characteristics
@@ -88,8 +88,8 @@ Offset | Size | Description
 
 ### Also see
 
-* [Microsoft: DateTime struct](https://docs.microsoft.com/en-us/dotnet/api/system.datetime?view=net-6.0)
-* [Microsoft: DateTime.Ticks](https://docs.microsoft.com/en-us/dotnet/api/system.datetime.ticks)
+* [Microsoft: DateTime struct](https://learn.microsoft.com/en-us/dotnet/api/system.datetime?view=net-6.0)
+* [Microsoft: DateTime.Ticks](https://learn.microsoft.com/en-us/dotnet/api/system.datetime.ticks?view=net-8.0)
 
 ## APFS timestamp
 ### Characteristics
@@ -143,7 +143,7 @@ Offset | Size | Description
 
 ### Also see
 
-* [Embarcadero: System.TDateTime](https://docwiki.embarcadero.com/Libraries/XE3/en/System.TDateTime)
+* [Embarcadero: System.TDateTime](https://docwiki.embarcadero.com/Libraries/Alexandria/en/System.TDateTime)
 
 ## FAT date and time
 ### Characteristics
@@ -178,7 +178,7 @@ Offset | Size | Description
 ### Also see
 
 * [Wikipedia: File Allocation Table](https://en.wikipedia.org/wiki/File_Allocation_Table)
-* [DosDateTimeToFileTime function](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-dosdatetimetofiletime)
+* [DosDateTimeToFileTime function](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-dosdatetimetofiletime)
 
 ## FAT timestamp
 ### Characteristics
@@ -229,7 +229,7 @@ SetFileTime Windows API function are overloaded with a special meaning.
 
 ### Also see
 
-* [MSDN: FILETIME](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
+* [MSDN: FILETIME](https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-filetime)
 
 ## Golang time.Time timestamp
 
@@ -413,7 +413,7 @@ An empty (or unset) SYSTEMTIME can be represented by 16x 0-byte values.
 
 ### Also see
 
-* [MSDN: SYSTEMTIME](https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-systemtime)
+* [MSDN: SYSTEMTIME](https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-systemtime)
 
 ## Time element strings
 

@@ -25,7 +25,7 @@ class OLEAutomationDate(interface.DateTimeValues):
   values represent date and times predating the OLE Automation date epoch.
 
   Also see:
-    https://docs.microsoft.com/en-us/dotnet/api/system.datetime.tooadate
+    https://learn.microsoft.com/en-us/dotnet/api/system.datetime.tooadate?view=net-8.0
 
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.

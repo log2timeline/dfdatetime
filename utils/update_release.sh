@@ -12,6 +12,9 @@ DPKG_DATE=`date -R`
 # Update the Python module version.
 sed "s/__version__ = '[0-9]*'/__version__ = '${VERSION}'/" -i dfdatetime/__init__.py
 
+# Update the version in the setuptools configuration.
+sed "s/version = [0-9]*/version = ${VERSION}/" -i setup.cfg
+
 # Update the version in the dpkg configuration files.
 cat > config/dpkg/changelog << EOT
 dfdatetime (${VERSION}-1) unstable; urgency=low
@@ -20,10 +23,6 @@ dfdatetime (${VERSION}-1) unstable; urgency=low
 
  -- Log2Timeline maintainers <log2timeline-maintainers@googlegroups.com>  ${DPKG_DATE}
 EOT
-
-# Regenerate the supported formats documentation.
-# TODO: generate supported formats.
-# PYTHONPATH=. ./utils/export_supported_formats.py > docs/sources/Supported-formats.md
 
 # Regenerate the API documentation.
 tox -edocs

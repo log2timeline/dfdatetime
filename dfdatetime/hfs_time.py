@@ -80,7 +80,7 @@ class HFSTime(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 

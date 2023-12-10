@@ -342,13 +342,13 @@ class DateTimeValues(object):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
     Returns:
       dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds, microseconds, time zone offset in minutes.
+          hours, minutes, seconds, nanoseconds, time zone offset in minutes.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -372,7 +372,7 @@ class DateTimeValues(object):
       raise ValueError(
           'Invalid time string - space missing as date and time separator.')
 
-    hours, minutes, seconds, microseconds, time_zone_offset = (
+    hours, minutes, seconds, nanoseconds, time_zone_offset = (
         self._CopyTimeFromString(time_string[11:]))
 
     date_time_values = {
@@ -383,8 +383,8 @@ class DateTimeValues(object):
         'minutes': minutes,
         'seconds': seconds}
 
-    if microseconds is not None:
-      date_time_values['microseconds'] = microseconds
+    if nanoseconds is not None:
+      date_time_values['nanoseconds'] = nanoseconds
     if time_zone_offset is not None:
       date_time_values['time_zone_offset'] = time_zone_offset
 
@@ -398,11 +398,11 @@ class DateTimeValues(object):
           hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The seconds fraction and
+          fraction can be either 3, 6 or 9 digits. The seconds fraction and
           time zone offset are optional.
 
     Returns:
-      tuple[int, int, int, int, int]: hours, minutes, seconds, microseconds,
+      tuple[int, int, int, int, int]: hours, minutes, seconds, nanoseconds,
           time zone offset in minutes.
 
     Raises:
@@ -442,7 +442,7 @@ class DateTimeValues(object):
     if seconds not in range(0, 60):
       raise ValueError(f'Seconds value: {seconds:d} out of bounds.')
 
-    microseconds = None
+    nanoseconds = None
     time_zone_offset = None
 
     time_zone_string_index = 8
@@ -459,7 +459,7 @@ class DateTimeValues(object):
 
     if time_string_length > 8 and time_string[8] == '.':
       time_fraction_length = time_zone_string_index - 9
-      if time_fraction_length not in (3, 6):
+      if time_fraction_length not in (3, 6, 9):
         raise ValueError('Invalid time string.')
 
       try:
@@ -469,9 +469,11 @@ class DateTimeValues(object):
         raise ValueError('Unable to parse time fraction.')
 
       if time_fraction_length == 3:
+        time_fraction *= 1000000
+      elif time_fraction_length == 6:
         time_fraction *= 1000
 
-      microseconds = time_fraction
+      nanoseconds = time_fraction
 
     if time_zone_string_index < time_string_length:
       if (time_string_length - time_zone_string_index != 6 or
@@ -502,7 +504,7 @@ class DateTimeValues(object):
       if time_string[time_zone_string_index] == '-':
         time_zone_offset = -time_zone_offset
 
-    return hours, minutes, seconds, microseconds, time_zone_offset
+    return hours, minutes, seconds, nanoseconds, time_zone_offset
 
   def _GetDateValues(
       self, number_of_days, epoch_year, epoch_month, epoch_day_of_month):
@@ -870,7 +872,7 @@ class DateTimeValues(object):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 

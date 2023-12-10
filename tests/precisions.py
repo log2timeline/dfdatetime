@@ -12,12 +12,12 @@ from dfdatetime import precisions
 class DateTimePrecisionHelperTest(unittest.TestCase):
   """Tests for the date time precision helper interface."""
 
-  def testCopyMicrosecondsToFractionOfSecond(self):
-    """Tests the CopyMicrosecondsToFractionOfSecond function."""
+  def testCopNanoosecondsToFractionOfSecond(self):
+    """Tests the CopyNanosecondsToFractionOfSecond function."""
     precision_helper = precisions.DateTimePrecisionHelper
 
     with self.assertRaises(NotImplementedError):
-      precision_helper.CopyMicrosecondsToFractionOfSecond(0)
+      precision_helper.CopyNanosecondsToFractionOfSecond(0)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -30,19 +30,19 @@ class DateTimePrecisionHelperTest(unittest.TestCase):
 class SecondsPrecisionHelperTest(unittest.TestCase):
   """Tests for the seconds precision helper."""
 
-  def testCopyMicrosecondsToFractionOfSecond(self):
-    """Tests the CopyMicrosecondsToFractionOfSecond function."""
+  def testCopyNanosecondsToFractionOfSecond(self):
+    """Tests the CopyNanosecondsToFractionOfSecond function."""
     precision_helper = precisions.SecondsPrecisionHelper
 
-    fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
+    fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
         123456)
     self.assertEqual(fraction_of_second, 0.0)
 
     with self.assertRaises(ValueError):
-      precision_helper.CopyMicrosecondsToFractionOfSecond(-1)
+      precision_helper.CopyNanosecondsToFractionOfSecond(-1)
 
     with self.assertRaises(ValueError):
-      precision_helper.CopyMicrosecondsToFractionOfSecond(1000000)
+      precision_helper.CopyNanosecondsToFractionOfSecond(1000000000)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -59,19 +59,19 @@ class SecondsPrecisionHelperTest(unittest.TestCase):
 class MillisecondsPrecisionHelperTest(unittest.TestCase):
   """Tests for the milliseconds precision helper."""
 
-  def testCopyMicrosecondsToFractionOfSecond(self):
-    """Tests the CopyMicrosecondsToFractionOfSecond function."""
+  def testCopyNanosecondsToFractionOfSecond(self):
+    """Tests the CopyNanosecondsToFractionOfSecond function."""
     precision_helper = precisions.MillisecondsPrecisionHelper
 
-    fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
-        123456)
+    fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
+        123456789)
     self.assertEqual(fraction_of_second, decimal.Decimal('0.123'))
 
     with self.assertRaises(ValueError):
-      precision_helper.CopyMicrosecondsToFractionOfSecond(-1)
+      precision_helper.CopyNanosecondsToFractionOfSecond(-1)
 
     with self.assertRaises(ValueError):
-      precision_helper.CopyMicrosecondsToFractionOfSecond(1000000)
+      precision_helper.CopyNanosecondsToFractionOfSecond(1000000000)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -86,21 +86,21 @@ class MillisecondsPrecisionHelperTest(unittest.TestCase):
 
 
 class MicrosecondsPrecisionHelperTest(unittest.TestCase):
-  """Tests for the milliseconds precision helper."""
+  """Tests for the microseconds precision helper."""
 
-  def testCopyMicrosecondsToFractionOfSecond(self):
-    """Tests the CopyMicrosecondsToFractionOfSecond function."""
+  def testCopyNanosecondsToFractionOfSecond(self):
+    """Tests the CopyNanosecondsToFractionOfSecond function."""
     precision_helper = precisions.MicrosecondsPrecisionHelper
 
-    fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
-        123456)
+    fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
+        123456789)
     self.assertEqual(fraction_of_second, decimal.Decimal('0.123456'))
 
     with self.assertRaises(ValueError):
-      precision_helper.CopyMicrosecondsToFractionOfSecond(-1)
+      precision_helper.CopyNanosecondsToFractionOfSecond(-1)
 
     with self.assertRaises(ValueError):
-      precision_helper.CopyMicrosecondsToFractionOfSecond(1000000)
+      precision_helper.CopyNanosecondsToFractionOfSecond(1000000000)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
@@ -112,6 +112,36 @@ class MicrosecondsPrecisionHelperTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       precision_helper.CopyToDateTimeString((2018, 1, 2, 19, 45, 12), 4.123456)
+
+
+class NanosecondsPrecisionHelperTest(unittest.TestCase):
+  """Tests for the nanoseconds precision helper."""
+
+  def testCopyNanosecondsToFractionOfSecond(self):
+    """Tests the CopyNanosecondsToFractionOfSecond function."""
+    precision_helper = precisions.NanosecondsPrecisionHelper
+
+    fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
+        123456789)
+    self.assertEqual(fraction_of_second, decimal.Decimal('0.123456789'))
+
+    with self.assertRaises(ValueError):
+      precision_helper.CopyNanosecondsToFractionOfSecond(-1)
+
+    with self.assertRaises(ValueError):
+      precision_helper.CopyNanosecondsToFractionOfSecond(1000000000)
+
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    precision_helper = precisions.NanosecondsPrecisionHelper
+
+    date_time_string = precision_helper.CopyToDateTimeString(
+        (2018, 1, 2, 19, 45, 12), 0.123456789)
+    self.assertEqual(date_time_string, '2018-01-02 19:45:12.123456789')
+
+    with self.assertRaises(ValueError):
+      precision_helper.CopyToDateTimeString(
+          (2018, 1, 2, 19, 45, 12), 4.123456789)
 
 
 class PrecisionHelperFactoryTest(unittest.TestCase):

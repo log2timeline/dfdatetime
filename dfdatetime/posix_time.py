@@ -78,7 +78,7 @@ class PosixTime(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """
@@ -175,7 +175,7 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """
@@ -187,16 +187,16 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', 0)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.MILLISECONDS_PER_SECOND
 
-    if microseconds:
+    if nanoseconds:
       milliseconds, _ = divmod(
-          microseconds, definitions.MILLISECONDS_PER_SECOND)
+          nanoseconds, definitions.NANOSECONDS_PER_MILLISECOND)
       timestamp += milliseconds
 
     self._timestamp = timestamp
@@ -282,7 +282,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """
@@ -294,13 +294,17 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', 0)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.MICROSECONDS_PER_SECOND
-    timestamp += microseconds
+
+    if nanoseconds:
+      milliseconds, _ = divmod(
+          nanoseconds, definitions.NANOSECONDS_PER_MICROSECOND)
+      timestamp += milliseconds
 
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
@@ -385,7 +389,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """
@@ -397,16 +401,13 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', None)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.NANOSECONDS_PER_SECOND
-
-    if microseconds:
-      nanoseconds = microseconds * definitions.MILLISECONDS_PER_SECOND
-      timestamp += nanoseconds
+    timestamp += nanoseconds
 
     self._normalized_timestamp = None
     self._timestamp = timestamp
@@ -420,7 +421,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """

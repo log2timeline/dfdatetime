@@ -191,14 +191,14 @@ class DateTimeValuesTest(unittest.TestCase):
 
     expected_date_dict = {
         'year': 2010, 'month': 8, 'day_of_month': 12,
-        'hours': 21, 'minutes': 6, 'seconds': 31, 'microseconds': 546875}
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'nanoseconds': 546875000}
     date_dict = date_time_values._CopyDateTimeFromString(
         '2010-08-12 21:06:31.546875')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
         'year': 2010, 'month': 8, 'day_of_month': 12,
-        'hours': 21, 'minutes': 6, 'seconds': 31, 'microseconds': 546875,
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'nanoseconds': 546875000,
         'time_zone_offset': -60}
     date_dict = date_time_values._CopyDateTimeFromString(
         '2010-08-12 21:06:31.546875-01:00')
@@ -206,10 +206,18 @@ class DateTimeValuesTest(unittest.TestCase):
 
     expected_date_dict = {
         'year': 2010, 'month': 8, 'day_of_month': 12,
-        'hours': 21, 'minutes': 6, 'seconds': 31, 'microseconds': 546875,
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'nanoseconds': 546875000,
         'time_zone_offset': 60}
     date_dict = date_time_values._CopyDateTimeFromString(
         '2010-08-12 21:06:31.546875+01:00')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 2010, 'month': 8, 'day_of_month': 12,
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'nanoseconds': 546875333,
+        'time_zone_offset': 60}
+    date_dict = date_time_values._CopyDateTimeFromString(
+        '2010-08-12 21:06:31.546875333+01:00')
     self.assertEqual(date_dict, expected_date_dict)
 
     with self.assertRaises(ValueError):
@@ -235,19 +243,19 @@ class DateTimeValuesTest(unittest.TestCase):
     time_tuple = date_time_values._CopyTimeFromString('20:23:56+05:30')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327000, None)
+    expected_time_tuple = (20, 23, 56, 327000000, None)
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327000, 60)
+    expected_time_tuple = (20, 23, 56, 327000000, 60)
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327+01:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327124, None)
+    expected_time_tuple = (20, 23, 56, 327124000, None)
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327124')
     self.assertEqual(time_tuple, expected_time_tuple)
 
-    expected_time_tuple = (20, 23, 56, 327124, -300)
+    expected_time_tuple = (20, 23, 56, 327124000, -300)
     time_tuple = date_time_values._CopyTimeFromString('20:23:56.327124-05:00')
     self.assertEqual(time_tuple, expected_time_tuple)
 

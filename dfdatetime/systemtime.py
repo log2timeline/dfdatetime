@@ -168,7 +168,7 @@ class Systemtime(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
@@ -183,11 +183,11 @@ class Systemtime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', 0)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     milliseconds, _ = divmod(
-        microseconds, definitions.MICROSECONDS_PER_MILLISECOND)
+        nanoseconds, definitions.NANOSECONDS_PER_MILLISECOND)
 
     if year < 1601 or year > 30827:
       raise ValueError(f'Unsupported year value: {year:d}.')

@@ -83,7 +83,7 @@ class Filetime(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
@@ -98,17 +98,19 @@ class Filetime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 1601:
       raise ValueError(f'Year value not supported: {year!s}.')
 
+    nanoseconds, _ = divmod(nanoseconds, 100)
+
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp += self._FILETIME_TO_POSIX_BASE
-    timestamp *= definitions.MICROSECONDS_PER_SECOND
-    timestamp += date_time_values.get('microseconds', 0)
-    timestamp *= self._100_NANOSECONDS_PER_MICROSECOND
+    timestamp *= self._100_NANOSECONDS_PER_SECOND
+    timestamp += nanoseconds
 
     self._normalized_timestamp = None
     self._timestamp = timestamp

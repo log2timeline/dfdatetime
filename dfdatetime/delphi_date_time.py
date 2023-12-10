@@ -86,7 +86,7 @@ class DelphiDateTime(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
@@ -101,7 +101,7 @@ class DelphiDateTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', None)
+    nanoseconds = date_time_values.get('nanoseconds', None)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year > 9999:
@@ -112,8 +112,8 @@ class DelphiDateTime(interface.DateTimeValues):
 
     timestamp = float(timestamp) / definitions.SECONDS_PER_DAY
     timestamp += self._DELPHI_TO_POSIX_BASE
-    if microseconds is not None:
-      timestamp += float(microseconds) / definitions.MICROSECONDS_PER_DAY
+    if nanoseconds is not None:
+      timestamp += float(nanoseconds) / definitions.NANOSECONDS_PER_DAY
 
     self._normalized_timestamp = None
     self._timestamp = timestamp

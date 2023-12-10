@@ -93,7 +93,7 @@ class CocoaTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    nanoseconds = date_time_values.get('nanoseconds', None)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     timestamp = self._GetNumberOfSecondsFromElements(
@@ -101,8 +101,7 @@ class CocoaTime(interface.DateTimeValues):
     timestamp += self._COCOA_TO_POSIX_BASE
 
     timestamp = float(timestamp)
-    if nanoseconds is not None:
-      timestamp += float(nanoseconds) / definitions.NANOSECONDS_PER_SECOND
+    timestamp += float(nanoseconds) / definitions.NANOSECONDS_PER_SECOND
 
     self._normalized_timestamp = None
     self._timestamp = timestamp

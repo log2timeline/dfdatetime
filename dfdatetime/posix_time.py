@@ -190,14 +190,13 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
     nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
+    milliseconds, _ = divmod(
+        nanoseconds, definitions.NANOSECONDS_PER_MILLISECOND)
+
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.MILLISECONDS_PER_SECOND
-
-    if nanoseconds:
-      milliseconds, _ = divmod(
-          nanoseconds, definitions.NANOSECONDS_PER_MILLISECOND)
-      timestamp += milliseconds
+    timestamp += milliseconds
 
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset
@@ -297,14 +296,13 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
     nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
+    milliseconds, _ = divmod(
+        nanoseconds, definitions.NANOSECONDS_PER_MICROSECOND)
+
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp *= definitions.MICROSECONDS_PER_SECOND
-
-    if nanoseconds:
-      milliseconds, _ = divmod(
-          nanoseconds, definitions.NANOSECONDS_PER_MICROSECOND)
-      timestamp += milliseconds
+    timestamp += milliseconds
 
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset

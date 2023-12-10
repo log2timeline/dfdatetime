@@ -271,14 +271,13 @@ class FATTimestamp(interface.DateTimeValues):
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError(f'Year value not supported: {year!s}.')
 
+    milliseconds, _ = divmod(nanoseconds, 10000000)
+
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp -= self._FAT_DATE_TO_POSIX_BASE
     timestamp *= 100
-
-    if nanoseconds:
-      milliseconds, _ = divmod(nanoseconds, 10000000)
-      timestamp += milliseconds
+    timestamp += milliseconds
 
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset

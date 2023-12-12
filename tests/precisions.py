@@ -12,7 +12,7 @@ from dfdatetime import precisions
 class DateTimePrecisionHelperTest(unittest.TestCase):
   """Tests for the date time precision helper interface."""
 
-  def testCopNanoosecondsToFractionOfSecond(self):
+  def testCopyNanosecondsToFractionOfSecond(self):
     """Tests the CopyNanosecondsToFractionOfSecond function."""
     precision_helper = precisions.DateTimePrecisionHelper
 

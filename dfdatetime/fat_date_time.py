@@ -140,7 +140,7 @@ class FATDateTime(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
@@ -250,7 +250,7 @@ class FATTimestamp(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
@@ -265,20 +265,19 @@ class FATTimestamp(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', 0)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError(f'Year value not supported: {year!s}.')
 
+    milliseconds, _ = divmod(nanoseconds, 10000000)
+
     timestamp = self._GetNumberOfSecondsFromElements(
         year, month, day_of_month, hours, minutes, seconds)
     timestamp -= self._FAT_DATE_TO_POSIX_BASE
     timestamp *= 100
-
-    if microseconds:
-      milliseconds, _ = divmod(microseconds, 10000)
-      timestamp += milliseconds
+    timestamp += milliseconds
 
     self._timestamp = timestamp
     self._time_zone_offset = time_zone_offset

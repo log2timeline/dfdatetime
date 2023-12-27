@@ -138,12 +138,12 @@ class TimeElements(interface.DateTimeValues):
           hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The fraction of second and
+          fraction can be either 3, 6 or 9 digits. The fraction of second and
           time zone offset are optional.
 
     Returns:
       dict[str, int]: date and time values, such as year, month, day of month,
-          hours, minutes, seconds, microseconds, time zone offset in minutes.
+          hours, minutes, seconds, nanoseconds, time zone offset in minutes.
 
     Raises:
       ValueError: if the time string is invalid or not supported.
@@ -166,7 +166,7 @@ class TimeElements(interface.DateTimeValues):
     if time_string[10] != 'T':
       raise ValueError('Invalid time string - missing date and time separator.')
 
-    hours, minutes, seconds, microseconds, time_zone_offset = (
+    hours, minutes, seconds, nanoseconds, time_zone_offset = (
         self._CopyTimeFromStringISO8601(time_string[11:]))
 
     date_time_values = {
@@ -177,8 +177,8 @@ class TimeElements(interface.DateTimeValues):
         'minutes': minutes,
         'seconds': seconds}
 
-    if microseconds is not None:
-      date_time_values['microseconds'] = microseconds
+    if nanoseconds is not None:
+      date_time_values['nanoseconds'] = nanoseconds
     if time_zone_offset is not None:
       date_time_values['time_zone_offset'] = time_zone_offset
 
@@ -349,7 +349,7 @@ class TimeElements(interface.DateTimeValues):
 
     Args:
       date_time_values  (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds, microseconds, time zone
+          month, day of month, hours, minutes, seconds, nanoseconds, time zone
           offset in minutes.
     """
     year = date_time_values.get('year', 0)
@@ -375,11 +375,11 @@ class TimeElements(interface.DateTimeValues):
           hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The faction of second and
+          fraction can be either 3, 6 or 9 digits. The fraction of second and
           time zone offset are optional.
 
     Returns:
-      tuple[int, int, int, int, int]: hours, minutes, seconds, microseconds,
+      tuple[int, int, int, int, int]: hours, minutes, seconds, nanoseconds,
           time zone offset in minutes.
 
     Raises:
@@ -404,7 +404,7 @@ class TimeElements(interface.DateTimeValues):
 
     minutes = None
     seconds = None
-    microseconds = None
+    nanoseconds = None
     time_zone_offset = None
 
     time_string_index = 2
@@ -481,8 +481,8 @@ class TimeElements(interface.DateTimeValues):
         seconds = int(time_fraction)
         time_fraction -= seconds
 
-      time_fraction *= definitions.MICROSECONDS_PER_SECOND
-      microseconds = int(time_fraction)
+      time_fraction *= definitions.NANOSECONDS_PER_SECOND
+      nanoseconds = int(time_fraction)
 
     if minutes is not None and minutes not in range(0, 60):
       raise ValueError(f'Minutes value: {minutes:d} out of bounds.')
@@ -520,7 +520,7 @@ class TimeElements(interface.DateTimeValues):
       if time_string[time_zone_string_index] == '-':
         time_zone_offset = -time_zone_offset
 
-    return hours, minutes, seconds, microseconds, time_zone_offset
+    return hours, minutes, seconds, nanoseconds, time_zone_offset
 
   def _CopyTimeFromStringRFC(self, time_string, time_zone_string):
     """Copies a time from a RFC 822, RFC 1123 or RFC 2822 time string.
@@ -695,7 +695,7 @@ class TimeElements(interface.DateTimeValues):
           YYYY-MM-DD hh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
     """
@@ -718,7 +718,7 @@ class TimeElements(interface.DateTimeValues):
           YYYY-MM-DDThh:mm:ss.######[+-]##:##
 
           Where # are numeric digits ranging from 0 to 9 and the seconds
-          fraction can be either 3 or 6 digits. The time of day, seconds
+          fraction can be either 3, 6 or 9 digits. The time of day, seconds
           fraction and time zone offset are optional. The default time zone
           is UTC.
 
@@ -941,7 +941,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     Args:
       date_time_values  (dict[str, int]): date and time values, such as year,
-          month, day of month, hours, minutes, seconds, microseconds, time zone
+          month, day of month, hours, minutes, seconds, nanoseconds, time zone
           offset in minutes.
 
     Raises:
@@ -953,14 +953,14 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    microseconds = date_time_values.get('microseconds', 0)
+    nanoseconds = date_time_values.get('nanoseconds', 0)
     time_zone_offset = date_time_values.get('time_zone_offset', 0)
 
     precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
         self._precision)
 
-    fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
-        microseconds)
+    fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
+        nanoseconds)
 
     self._normalized_timestamp = None
     self._number_of_seconds = self._GetNumberOfSecondsFromElements(
@@ -985,8 +985,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
         self._precision)
 
-    fraction_of_second = precision_helper.CopyMicrosecondsToFractionOfSecond(
-        datetime_object.microsecond)
+    fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
+        datetime_object.microsecond * definitions.NANOSECONDS_PER_MICROSECOND)
     self.fraction_of_second = fraction_of_second
 
   def CopyFromStringTuple(self, time_elements_tuple):

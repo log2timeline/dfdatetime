@@ -143,7 +143,7 @@ Offset | Size | Description
 
 ### Also see
 
-* [Embarcadero: System.TDateTime](https://docwiki.embarcadero.com/Libraries/Alexandria/en/System.TDateTime)
+* Embarcadero Delphi documentation on System.TDateTime
 
 ## FAT date and time
 ### Characteristics
@@ -288,7 +288,7 @@ can differ depending on the context in which the timestamp is used.
 ### Also see
 
 * [Wikipedia: HFS Plus](https://en.wikipedia.org/wiki/HFS_Plus)
-* [Technical Note TN1150 - HFS Plus Volume Format](http://dubeiko.com/development/FileSystems/HFSPLUS/tn1150.html#HFSPlusDates)
+* [Technical Note TN1150 - HFS Plus Volume Format](https://developer.apple.com/library/archive/technotes/tn/tn1150.html), see section "HFS Plus Dates"
 
 ## Java timestamp
 ### Characteristics

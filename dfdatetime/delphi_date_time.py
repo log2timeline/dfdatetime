@@ -26,9 +26,6 @@ class DelphiDateTime(interface.DateTimeValues):
   The maximal correct date supported by TDateTime values is limited to:
   9999-12-31 23:59:59.999
 
-  Also see:
-    https://docwiki.embarcadero.com/Libraries/Alexandria/en/System.TDateTime
-
   Attributes:
     is_local_time (bool): True if the date and time value is in local time.
   """

@@ -20,8 +20,8 @@ class DotNetDateTime(interface.DateTimeValues):
   """.NET DateTime ticks.
 
   The .NET DateTime timestamp is a 64-bit signed integer that contains the date
-  and time as the number of 100 nanoseconds since 12:00 AM January 1, year
-  1 A.D. in the proleptic Gregorian Calendar.
+  and time as the number of 100 nanoseconds since 12:00 AM January 1, year 1
+  A.D. in the proleptic Gregorian Calendar.
   """
 
   _EPOCH = DotNetDateTimeEpoch()

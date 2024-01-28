@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Digital Forensics Date and Time (dfDateTime).
 
-dfDateTime, or Digital Forensics date and time, provides date and time
-objects to preserve accuracy and precision.
+dfDateTime, or Digital Forensics date and time, provides date and time objects
+to preserve accuracy and precision.
 """
 
 # Imports for date time values factory.
@@ -25,4 +25,4 @@ from dfdatetime import uuid_time
 from dfdatetime import webkit_time
 
 
-__version__ = '20240113'
+__version__ = '20240128'

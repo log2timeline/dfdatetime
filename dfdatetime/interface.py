@@ -112,23 +112,17 @@ class DateTimeValues(object):
 
   @property
   def is_delta(self):
-    """is_delta (bool): True if the date and time value is relative to another
-        date and time value.
-    """
+    """Is delta (bool): True if the date and time is relative to another."""
     return self._is_delta
 
   @property
   def precision(self):
-    """precision (str): precision of the date and time value, which should
-        be one of the PRECISION_VALUES in definitions.
-    """
+    """Precision (str): precision of the date and time value."""
     return self._precision
 
   @property
   def time_zone_offset(self):
-    """time_zone_offset (int): time zone offset in number of minutes from UTC
-        or None if not set.
-    """
+    """Time zone offset (int): time zone offset in minutes from UTC."""
     return self._time_zone_offset
 
   @time_zone_offset.setter

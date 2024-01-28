@@ -111,32 +111,32 @@ class Systemtime(interface.DateTimeValues):
 
   @property
   def hours(self):
-    """hours (int): hours, 0 through 23."""
+    """Hours (int): hours, 0 through 23."""
     return self._hours
 
   @property
   def milliseconds(self):
-    """milliseconds (int): milliseconds, 0 through 999."""
+    """Milliseconds (int): milliseconds, 0 through 999."""
     return self._milliseconds
 
   @property
   def minutes(self):
-    """minutes (int): minutes, 0 through 59."""
+    """Minutes (int): minutes, 0 through 59."""
     return self._minutes
 
   @property
   def month(self):
-    """month (int): month of year, 1 through 12."""
+    """Month (int): month of year, 1 through 12."""
     return self._month
 
   @property
   def seconds(self):
-    """seconds (int): seconds, 0 through 59."""
+    """Seconds (int): seconds, 0 through 59."""
     return self._seconds
 
   @property
   def year(self):
-    """year (int): year, 1601 through 30827."""
+    """Year (int): year, 1601 through 30827."""
     return self._year
 
   def _GetNormalizedTimestamp(self):

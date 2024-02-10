@@ -84,6 +84,7 @@ Time zone | externally represented, typically UTC
 ### Format
 
 Offset | Size | Description
+--- | --- | ---
 0 | 4 or 8 | timestamp, little endian integer value containing the number of 100 nanosecond intervals since January 1, 0001 00:00:00.0000000
 
 ### Also see

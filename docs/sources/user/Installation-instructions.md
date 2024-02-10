@@ -49,7 +49,7 @@ necessary packages for running dfDateTime. l2tbinaries provides the following
 branches:
 
 * main; branch intended for the "packaged release" of dfDateTime and dependencies;
-* staging; branch intended for testing pre-releases of ACStore;
+* staging; branch intended for testing pre-releases of dfDateTime;
 * dev; branch intended for the "development release" of dfDateTime;
 * testing; branch intended for testing newly created packages.
 

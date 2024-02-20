@@ -51,15 +51,15 @@ class JavaTimeTest(unittest.TestCase):
 
     java_time_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(java_time_object._timestamp, 1281571200000)
-    self.assertEqual(java_time_object._time_zone_offset, 0)
+    self.assertEqual(java_time_object._time_zone_offset, None)
 
     java_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(java_time_object._timestamp, 1281647191000)
-    self.assertEqual(java_time_object._time_zone_offset, 0)
+    self.assertEqual(java_time_object._time_zone_offset, None)
 
     java_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(java_time_object._timestamp, 1281647191546)
-    self.assertEqual(java_time_object._time_zone_offset, 0)
+    self.assertEqual(java_time_object._time_zone_offset, None)
 
     java_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(java_time_object._timestamp, 1281647191546)
@@ -71,7 +71,7 @@ class JavaTimeTest(unittest.TestCase):
 
     java_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(java_time_object._timestamp, -11644387200000)
-    self.assertEqual(java_time_object._time_zone_offset, 0)
+    self.assertEqual(java_time_object._time_zone_offset, None)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

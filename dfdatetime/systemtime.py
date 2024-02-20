@@ -184,7 +184,7 @@ class Systemtime(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
     nanoseconds = date_time_values.get('nanoseconds', 0)
-    time_zone_offset = date_time_values.get('time_zone_offset', 0)
+    time_zone_offset = date_time_values.get('time_zone_offset', None)
 
     milliseconds, _ = divmod(
         nanoseconds, definitions.NANOSECONDS_PER_MILLISECOND)

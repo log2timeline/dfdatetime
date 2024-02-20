@@ -143,27 +143,27 @@ class GolangTest(unittest.TestCase):
     golang_time_object.CopyFromDateTimeString('0001-01-01')
     self.assertEqual(golang_time_object._number_of_seconds, 0)
     self.assertEqual(golang_time_object._nanoseconds, 0)
-    self.assertEqual(golang_time_object._time_zone_offset, 0)
+    self.assertEqual(golang_time_object._time_zone_offset, None)
 
     golang_time_object.CopyFromDateTimeString('0001-01-01 00:01:00')
     self.assertEqual(golang_time_object._number_of_seconds, 60)
     self.assertEqual(golang_time_object._nanoseconds, 0)
-    self.assertEqual(golang_time_object._time_zone_offset, 0)
+    self.assertEqual(golang_time_object._time_zone_offset, None)
 
     golang_time_object.CopyFromDateTimeString('0001-01-01 00:00:00.000001')
     self.assertEqual(golang_time_object._number_of_seconds, 0)
     self.assertEqual(golang_time_object._nanoseconds, 1000)
-    self.assertEqual(golang_time_object._time_zone_offset, 0)
+    self.assertEqual(golang_time_object._time_zone_offset, None)
 
     golang_time_object.CopyFromDateTimeString('2000-01-01')
     self.assertEqual(golang_time_object._number_of_seconds, 63082281600)
     self.assertEqual(golang_time_object._nanoseconds, 0)
-    self.assertEqual(golang_time_object._time_zone_offset, 0)
+    self.assertEqual(golang_time_object._time_zone_offset, None)
 
     golang_time_object.CopyFromDateTimeString('2000-01-01 12:23:45.567890')
     self.assertEqual(golang_time_object._number_of_seconds, 63082326225)
     self.assertEqual(golang_time_object._nanoseconds, 567890000)
-    self.assertEqual(golang_time_object._time_zone_offset, 0)
+    self.assertEqual(golang_time_object._time_zone_offset, None)
 
     golang_time_object.CopyFromDateTimeString(
         '2000-01-01 12:23:45.567890+01:00')

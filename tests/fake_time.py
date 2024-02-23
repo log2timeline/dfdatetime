@@ -55,17 +55,17 @@ class FakeTimeTest(unittest.TestCase):
     fake_time_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(fake_time_object._number_of_seconds, 1281571200)
     self.assertIsNone(fake_time_object._microseconds)
-    self.assertEqual(fake_time_object._time_zone_offset, 0)
+    self.assertEqual(fake_time_object._time_zone_offset, None)
 
     fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(fake_time_object._number_of_seconds, 1281647191)
     self.assertIsNone(fake_time_object._microseconds)
-    self.assertEqual(fake_time_object._time_zone_offset, 0)
+    self.assertEqual(fake_time_object._time_zone_offset, None)
 
     fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(fake_time_object._number_of_seconds, 1281647191)
     self.assertEqual(fake_time_object._microseconds, 546875)
-    self.assertEqual(fake_time_object._time_zone_offset, 0)
+    self.assertEqual(fake_time_object._time_zone_offset, None)
 
     fake_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(fake_time_object._number_of_seconds, 1281647191)
@@ -80,7 +80,7 @@ class FakeTimeTest(unittest.TestCase):
     fake_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(fake_time_object._number_of_seconds, -11644387200)
     self.assertIsNone(fake_time_object._microseconds)
-    self.assertEqual(fake_time_object._time_zone_offset, 0)
+    self.assertEqual(fake_time_object._time_zone_offset, None)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

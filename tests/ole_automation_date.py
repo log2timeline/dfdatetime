@@ -69,16 +69,16 @@ class OLEAutomationDateTest(unittest.TestCase):
 
     ole_automation_date_object.CopyFromDateTimeString('2017-11-05')
     self.assertEqual(ole_automation_date_object._timestamp, 43044.0)
-    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, None)
 
     ole_automation_date_object.CopyFromDateTimeString('2017-11-05 11:32:00')
     self.assertEqual(ole_automation_date_object._timestamp, 43044.48055555555)
-    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, None)
 
     ole_automation_date_object.CopyFromDateTimeString(
         '2017-11-05 11:32:00.546875')
     self.assertEqual(ole_automation_date_object._timestamp, 43044.480561885124)
-    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, None)
 
     ole_automation_date_object.CopyFromDateTimeString(
         '2017-11-05 11:32:00.546875-01:00')
@@ -92,7 +92,7 @@ class OLEAutomationDateTest(unittest.TestCase):
 
     ole_automation_date_object.CopyFromDateTimeString('1900-01-01 00:00:00')
     self.assertEqual(ole_automation_date_object._timestamp, 2.0)
-    self.assertEqual(ole_automation_date_object._time_zone_offset, 0)
+    self.assertEqual(ole_automation_date_object._time_zone_offset, None)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

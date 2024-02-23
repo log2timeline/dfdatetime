@@ -100,15 +100,15 @@ class DelphiDateTimeTest(unittest.TestCase):
 
     delphi_date_time_object.CopyFromDateTimeString('2013-06-18')
     self.assertEqual(delphi_date_time_object._timestamp, 41443.0)
-    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, None)
 
     delphi_date_time_object.CopyFromDateTimeString('2013-06-18 19:50:00')
     self.assertEqual(delphi_date_time_object._timestamp, 41443.82638888889)
-    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, None)
 
     delphi_date_time_object.CopyFromDateTimeString('2013-06-18 19:50:00.546875')
     self.assertEqual(delphi_date_time_object._timestamp, 41443.826395218464)
-    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, None)
 
     delphi_date_time_object.CopyFromDateTimeString(
         '2013-06-18 19:50:00.546875-01:00')
@@ -122,7 +122,7 @@ class DelphiDateTimeTest(unittest.TestCase):
 
     delphi_date_time_object.CopyFromDateTimeString('1899-12-31 00:00:00')
     self.assertEqual(delphi_date_time_object._timestamp, 1.0)
-    self.assertEqual(delphi_date_time_object._time_zone_offset, 0)
+    self.assertEqual(delphi_date_time_object._time_zone_offset, None)
 
     delphi_date_time_object = DelphiDateTimeInvalidYear()
 

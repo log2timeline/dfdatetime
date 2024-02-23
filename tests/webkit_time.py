@@ -65,15 +65,15 @@ class WebKitTimeTest(unittest.TestCase):
 
     webkit_time_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(webkit_time_object._timestamp, 12926044800000000)
-    self.assertEqual(webkit_time_object._time_zone_offset, 0)
+    self.assertEqual(webkit_time_object._time_zone_offset, None)
 
     webkit_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(webkit_time_object._timestamp, 12926120791000000)
-    self.assertEqual(webkit_time_object._time_zone_offset, 0)
+    self.assertEqual(webkit_time_object._time_zone_offset, None)
 
     webkit_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(webkit_time_object._timestamp, 12926120791546875)
-    self.assertEqual(webkit_time_object._time_zone_offset, 0)
+    self.assertEqual(webkit_time_object._time_zone_offset, None)
 
     webkit_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875-01:00')
@@ -87,7 +87,7 @@ class WebKitTimeTest(unittest.TestCase):
 
     webkit_time_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(webkit_time_object._timestamp, 86400 * 1000000)
-    self.assertEqual(webkit_time_object._time_zone_offset, 0)
+    self.assertEqual(webkit_time_object._time_zone_offset, None)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

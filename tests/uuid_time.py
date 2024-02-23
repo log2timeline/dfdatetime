@@ -97,15 +97,15 @@ class UUIDTimeTest(unittest.TestCase):
 
     uuid_time_object.CopyFromDateTimeString('2013-08-01')
     self.assertEqual(uuid_time_object._timestamp, 135946080000000000)
-    self.assertEqual(uuid_time_object._time_zone_offset, 0)
+    self.assertEqual(uuid_time_object._time_zone_offset, None)
 
     uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28')
     self.assertEqual(uuid_time_object._timestamp, 135946635280000000)
-    self.assertEqual(uuid_time_object._time_zone_offset, 0)
+    self.assertEqual(uuid_time_object._time_zone_offset, None)
 
     uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875')
     self.assertEqual(uuid_time_object._timestamp, 135946635285468750)
-    self.assertEqual(uuid_time_object._time_zone_offset, 0)
+    self.assertEqual(uuid_time_object._time_zone_offset, None)
 
     uuid_time_object.CopyFromDateTimeString('2013-08-01 15:25:28.546875-01:00')
     self.assertEqual(uuid_time_object._timestamp, 135946635285468750)
@@ -117,7 +117,7 @@ class UUIDTimeTest(unittest.TestCase):
 
     uuid_time_object.CopyFromDateTimeString('1582-10-16 00:00:00')
     self.assertEqual(uuid_time_object._timestamp, 864000000000)
-    self.assertEqual(uuid_time_object._time_zone_offset, 0)
+    self.assertEqual(uuid_time_object._time_zone_offset, None)
 
     with self.assertRaises(ValueError):
       uuid_time_object.CopyFromDateTimeString('1570-01-02 00:00:00')

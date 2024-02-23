@@ -60,15 +60,15 @@ class CocoaTimeTest(unittest.TestCase):
 
     cocoa_time_object.CopyFromDateTimeString('2013-07-08')
     self.assertEqual(cocoa_time_object._timestamp, 394934400.0)
-    self.assertEqual(cocoa_time_object._time_zone_offset, 0)
+    self.assertEqual(cocoa_time_object._time_zone_offset, None)
 
     cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45')
     self.assertEqual(cocoa_time_object._timestamp, 395011845.0)
-    self.assertEqual(cocoa_time_object._time_zone_offset, 0)
+    self.assertEqual(cocoa_time_object._time_zone_offset, None)
 
     cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875')
     self.assertEqual(cocoa_time_object._timestamp, 395011845.546875)
-    self.assertEqual(cocoa_time_object._time_zone_offset, 0)
+    self.assertEqual(cocoa_time_object._time_zone_offset, None)
 
     cocoa_time_object.CopyFromDateTimeString('2013-07-08 21:30:45.546875-01:00')
     self.assertEqual(cocoa_time_object._timestamp, 395011845.546875)
@@ -80,7 +80,7 @@ class CocoaTimeTest(unittest.TestCase):
 
     cocoa_time_object.CopyFromDateTimeString('2001-01-02 00:00:00')
     self.assertEqual(cocoa_time_object._timestamp, 86400.0)
-    self.assertEqual(cocoa_time_object._time_zone_offset, 0)
+    self.assertEqual(cocoa_time_object._time_zone_offset, None)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

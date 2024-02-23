@@ -205,8 +205,7 @@ Supported date range | 1601-01-01 00:00:00.0000000 through ...
 Storage granularity | 100-nanosecond intervals
 Time zone | externally represented, typically UTC
 
-The actual upper bound of the supported date range is unclear. Also see:
-[Latest possible FILETIME](https://stackoverflow.com/questions/9999393/latest-possible-filetime)
+The actual upper bound of the supported date range is unclear.
 
 ### Format
 

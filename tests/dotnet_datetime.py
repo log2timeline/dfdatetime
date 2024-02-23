@@ -64,15 +64,15 @@ class DotNetDateTimeTest(unittest.TestCase):
 
     dotnet_date_time.CopyFromDateTimeString('2020-12-12')
     self.assertEqual(dotnet_date_time._timestamp, 637433280000000000)
-    self.assertEqual(dotnet_date_time._time_zone_offset, 0)
+    self.assertEqual(dotnet_date_time._time_zone_offset, None)
 
     dotnet_date_time.CopyFromDateTimeString('2020-12-12 12:12:12')
     self.assertEqual(dotnet_date_time._timestamp, 637433719320000000)
-    self.assertEqual(dotnet_date_time._time_zone_offset, 0)
+    self.assertEqual(dotnet_date_time._time_zone_offset, None)
 
     dotnet_date_time.CopyFromDateTimeString('2020-12-12 12:12:12.123')
     self.assertEqual(dotnet_date_time._timestamp, 637433719321230000)
-    self.assertEqual(dotnet_date_time._time_zone_offset, 0)
+    self.assertEqual(dotnet_date_time._time_zone_offset, None)
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""

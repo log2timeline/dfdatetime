@@ -65,15 +65,15 @@ class FiletimeTest(unittest.TestCase):
 
     filetime_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(filetime_object._timestamp, 0x1cb39b14e8c4000)
-    self.assertEqual(filetime_object._time_zone_offset, 0)
+    self.assertEqual(filetime_object._time_zone_offset, None)
 
     filetime_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(filetime_object._timestamp, 0x1cb3a623cb6a580)
-    self.assertEqual(filetime_object._time_zone_offset, 0)
+    self.assertEqual(filetime_object._time_zone_offset, None)
 
     filetime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(filetime_object._timestamp, 0x01cb3a623d0a17ce)
-    self.assertEqual(filetime_object._time_zone_offset, 0)
+    self.assertEqual(filetime_object._time_zone_offset, None)
 
     filetime_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875-01:00')
     self.assertEqual(filetime_object._timestamp, 0x01cb3a623d0a17ce)
@@ -85,7 +85,7 @@ class FiletimeTest(unittest.TestCase):
 
     filetime_object.CopyFromDateTimeString('1601-01-02 00:00:00')
     self.assertEqual(filetime_object._timestamp, 86400 * 10000000)
-    self.assertEqual(filetime_object._time_zone_offset, 0)
+    self.assertEqual(filetime_object._time_zone_offset, None)
 
     with self.assertRaises(ValueError):
       filetime_object.CopyFromDateTimeString('1500-01-02 00:00:00')

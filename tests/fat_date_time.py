@@ -52,15 +52,15 @@ class FATDateTime(unittest.TestCase):
 
     fat_date_time_object.CopyFromDateTimeString('2010-08-12')
     self.assertEqual(fat_date_time_object._number_of_seconds, 966038400)
-    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
+    self.assertEqual(fat_date_time_object._time_zone_offset, None)
 
     fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31')
     self.assertEqual(fat_date_time_object._number_of_seconds, 966114391)
-    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
+    self.assertEqual(fat_date_time_object._time_zone_offset, None)
 
     fat_date_time_object.CopyFromDateTimeString('2010-08-12 21:06:31.546875')
     self.assertEqual(fat_date_time_object._number_of_seconds, 966114391)
-    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
+    self.assertEqual(fat_date_time_object._time_zone_offset, None)
 
     fat_date_time_object.CopyFromDateTimeString(
         '2010-08-12 21:06:31.546875-01:00')
@@ -74,7 +74,7 @@ class FATDateTime(unittest.TestCase):
 
     fat_date_time_object.CopyFromDateTimeString('1980-01-02 00:00:00')
     self.assertEqual(fat_date_time_object._number_of_seconds, 86400)
-    self.assertEqual(fat_date_time_object._time_zone_offset, 0)
+    self.assertEqual(fat_date_time_object._time_zone_offset, None)
 
     with self.assertRaises(ValueError):
       fat_date_time_object.CopyFromDateTimeString('2200-01-02 00:00:00')
@@ -204,15 +204,15 @@ class FATTimestampTest(unittest.TestCase):
 
     fat_timestamp_object.CopyFromDateTimeString('2021-07-09')
     self.assertEqual(fat_timestamp_object._timestamp, 131025600000)
-    self.assertEqual(fat_timestamp_object._time_zone_offset, 0)
+    self.assertEqual(fat_timestamp_object._time_zone_offset, None)
 
     fat_timestamp_object.CopyFromDateTimeString('2021-07-09 22:11:30')
     self.assertEqual(fat_timestamp_object._timestamp, 131033589000)
-    self.assertEqual(fat_timestamp_object._time_zone_offset, 0)
+    self.assertEqual(fat_timestamp_object._time_zone_offset, None)
 
     fat_timestamp_object.CopyFromDateTimeString('2021-07-09 22:11:30.246875')
     self.assertEqual(fat_timestamp_object._timestamp, 131033589024)
-    self.assertEqual(fat_timestamp_object._time_zone_offset, 0)
+    self.assertEqual(fat_timestamp_object._time_zone_offset, None)
 
     fat_timestamp_object.CopyFromDateTimeString(
         '2021-07-09 22:11:30.246875-01:00')
@@ -226,7 +226,7 @@ class FATTimestampTest(unittest.TestCase):
 
     fat_timestamp_object.CopyFromDateTimeString('1980-01-02 00:00:00')
     self.assertEqual(fat_timestamp_object._timestamp, 8640000)
-    self.assertEqual(fat_timestamp_object._time_zone_offset, 0)
+    self.assertEqual(fat_timestamp_object._time_zone_offset, None)
 
     with self.assertRaises(ValueError):
       fat_timestamp_object.CopyFromDateTimeString('2200-01-02 00:00:00')

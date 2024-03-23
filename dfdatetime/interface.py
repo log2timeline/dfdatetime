@@ -791,7 +791,7 @@ class DateTimeValues(object):
     Raises:
       ValueError: if the time elements are invalid.
     """
-    if not month or not day_of_month:
+    if month is None or day_of_month is None:
       return None
 
     if hours is None:

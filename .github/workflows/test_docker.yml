@@ -30,7 +30,7 @@ jobs:
     - name: Build source distribution (sdist)
       run: |
         python3 -m build --no-isolation --sdist
-      - name: Build binary distribution (wheel)
+    - name: Build binary distribution (wheel)
       run: |
         python3 -m build --no-isolation --wheel
   test_ubuntu:
@@ -68,6 +68,6 @@ jobs:
     - name: Build source distribution (sdist)
       run: |
         python3 -m build --no-isolation --sdist
-      - name: Build binary distribution (wheel)
+    - name: Build binary distribution (wheel)
       run: |
         python3 -m build --no-isolation --wheel

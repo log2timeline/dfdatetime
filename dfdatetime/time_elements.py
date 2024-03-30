@@ -840,6 +840,42 @@ class TimeElements(interface.DateTimeValues):
         f'{year:04d}-{month:02d}-{day_of_month:02d} '
         f'{hours:02d}:{minutes:02d}:{seconds:02d}')
 
+  def NewFromDeltaAndDate(self, year, month, day_of_month):
+    """Creates a new time elements instance from a date time delta and a date.
+
+    Args:
+      year (int): year.
+      month (int): month, where 1 represents January and 0 if not set.
+      day_of_month (int): day of month, where 1 represents the first day and 0
+          if not set.
+
+    Returns:
+      TimeElements: time elements or None if time elements are missing.
+
+    Raises:
+      ValueError: if the instance is not a date time delta.
+    """
+    if not self._is_delta:
+      raise ValueError('Not a date time delta.')
+
+    if self._time_elements_tuple is None:
+      return None
+
+    delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
+        self._time_elements_tuple)
+
+    time_elements_tuple = (
+        year + delta_year, month + delta_month,
+        day_of_month + delta_day_of_month, hours, minutes, seconds)
+
+    date_time = TimeElements(
+        precision=self._precision, time_elements_tuple=time_elements_tuple,
+        time_zone_offset=self._time_zone_offset)
+
+    date_time.is_local_time = self.is_local_time
+
+    return date_time
+
   def NewFromDeltaAndYear(self, year):
     """Creates a new time elements instance from a date time delta and a year.
 
@@ -852,25 +888,7 @@ class TimeElements(interface.DateTimeValues):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self._is_delta:
-      raise ValueError('Not a date time delta.')
-
-    if self._number_of_seconds is None:
-      return None
-
-    delta_year, month, day_of_month, hours, minutes, seconds = (
-        self._time_elements_tuple)
-
-    time_elements_tuple = (
-        year + delta_year, month, day_of_month, hours, minutes, seconds)
-
-    date_time = TimeElements(
-        precision=self._precision, time_elements_tuple=time_elements_tuple,
-        time_zone_offset=self._time_zone_offset)
-
-    date_time.is_local_time = self.is_local_time
-
-    return date_time
+    return self.NewFromDeltaAndDate(year, 0, 0)
 
 
 class TimeElementsWithFractionOfSecond(TimeElements):
@@ -1042,6 +1060,40 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     return precision_helper.CopyToDateTimeString(
         self._time_elements_tuple, self.fraction_of_second)
 
+  def NewFromDeltaAndDate(self, year, month, day_of_month):
+    """Creates a new time elements instance from a date time delta and a date.
+
+    Args:
+      year (int): year.
+      month (int): month, where 1 represents January and 0 if not set.
+      day_of_month (int): day of month, where 1 represents the first day and 0
+          if not set.
+
+    Returns:
+      TimeElementsWithFractionOfSecond: time elements or None if time elements
+          are missing.
+
+    Raises:
+      ValueError: if the instance is not a date time delta.
+    """
+    if not self._is_delta:
+      raise ValueError('Not a date time delta.')
+
+    if self._time_elements_tuple is None:
+      return None
+
+    delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
+        self._time_elements_tuple)
+
+    time_elements_tuple = (
+        year + delta_year, month + delta_month,
+        day_of_month + delta_day_of_month, hours, minutes, seconds)
+
+    return TimeElementsWithFractionOfSecond(
+        fraction_of_second=self.fraction_of_second, precision=self._precision,
+        time_elements_tuple=time_elements_tuple,
+        time_zone_offset=self._time_zone_offset)
+
   def NewFromDeltaAndYear(self, year):
     """Creates a new time elements instance from a date time delta and a year.
 
@@ -1055,22 +1107,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self._is_delta:
-      raise ValueError('Not a date time delta.')
-
-    if self._number_of_seconds is None:
-      return None
-
-    delta_year, month, day_of_month, hours, minutes, seconds = (
-        self._time_elements_tuple)
-
-    time_elements_tuple = (
-        year + delta_year, month, day_of_month, hours, minutes, seconds)
-
-    return TimeElementsWithFractionOfSecond(
-        fraction_of_second=self.fraction_of_second, precision=self._precision,
-        time_elements_tuple=time_elements_tuple,
-        time_zone_offset=self._time_zone_offset)
+    return self.NewFromDeltaAndDate(year, 0, 0)
 
 
 class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
@@ -1170,6 +1207,40 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     super(TimeElementsInMilliseconds, self).CopyFromStringTuple(
         time_elements_tuple)
 
+  def NewFromDeltaAndDate(self, year, month, day_of_month):
+    """Creates a new time elements instance from a date time delta and a date.
+
+    Args:
+      year (int): year.
+      month (int): month, where 1 represents January and 0 if not set.
+      day_of_month (int): day of month, where 1 represents the first day and 0
+          if not set.
+
+    Returns:
+      TimeElementsInMilliseconds: time elements or None if time elements are
+          missing.
+
+    Raises:
+      ValueError: if the instance is not a date time delta.
+    """
+    if not self._is_delta:
+      raise ValueError('Not a date time delta.')
+
+    if self._time_elements_tuple is None:
+      return None
+
+    delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
+        self._time_elements_tuple)
+
+    time_elements_tuple = (
+        year + delta_year, month + delta_month,
+        day_of_month + delta_day_of_month, hours, minutes, seconds,
+        self.milliseconds)
+
+    return TimeElementsInMilliseconds(
+        precision=self._precision, time_elements_tuple=time_elements_tuple,
+        time_zone_offset=self._time_zone_offset)
+
   def NewFromDeltaAndYear(self, year):
     """Creates a new time elements instance from a date time delta and a year.
 
@@ -1183,22 +1254,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self._is_delta:
-      raise ValueError('Not a date time delta.')
-
-    if self._number_of_seconds is None:
-      return None
-
-    delta_year, month, day_of_month, hours, minutes, seconds = (
-        self._time_elements_tuple)
-
-    time_elements_tuple = (
-        year + delta_year, month, day_of_month, hours, minutes, seconds,
-        self.milliseconds)
-
-    return TimeElementsInMilliseconds(
-        precision=self._precision, time_elements_tuple=time_elements_tuple,
-        time_zone_offset=self._time_zone_offset)
+    return self.NewFromDeltaAndDate(year, 0, 0)
 
 
 class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
@@ -1298,6 +1354,40 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
         time_elements_tuple)
 
+  def NewFromDeltaAndDate(self, year, month, day_of_month):
+    """Creates a new time elements instance from a date time delta and a year.
+
+    Args:
+      year (int): year.
+      month (int): month, where 1 represents January and 0 if not set.
+      day_of_month (int): day of month, where 1 represents the first day and 0
+          if not set.
+
+    Returns:
+      TimeElementsInMicroseconds: time elements or None if time elements are
+          missing.
+
+    Raises:
+      ValueError: if the instance is not a date time delta.
+    """
+    if not self._is_delta:
+      raise ValueError('Not a date time delta.')
+
+    if self._time_elements_tuple is None:
+      return None
+
+    delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
+        self._time_elements_tuple)
+
+    time_elements_tuple = (
+        year + delta_year, month + delta_month,
+        day_of_month + delta_day_of_month, hours, minutes, seconds,
+        self.microseconds)
+
+    return TimeElementsInMicroseconds(
+        precision=self._precision, time_elements_tuple=time_elements_tuple,
+        time_zone_offset=self._time_zone_offset)
+
   def NewFromDeltaAndYear(self, year):
     """Creates a new time elements instance from a date time delta and a year.
 
@@ -1311,22 +1401,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     Raises:
       ValueError: if the instance is not a date time delta.
     """
-    if not self._is_delta:
-      raise ValueError('Not a date time delta.')
-
-    if self._number_of_seconds is None:
-      return None
-
-    delta_year, month, day_of_month, hours, minutes, seconds = (
-        self._time_elements_tuple)
-
-    time_elements_tuple = (
-        year + delta_year, month, day_of_month, hours, minutes, seconds,
-        self.microseconds)
-
-    return TimeElementsInMicroseconds(
-        precision=self._precision, time_elements_tuple=time_elements_tuple,
-        time_zone_offset=self._time_zone_offset)
+    return self.NewFromDeltaAndDate(year, 0, 0)
 
 
 factory.Factory.RegisterDateTimeValues(TimeElements)

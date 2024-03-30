@@ -770,6 +770,30 @@ class TimeElementsTest(unittest.TestCase):
     time_of_day_tuple = time_elements_object.GetTimeOfDay()
     self.assertEqual(time_of_day_tuple, (None, None, None))
 
+  def testNewFromDeltaAndDate(self):
+    """Tests the NewFromDeltaAndDate function."""
+    time_elements_object = time_elements.TimeElements(
+        is_delta=True, time_elements_tuple=(1, 0, 0, 20, 6, 31))
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndDate(
+        2009, 1, 12)
+    self.assertIsNotNone(new_time_elements_object)
+    self.assertFalse(new_time_elements_object.is_delta)
+    self.assertEqual(new_time_elements_object.year, 2010)
+    self.assertEqual(new_time_elements_object.month, 1)
+    self.assertEqual(new_time_elements_object.day_of_month, 12)
+
+    time_elements_object = time_elements.TimeElements(is_delta=True)
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndDate(
+        2009, 1, 12)
+    self.assertIsNone(new_time_elements_object)
+
+    time_elements_object = time_elements.TimeElements(is_delta=False)
+
+    with self.assertRaises(ValueError):
+      time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
+
   def testNewFromDeltaAndYear(self):
     """Tests the NewFromDeltaAndYear function."""
     time_elements_object = time_elements.TimeElements(
@@ -1137,6 +1161,31 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
 
     time_of_day_tuple = time_elements_object.GetTimeOfDay()
     self.assertEqual(time_of_day_tuple, (None, None, None))
+
+  def testNewFromDeltaAndDate(self):
+    """Tests the NewFromDeltaAndDate function."""
+    time_elements_object = time_elements.TimeElementsInMilliseconds(
+        is_delta=True, time_elements_tuple=(1, 0, 0, 20, 6, 31, 429))
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndDate(
+        2009, 1, 12)
+    self.assertIsNotNone(new_time_elements_object)
+    self.assertFalse(new_time_elements_object.is_delta)
+    self.assertEqual(new_time_elements_object.year, 2010)
+    self.assertEqual(new_time_elements_object.month, 1)
+    self.assertEqual(new_time_elements_object.day_of_month, 12)
+    self.assertEqual(new_time_elements_object.milliseconds, 429)
+
+    time_elements_object = time_elements.TimeElements(is_delta=True)
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndDate(
+        2009, 1, 12)
+    self.assertIsNone(new_time_elements_object)
+
+    time_elements_object = time_elements.TimeElements(is_delta=False)
+
+    with self.assertRaises(ValueError):
+      time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
 
   def testNewFromDeltaAndYear(self):
     """Tests the NewFromDeltaAndYear function."""
@@ -1507,6 +1556,31 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     time_of_day_tuple = time_elements_object.GetTimeOfDay()
     self.assertEqual(time_of_day_tuple, (None, None, None))
+
+  def testNewFromDeltaAndDate(self):
+    """Tests the NewFromDeltaAndDate function."""
+    time_elements_object = time_elements.TimeElementsInMicroseconds(
+        is_delta=True, time_elements_tuple=(1, 0, 0, 20, 6, 31, 429876))
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndDate(
+        2009, 1, 12)
+    self.assertIsNotNone(new_time_elements_object)
+    self.assertFalse(new_time_elements_object.is_delta)
+    self.assertEqual(new_time_elements_object.year, 2010)
+    self.assertEqual(new_time_elements_object.month, 1)
+    self.assertEqual(new_time_elements_object.day_of_month, 12)
+    self.assertEqual(new_time_elements_object.microseconds, 429876)
+
+    time_elements_object = time_elements.TimeElements(is_delta=True)
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndDate(
+        2009, 1, 12)
+    self.assertIsNone(new_time_elements_object)
+
+    time_elements_object = time_elements.TimeElements(is_delta=False)
+
+    with self.assertRaises(ValueError):
+      time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
 
   def testNewFromDeltaAndYear(self):
     """Tests the NewFromDeltaAndYear function."""

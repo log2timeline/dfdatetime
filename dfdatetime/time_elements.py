@@ -907,7 +907,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
 
     Args:
       fraction_of_second (Optional[decimal.Decimal]): fraction of second, which
-          must be a value between 0.0 and 1.0.
+          must be a value between 0.00 and 1.00.
       is_delta (Optional[bool]): True if the date and time value is relative to
           another date and time value.
       precision (Optional[str]): precision of the date and time value, which
@@ -923,7 +923,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
           value is out of bounds.
     """
     if fraction_of_second is not None:
-      if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+      if fraction_of_second < 0.00 or fraction_of_second >= 1.00:
         raise ValueError(
             f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
@@ -1035,7 +1035,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
       raise ValueError(
           f'Invalid fraction of second value: {fraction_of_second_string!s}')
 
-    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
+    if fraction_of_second < 0.00 or fraction_of_second >= 1.00:
       raise ValueError(
           f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 

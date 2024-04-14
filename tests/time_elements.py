@@ -1627,9 +1627,9 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
 
     expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
     time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
-      fraction_of_second=decimal.Decimal(0.8742),
-      precision=definitions.PRECISION_100_MICROSECONDS,
-      time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+        fraction_of_second=decimal.Decimal(0.8742),
+        precision=definitions.PRECISION_100_MICROSECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
     self.assertIsNotNone(time_elements_object)
     self.assertEqual(
       time_elements_object._time_elements_tuple, expected_time_elements_tuple)

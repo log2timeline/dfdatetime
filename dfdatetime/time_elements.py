@@ -923,7 +923,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
           value is out of bounds.
     """
     if fraction_of_second is not None:
-      if fraction_of_second < 0.00 or fraction_of_second >= 1.00:
+      if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
         raise ValueError(
             f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 

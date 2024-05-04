@@ -137,7 +137,7 @@ class CentisecondsPrecisionHelper(DateTimePrecisionHelper):
 
     Returns:
       str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.###
+          YYYY-MM-DD hh:mm:ss.##
 
     Raises:
       ValueError: if the fraction of second is out of bounds.
@@ -247,7 +247,7 @@ class DecimillisecondsPrecisionHelper(DateTimePrecisionHelper):
 
     Returns:
       str: date and time value formatted as:
-          YYYY-MM-DD hh:mm:ss.###
+          YYYY-MM-DD hh:mm:ss.####
 
     Raises:
       ValueError: if the fraction of second is out of bounds.

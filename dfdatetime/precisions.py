@@ -25,8 +25,8 @@ class DateTimePrecisionHelper(object):
       nanoseconds (int): number of nanoseconds.
 
     Returns:
-      decimal.Decimal: fraction of second, which must be a value between 0.0
-          and 1.0.
+      decimal.Decimal: fraction of second, which must be a value between 0.0 and
+          1.0.
     """
     raise NotImplementedError()
 
@@ -110,8 +110,8 @@ class CentisecondsPrecisionHelper(DateTimePrecisionHelper):
       nanoseconds (int): number of nanoseconds.
 
     Returns:
-      decimal.Decimal: fraction of second, which must be a value between 0.00
-      and 1.00.
+      decimal.Decimal: fraction of second, which must be a value between 0.0 and
+          1.0.
 
     Raises:
       ValueError: if the number of nanoseconds is out of bounds.
@@ -133,7 +133,7 @@ class CentisecondsPrecisionHelper(DateTimePrecisionHelper):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
       fraction_of_second (decimal.Decimal): fraction of second, which must be a
-          value between 0.00 and 1.00.
+          value between 0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:
@@ -142,7 +142,7 @@ class CentisecondsPrecisionHelper(DateTimePrecisionHelper):
     Raises:
       ValueError: if the fraction of second is out of bounds.
     """
-    if fraction_of_second < 0.00 or fraction_of_second >= 1.00:
+    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
       raise ValueError(
           f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
@@ -218,8 +218,8 @@ class DecimillisecondsPrecisionHelper(DateTimePrecisionHelper):
       nanoseconds (int): number of nanoseconds.
 
     Returns:
-      decimal.Decimal: fraction of second, which must be a value between 0.0000
-          and 1.0000.
+      decimal.Decimal: fraction of second, which must be a value between 0.0
+          and 1.0.
 
     Raises:
       ValueError: if the number of nanoseconds is out of bounds.
@@ -243,7 +243,7 @@ class DecimillisecondsPrecisionHelper(DateTimePrecisionHelper):
           time elements, contains year, month, day of month, hours, minutes and
           seconds.
       fraction_of_second (decimal.Decimal): fraction of second, which must be a
-          value between 0.0000 and 1.0000.
+          value between 0.0 and 1.0.
 
     Returns:
       str: date and time value formatted as:
@@ -252,7 +252,7 @@ class DecimillisecondsPrecisionHelper(DateTimePrecisionHelper):
     Raises:
       ValueError: if the fraction of second is out of bounds.
     """
-    if fraction_of_second < 0.0000 or fraction_of_second >= 1.0000:
+    if fraction_of_second < 0.0 or fraction_of_second >= 1.0:
       raise ValueError(
           f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 

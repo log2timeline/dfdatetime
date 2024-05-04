@@ -1404,6 +1404,154 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
     return self.NewFromDeltaAndDate(year, 0, 0)
 
 
+class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
+  """Time elements in nanoseconds.
+
+  Attributes:
+    fraction_of_second (decimal.Decimal): fraction of second, which must be a
+        value between 0.0 and 1.0.
+    is_local_time (bool): True if the date and time value is in local time.
+    precision (str): precision of the date of the date and time value, that
+        represents 1 nanosecond (PRECISION_1_NANOSECOND).
+  """
+
+  def __init__(
+      self, is_delta=False, precision=None, time_elements_tuple=None,
+      time_zone_offset=None):
+    """Initializes time elements.
+
+    Args:
+      is_delta (Optional[bool]): True if the date and time value is relative to
+          another date and time value.
+      precision (Optional[str]): precision of the date and time value, which
+          should be one of the PRECISION_VALUES in definitions.
+      time_elements_tuple (Optional[tuple[int, int, int, int, int, int, int]]):
+          time elements, contains year, month, day of month, hours, minutes,
+          seconds and nanoseconds.
+      time_zone_offset (Optional[int]): time zone offset in number of minutes
+          from UTC or None if not set.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid.
+    """
+    fraction_of_second = None
+    if time_elements_tuple:
+      number_of_elements = len(time_elements_tuple)
+      if number_of_elements < 7:
+        raise ValueError((
+            f'Invalid time elements tuple at least 7 elements required,'
+            f'got: {number_of_elements:d}'))
+
+      nanoseconds = time_elements_tuple[6]
+      time_elements_tuple = time_elements_tuple[:6]
+
+      if (nanoseconds < 0 or
+          nanoseconds >= definitions.NANOSECONDS_PER_SECOND):
+        raise ValueError('Invalid number of nanoseconds.')
+
+      fraction_of_second = (
+          decimal.Decimal(nanoseconds) / definitions.NANOSECONDS_PER_SECOND)
+
+    super(TimeElementsInNanoseconds, self).__init__(
+        fraction_of_second=fraction_of_second, is_delta=is_delta,
+        precision=precision or definitions.PRECISION_1_NANOSECOND,
+        time_elements_tuple=time_elements_tuple,
+        time_zone_offset=time_zone_offset)
+
+  @property
+  def nanoseconds(self):
+    """int: number of nanoseconds."""
+    return int(self.fraction_of_second * definitions.NANOSECONDS_PER_SECOND)
+
+  def CopyFromStringTuple(self, time_elements_tuple):
+    """Copies time elements from string-based time elements tuple.
+
+    Args:
+      time_elements_tuple (Optional[tuple[str, str, str, str, str, str, str]]):
+          time elements, contains year, month, day of month, hours, minutes,
+          seconds and nanoseconds.
+
+    Raises:
+      ValueError: if the time elements tuple is invalid.
+    """
+    number_of_elements = len(time_elements_tuple)
+    if len(time_elements_tuple) < 7:
+      raise ValueError((
+          f'Invalid time elements tuple at least 7 elements required,'
+          f'got: {number_of_elements:d}'))
+
+    year, month, day_of_month, hours, minutes, seconds, nanoseconds = (
+        time_elements_tuple)
+
+    try:
+      nanoseconds = int(nanoseconds, 10)
+    except (TypeError, ValueError):
+      raise ValueError(f'Invalid nanosecond value: {nanoseconds!s}')
+
+    if nanoseconds < 0 or nanoseconds >= definitions.NANOSECONDS_PER_SECOND:
+      raise ValueError('Invalid number of nanoseconds.')
+
+    fraction_of_second = (
+        decimal.Decimal(nanoseconds) / definitions.NANOSECONDS_PER_SECOND)
+
+    time_elements_tuple = (
+        year, month, day_of_month, hours, minutes, seconds,
+        str(fraction_of_second))
+
+    super(TimeElementsInNanoseconds, self).CopyFromStringTuple(
+        time_elements_tuple)
+
+  def NewFromDeltaAndDate(self, year, month, day_of_month):
+    """Creates a new time elements instance from a date time delta and a year.
+
+    Args:
+      year (int): year.
+      month (int): month, where 1 represents January and 0 if not set.
+      day_of_month (int): day of month, where 1 represents the first day and 0
+          if not set.
+
+    Returns:
+      TimeElementsInNanoseconds: time elements or None if time elements are
+          missing.
+
+    Raises:
+      ValueError: if the instance is not a date time delta.
+    """
+    if not self._is_delta:
+      raise ValueError('Not a date time delta.')
+
+    if self._time_elements_tuple is None:
+      return None
+
+    delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
+        self._time_elements_tuple)
+
+    time_elements_tuple = (
+        year + delta_year, month + delta_month,
+        day_of_month + delta_day_of_month, hours, minutes, seconds,
+        self.nanoseconds)
+
+    return TimeElementsInNanoseconds(
+        precision=self._precision, time_elements_tuple=time_elements_tuple,
+        time_zone_offset=self._time_zone_offset)
+
+  def NewFromDeltaAndYear(self, year):
+    """Creates a new time elements instance from a date time delta and a year.
+
+    Args:
+      year (int): year.
+
+    Returns:
+      TimeElementsInNanoseconds: time elements or None if time elements are
+          missing.
+
+    Raises:
+      ValueError: if the instance is not a date time delta.
+    """
+    return self.NewFromDeltaAndDate(year, 0, 0)
+
+
 factory.Factory.RegisterDateTimeValues(TimeElements)
 factory.Factory.RegisterDateTimeValues(TimeElementsInMilliseconds)
 factory.Factory.RegisterDateTimeValues(TimeElementsInMicroseconds)
+factory.Factory.RegisterDateTimeValues(TimeElementsInNanoseconds)

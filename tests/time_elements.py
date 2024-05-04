@@ -6,6 +6,7 @@ import datetime
 import decimal
 import unittest
 
+from dfdatetime import definitions
 from dfdatetime import time_elements
 
 
@@ -1602,6 +1603,244 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
 
     with self.assertRaises(ValueError):
       time_elements_object.NewFromDeltaAndYear(2009)
+
+
+class TimeElementsWithFractionOfSeconds(unittest.TestCase):
+  """Tests for the time elements with fractions of seconds."""
+
+  # pylint: disable=protected-access
+
+  def testInitialize(self):
+    """Tests the initialization function."""
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond()
+    self.assertIsNotNone(time_elements_object)
+
+    expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal(0.87),
+        precision=definitions.PRECISION_10_MILLISECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+    self.assertIsNotNone(time_elements_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.87)
+
+    expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal(0.8742),
+        precision=definitions.PRECISION_100_MICROSECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+    self.assertIsNotNone(time_elements_object)
+    self.assertEqual(
+      time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(time_elements_object.fraction_of_second, 0.8742)
+
+    with self.assertRaises(ValueError):
+      time_elements.TimeElementsWithFractionOfSecond(
+          fraction_of_second=decimal.Decimal('1.87'),
+          precision=definitions.PRECISION_10_MILLISECONDS,
+          time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    with self.assertRaises(ValueError):
+      time_elements.TimeElementsWithFractionOfSecond(
+          fraction_of_second=decimal.Decimal('-1'),
+          precision=definitions.PRECISION_10_MILLISECONDS,
+          time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+  def testGetNormalizedTimestamp(self):
+    """Tests the _GetNormalizedTimestamp function."""
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.87'),
+        precision=definitions.PRECISION_10_MILLISECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.87'))
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.87'),
+        precision=definitions.PRECISION_10_MILLISECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31),
+        time_zone_offset=60)
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.87'))
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.87'),
+        precision=definitions.PRECISION_10_MILLISECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+    time_elements_object.time_zone_offset = 60
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281639991.87'))
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.8724'),
+        precision=definitions.PRECISION_100_MICROSECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.8724'))
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond()
+    normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
+    self.assertIsNone(normalized_timestamp)
+
+  def testCopyFromDateTimeValues(self):
+    """Tests the _CopyFromDateTimeValues function."""
+    date_time_values = {
+        'year': 2010,
+        'month': 8,
+        'day_of_month': 12,
+        'hours': 21,
+        'minutes': 6,
+        'seconds': 31,
+        'nanoseconds': 123456789,
+        'time_zone_offset': 60}
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        precision=definitions.PRECISION_10_MILLISECONDS)
+    time_elements_object._CopyFromDateTimeValues(date_time_values)
+
+    self.assertEqual(
+      time_elements_object._time_elements_tuple, (2010, 8, 12, 21, 6, 31))
+    self.assertEqual(
+      time_elements_object.fraction_of_second, decimal.Decimal('0.12'))
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        precision=definitions.PRECISION_1_MILLISECOND)
+    time_elements_object._CopyFromDateTimeValues(date_time_values)
+    self.assertEqual(
+      time_elements_object.fraction_of_second, decimal.Decimal('0.123'))
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        precision=definitions.PRECISION_100_MICROSECONDS)
+    time_elements_object._CopyFromDateTimeValues(date_time_values)
+    self.assertEqual(
+      time_elements_object.fraction_of_second, decimal.Decimal('0.1234'))
+
+  def testCopyFromDatetime(self):
+    """Tests the CopyFromDatetime function."""
+    datetime_object = datetime.datetime(2010, 8, 12, 21, 6, 31, 546875)
+    expected_time_elements_tuple = (2010, 8, 12, 21, 6, 31)
+    expected_number_of_seconds = 1281647191
+    expected_fraction_of_second = decimal.Decimal('0.54')
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+      precision=definitions.PRECISION_10_MILLISECONDS)
+    time_elements_object.CopyFromDatetime(datetime_object)
+
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(
+        time_elements_object.fraction_of_second, expected_fraction_of_second)
+    self.assertTrue(time_elements_object.is_local_time)
+
+    datetime_object = datetime.datetime(
+        2010, 8, 12, 21, 6, 31, 546875, tzinfo=datetime.timezone.utc)
+    time_elements_object.CopyFromDatetime(datetime_object)
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object._number_of_seconds, expected_number_of_seconds)
+    self.assertEqual(
+        time_elements_object.fraction_of_second, expected_fraction_of_second)
+    self.assertFalse(time_elements_object.is_local_time)
+
+  def testCopyFromStringTuple(self):
+    """Tests the CopyFromStringTuple function."""
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        precision=definitions.PRECISION_10_MILLISECONDS)
+
+    expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
+    expected_fraction_of_second = decimal.Decimal('0.46')
+    time_elements_object.CopyFromStringTuple(
+        time_elements_tuple=('2010', '8', '12', '20', '6', '31', '0.46'))
+
+    self.assertEqual(
+        time_elements_object._time_elements_tuple, expected_time_elements_tuple)
+    self.assertEqual(
+        time_elements_object.fraction_of_second, expected_fraction_of_second)
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        precision=definitions.PRECISION_100_MICROSECONDS)
+    time_elements_object.CopyFromStringTuple(
+        time_elements_tuple=('2010', '8', '12', '20', '6', '31', '0.4671'))
+    self.assertEqual(
+        time_elements_object.fraction_of_second, decimal.Decimal('0.4671'))
+
+    with self.assertRaises(ValueError):
+      time_elements_object.CopyFromStringTuple(
+          time_elements_tuple=('2010', '8', '12', '20', '6', '31'))
+
+    with self.assertRaises(ValueError):
+      time_elements_object.CopyFromStringTuple(
+          time_elements_tuple=('2010', '8', '12', '20', '6', '31', '96'))
+
+  def testCopyToDateTimeString(self):
+    """Tests the CopyToDateTimeString function."""
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.87'),
+        precision=definitions.PRECISION_10_MILLISECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    date_time_string = time_elements_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.87')
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.874'),
+        precision=definitions.PRECISION_1_MILLISECOND,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    date_time_string = time_elements_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.874')
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.8741'),
+        precision=definitions.PRECISION_100_MICROSECONDS,
+        time_elements_tuple=(2010, 8, 12, 20, 6, 31))
+
+    date_time_string = time_elements_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.8741')
+
+  def testNewFromDeltaAndDate(self):
+    """Tests the NewFromDeltaAndDate function."""
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.87'),
+        is_delta=True,
+        precision=definitions.PRECISION_10_MILLISECONDS,
+        time_elements_tuple=(1, 0, 0, 20, 6, 31))
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndDate(
+        2009, 1, 12)
+    self.assertFalse(new_time_elements_object.is_delta)
+    self.assertEqual(new_time_elements_object.year, 2010)
+    self.assertEqual(new_time_elements_object.month, 1)
+    self.assertEqual(new_time_elements_object.day_of_month, 12)
+    self.assertEqual(
+        new_time_elements_object.fraction_of_second, decimal.Decimal('0.87'))
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        time_elements_tuple=(1, 0, 0, 20, 6, 31))
+
+    with self.assertRaises(ValueError):
+      time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
+
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond()
+
+    with self.assertRaises(ValueError):
+      time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
+
+  def testNewFromDeltaAndYear(self):
+    """Tests the NewFromDeltaAndYear function."""
+    time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
+        fraction_of_second=decimal.Decimal('0.87'),
+        is_delta=True,
+        precision=definitions.PRECISION_10_MILLISECONDS,
+        time_elements_tuple=(1, 8, 12, 20, 6, 31))
+
+    new_time_elements_object = time_elements_object.NewFromDeltaAndYear(2009)
+    self.assertFalse(new_time_elements_object.is_delta)
+    self.assertEqual(new_time_elements_object.year, 2010)
 
 
 if __name__ == '__main__':

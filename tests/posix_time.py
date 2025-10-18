@@ -280,7 +280,7 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
     posix_timestamp, fraction_of_second = (
         posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertEqual(posix_timestamp, -11644468446)
-    self.assertEqual(fraction_of_second, -327)
+    self.assertEqual(fraction_of_second, 327)
 
     posix_time_object = posix_time.PosixTime()
 
@@ -443,7 +443,7 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
     posix_timestamp, fraction_of_second = (
         posix_time_object.CopyToPosixTimestampWithFractionOfSecond())
     self.assertEqual(posix_timestamp, -11644468446)
-    self.assertEqual(fraction_of_second, -327447)
+    self.assertEqual(fraction_of_second, 327447)
 
     posix_time_object = posix_time.PosixTime()
 

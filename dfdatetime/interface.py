@@ -898,10 +898,12 @@ class DateTimeValues(object):
       return None, None
 
     remainder_multiplier = self._REMAINDER_MULTIPLIER.get(self._precision, None)
-    if remainder_multiplier:
+    if not remainder_multiplier:
+      remainder = None
+    elif normalized_timestamp >= 0:
       remainder = int((normalized_timestamp % 1) * remainder_multiplier)
     else:
-      remainder = None
+      remainder = int((normalized_timestamp % 1) * -remainder_multiplier)
 
     return int(normalized_timestamp), remainder
 

@@ -57,7 +57,8 @@ class FiletimeTest(unittest.TestCase):
     filetime_object = filetime.Filetime(timestamp=0x0000000000008000)
 
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
-    self.assertEqual(normalized_timestamp, decimal.Decimal('-11644473599.9967232'))
+    self.assertEqual(
+        normalized_timestamp, decimal.Decimal('-11644473599.9967232'))
 
     filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
 

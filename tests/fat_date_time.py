@@ -250,20 +250,20 @@ class FATTimestampTest(unittest.TestCase):
     date_time_string = fat_timestamp_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2021-07-09T22:11:30.24+00:00')
 
-  def testCopyToFATTimestampstampWithFractionOfSecond(self):
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
     """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
     fat_timestamp_object = fat_date_time.FATTimestamp(timestamp=131033589024)
 
-    fat_timestamp, fraction_of_second = (
+    posix_timestamp, fraction_of_second = (
         fat_timestamp_object.CopyToPosixTimestampWithFractionOfSecond())
-    self.assertEqual(fat_timestamp, 1625868690)
+    self.assertEqual(posix_timestamp, 1625868690)
     self.assertEqual(fraction_of_second, 24)
 
     fat_timestamp_object = fat_date_time.FATTimestamp()
 
-    fat_timestamp, fraction_of_second = (
+    posix_timestamp, fraction_of_second = (
         fat_timestamp_object.CopyToPosixTimestampWithFractionOfSecond())
-    self.assertIsNone(fat_timestamp)
+    self.assertIsNone(posix_timestamp)
     self.assertIsNone(fraction_of_second)
 
   def testGetDate(self):

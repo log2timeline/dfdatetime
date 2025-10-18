@@ -49,6 +49,16 @@ class FiletimeTest(unittest.TestCase):
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
     self.assertEqual(normalized_timestamp, decimal.Decimal('1281643591.546875'))
 
+    filetime_object = filetime.Filetime(timestamp=0x0000000000000000)
+
+    normalized_timestamp = filetime_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('-11644473600.0'))
+
+    filetime_object = filetime.Filetime(timestamp=0x0000000000008000)
+
+    normalized_timestamp = filetime_object._GetNormalizedTimestamp()
+    self.assertEqual(normalized_timestamp, decimal.Decimal('-11644473599.9967232'))
+
     filetime_object = filetime.Filetime(timestamp=0x1ffffffffffffffff)
 
     normalized_timestamp = filetime_object._GetNormalizedTimestamp()
@@ -108,6 +118,36 @@ class FiletimeTest(unittest.TestCase):
 
     date_time_string = filetime_object.CopyToDateTimeStringISO8601()
     self.assertEqual(date_time_string, '2010-08-12T21:06:31.5468750+00:00')
+
+  def testCopyToPosixTimestampWithFractionOfSecond(self):
+    """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+    filetime_object = filetime.Filetime(timestamp=0x01cb3a623d0a17ce)
+
+    posix_timestamp, fraction_of_second = (
+        filetime_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, 1281647191)
+    self.assertEqual(fraction_of_second, 5468750)
+
+    filetime_object = filetime.Filetime(timestamp=0x0000000000000000)
+
+    posix_timestamp, fraction_of_second = (
+        filetime_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, -11644473600)
+    self.assertEqual(fraction_of_second, 0)
+
+    filetime_object = filetime.Filetime(timestamp=0x0000000000008000)
+
+    posix_timestamp, fraction_of_second = (
+        filetime_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertEqual(posix_timestamp, -11644473599)
+    self.assertEqual(fraction_of_second, 9967232)
+
+    filetime_object = filetime.Filetime()
+
+    posix_timestamp, fraction_of_second = (
+        filetime_object.CopyToPosixTimestampWithFractionOfSecond())
+    self.assertIsNone(posix_timestamp)
+    self.assertIsNone(fraction_of_second)
 
   def testGetDate(self):
     """Tests the GetDate function."""

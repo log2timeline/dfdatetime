@@ -6,6 +6,5 @@ exclude *.pyc
 recursive-include config *
 recursive-exclude dfdatetime *.pyc
 # The test scripts are not required in a binary distribution package they 
-# are considered source distribution files and excluded in find_package()
-# in setup.py.
+# are considered source distribution files and excluded by find_package().
 recursive-include tests *.py

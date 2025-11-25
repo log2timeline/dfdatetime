@@ -1,3 +1,29 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "dfdatetime"
+version = "20251125"
+description = "Digital Forensics date and time (dfDateTime)"
+maintainers = [
+    { name = "Log2Timeline maintainers", email = "log2timeline-maintainers@googlegroups.com" },
+]
+license = "Apache-2.0"
+license-files = ["ACKNOWLEDGEMENTS", "AUTHORS", "LICENSE"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python",
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Documentation = "https://dfdatetime.readthedocs.io/en/latest"
+Homepage = "https://github.com/log2timeline/dfdatetime"
+Repository = "https://github.com/log2timeline/dfdatetime"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dfdatetime"]
+exclude = ["docs", "tests", "tests.*", "utils"]

@@ -20,4 +20,4 @@ jobs:
         brew link --force gettext
     - name: Run tests
       run: |
-        tox -e py${{ matrix.toxenv }}
+        tox -e ${{ matrix.toxenv }}

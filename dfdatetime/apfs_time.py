@@ -53,7 +53,7 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
     Raises:
       ValueError: if the date and time value is not supported.
     """
-    super(APFSTime, self)._CopyFromDateTimeString(time_string)
+    super()._CopyFromDateTimeString(time_string)
 
     if (self._timestamp is None or self._timestamp < self._INT64_MIN or
         self._timestamp > self._INT64_MAX):
@@ -70,7 +70,7 @@ class APFSTime(posix_time.PosixTimeInNanoseconds):
         self._timestamp > self._INT64_MAX):
       return None
 
-    return super(APFSTime, self)._CopyToDateTimeString()
+    return super()._CopyToDateTimeString()
 
 
 factory.Factory.RegisterDateTimeValues(APFSTime)

@@ -92,7 +92,7 @@ class TimeElements(interface.DateTimeValues):
     Raises:
       ValueError: if the time elements tuple is invalid.
     """
-    super(TimeElements, self).__init__(
+    super().__init__(
         is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_SECOND,
         time_zone_offset=time_zone_offset)
@@ -926,7 +926,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         raise ValueError(
             f'Fraction of second value: {fraction_of_second:f} out of bounds.')
 
-    super(TimeElementsWithFractionOfSecond, self).__init__(
+    super().__init__(
         is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_SECOND,
         time_elements_tuple=time_elements_tuple,
@@ -996,7 +996,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
     Args:
       datetime_object (datetime.datetime): Python datetime object.
     """
-    super(TimeElementsWithFractionOfSecond, self).CopyFromDatetime(
+    super().CopyFromDatetime(
         datetime_object)
 
     precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
@@ -1023,7 +1023,7 @@ class TimeElementsWithFractionOfSecond(TimeElements):
           f'Invalid time elements tuple at least 7 elements required,'
           f'got: {number_of_elements:d}'))
 
-    super(TimeElementsWithFractionOfSecond, self).CopyFromStringTuple(
+    super().CopyFromStringTuple(
         time_elements_tuple)
 
     fraction_of_second_string = time_elements_tuple[6]
@@ -1157,7 +1157,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
       fraction_of_second = (
           decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND)
 
-    super(TimeElementsInMilliseconds, self).__init__(
+    super().__init__(
         fraction_of_second=fraction_of_second, is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_elements_tuple=time_elements_tuple,
@@ -1203,7 +1203,7 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         year, month, day_of_month, hours, minutes, seconds,
         str(fraction_of_second))
 
-    super(TimeElementsInMilliseconds, self).CopyFromStringTuple(
+    super().CopyFromStringTuple(
         time_elements_tuple)
 
   def NewFromDeltaAndDate(self, year, month, day_of_month):
@@ -1304,7 +1304,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
       fraction_of_second = (
           decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND)
 
-    super(TimeElementsInMicroseconds, self).__init__(
+    super().__init__(
         fraction_of_second=fraction_of_second, is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_elements_tuple=time_elements_tuple,
@@ -1350,7 +1350,7 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         year, month, day_of_month, hours, minutes, seconds,
         str(fraction_of_second))
 
-    super(TimeElementsInMicroseconds, self).CopyFromStringTuple(
+    super().CopyFromStringTuple(
         time_elements_tuple)
 
   def NewFromDeltaAndDate(self, year, month, day_of_month):
@@ -1451,7 +1451,7 @@ class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
       fraction_of_second = (
           decimal.Decimal(nanoseconds) / definitions.NANOSECONDS_PER_SECOND)
 
-    super(TimeElementsInNanoseconds, self).__init__(
+    super().__init__(
         fraction_of_second=fraction_of_second, is_delta=is_delta,
         precision=precision or definitions.PRECISION_1_NANOSECOND,
         time_elements_tuple=time_elements_tuple,
@@ -1497,7 +1497,7 @@ class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
         year, month, day_of_month, hours, minutes, seconds,
         str(fraction_of_second))
 
-    super(TimeElementsInNanoseconds, self).CopyFromStringTuple(
+    super().CopyFromStringTuple(
         time_elements_tuple)
 
   def NewFromDeltaAndDate(self, year, month, day_of_month):

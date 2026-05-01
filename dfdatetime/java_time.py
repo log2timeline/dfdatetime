@@ -53,7 +53,7 @@ class JavaTime(posix_time.PosixTimeInMilliseconds):
         self._timestamp > self._INT64_MAX):
       return None
 
-    return super(JavaTime, self).CopyToDateTimeString()
+    return super().CopyToDateTimeString()
 
 
 factory.Factory.RegisterDateTimeValues(JavaTime)

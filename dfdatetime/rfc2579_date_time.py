@@ -58,7 +58,7 @@ class RFC2579DateTime(interface.DateTimeValues):
     Raises:
       ValueError: if the system time is invalid.
     """
-    super(RFC2579DateTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_100_MILLISECONDS)
     self._day_of_month = None
     self._deciseconds = None

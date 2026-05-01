@@ -1,7 +1,7 @@
 """The date and time values factory."""
 
 
-class Factory(object):
+class Factory:
   """Date and time values factory."""
 
   _date_time_values_types = {}

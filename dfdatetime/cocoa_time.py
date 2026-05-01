@@ -12,7 +12,7 @@ class CocoaTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a Cocoa time epoch."""
-    super(CocoaTimeEpoch, self).__init__(2001, 1, 1)
+    super().__init__(2001, 1, 1)
 
 
 class CocoaTime(interface.DateTimeValues):
@@ -41,7 +41,7 @@ class CocoaTime(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[float]): Cocoa timestamp.
     """
-    super(CocoaTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_SECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

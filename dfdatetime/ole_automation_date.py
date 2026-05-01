@@ -12,7 +12,7 @@ class OLEAutomationDateEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a OLE automation date epoch."""
-    super(OLEAutomationDateEpoch, self).__init__(1899, 12, 30)
+    super().__init__(1899, 12, 30)
 
 
 class OLEAutomationDate(interface.DateTimeValues):
@@ -44,7 +44,7 @@ class OLEAutomationDate(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[float]): OLE Automation date.
     """
-    super(OLEAutomationDate, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

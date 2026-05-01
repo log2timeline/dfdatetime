@@ -32,7 +32,7 @@ class FakeTime(interface.DateTimeValues):
     # Note that time.time() and divmod return floating point values.
     timestamp, fraction_of_second = divmod(time.time(), 1)
 
-    super(FakeTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_zone_offset=time_zone_offset)
     self._microseconds = int(

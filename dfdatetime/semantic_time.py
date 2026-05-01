@@ -25,7 +25,7 @@ class SemanticTime(interface.DateTimeValues):
       string (str): semantic representation of the time, such as:
           "Never", "Not set".
     """
-    super(SemanticTime, self).__init__()
+    super().__init__()
     self._string = string
 
   @property
@@ -198,7 +198,7 @@ class InvalidTime(SemanticTime):
 
   def __init__(self):
     """Initializes a semantic time that represents invalid."""
-    super(InvalidTime, self).__init__(string='Invalid')
+    super().__init__(string='Invalid')
 
 
 class Never(SemanticTime):
@@ -208,7 +208,7 @@ class Never(SemanticTime):
 
   def __init__(self):
     """Initializes a semantic time that represents never."""
-    super(Never, self).__init__(string='Never')
+    super().__init__(string='Never')
 
   def __eq__(self, other):
     """Determines if the date time values are equal to other.
@@ -308,7 +308,7 @@ class NotSet(SemanticTime):
 
   def __init__(self):
     """Initializes a semantic time that represents not set."""
-    super(NotSet, self).__init__(string='Not set')
+    super().__init__(string='Not set')
 
 
 factory.Factory.RegisterDateTimeValues(SemanticTime)

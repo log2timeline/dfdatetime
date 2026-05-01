@@ -13,7 +13,7 @@ class GolangTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a Golang time.Time epoch."""
-    super(GolangTimeEpoch, self).__init__(1, 1, 1)
+    super().__init__(1, 1, 1)
 
 
 class GolangTime(interface.DateTimeValues):
@@ -71,7 +71,7 @@ class GolangTime(interface.DateTimeValues):
       number_of_seconds, nanoseconds, time_zone_offset = (
           self._GetNumberOfSeconds(golang_timestamp))
 
-    super(GolangTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_NANOSECOND,
         time_zone_offset=time_zone_offset)
     self._golang_timestamp = golang_timestamp

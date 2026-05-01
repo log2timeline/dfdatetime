@@ -12,7 +12,7 @@ class FATDateTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a FAT date time epoch."""
-    super(FATDateTimeEpoch, self).__init__(1980, 1, 1)
+    super().__init__(1980, 1, 1)
 
 
 class FATDateTime(interface.DateTimeValues):
@@ -52,7 +52,7 @@ class FATDateTime(interface.DateTimeValues):
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
     """
-    super(FATDateTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_2_SECONDS,
         time_zone_offset=time_zone_offset)
     self._fat_date_time = fat_date_time
@@ -211,7 +211,7 @@ class FATTimestamp(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): FAT timestamp.
     """
-    super(FATTimestamp, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_10_MILLISECONDS,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

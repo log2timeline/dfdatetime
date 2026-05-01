@@ -6,7 +6,7 @@ import decimal
 from dfdatetime import definitions
 
 
-class DateTimeEpoch(object):
+class DateTimeEpoch:
   """Date and time epoch interface.
 
   This is the super class of different epoch representations.
@@ -29,7 +29,7 @@ class DateTimeEpoch(object):
       day_of_month (int): day of the month that is the start of the epoch,
           where 1 represents the first day.
     """
-    super(DateTimeEpoch, self).__init__()
+    super().__init__()
     self.day_of_month = day_of_month
     self.month = month
     self.year = year
@@ -40,10 +40,10 @@ class NormalizedTimeEpoch(DateTimeEpoch):
 
   def __init__(self):
     """Initializes a dfDateTime normalized time epoch."""
-    super(NormalizedTimeEpoch, self).__init__(1970, 1, 1)
+    super().__init__(1970, 1, 1)
 
 
-class DateTimeValues(object):
+class DateTimeValues:
   """Date and time values interface.
 
   This is the super class of different date and time representations.
@@ -99,7 +99,7 @@ class DateTimeValues(object):
       time_zone_offset (Optional[int]): time zone offset in number of minutes
           from UTC or None if not set.
     """
-    super(DateTimeValues, self).__init__()
+    super().__init__()
     self._cached_date_time_values = None
     self._is_delta = is_delta
     self._normalized_timestamp = None

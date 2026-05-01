@@ -12,7 +12,7 @@ class HFSTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a HFS time epoch."""
-    super(HFSTimeEpoch, self).__init__(1904, 1, 1)
+    super().__init__(1904, 1, 1)
 
 
 class HFSTime(interface.DateTimeValues):
@@ -41,7 +41,7 @@ class HFSTime(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): HFS timestamp.
     """
-    super(HFSTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_SECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

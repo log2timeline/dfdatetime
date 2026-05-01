@@ -12,7 +12,7 @@ class DelphiDateTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a Delphi TDateTime epoch."""
-    super(DelphiDateTimeEpoch, self).__init__(1899, 12, 30)
+    super().__init__(1899, 12, 30)
 
 
 class DelphiDateTime(interface.DateTimeValues):
@@ -44,7 +44,7 @@ class DelphiDateTime(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[float]): Delphi TDateTime timestamp.
     """
-    super(DelphiDateTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

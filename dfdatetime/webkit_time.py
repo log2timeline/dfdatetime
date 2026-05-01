@@ -12,7 +12,7 @@ class WebKitTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a WebKit time epoch."""
-    super(WebKitTimeEpoch, self).__init__(1601, 1, 1)
+    super().__init__(1601, 1, 1)
 
 
 class WebKitTime(interface.DateTimeValues):
@@ -40,7 +40,7 @@ class WebKitTime(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): WebKit timestamp.
     """
-    super(WebKitTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

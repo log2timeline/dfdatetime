@@ -12,7 +12,7 @@ class FiletimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a FILETIME epoch."""
-    super(FiletimeEpoch, self).__init__(1601, 1, 1)
+    super().__init__(1601, 1, 1)
 
 
 class Filetime(interface.DateTimeValues):
@@ -43,7 +43,7 @@ class Filetime(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): FILETIME timestamp.
     """
-    super(Filetime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_100_NANOSECONDS,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

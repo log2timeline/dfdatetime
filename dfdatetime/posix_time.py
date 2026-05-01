@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """POSIX timestamp implementation."""
 
 import decimal

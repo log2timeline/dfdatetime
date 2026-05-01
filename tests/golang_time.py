@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests for the Golang time.Time timestamp implementation."""
 
 import decimal

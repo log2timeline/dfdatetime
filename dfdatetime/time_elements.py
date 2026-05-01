@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Time elements implementation."""
 
 import decimal

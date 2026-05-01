@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """FAT date time implementation."""
 
 import decimal

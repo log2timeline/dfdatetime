@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """UUID version 1 time implementation."""
 
 import decimal

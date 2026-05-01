@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """HFS time implementation."""
 
 import decimal

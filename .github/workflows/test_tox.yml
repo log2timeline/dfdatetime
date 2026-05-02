@@ -25,7 +25,7 @@ jobs:
         - python-version: '3.14'
           toxenv: 'py314,wheel'
     container:
-      image: ubuntu:24.04
+      image: ubuntu:26.04
     steps:
     - uses: actions/checkout@v4
     - name: Set up container
@@ -58,7 +58,7 @@ jobs:
         - python-version: '3.12'
           toxenv: 'coverage'
     container:
-      image: ubuntu:24.04
+      image: ubuntu:26.04
     steps:
     - uses: actions/checkout@v4
     - name: Set up container
@@ -95,7 +95,7 @@ jobs:
         - python-version: '3.12'
           toxenv: 'lint'
     container:
-      image: ubuntu:24.04
+      image: ubuntu:26.04
     steps:
     - uses: actions/checkout@v4
     - name: Set up container

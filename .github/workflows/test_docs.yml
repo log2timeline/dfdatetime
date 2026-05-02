@@ -17,7 +17,7 @@ jobs:
         - python-version: '3.12'
           toxenv: 'docs'
     container:
-      image: ubuntu:24.04
+      image: ubuntu:26.04
     steps:
     - uses: actions/checkout@v4
     - name: Set up container

@@ -12,7 +12,7 @@ class PosixTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a POSIX time epoch."""
-    super(PosixTimeEpoch, self).__init__(1970, 1, 1)
+    super().__init__(1970, 1, 1)
 
 
 class PosixTime(interface.DateTimeValues):
@@ -41,7 +41,7 @@ class PosixTime(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp.
     """
-    super(PosixTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_SECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
@@ -136,7 +136,7 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp in milliseconds.
     """
-    super(PosixTimeInMilliseconds, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
@@ -242,7 +242,7 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp in microseconds.
     """
-    super(PosixTimeInMicroseconds, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_MICROSECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp
@@ -348,7 +348,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): POSIX timestamp in nanoseconds.
     """
-    super(PosixTimeInNanoseconds, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_NANOSECOND,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

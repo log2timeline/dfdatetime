@@ -41,7 +41,7 @@ class Systemtime(interface.DateTimeValues):
     Raises:
       ValueError: if the system time is invalid.
     """
-    super(Systemtime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_1_MILLISECOND,
         time_zone_offset=time_zone_offset)
     self._number_of_seconds = None

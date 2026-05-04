@@ -12,7 +12,7 @@ class UUIDTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes an UUID version 1 time epoch."""
-    super(UUIDTimeEpoch, self).__init__(1582, 10, 15)
+    super().__init__(1582, 10, 15)
 
 
 class UUIDTime(interface.DateTimeValues):
@@ -49,7 +49,7 @@ class UUIDTime(interface.DateTimeValues):
     if timestamp and (timestamp < 0 or timestamp > self._UINT60_MAX):
       raise ValueError('Invalid UUID version 1 timestamp.')
 
-    super(UUIDTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_100_NANOSECONDS,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp

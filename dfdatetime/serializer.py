@@ -4,7 +4,7 @@ from dfdatetime import factory
 from dfdatetime import interface
 
 
-class Serializer(object):
+class Serializer:
   """Date and time values serializer."""
 
   @classmethod

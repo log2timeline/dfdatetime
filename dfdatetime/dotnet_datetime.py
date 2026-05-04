@@ -12,7 +12,7 @@ class DotNetDateTimeEpoch(interface.DateTimeEpoch):
 
   def __init__(self):
     """Initializes a .NET DateTime epoch."""
-    super(DotNetDateTimeEpoch, self).__init__(1, 1, 1)
+    super().__init__(1, 1, 1)
 
 
 class DotNetDateTime(interface.DateTimeValues):
@@ -40,7 +40,7 @@ class DotNetDateTime(interface.DateTimeValues):
           from UTC or None if not set.
       timestamp (Optional[int]): .NET DateTime ticks.
     """
-    super(DotNetDateTime, self).__init__(
+    super().__init__(
         precision=precision or definitions.PRECISION_100_NANOSECONDS,
         time_zone_offset=time_zone_offset)
     self._timestamp = timestamp or 0

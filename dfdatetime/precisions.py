@@ -5,7 +5,7 @@ import decimal
 from dfdatetime import definitions
 
 
-class DateTimePrecisionHelper(object):
+class DateTimePrecisionHelper:
   """Date time precision helper interface.
 
   This is the super class of different date and time precision helpers.
@@ -369,7 +369,7 @@ class NanosecondsPrecisionHelper(DateTimePrecisionHelper):
             f'{hours:02d}:{minutes:02d}:{seconds:02d}.{nanoseconds:09d}')
 
 
-class PrecisionHelperFactory(object):
+class PrecisionHelperFactory:
   """Date time precision helper factory."""
 
   _PRECISION_CLASSES = {

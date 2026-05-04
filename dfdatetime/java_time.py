@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Java java.util.Date timestamp implementation."""
 
 import decimal

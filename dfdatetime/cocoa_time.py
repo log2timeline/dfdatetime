@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Cocoa timestamp implementation."""
 
 import decimal

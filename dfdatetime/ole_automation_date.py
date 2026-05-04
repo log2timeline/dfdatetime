@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """OLE automation date (or Floatingtime or Application time) implementation."""
 
 import decimal

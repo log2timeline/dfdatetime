@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The date and time definitions.
 
 Also see:

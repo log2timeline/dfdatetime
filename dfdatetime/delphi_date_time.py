@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Delphi TDateTime implementation."""
 
 import decimal

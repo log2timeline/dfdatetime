@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """FILETIME timestamp implementation."""
 
 import decimal

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dfdatetime"
-version = "20260411"
+version = "20260501"
 description = "Digital Forensics date and time (dfDateTime)"
 maintainers = [
     { name = "Log2Timeline maintainers", email = "log2timeline-maintainers@googlegroups.com" },
@@ -23,7 +23,5 @@ Documentation = "https://dfdatetime.readthedocs.io/en/latest"
 Homepage = "https://github.com/log2timeline/dfdatetime"
 Repository = "https://github.com/log2timeline/dfdatetime"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["dfdatetime"]
-exclude = ["docs", "tests", "tests.*", "utils"]
+[tool.setuptools]
+package-dir = {"dfdatetime" = "dfdatetime"}

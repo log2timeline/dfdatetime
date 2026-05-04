@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Semantic time implementation."""
 
 from dfdatetime import factory

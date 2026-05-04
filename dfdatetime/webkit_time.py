@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """WebKit time implementation."""
 
 import decimal

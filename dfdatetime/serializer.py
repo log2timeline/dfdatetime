@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The date and time values serializer."""
 
 from dfdatetime import factory

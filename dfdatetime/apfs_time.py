@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Apple File System (APFS) time implementation."""
 
 import decimal

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Date and time interfaces."""
 
 import abc

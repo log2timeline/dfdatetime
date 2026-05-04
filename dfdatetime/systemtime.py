@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """SYSTEMTIME structure implementation."""
 
 import decimal

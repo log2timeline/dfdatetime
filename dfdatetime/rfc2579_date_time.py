@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """RFC2579 date-time implementation."""
 
 import decimal

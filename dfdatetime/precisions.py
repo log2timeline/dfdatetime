@@ -394,7 +394,7 @@ class PrecisionHelperFactory:
     Raises:
       ValueError: if the precision value is unsupported.
     """
-    precision_helper_class = cls._PRECISION_CLASSES.get(precision, None)
+    precision_helper_class = cls._PRECISION_CLASSES.get(precision)
     if not precision_helper_class:
       raise ValueError(f'Unsupported precision: {precision!s}')
 

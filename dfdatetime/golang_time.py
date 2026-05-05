@@ -175,7 +175,7 @@ class GolangTime(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
     nanoseconds = date_time_values.get('nanoseconds', 0)
-    time_zone_offset = date_time_values.get('time_zone_offset', None)
+    time_zone_offset = date_time_values.get('time_zone_offset')
 
     if year < 0:
       raise ValueError(f'Year value not supported: {year!s}.')

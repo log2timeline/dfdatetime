@@ -154,7 +154,7 @@ class FATDateTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    time_zone_offset = date_time_values.get('time_zone_offset', None)
+    time_zone_offset = date_time_values.get('time_zone_offset')
 
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError(f'Year value not supported: {year!s}.')
@@ -265,7 +265,7 @@ class FATTimestamp(interface.DateTimeValues):
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
     nanoseconds = date_time_values.get('nanoseconds', 0)
-    time_zone_offset = date_time_values.get('time_zone_offset', None)
+    time_zone_offset = date_time_values.get('time_zone_offset')
 
     if year < 1980 or year > (1980 + 0x7f):
       raise ValueError(f'Year value not supported: {year!s}.')

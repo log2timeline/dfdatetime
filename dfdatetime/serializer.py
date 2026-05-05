@@ -183,7 +183,7 @@ class Serializer:
     Returns:
       dfdatetime.DateTimeValues: date and time values.
     """
-    class_name = json_dict.get('__class_name__', None)
+    class_name = json_dict.get('__class_name__')
     if class_name:
       del json_dict['__class_name__']
 
@@ -193,25 +193,25 @@ class Serializer:
     if class_name not in (
         'TimeElements', 'TimeElementsInMilliseconds',
         'TimeElementsInMicroseconds'):
-      is_delta = json_dict.get('is_delta', None)
+      is_delta = json_dict.get('is_delta')
       if is_delta is not None:
         del json_dict['is_delta']
 
-    is_local_time = json_dict.get('is_local_time', None)
+    is_local_time = json_dict.get('is_local_time')
     if is_local_time is not None:
       del json_dict['is_local_time']
 
-    time_zone_hint = json_dict.get('time_zone_hint', None)
+    time_zone_hint = json_dict.get('time_zone_hint')
     if time_zone_hint is not None:
       del json_dict['time_zone_hint']
 
     if class_name in ('InvalidTime', 'Never', 'NotSet'):
-      string = json_dict.get('string', None)
+      string = json_dict.get('string')
       if string is not None:
         del json_dict['string']
 
     if class_name in ('GolangTime', 'RFC2579DateTime'):
-      time_zone_offset = json_dict.get('time_zone_offset', None)
+      time_zone_offset = json_dict.get('time_zone_offset')
       if time_zone_offset is not None:
         del json_dict['time_zone_offset']
 

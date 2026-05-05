@@ -746,7 +746,7 @@ class DateTimeValues:
     year, _ = divmod(year, 100)
     year *= 100
 
-    number_of_days = definitions.DAYS_PER_CENTURY.get(year, None)
+    number_of_days = definitions.DAYS_PER_CENTURY.get(year)
     if number_of_days is not None:
       return number_of_days
 
@@ -763,7 +763,7 @@ class DateTimeValues:
     Returns:
       int: number of days in the year.
     """
-    number_of_days = definitions.DAYS_PER_YEAR.get(year, None)
+    number_of_days = definitions.DAYS_PER_YEAR.get(year)
     if number_of_days is not None:
       return number_of_days
 
@@ -809,7 +809,7 @@ class DateTimeValues:
     elif seconds not in range(0, 60):
       raise ValueError(f'Seconds value: {seconds!s} out of bounds.')
 
-    number_of_days = definitions.DAYS_PER_YEAR_IN_POSIX_EPOCH.get(year, None)
+    number_of_days = definitions.DAYS_PER_YEAR_IN_POSIX_EPOCH.get(year)
     if number_of_days is None:
       raise ValueError(f'Year value: {year!s} out of bounds.')
 
@@ -896,7 +896,7 @@ class DateTimeValues:
     if normalized_timestamp is None:
       return None, None
 
-    remainder_multiplier = self._REMAINDER_MULTIPLIER.get(self._precision, None)
+    remainder_multiplier = self._REMAINDER_MULTIPLIER.get(self._precision)
     if not remainder_multiplier:
       remainder = None
     elif normalized_timestamp >= 0:

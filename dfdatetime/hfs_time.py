@@ -94,7 +94,7 @@ class HFSTime(interface.DateTimeValues):
     hours = date_time_values.get('hours', 0)
     minutes = date_time_values.get('minutes', 0)
     seconds = date_time_values.get('seconds', 0)
-    time_zone_offset = date_time_values.get('time_zone_offset', None)
+    time_zone_offset = date_time_values.get('time_zone_offset')
 
     if year < 1904 or year > 2040:
       raise ValueError('Year value not supported.')

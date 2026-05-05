@@ -15,7 +15,7 @@ jobs:
       matrix:
         python-version: ['3.12']
     container:
-      image: ubuntu:26.04
+      image: ubuntu:24.04
     steps:
     - uses: actions/checkout@v6
     - name: Set up container

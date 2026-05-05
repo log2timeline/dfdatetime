@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dfdatetime"
-version = "20260504"
+version = "20260505"
 description = "Digital Forensics date and time (dfDateTime)"
 maintainers = [
     { name = "Log2Timeline maintainers", email = "log2timeline-maintainers@googlegroups.com" },

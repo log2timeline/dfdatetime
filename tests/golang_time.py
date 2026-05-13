@@ -136,7 +136,7 @@ class GolangTest(unittest.TestCase):
       golang_time_object._GetNumberOfSeconds(golang_timestamp)
 
     with self.assertRaises(ValueError):
-      golang_timestamp = bytes.fromhex('ffffffffffffffffffffffffffff01')
+      golang_timestamp = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       golang_time_object._GetNumberOfSeconds(golang_timestamp)
 
   def testCopyFromDateTimeString(self):
@@ -174,8 +174,13 @@ class GolangTest(unittest.TestCase):
     self.assertEqual(golang_time_object._nanoseconds, 567890000)
     self.assertEqual(golang_time_object._time_zone_offset, 60)
 
+    # Test with invalid date string.
     with self.assertRaises(ValueError):
-      golang_time_object.CopyFromDateTimeString('-0001-01-01')
+      golang_time_object.CopyFromDateTimeString('0001:01-01 00:01:00')
+
+    # Test with negative year.
+    with self.assertRaises(ValueError):
+      golang_time_object.CopyFromDateTimeString('-001-01-01 00:01:00')
 
   def testCopyToDateTimeString(self):
     """Test the CopyToDateTimeString function."""

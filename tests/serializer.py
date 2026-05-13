@@ -138,6 +138,18 @@ class SerializerTest(unittest.TestCase):
         rfc2579_date_time_object)
     self.assertEqual(json_dict, expected_json_dict)
 
+    negative_timezone_rfc2579_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '-', 2, 0))
+
+    expected_json_dict = {
+        '__class_name__': 'RFC2579DateTime',
+        '__type__': 'DateTimeValues',
+        'rfc2579_date_time_tuple': (2010, 8, 12, 20, 6, 31, 6, '-', 2, 0)}
+
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
+        negative_timezone_rfc2579_object)
+    self.assertEqual(json_dict, expected_json_dict)
+
     systemtime_object = systemtime.Systemtime(
         system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142))
 
@@ -266,7 +278,8 @@ class SerializerTest(unittest.TestCase):
         '__class_name__': 'GolangTime',
         '__type__': 'DateTimeValues',
         'golang_timestamp': (
-            b'\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00\x03\xff\xff')}
+            b'\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x00\x00\x03\xff\xff'),
+        'time_zone_offset': 60}
 
     golang_timestamp = bytes.fromhex('01000000000000000200000003ffff')
     expected_date_time_object = golang_time.GolangTime(
@@ -337,6 +350,17 @@ class SerializerTest(unittest.TestCase):
     date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(
         json_dict)
     self.assertEqual(date_time_object, expected_date_time_object)
+
+    # Test if is_delta is removed.
+    json_dict = {
+        '__class_name__': 'PosixTime',
+        '__type__': 'DateTimeValues',
+        'timestamp': 1281643591,
+        'is_delta': True}
+
+    date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(
+        json_dict)
+    self.assertFalse(date_time_object.is_delta)
 
     with self.assertRaises(KeyError):
       json_dict = {

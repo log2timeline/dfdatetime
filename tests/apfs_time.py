@@ -52,6 +52,11 @@ class APFSTimeTest(unittest.TestCase):
 
   def testCopyToDateTimeString(self):
     """Tests the CopyToDateTimeString function."""
+    apfs_time_object = apfs_time.APFSTime(timestamp=1281643591987654321)
+
+    date_time_string = apfs_time_object.CopyToDateTimeString()
+    self.assertEqual(date_time_string, '2010-08-12 20:06:31.987654321')
+
     apfs_time_object = apfs_time.APFSTime(timestamp=9223372036854775810)
 
     date_time_string = apfs_time_object.CopyToDateTimeString()

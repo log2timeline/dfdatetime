@@ -60,6 +60,10 @@ class RFC2579DateTimeTest(unittest.TestCase):
     self.assertEqual(rfc2579_date_time_object.deciseconds, 6)
     self.assertEqual(rfc2579_date_time_object.time_zone_offset, 120)
 
+    rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+        rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, '-', 2, 0))
+    self.assertEqual(rfc2579_date_time_object.time_zone_offset, -120)
+
     with self.assertRaises(ValueError):
       rfc2579_date_time.RFC2579DateTime(
           rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31))

@@ -141,7 +141,7 @@ class GolangTime(interface.DateTimeValues):
 
       # TODO: add support for version 2 time zone offset in seconds
 
-    except struct.error as exception:
+    except (TypeError, struct.error) as exception:
       raise ValueError((
           f'Unable to unpacked Golang time.Time timestamp with error: '
           f'{exception!s}'))

@@ -450,6 +450,33 @@ class TimeElementsTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringRFC('11:57:09', 'XXX')
 
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('12:34:56:78', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('12X34:56', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('12:34X56', 'GMT')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57', '+01000')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57', 'ZZZ')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57', '+A500')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57', '+1600')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57', '+01A0')
+
+    with self.assertRaises(ValueError):
+      time_elements_object._CopyTimeFromStringRFC('11:57', '+0160')
+
   def testCopyFromDatetime(self):
     """Tests the CopyFromDatetime function."""
     time_elements_object = time_elements.TimeElements()

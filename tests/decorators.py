@@ -7,7 +7,7 @@ import warnings
 from dfdatetime import decorators
 
 
-class TestClass(object):
+class TestClass:
   """Class for testing deprecated decorator."""
 
   def Method(self):

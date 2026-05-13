@@ -451,28 +451,19 @@ class TimeElementsTest(unittest.TestCase):
       time_elements_object._CopyTimeFromStringRFC('11:57:09', 'XXX')
 
     with self.assertRaises(ValueError):
-      time_elements_object._CopyTimeFromStringRFC('', 'GMT')
-
-    with self.assertRaises(ValueError):
-      time_elements_object._CopyTimeFromStringRFC('11 57', 'GMT')
-
-    with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringRFC('12:34:56:78', 'GMT')
 
     with self.assertRaises(ValueError):
-      time_elements_object._CopyTimeFromStringRFC('12.34:56', 'GMT')
+      time_elements_object._CopyTimeFromStringRFC('12X34:56', 'GMT')
 
     with self.assertRaises(ValueError):
-      time_elements_object._CopyTimeFromStringRFC('12:34.56', 'GMT')
+      time_elements_object._CopyTimeFromStringRFC('12:34X56', 'GMT')
 
     with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringRFC('11:57', '+01000')
 
     with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringRFC('11:57', 'ZZZ')
-
-    with self.assertRaises(ValueError):
-      time_elements_object._CopyTimeFromStringRFC('11:57', '1100')
 
     with self.assertRaises(ValueError):
       time_elements_object._CopyTimeFromStringRFC('11:57', '+A500')

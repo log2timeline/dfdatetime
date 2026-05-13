@@ -93,6 +93,19 @@ class DotNetDateTimeTest(unittest.TestCase):
     dotnet_date_string = dotnet_date_time.CopyToDateTimeString()
     self.assertEqual(dotnet_date_string, '2020-12-12 12:12:12.1230000')
 
+    # Test out of range timestamp
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(timestamp=-1)
+    self.assertIsNone(dotnet_date_time.CopyToDateTimeString())
+
+    dotnet_date_time = dotnet_datetime.DotNetDateTime(
+        timestamp=dotnet_datetime.DotNetDateTime._UINT64_MAX + 1)
+    self.assertIsNone(dotnet_date_time.CopyToDateTimeString())
+
+    # Test year > 9999
+    dotnet_date_time = dotnet_datetime.DotNetDateTime()
+    with self.assertRaises(ValueError):
+      dotnet_date_time.CopyFromDateTimeString('10000-01-01')
+
 
 if __name__ == '__main__':
   unittest.main()

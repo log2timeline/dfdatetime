@@ -72,6 +72,9 @@ class FactoryTest(unittest.TestCase):
         len(factory.Factory._date_time_values_types),
         number_of_date_time_values_types)
 
+    with self.assertRaises(KeyError):
+      factory.Factory.DeregisterDateTimeValues(TestDateTimeValues)
+
   def testNewDateTimeValues(self):
     """Tests the NewDateTimeValues function."""
     test_date_time_values = factory.Factory.NewDateTimeValues(

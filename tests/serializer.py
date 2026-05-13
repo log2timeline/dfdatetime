@@ -17,6 +17,27 @@ from dfdatetime import time_elements
 class SerializerTest(unittest.TestCase):
   """Tests for the date and time values serializer."""
 
+  def testConvertDictToDateTimeValues(self):
+    """Test ConvertDictToDateTimeValues function."""
+    json_dict = {
+        '__class_name__': 'PosixTime',
+        '__type__': 'DateTimeValues',
+        'timestamp': 1281643591}
+
+    date_time_object = serializer.Serializer.ConvertDictToDateTimeValues(
+        json_dict)
+    self.assertIsNotNone(date_time_object)
+
+  def testConvertDateTimeValuesToDict(self):
+    """Test ConvertDateTimeValuesToDict function."""
+    posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+    json_dict = serializer.Serializer.ConvertDateTimeValuesToDict(
+        posix_time_object)
+    self.assertIsNotNone(json_dict)
+
+    with self.assertRaises(TypeError):
+      serializer.Serializer.ConvertDateTimeValuesToDict('not a datetime')
+
   def testConvertDateTimeValuesToJSON(self):
     """Test ConvertDateTimeValuesToJSON function."""
     posix_time_object = posix_time.PosixTime(timestamp=1281643591)
@@ -316,6 +337,11 @@ class SerializerTest(unittest.TestCase):
     date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(
         json_dict)
     self.assertEqual(date_time_object, expected_date_time_object)
+
+    with self.assertRaises(KeyError):
+      json_dict = {
+          '__class_name__': 'UnknownType', '__type__': 'DateTimeValues'}
+      serializer.Serializer.ConvertJSONToDateTimeValues(json_dict)
 
 
 if __name__ == '__main__':

@@ -182,6 +182,9 @@ class Serializer:
 
     Returns:
       dfdatetime.DateTimeValues: date and time values.
+
+    Raises:
+      KeyError: If date and time values type is not supported by factory.
     """
     class_name = json_dict.get('__class_name__')
     if class_name:

@@ -49,6 +49,22 @@ class DateTimeValuesTest(unittest.TestCase):
 
   # pylint: disable=protected-access
 
+  def testIsDelta(self):
+    """Tests the is_delta property."""
+    date_time_values = interface.DateTimeValues(is_delta=True)
+    self.assertTrue(date_time_values.is_delta)
+
+  def testPrecision(self):
+    """Tests the precision property."""
+    date_time_values = interface.DateTimeValues(
+        precision=definitions.PRECISION_1_MILLISECOND)
+    self.assertEqual(date_time_values.precision, '1ms')
+
+  def testTimeZoneOffset(self):
+    """Tests the time_zone_offset property."""
+    date_time_values = interface.DateTimeValues(time_zone_offset=60)
+    self.assertEqual(date_time_values.time_zone_offset, 60)
+
   def testComparison(self):
     """Tests the comparison functions."""
     date_time_values1 = EmptyDateTimeValues()
@@ -209,6 +225,13 @@ class DateTimeValuesTest(unittest.TestCase):
         'time_zone_offset': 60}
     date_dict = date_time_values._CopyDateTimeFromString(
         '2010-08-12 21:06:31.546875+01:00')
+    self.assertEqual(date_dict, expected_date_dict)
+
+    expected_date_dict = {
+        'year': 2010, 'month': 8, 'day_of_month': 12,
+        'hours': 21, 'minutes': 6, 'seconds': 31, 'nanoseconds': 546875333}
+    date_dict = date_time_values._CopyDateTimeFromString(
+        '2010-08-12 21:06:31.546875333')
     self.assertEqual(date_dict, expected_date_dict)
 
     expected_date_dict = {
@@ -448,6 +471,9 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertEqual(month, 1)
     self.assertEqual(day_of_month, 1)
 
+    with self.assertRaises(ValueError):
+      date_time_values._GetDateValuesWithEpoch(-1000000000, date_time_epoch)
+
   def testGetDayOfYear(self):
     """Tests the _GetDayOfYear function."""
     date_time_values = interface.DateTimeValues()
@@ -514,6 +540,8 @@ class DateTimeValuesTest(unittest.TestCase):
 
     self.assertEqual(date_time_values._GetNumberOfDaysInCentury(1700), 36524)
     self.assertEqual(date_time_values._GetNumberOfDaysInCentury(2000), 36525)
+    self.assertEqual(date_time_values._GetNumberOfDaysInCentury(10000), 36525)
+    self.assertEqual(date_time_values._GetNumberOfDaysInCentury(10100), 36524)
 
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfDaysInCentury(-1)
@@ -525,6 +553,8 @@ class DateTimeValuesTest(unittest.TestCase):
     self.assertEqual(date_time_values._GetNumberOfDaysInYear(1999), 365)
     self.assertEqual(date_time_values._GetNumberOfDaysInYear(2000), 366)
     self.assertEqual(date_time_values._GetNumberOfDaysInYear(1996), 366)
+    self.assertEqual(date_time_values._GetNumberOfDaysInYear(10000), 366)
+    self.assertEqual(date_time_values._GetNumberOfDaysInYear(10100), 365)
 
   def testGetNumberOfSecondsFromElements(self):
     """Tests the _GetNumberOfSecondsFromElements function."""
@@ -585,6 +615,10 @@ class DateTimeValuesTest(unittest.TestCase):
     with self.assertRaises(ValueError):
       date_time_values._GetNumberOfSecondsFromElements(
           2013, 2, 29, 1, 4, 25)
+
+    with self.assertRaises(ValueError):
+      date_time_values._GetNumberOfSecondsFromElements(
+          10000, 8, 12, 21, 6, 31)
 
   def testGetTimeValues(self):
     """Tests the _GetTimeValues function."""

@@ -582,9 +582,6 @@ class TimeElements(interface.DateTimeValues):
       if seconds not in range(0, 60):
         raise ValueError(f'Seconds value: {seconds:d} out of bounds.')
 
-    if time_string_length < 5:
-      raise ValueError('Time string too short.')
-
     time_zone_string_length = len(time_zone_string)
     if time_zone_string_length > 5:
       raise ValueError('Time zone string too long.')

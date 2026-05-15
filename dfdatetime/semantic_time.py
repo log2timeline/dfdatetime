@@ -5,310 +5,310 @@ from dfdatetime import interface
 
 
 class SemanticTime(interface.DateTimeValues):
-  """Semantic time.
+    """Semantic time.
 
-  Semantic time is term to describe date and time values that have specific
-  meaning such as: "Never", "Yesterday", "Not set".
+    Semantic time is term to describe date and time values that have specific
+    meaning such as: "Never", "Yesterday", "Not set".
 
-  Attributes:
-    is_local_time (bool): True if the date and time value is in local time.
-  """
-
-  # pylint: disable=redundant-returns-doc
-
-  _SORT_ORDER = 50
-
-  def __init__(self, string=None):
-    """Initializes a semantic time.
-
-    Args:
-      string (str): semantic representation of the time, such as:
-          "Never", "Not set".
+    Attributes:
+      is_local_time (bool): True if the date and time value is in local time.
     """
-    super().__init__()
-    self._string = string
 
-  @property
-  def string(self):
-    """str: semantic representation of the time, such as: "Never"."""
-    return self._string
+    # pylint: disable=redundant-returns-doc
 
-  def __eq__(self, other):
-    """Determines if the date time values are equal to other.
+    _SORT_ORDER = 50
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+    def __init__(self, string=None):
+        """Initializes a semantic time.
 
-    Returns:
-      bool: True if the date time values are equal to other.
-    """
-    if not isinstance(other, SemanticTime):
-      return False
+        Args:
+          string (str): semantic representation of the time, such as:
+              "Never", "Not set".
+        """
+        super().__init__()
+        self._string = string
 
-    return self._SORT_ORDER == other._SORT_ORDER  # pylint: disable=protected-access
+    @property
+    def string(self):
+        """str: semantic representation of the time, such as: "Never"."""
+        return self._string
 
-  def __ge__(self, other):
-    """Determines if the date time values are greater than or equal to other.
+    def __eq__(self, other):
+        """Determines if the date time values are equal to other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-    Returns:
-      bool: True if the date time values are greater than or equal to other.
+        Returns:
+          bool: True if the date time values are equal to other.
+        """
+        if not isinstance(other, SemanticTime):
+            return False
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        return self._SORT_ORDER == other._SORT_ORDER  # pylint: disable=protected-access
 
-    if not isinstance(other, SemanticTime):
-      return False
+    def __ge__(self, other):
+        """Determines if the date time values are greater than or equal to other.
 
-    return self._SORT_ORDER >= other._SORT_ORDER  # pylint: disable=protected-access
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-  def __gt__(self, other):
-    """Determines if the date time values are greater than other.
+        Returns:
+          bool: True if the date time values are greater than or equal to other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    Returns:
-      bool: True if the date time values are greater than other.
+        if not isinstance(other, SemanticTime):
+            return False
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        return self._SORT_ORDER >= other._SORT_ORDER  # pylint: disable=protected-access
 
-    if not isinstance(other, SemanticTime):
-      return False
+    def __gt__(self, other):
+        """Determines if the date time values are greater than other.
 
-    return self._SORT_ORDER > other._SORT_ORDER  # pylint: disable=protected-access
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-  def __le__(self, other):
-    """Determines if the date time values are greater than or equal to other.
+        Returns:
+          bool: True if the date time values are greater than other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    Returns:
-      bool: True if the date time values are greater than or equal to other.
+        if not isinstance(other, SemanticTime):
+            return False
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        return self._SORT_ORDER > other._SORT_ORDER  # pylint: disable=protected-access
 
-    if not isinstance(other, SemanticTime):
-      return True
+    def __le__(self, other):
+        """Determines if the date time values are greater than or equal to other.
 
-    return self._SORT_ORDER <= other._SORT_ORDER  # pylint: disable=protected-access
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-  def __lt__(self, other):
-    """Determines if the date time values are less than other.
+        Returns:
+          bool: True if the date time values are greater than or equal to other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    Returns:
-      bool: True if the date time values are less than other.
+        if not isinstance(other, SemanticTime):
+            return True
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        return self._SORT_ORDER <= other._SORT_ORDER  # pylint: disable=protected-access
 
-    if not isinstance(other, SemanticTime):
-      return True
+    def __lt__(self, other):
+        """Determines if the date time values are less than other.
 
-    return self._SORT_ORDER < other._SORT_ORDER  # pylint: disable=protected-access
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-  def __ne__(self, other):
-    """Determines if the date time values are not equal to other.
+        Returns:
+          bool: True if the date time values are less than other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    Returns:
-      bool: True if the date time values are not equal to other.
-    """
-    if not isinstance(other, SemanticTime):
-      return True
+        if not isinstance(other, SemanticTime):
+            return True
 
-    return self._SORT_ORDER != other._SORT_ORDER  # pylint: disable=protected-access
+        return self._SORT_ORDER < other._SORT_ORDER  # pylint: disable=protected-access
 
-  def _GetNormalizedTimestamp(self):
-    """Retrieves the normalized timestamp.
+    def __ne__(self, other):
+        """Determines if the date time values are not equal to other.
 
-    Returns:
-      decimal.Decimal: normalized timestamp, which contains the number of
-          seconds since January 1, 1970 00:00:00 and a fraction of second used
-          for increased precision, or None if the normalized timestamp cannot be
-          determined.
-    """
-    return None
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-  def CopyFromDateTimeString(self, time_string):
-    """Copies semantic time from a date and time string.
+        Returns:
+          bool: True if the date time values are not equal to other.
+        """
+        if not isinstance(other, SemanticTime):
+            return True
 
-    Args:
-      time_string (str): semantic representation of the time, such as:
-          "Never", "Not set".
+        return self._SORT_ORDER != other._SORT_ORDER  # pylint: disable=protected-access
 
-    Raises:
-      ValueError: because semantic time cannot be copied from a string.
-    """
-    self._string = time_string
+    def _GetNormalizedTimestamp(self):
+        """Retrieves the normalized timestamp.
 
-  def CopyToDateTimeString(self):
-    """Copies the date time value to a date and time string.
+        Returns:
+          decimal.Decimal: normalized timestamp, which contains the number of
+              seconds since January 1, 1970 00:00:00 and a fraction of second used
+              for increased precision, or None if the normalized timestamp cannot be
+              determined.
+        """
+        return None
 
-    Returns:
-      str: semantic representation of the time, such as: "Never", "Not set".
-    """
-    return self._string
+    def CopyFromDateTimeString(self, time_string):
+        """Copies semantic time from a date and time string.
 
-  def CopyToDateTimeStringISO8601(self):
-    """Copies the date time value to an ISO 8601 date and time string.
+        Args:
+          time_string (str): semantic representation of the time, such as:
+              "Never", "Not set".
 
-    Returns:
-      str: date and time value formatted as an ISO 8601 date and time string,
-          which always be None since semantic time cannot be represented in
-          ISO 8601.
-    """
-    return None
+        Raises:
+          ValueError: because semantic time cannot be copied from a string.
+        """
+        self._string = time_string
 
-  def GetPlasoTimestamp(self):
-    """Retrieves a timestamp that is compatible with plaso.
+    def CopyToDateTimeString(self):
+        """Copies the date time value to a date and time string.
 
-    Returns:
-      int: a POSIX timestamp in microseconds, which will always be 0.
-    """
-    return 0
+        Returns:
+          str: semantic representation of the time, such as: "Never", "Not set".
+        """
+        return self._string
+
+    def CopyToDateTimeStringISO8601(self):
+        """Copies the date time value to an ISO 8601 date and time string.
+
+        Returns:
+          str: date and time value formatted as an ISO 8601 date and time string,
+              which always be None since semantic time cannot be represented in
+              ISO 8601.
+        """
+        return None
+
+    def GetPlasoTimestamp(self):
+        """Retrieves a timestamp that is compatible with plaso.
+
+        Returns:
+          int: a POSIX timestamp in microseconds, which will always be 0.
+        """
+        return 0
 
 
 class InvalidTime(SemanticTime):
-  """Semantic time that represents invalid."""
+    """Semantic time that represents invalid."""
 
-  _SORT_ORDER = 1
+    _SORT_ORDER = 1
 
-  def __init__(self):
-    """Initializes a semantic time that represents invalid."""
-    super().__init__(string='Invalid')
+    def __init__(self):
+        """Initializes a semantic time that represents invalid."""
+        super().__init__(string="Invalid")
 
 
 class Never(SemanticTime):
-  """Semantic time that represents never."""
+    """Semantic time that represents never."""
 
-  _SORT_ORDER = 99
+    _SORT_ORDER = 99
 
-  def __init__(self):
-    """Initializes a semantic time that represents never."""
-    super().__init__(string='Never')
+    def __init__(self):
+        """Initializes a semantic time that represents never."""
+        super().__init__(string="Never")
 
-  def __eq__(self, other):
-    """Determines if the date time values are equal to other.
+    def __eq__(self, other):
+        """Determines if the date time values are equal to other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-    Returns:
-      bool: True if the date time values are equal to other.
-    """
-    return isinstance(other, Never)
+        Returns:
+          bool: True if the date time values are equal to other.
+        """
+        return isinstance(other, Never)
 
-  def __ge__(self, other):
-    """Determines if the date time values are greater than or equal to other.
+    def __ge__(self, other):
+        """Determines if the date time values are greater than or equal to other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-    Returns:
-      bool: True if the date time values are greater than or equal to other.
+        Returns:
+          bool: True if the date time values are greater than or equal to other.
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    return True
+        return True
 
-  def __gt__(self, other):
-    """Determines if the date time values are greater than other.
+    def __gt__(self, other):
+        """Determines if the date time values are greater than other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-    Returns:
-      bool: True if the date time values are greater than other.
+        Returns:
+          bool: True if the date time values are greater than other.
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    return not isinstance(other, Never)
+        return not isinstance(other, Never)
 
-  def __le__(self, other):
-    """Determines if the date time values are less than or equal to other.
+    def __le__(self, other):
+        """Determines if the date time values are less than or equal to other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-    Returns:
-      bool: True if the date time values are greater than or equal to other.
+        Returns:
+          bool: True if the date time values are greater than or equal to other.
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    return isinstance(other, Never)
+        return isinstance(other, Never)
 
-  def __lt__(self, other):
-    """Determines if the date time values are less than other.
+    def __lt__(self, other):
+        """Determines if the date time values are less than other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-    Returns:
-      bool: True if the date time values are less than other.
+        Returns:
+          bool: True if the date time values are less than other.
 
-    Raises:
-      ValueError: if other is not an instance of DateTimeValues.
-    """
-    if not isinstance(other, interface.DateTimeValues):
-      raise ValueError('Other not an instance of DateTimeValues')
+        Raises:
+          ValueError: if other is not an instance of DateTimeValues.
+        """
+        if not isinstance(other, interface.DateTimeValues):
+            raise ValueError("Other not an instance of DateTimeValues")
 
-    return False
+        return False
 
-  def __ne__(self, other):
-    """Determines if the date time values are not equal to other.
+    def __ne__(self, other):
+        """Determines if the date time values are not equal to other.
 
-    Args:
-      other (DateTimeValues): date time values to compare against.
+        Args:
+          other (DateTimeValues): date time values to compare against.
 
-    Returns:
-      bool: True if the date time values are not equal to other.
-    """
-    return not isinstance(other, Never)
+        Returns:
+          bool: True if the date time values are not equal to other.
+        """
+        return not isinstance(other, Never)
 
 
 class NotSet(SemanticTime):
-  """Semantic time that represents not set."""
+    """Semantic time that represents not set."""
 
-  _SORT_ORDER = 2
+    _SORT_ORDER = 2
 
-  def __init__(self):
-    """Initializes a semantic time that represents not set."""
-    super().__init__(string='Not set')
+    def __init__(self):
+        """Initializes a semantic time that represents not set."""
+        super().__init__(string="Not set")
 
 
 factory.Factory.RegisterDateTimeValues(SemanticTime)

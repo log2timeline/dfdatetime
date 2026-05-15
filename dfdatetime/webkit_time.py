@@ -55,9 +55,10 @@ class WebKitTime(interface.DateTimeValues):
         """Retrieves the normalized timestamp.
 
         Returns:
-          float: normalized timestamp, which contains the number of seconds since
-              January 1, 1970 00:00:00 and a fraction of second used for increased
-              precision, or None if the normalized timestamp cannot be determined.
+          decimal.Decimal: normalized timestamp, which contains the number of
+              seconds since January 1, 1970 00:00:00 and a fraction of second used
+              for increased precision, or None if the normalized timestamp cannot be
+              determined.
         """
         if self._normalized_timestamp is None:
             if (
@@ -137,11 +138,22 @@ class WebKitTime(interface.DateTimeValues):
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}.{microseconds:06d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = self._timestamp
+
+        return serializable_dict
 
 
 factory.Factory.RegisterDateTimeValues(WebKitTime)

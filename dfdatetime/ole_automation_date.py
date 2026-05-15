@@ -135,13 +135,24 @@ class OLEAutomationDate(interface.DateTimeValues):
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         microseconds = int((timestamp % 1) * definitions.MICROSECONDS_PER_SECOND)
 
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}.{microseconds:06d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = self._timestamp
+
+        return serializable_dict
 
 
 factory.Factory.RegisterDateTimeValues(OLEAutomationDate)

@@ -127,14 +127,12 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
             rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 0, 0)
         )
-
         normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.6"))
 
         rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
             rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 1, 0)
         )
-
         normalized_timestamp = rfc2579_date_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.6"))
 
@@ -237,7 +235,6 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
             rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 0, 0)
         )
-
         date_time_string = rfc2579_date_time_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.6")
 
@@ -251,16 +248,27 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
             rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 0, 0)
         )
-
         date_time_string = rfc2579_date_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31.6+00:00")
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
+            rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 0, 0)
+        )
+        expected_serializable_dict = {
+            "__class_name__": "RFC2579DateTime",
+            "__type__": "DateTimeValues",
+            "rfc2579_date_time_tuple": (2010, 8, 12, 20, 6, 31, 6, "+", 0, 0),
+        }
+        serializable_dict = rfc2579_date_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""
         rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
             rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 0, 0)
         )
-
         date_tuple = rfc2579_date_time_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -274,7 +282,6 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
             rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 0, 0)
         )
-
         date_with_time_of_day_tuple = rfc2579_date_time_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -290,7 +297,6 @@ class RFC2579DateTimeTest(unittest.TestCase):
         rfc2579_date_time_object = rfc2579_date_time.RFC2579DateTime(
             rfc2579_date_time_tuple=(2010, 8, 12, 20, 6, 31, 6, "+", 0, 0)
         )
-
         time_of_day_tuple = rfc2579_date_time_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 

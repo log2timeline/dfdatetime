@@ -44,13 +44,13 @@ class Systemtime(interface.DateTimeValues):
             precision=precision or definitions.PRECISION_1_MILLISECOND,
             time_zone_offset=time_zone_offset,
         )
-        self._number_of_seconds = None
         self._day_of_month = None
         self._day_of_week = None
         self._hours = None
         self._milliseconds = None
         self._minutes = None
         self._month = None
+        self._number_of_seconds = None
         self._seconds = None
         self._year = None
 
@@ -228,6 +228,26 @@ class Systemtime(interface.DateTimeValues):
             f"{self._hours:02d}:{self._minutes:02d}:{self._seconds:02d}"
             f".{self._milliseconds:03d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["system_time_tuple"] = (
+            self._year,
+            self._month,
+            self._day_of_week,
+            self._day_of_month,
+            self._hours,
+            self._minutes,
+            self._seconds,
+            self._milliseconds,
+        )
+        return serializable_dict
 
 
 factory.Factory.RegisterDateTimeValues(Systemtime)

@@ -68,7 +68,6 @@ class DelphiDateTimeTest(unittest.TestCase):
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             timestamp=41443.8263953
         )
-
         expected_normalized_timestamp = decimal.Decimal("1371585000.553919887170195579")
         normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
@@ -76,7 +75,6 @@ class DelphiDateTimeTest(unittest.TestCase):
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             time_zone_offset=60, timestamp=41443.8263953
         )
-
         expected_normalized_timestamp = decimal.Decimal("1371581400.553919887170195579")
         normalized_timestamp = delphi_date_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
@@ -137,7 +135,6 @@ class DelphiDateTimeTest(unittest.TestCase):
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             timestamp=41443.8263953
         )
-
         date_time_string = delphi_date_time_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2013-06-18 19:50:00.553919")
 
@@ -151,7 +148,6 @@ class DelphiDateTimeTest(unittest.TestCase):
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             timestamp=41443.8263953
         )
-
         date_time_string = delphi_date_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2013-06-18T19:50:00.553919+00:00")
 
@@ -159,12 +155,24 @@ class DelphiDateTimeTest(unittest.TestCase):
         date_time_string = delphi_date_time_object.CopyToDateTimeStringISO8601()
         self.assertIsNone(date_time_string)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        delphi_date_time_object = delphi_date_time.DelphiDateTime(
+            timestamp=41443.8263953
+        )
+        expected_serializable_dict = {
+            "__class_name__": "DelphiDateTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 41443.8263953,
+        }
+        serializable_dict = delphi_date_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             timestamp=41443.8263953
         )
-
         date_tuple = delphi_date_time_object.GetDate()
         self.assertEqual(date_tuple, (2013, 6, 18))
 
@@ -178,7 +186,6 @@ class DelphiDateTimeTest(unittest.TestCase):
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             timestamp=41443.8263953
         )
-
         date_with_time_of_day_tuple = delphi_date_time_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2013, 6, 18, 19, 50, 0))
 
@@ -195,7 +202,6 @@ class DelphiDateTimeTest(unittest.TestCase):
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             timestamp=41443.8263953
         )
-
         micro_posix_timestamp = delphi_date_time_object.GetPlasoTimestamp()
         self.assertEqual(micro_posix_timestamp, 1371585000553920)
 
@@ -214,7 +220,6 @@ class DelphiDateTimeTest(unittest.TestCase):
         delphi_date_time_object = delphi_date_time.DelphiDateTime(
             timestamp=41443.8263953
         )
-
         time_of_day_tuple = delphi_date_time_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (19, 50, 0))
 

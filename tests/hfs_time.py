@@ -112,6 +112,18 @@ class HFSTimeTest(unittest.TestCase):
         date_time_string = hfs_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2013-08-01T15:25:28+00:00")
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)
+
+        expected_serializable_dict = {
+            "__class_name__": "HFSTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 3458215528,
+        }
+        serializable_dict = hfs_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         hfs_time_object = hfs_time.HFSTime(timestamp=3458215528)

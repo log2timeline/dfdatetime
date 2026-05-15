@@ -61,14 +61,12 @@ class SystemtimeTest(unittest.TestCase):
         systemtime_object = systemtime.Systemtime(
             system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142)
         )
-
         normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.142"))
 
         systemtime_object = systemtime.Systemtime(
             system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142), time_zone_offset=60
         )
-
         normalized_timestamp = systemtime_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.142"))
 
@@ -165,7 +163,6 @@ class SystemtimeTest(unittest.TestCase):
         systemtime_object = systemtime.Systemtime(
             system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142)
         )
-
         date_time_string = systemtime_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.142")
 
@@ -179,16 +176,27 @@ class SystemtimeTest(unittest.TestCase):
         systemtime_object = systemtime.Systemtime(
             system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142)
         )
-
         date_time_string = systemtime_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31.142+00:00")
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        systemtime_object = systemtime.Systemtime(
+            system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142)
+        )
+        expected_serializable_dict = {
+            "__class_name__": "Systemtime",
+            "__type__": "DateTimeValues",
+            "system_time_tuple": (2010, 8, 4, 12, 20, 6, 31, 142),
+        }
+        serializable_dict = systemtime_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""
         systemtime_object = systemtime.Systemtime(
             system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142)
         )
-
         date_tuple = systemtime_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -202,7 +210,6 @@ class SystemtimeTest(unittest.TestCase):
         systemtime_object = systemtime.Systemtime(
             system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142)
         )
-
         date_with_time_of_day_tuple = systemtime_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -218,7 +225,6 @@ class SystemtimeTest(unittest.TestCase):
         systemtime_object = systemtime.Systemtime(
             system_time_tuple=(2010, 8, 4, 12, 20, 6, 31, 142)
         )
-
         time_of_day_tuple = systemtime_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 

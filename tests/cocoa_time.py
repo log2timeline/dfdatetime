@@ -39,7 +39,6 @@ class CocoaTimeTest(unittest.TestCase):
         cocoa_time_object = cocoa_time.CocoaTime(
             time_zone_offset=60, timestamp=395011845.0
         )
-
         normalized_timestamp = cocoa_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1373315445.0"))
 
@@ -108,6 +107,18 @@ class CocoaTimeTest(unittest.TestCase):
 
         date_time_string = cocoa_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2013-07-08T21:30:45.546875+00:00")
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)
+
+        expected_serializable_dict = {
+            "__class_name__": "CocoaTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 395011845.546875,
+        }
+        serializable_dict = cocoa_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""

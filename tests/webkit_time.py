@@ -106,6 +106,18 @@ class WebKitTimeTest(unittest.TestCase):
         date_time_string = webkit_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T21:06:31.546875+00:00")
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)
+
+        expected_serializable_dict = {
+            "__class_name__": "WebKitTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 12926120791546875,
+        }
+        serializable_dict = webkit_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         webkit_time_object = webkit_time.WebKitTime(timestamp=12926120791546875)

@@ -82,7 +82,7 @@ class GolangTime(interface.DateTimeValues):
 
     @property
     def golang_timestamp(self):
-        """int: Golang time.Time timestamp or None if not set."""
+        """bytes: Golang time.Time timestamp or None if not set."""
         return self._golang_timestamp
 
     def _GetNormalizedTimestamp(self):
@@ -101,11 +101,9 @@ class GolangTime(interface.DateTimeValues):
                 and self._nanoseconds is not None
                 and self._nanoseconds >= 0
             ):
-
                 self._normalized_timestamp = decimal.Decimal(
                     self._number_of_seconds - GolangTime._GOLANG_TO_POSIX_BASE
                 )
-
                 if self._nanoseconds is not None and self._nanoseconds >= 0:
                     self._normalized_timestamp += (
                         decimal.Decimal(self._nanoseconds)
@@ -147,15 +145,12 @@ class GolangTime(interface.DateTimeValues):
             number_of_seconds, nanoseconds, time_zone_offset = struct.unpack(
                 ">qih", golang_timestamp[1:15]
             )
-
             # TODO: add support for version 2 time zone offset in seconds
 
         except (TypeError, struct.error) as exception:
             raise ValueError(
-                (
-                    f"Unable to unpacked Golang time.Time timestamp with error: "
-                    f"{exception!s}"
-                )
+                f"Unable to unpacked Golang time.Time timestamp with error: "
+                f"{exception!s}"
             )
 
         # A time zone offset of -1 minute is a special representation for UTC.
@@ -195,7 +190,6 @@ class GolangTime(interface.DateTimeValues):
         seconds = self._GetNumberOfSecondsFromElements(
             year, month, day_of_month, hours, minutes, seconds
         )
-
         seconds += self._GOLANG_TO_POSIX_BASE
 
         self._normalized_timestamp = None
@@ -216,15 +210,25 @@ class GolangTime(interface.DateTimeValues):
         number_of_days, hours, minutes, seconds = self._GetTimeValues(
             self._number_of_seconds
         )
-
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}.{self._nanoseconds:09d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        return {
+            "__class_name__": type(self).__name__,
+            "__type__": "DateTimeValues",
+            "golang_timestamp": self._golang_timestamp,
+        }
 
 
 factory.Factory.RegisterDateTimeValues(GolangTime)

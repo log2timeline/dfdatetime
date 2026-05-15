@@ -39,7 +39,6 @@ class PosixTimeTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTime(
             time_zone_offset=60, timestamp=1281643591
         )
-
         normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.0"))
 
@@ -132,6 +131,18 @@ class PosixTimeTest(unittest.TestCase):
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        posix_time_object = posix_time.PosixTime(timestamp=1281643591)
+
+        expected_serializable_dict = {
+            "__class_name__": "PosixTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 1281643591,
+        }
+        serializable_dict = posix_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         posix_time_object = posix_time.PosixTime(timestamp=1281643591)
@@ -194,7 +205,6 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMilliseconds(
             time_zone_offset=60, timestamp=1281643591546
         )
-
         normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.546"))
 
@@ -261,7 +271,6 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMilliseconds(
             timestamp=-11644468446327
         )
-
         date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "1601-01-01T01:25:53.673+00:00")
 
@@ -278,20 +287,31 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMilliseconds(
             timestamp=-11644468446327
         )
-
         posix_timestamp, fraction_of_second = (
             posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
         )
         self.assertEqual(posix_timestamp, -11644468446)
         self.assertEqual(fraction_of_second, 327)
 
-        posix_time_object = posix_time.PosixTime()
+        posix_time_object = posix_time.PosixTimeInMilliseconds()
 
         posix_timestamp, fraction_of_second = (
             posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
         )
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        posix_time_object = posix_time.PosixTimeInMilliseconds(timestamp=1281643591546)
+
+        expected_serializable_dict = {
+            "__class_name__": "PosixTimeInMilliseconds",
+            "__type__": "DateTimeValues",
+            "timestamp": 1281643591546,
+        }
+        serializable_dict = posix_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""
@@ -352,14 +372,12 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=1281643591546875
         )
-
         normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.546875"))
 
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             time_zone_offset=60, timestamp=1281643591546875
         )
-
         normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.546875"))
 
@@ -411,7 +429,6 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=1281643591546875
         )
-
         date_time_string = posix_time_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.546875")
 
@@ -425,14 +442,12 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=1281643591546875
         )
-
         date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31.546875+00:00")
 
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=-11644468446327447
         )
-
         date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "1601-01-01T01:25:53.672553+00:00")
 
@@ -441,7 +456,6 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=1281643591546875
         )
-
         posix_timestamp, fraction_of_second = (
             posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
         )
@@ -451,14 +465,13 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=-11644468446327447
         )
-
         posix_timestamp, fraction_of_second = (
             posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
         )
         self.assertEqual(posix_timestamp, -11644468446)
         self.assertEqual(fraction_of_second, 327447)
 
-        posix_time_object = posix_time.PosixTime()
+        posix_time_object = posix_time.PosixTimeInMicroseconds()
 
         posix_timestamp, fraction_of_second = (
             posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
@@ -466,12 +479,24 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        posix_time_object = posix_time.PosixTimeInMicroseconds(
+            timestamp=1281643591546875
+        )
+        expected_serializable_dict = {
+            "__class_name__": "PosixTimeInMicroseconds",
+            "__type__": "DateTimeValues",
+            "timestamp": 1281643591546875,
+        }
+        serializable_dict = posix_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=1281643591546875
         )
-
         date_tuple = posix_time_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -485,7 +510,6 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=1281643591546875
         )
-
         date_with_time_of_day_tuple = posix_time_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -501,7 +525,6 @@ class PosixTimeInMicrosecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInMicroseconds(
             timestamp=1281643591546875
         )
-
         time_of_day_tuple = posix_time_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 
@@ -531,14 +554,12 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInNanoseconds(
             timestamp=1281643591987654321
         )
-
         normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.987654321"))
 
         posix_time_object = posix_time.PosixTimeInNanoseconds(
             time_zone_offset=60, timestamp=1281643591987654321
         )
-
         normalized_timestamp = posix_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.987654321"))
 
@@ -588,7 +609,6 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInNanoseconds(
             timestamp=1281643591987654321
         )
-
         date_time_string = posix_time_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.987654321")
 
@@ -602,16 +622,55 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInNanoseconds(
             timestamp=1281643591987654321
         )
-
         date_time_string = posix_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31.987654321+00:00")
+
+    def testCopyToPosixTimestampWithFractionOfSecond(self):
+        """Tests the CopyToPosixTimestampWithFractionOfSecond function."""
+        posix_time_object = posix_time.PosixTimeInNanoseconds(
+            timestamp=1281643591987654321
+        )
+        posix_timestamp, fraction_of_second = (
+            posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
+        )
+        self.assertEqual(posix_timestamp, 1281643591)
+        self.assertEqual(fraction_of_second, 987654321)
+
+        posix_time_object = posix_time.PosixTimeInNanoseconds(
+            timestamp=-11644468446327447321
+        )
+        posix_timestamp, fraction_of_second = (
+            posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
+        )
+        self.assertEqual(posix_timestamp, -11644468446)
+        self.assertEqual(fraction_of_second, 327447321)
+
+        posix_time_object = posix_time.PosixTimeInNanoseconds()
+
+        posix_timestamp, fraction_of_second = (
+            posix_time_object.CopyToPosixTimestampWithFractionOfSecond()
+        )
+        self.assertIsNone(posix_timestamp)
+        self.assertIsNone(fraction_of_second)
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        posix_time_object = posix_time.PosixTimeInNanoseconds(
+            timestamp=1281643591987654321
+        )
+        expected_serializable_dict = {
+            "__class_name__": "PosixTimeInNanoseconds",
+            "__type__": "DateTimeValues",
+            "timestamp": 1281643591987654321,
+        }
+        serializable_dict = posix_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""
         posix_time_object = posix_time.PosixTimeInNanoseconds(
             timestamp=1281643591987654321
         )
-
         date_tuple = posix_time_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -625,7 +684,6 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInNanoseconds(
             timestamp=1281643591987654321
         )
-
         date_with_time_of_day_tuple = posix_time_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -641,7 +699,6 @@ class PosixTimeInNanoSecondsTest(unittest.TestCase):
         posix_time_object = posix_time.PosixTimeInNanoseconds(
             timestamp=1281643591987654321
         )
-
         time_of_day_tuple = posix_time_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 

@@ -108,7 +108,6 @@ class DelphiDateTime(interface.DateTimeValues):
         timestamp = self._GetNumberOfSecondsFromElements(
             year, month, day_of_month, hours, minutes, seconds
         )
-
         timestamp = float(timestamp) / definitions.SECONDS_PER_DAY
         timestamp += self._DELPHI_TO_POSIX_BASE
         timestamp += float(nanoseconds) / definitions.NANOSECONDS_PER_DAY
@@ -132,26 +131,36 @@ class DelphiDateTime(interface.DateTimeValues):
         number_of_days, hours, minutes, seconds = self._GetTimeValues(
             int(number_of_seconds)
         )
-
         # The maximum date supported by TDateTime values is limited to:
         # 9999-12-31 23:59:59.999 (approximate 2958465 days since epoch).
         # The minimum date is unknown hence assuming it is limited to:
         # 0001-01-01 00:00:00.000 (approximate -693593 days since epoch).
+
         if number_of_days < -693593 or number_of_days > 2958465:
             return None
 
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         microseconds = int(
             (number_of_seconds % 1) * definitions.MICROSECONDS_PER_SECOND
         )
-
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}.{microseconds:06d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = self._timestamp
+
+        return serializable_dict
 
 
 factory.Factory.RegisterDateTimeValues(DelphiDateTime)

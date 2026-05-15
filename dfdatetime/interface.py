@@ -108,7 +108,7 @@ class DateTimeValues:
         self._time_zone_offset = time_zone_offset
 
         self.is_local_time = False
-        self.time_zone_hint = False
+        self.time_zone_hint = None
 
     @property
     def is_delta(self):
@@ -515,6 +515,25 @@ class DateTimeValues:
                 time_zone_offset = -time_zone_offset
 
         return hours, minutes, seconds, nanoseconds, time_zone_offset
+
+    def _CreateSerializableDict(self):
+        """Creates a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = {
+            "__class_name__": type(self).__name__,
+            "__type__": "DateTimeValues",
+        }
+        if self.is_local_time:
+            serializable_dict["is_local_time"] = True
+        if self._time_zone_offset:
+            serializable_dict["time_zone_offset"] = self._time_zone_offset
+        if self.time_zone_hint:
+            serializable_dict["time_zone_hint"] = self.time_zone_hint
+
+        return serializable_dict
 
     def _GetDateValues(
         self, number_of_days, epoch_year, epoch_month, epoch_day_of_month
@@ -978,6 +997,14 @@ class DateTimeValues:
                 )
 
         return date_time_string
+
+    @abc.abstractmethod
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
 
     def GetDate(self):
         """Retrieves the date represented by the date and time values.

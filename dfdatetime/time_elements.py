@@ -179,7 +179,6 @@ class TimeElements(interface.DateTimeValues):
         hours, minutes, seconds, nanoseconds, time_zone_offset = (
             self._CopyTimeFromStringISO8601(time_string[11:])
         )
-
         date_time_values = {
             "year": year,
             "month": month,
@@ -188,7 +187,6 @@ class TimeElements(interface.DateTimeValues):
             "minutes": minutes,
             "seconds": seconds,
         }
-
         if nanoseconds is not None:
             date_time_values["nanoseconds"] = nanoseconds
         if time_zone_offset is not None:
@@ -264,7 +262,6 @@ class TimeElements(interface.DateTimeValues):
         hours, minutes, seconds, time_zone_offset = self._CopyTimeFromStringRFC(
             string_segments[3], string_segments[4]
         )
-
         date_time_values = {
             "year": year,
             "month": month,
@@ -273,7 +270,6 @@ class TimeElements(interface.DateTimeValues):
             "minutes": minutes,
             "time_zone_offset": time_zone_offset,
         }
-
         if seconds is not None:
             date_time_values["seconds"] = seconds
 
@@ -345,7 +341,6 @@ class TimeElements(interface.DateTimeValues):
         hours, minutes, seconds, time_zone_offset = self._CopyTimeFromStringRFC(
             string_segments[3], string_segments[4]
         )
-
         date_time_values = {
             "year": year,
             "month": month,
@@ -354,7 +349,6 @@ class TimeElements(interface.DateTimeValues):
             "minutes": minutes,
             "time_zone_offset": time_zone_offset,
         }
-
         if seconds is not None:
             date_time_values["seconds"] = seconds
 
@@ -695,7 +689,6 @@ class TimeElements(interface.DateTimeValues):
         year, month, day_of_month, hours, minutes, seconds, _, _, _ = (
             datetime_object.utctimetuple()
         )
-
         date_time_values = {
             "year": year,
             "month": month,
@@ -704,7 +697,6 @@ class TimeElements(interface.DateTimeValues):
             "minutes": minutes,
             "seconds": seconds,
         }
-
         self._CopyFromDateTimeValues(date_time_values)
 
         self.is_local_time = bool(datetime_object.tzinfo is None)
@@ -865,6 +857,21 @@ class TimeElements(interface.DateTimeValues):
             f"{hours:02d}:{minutes:02d}:{seconds:02d}"
         )
 
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["time_elements_tuple"] = self._time_elements_tuple
+
+        if self._is_delta:
+            serializable_dict["is_delta"] = True
+
+        return serializable_dict
+
     def NewFromDeltaAndDate(self, year, month, day_of_month):
         """Creates a new time elements instance from a date time delta and a date.
 
@@ -889,7 +896,6 @@ class TimeElements(interface.DateTimeValues):
         delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
             self._time_elements_tuple
         )
-
         time_elements_tuple = (
             year + delta_year,
             month + delta_month,
@@ -898,13 +904,11 @@ class TimeElements(interface.DateTimeValues):
             minutes,
             seconds,
         )
-
         date_time = TimeElements(
             precision=self._precision,
             time_elements_tuple=time_elements_tuple,
             time_zone_offset=self._time_zone_offset,
         )
-
         date_time.is_local_time = self.is_local_time
 
         return date_time
@@ -991,7 +995,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
                 self._normalized_timestamp = (
                     decimal.Decimal(self._number_of_seconds) + self.fraction_of_second
                 )
-
                 if self._time_zone_offset:
                     self._normalized_timestamp -= self._time_zone_offset * 60
 
@@ -1020,11 +1023,9 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
             self._precision
         )
-
         fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
             nanoseconds
         )
-
         self._normalized_timestamp = None
         self._number_of_seconds = self._GetNumberOfSecondsFromElements(
             year, month, day_of_month, hours, minutes, seconds
@@ -1047,7 +1048,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
             self._precision
         )
-
         fraction_of_second = precision_helper.CopyNanosecondsToFractionOfSecond(
             datetime_object.microsecond * definitions.NANOSECONDS_PER_MICROSECOND
         )
@@ -1067,10 +1067,8 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         number_of_elements = len(time_elements_tuple)
         if number_of_elements < 7:
             raise ValueError(
-                (
-                    f"Invalid time elements tuple at least 7 elements required,"
-                    f"got: {number_of_elements:d}"
-                )
+                f"Invalid time elements tuple at least 7 elements required,"
+                f"got: {number_of_elements:d}"
             )
 
         super().CopyFromStringTuple(time_elements_tuple)
@@ -1107,7 +1105,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         precision_helper = precisions.PrecisionHelperFactory.CreatePrecisionHelper(
             self._precision
         )
-
         return precision_helper.CopyToDateTimeString(
             self._time_elements_tuple, self.fraction_of_second
         )
@@ -1137,7 +1134,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
         delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
             self._time_elements_tuple
         )
-
         time_elements_tuple = (
             year + delta_year,
             month + delta_month,
@@ -1146,7 +1142,6 @@ class TimeElementsWithFractionOfSecond(TimeElements):
             minutes,
             seconds,
         )
-
         return TimeElementsWithFractionOfSecond(
             fraction_of_second=self.fraction_of_second,
             precision=self._precision,
@@ -1261,7 +1256,6 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         year, month, day_of_month, hours, minutes, seconds, milliseconds = (
             time_elements_tuple
         )
-
         try:
             milliseconds = int(milliseconds, 10)
         except (TypeError, ValueError):
@@ -1273,7 +1267,6 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         fraction_of_second = (
             decimal.Decimal(milliseconds) / definitions.MILLISECONDS_PER_SECOND
         )
-
         time_elements_tuple = (
             year,
             month,
@@ -1283,8 +1276,25 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
             seconds,
             str(fraction_of_second),
         )
-
         super().CopyFromStringTuple(time_elements_tuple)
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["time_elements_tuple"] = (
+            *self._time_elements_tuple,
+            self.milliseconds,
+        )
+
+        if self._is_delta:
+            serializable_dict["is_delta"] = True
+
+        return serializable_dict
 
     def NewFromDeltaAndDate(self, year, month, day_of_month):
         """Creates a new time elements instance from a date time delta and a date.
@@ -1311,7 +1321,6 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
         delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
             self._time_elements_tuple
         )
-
         time_elements_tuple = (
             year + delta_year,
             month + delta_month,
@@ -1321,7 +1330,6 @@ class TimeElementsInMilliseconds(TimeElementsWithFractionOfSecond):
             seconds,
             self.milliseconds,
         )
-
         return TimeElementsInMilliseconds(
             precision=self._precision,
             time_elements_tuple=time_elements_tuple,
@@ -1435,7 +1443,6 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         year, month, day_of_month, hours, minutes, seconds, microseconds = (
             time_elements_tuple
         )
-
         try:
             microseconds = int(microseconds, 10)
         except (TypeError, ValueError):
@@ -1447,7 +1454,6 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         fraction_of_second = (
             decimal.Decimal(microseconds) / definitions.MICROSECONDS_PER_SECOND
         )
-
         time_elements_tuple = (
             year,
             month,
@@ -1457,8 +1463,25 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
             seconds,
             str(fraction_of_second),
         )
-
         super().CopyFromStringTuple(time_elements_tuple)
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["time_elements_tuple"] = (
+            *self._time_elements_tuple,
+            self.microseconds,
+        )
+
+        if self._is_delta:
+            serializable_dict["is_delta"] = True
+
+        return serializable_dict
 
     def NewFromDeltaAndDate(self, year, month, day_of_month):
         """Creates a new time elements instance from a date time delta and a year.
@@ -1485,7 +1508,6 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
         delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
             self._time_elements_tuple
         )
-
         time_elements_tuple = (
             year + delta_year,
             month + delta_month,
@@ -1495,7 +1517,6 @@ class TimeElementsInMicroseconds(TimeElementsWithFractionOfSecond):
             seconds,
             self.microseconds,
         )
-
         return TimeElementsInMicroseconds(
             precision=self._precision,
             time_elements_tuple=time_elements_tuple,
@@ -1609,7 +1630,6 @@ class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
         year, month, day_of_month, hours, minutes, seconds, nanoseconds = (
             time_elements_tuple
         )
-
         try:
             nanoseconds = int(nanoseconds, 10)
         except (TypeError, ValueError):
@@ -1621,7 +1641,6 @@ class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
         fraction_of_second = (
             decimal.Decimal(nanoseconds) / definitions.NANOSECONDS_PER_SECOND
         )
-
         time_elements_tuple = (
             year,
             month,
@@ -1631,8 +1650,25 @@ class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
             seconds,
             str(fraction_of_second),
         )
-
         super().CopyFromStringTuple(time_elements_tuple)
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["time_elements_tuple"] = (
+            *self._time_elements_tuple,
+            self.nanoseconds,
+        )
+
+        if self._is_delta:
+            serializable_dict["is_delta"] = True
+
+        return serializable_dict
 
     def NewFromDeltaAndDate(self, year, month, day_of_month):
         """Creates a new time elements instance from a date time delta and a year.
@@ -1659,7 +1695,6 @@ class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
         delta_year, delta_month, delta_day_of_month, hours, minutes, seconds = (
             self._time_elements_tuple
         )
-
         time_elements_tuple = (
             year + delta_year,
             month + delta_month,
@@ -1669,7 +1704,6 @@ class TimeElementsInNanoseconds(TimeElementsWithFractionOfSecond):
             seconds,
             self.nanoseconds,
         )
-
         return TimeElementsInNanoseconds(
             precision=self._precision,
             time_elements_tuple=time_elements_tuple,

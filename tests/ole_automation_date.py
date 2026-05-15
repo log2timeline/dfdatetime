@@ -36,7 +36,6 @@ class OLEAutomationDateTest(unittest.TestCase):
         ole_automation_date_object = ole_automation_date.OLEAutomationDate(
             timestamp=43044.480556
         )
-
         expected_normalized_timestamp = decimal.Decimal("1509881520.038400194607675076")
         normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
@@ -44,7 +43,6 @@ class OLEAutomationDateTest(unittest.TestCase):
         ole_automation_date_object = ole_automation_date.OLEAutomationDate(
             time_zone_offset=60, timestamp=43044.480556
         )
-
         expected_normalized_timestamp = decimal.Decimal("1509877920.038400194607675076")
         normalized_timestamp = ole_automation_date_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, expected_normalized_timestamp)
@@ -100,7 +98,6 @@ class OLEAutomationDateTest(unittest.TestCase):
         ole_automation_date_object = ole_automation_date.OLEAutomationDate(
             timestamp=43044.480556
         )
-
         date_time_string = ole_automation_date_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2017-11-05 11:32:00.038400")
 
@@ -114,16 +111,27 @@ class OLEAutomationDateTest(unittest.TestCase):
         ole_automation_date_object = ole_automation_date.OLEAutomationDate(
             timestamp=43044.480556
         )
-
         date_time_string = ole_automation_date_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2017-11-05T11:32:00.038400+00:00")
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        ole_automation_date_object = ole_automation_date.OLEAutomationDate(
+            timestamp=43044.480556
+        )
+        expected_serializable_dict = {
+            "__class_name__": "OLEAutomationDate",
+            "__type__": "DateTimeValues",
+            "timestamp": 43044.480556,
+        }
+        serializable_dict = ole_automation_date_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""
         ole_automation_date_object = ole_automation_date.OLEAutomationDate(
             timestamp=43044.480556
         )
-
         date_tuple = ole_automation_date_object.GetDate()
         self.assertEqual(date_tuple, (2017, 11, 5))
 
@@ -137,7 +145,6 @@ class OLEAutomationDateTest(unittest.TestCase):
         ole_automation_date_object = ole_automation_date.OLEAutomationDate(
             timestamp=43044.480556
         )
-
         date_with_time_of_day_tuple = ole_automation_date_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2017, 11, 5, 11, 32, 0))
 
@@ -153,7 +160,6 @@ class OLEAutomationDateTest(unittest.TestCase):
         ole_automation_date_object = ole_automation_date.OLEAutomationDate(
             timestamp=43044.480556
         )
-
         time_of_day_tuple = ole_automation_date_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (11, 32, 0))
 

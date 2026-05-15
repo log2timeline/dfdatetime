@@ -112,11 +112,22 @@ class PosixTime(interface.DateTimeValues):
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = self._timestamp
+
+        return serializable_dict
 
 
 class PosixTimeInMilliseconds(interface.DateTimeValues):
@@ -166,7 +177,6 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
                     decimal.Decimal(self._timestamp)
                     / definitions.MILLISECONDS_PER_SECOND
                 )
-
                 if self._time_zone_offset:
                     self._normalized_timestamp -= self._time_zone_offset * 60
 
@@ -224,11 +234,22 @@ class PosixTimeInMilliseconds(interface.DateTimeValues):
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = self._timestamp
+
+        return serializable_dict
 
 
 class PosixTimeInMicroseconds(interface.DateTimeValues):
@@ -278,7 +299,6 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
                     decimal.Decimal(self._timestamp)
                     / definitions.MICROSECONDS_PER_SECOND
                 )
-
                 if self._time_zone_offset:
                     self._normalized_timestamp -= self._time_zone_offset * 60
 
@@ -336,11 +356,22 @@ class PosixTimeInMicroseconds(interface.DateTimeValues):
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}.{microseconds:06d}"
         )
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = self._timestamp
+
+        return serializable_dict
 
 
 class PosixTimeInNanoseconds(interface.DateTimeValues):
@@ -390,13 +421,12 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
                     decimal.Decimal(self._timestamp)
                     / definitions.NANOSECONDS_PER_SECOND
                 )
-
                 if self._time_zone_offset:
                     self._normalized_timestamp -= self._time_zone_offset * 60
 
         return self._normalized_timestamp
 
-    def _CopyFromDateTimeString(self, time_string):
+    def CopyFromDateTimeString(self, time_string):
         """Copies a POSIX timestamp from a date and time string.
 
         Args:
@@ -429,21 +459,7 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
         self._timestamp = timestamp
         self._time_zone_offset = time_zone_offset
 
-    def CopyFromDateTimeString(self, time_string):
-        """Copies a POSIX timestamp from a date and time string.
-
-        Args:
-          time_string (str): date and time value formatted as:
-              YYYY-MM-DD hh:mm:ss.######[+-]##:##
-
-              Where # are numeric digits ranging from 0 to 9 and the seconds
-              fraction can be either 3, 6 or 9 digits. The time of day, seconds
-              fraction and time zone offset are optional. The default time zone
-              is UTC.
-        """
-        self._CopyFromDateTimeString(time_string)
-
-    def _CopyToDateTimeString(self):
+    def CopyToDateTimeString(self):
         """Copies the POSIX timestamp to a date and time string.
 
         Returns:
@@ -461,20 +477,22 @@ class PosixTimeInNanoseconds(interface.DateTimeValues):
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         return (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}.{nanoseconds:09d}"
         )
 
-    def CopyToDateTimeString(self):
-        """Copies the POSIX timestamp to a date and time string.
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
 
         Returns:
-          str: date and time value formatted as: "YYYY-MM-DD hh:mm:ss.#########" or
-              None if the timestamp is missing or invalid.
+          dict[str, object]: serializable dictionary.
         """
-        return self._CopyToDateTimeString()
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = self._timestamp
+
+        return serializable_dict
 
 
 factory.Factory.RegisterDateTimeValues(PosixTime)

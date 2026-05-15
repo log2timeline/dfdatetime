@@ -255,5 +255,35 @@ class RFC2579DateTime(interface.DateTimeValues):
             f".{self._deciseconds:01d}"
         )
 
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        time_zone_hours, time_zone_minutes = divmod(self._time_zone_offset, 60)
+        if self._time_zone_offset < 0:
+            time_zone_sign = "-"
+            time_zone_hours *= -1
+        else:
+            time_zone_sign = "+"
+
+        return {
+            "__class_name__": type(self).__name__,
+            "__type__": "DateTimeValues",
+            "rfc2579_date_time_tuple": (
+                self._year,
+                self._month,
+                self._day_of_month,
+                self._hours,
+                self._minutes,
+                self._seconds,
+                self._deciseconds,
+                time_zone_sign,
+                time_zone_hours,
+                time_zone_minutes,
+            ),
+        }
+
 
 factory.Factory.RegisterDateTimeValues(RFC2579DateTime)

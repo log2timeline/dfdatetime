@@ -60,7 +60,6 @@ class UUIDTimeTest(unittest.TestCase):
         uuid_time_object = uuid_time.UUIDTime(
             time_zone_offset=60, timestamp=uuid_object.time
         )
-
         normalized_timestamp = uuid_time_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1337127061.6544084"))
 
@@ -139,6 +138,19 @@ class UUIDTimeTest(unittest.TestCase):
 
         date_time_string = uuid_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2012-05-16T01:11:01.6544084+00:00")
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        uuid_object = uuid.UUID("00911b54-9ef4-11e1-be53-525400123456")
+        uuid_time_object = uuid_time.UUIDTime(timestamp=uuid_object.time)
+
+        expected_serializable_dict = {
+            "__class_name__": "UUIDTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 135564234616544084,
+        }
+        serializable_dict = uuid_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""

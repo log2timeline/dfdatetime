@@ -41,7 +41,6 @@ class DotNetDateTimeTest(unittest.TestCase):
         dotnet_date_time = dotnet_datetime.DotNetDateTime(
             time_zone_offset=60, timestamp=637433719321230000
         )
-
         expected_normalized_timestamp = decimal.Decimal(1607771532123) / 1000
 
         normalized_timestamp = dotnet_date_time._GetNormalizedTimestamp()
@@ -101,6 +100,18 @@ class DotNetDateTimeTest(unittest.TestCase):
         dotnet_date_time = dotnet_datetime.DotNetDateTime()
         with self.assertRaises(ValueError):
             dotnet_date_time.CopyFromDateTimeString("10000-01-01")
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        dotnet_date_time = dotnet_datetime.DotNetDateTime(timestamp=637433719321230000)
+
+        expected_serializable_dict = {
+            "__class_name__": "DotNetDateTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 637433719321230000,
+        }
+        serializable_dict = dotnet_date_time.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
 
 if __name__ == "__main__":

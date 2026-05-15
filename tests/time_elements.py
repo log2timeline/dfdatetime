@@ -94,14 +94,12 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591"))
 
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31), time_zone_offset=60
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991"))
 
@@ -900,14 +898,12 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31")
 
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(0, 8, 12, 20, 6, 31)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "0000-08-12 20:06:31")
 
@@ -921,7 +917,6 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31+00:00")
 
@@ -933,14 +928,12 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31), time_zone_offset=120
         )
-
         date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31+02:00")
 
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31), time_zone_offset=-300
         )
-
         date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31-05:00")
 
@@ -949,7 +942,6 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         posix_timestamp = time_elements_object.CopyToPosixTimestamp()
         self.assertEqual(posix_timestamp, 1281643591)
 
@@ -963,7 +955,6 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         posix_timestamp, fraction_of_second = (
             time_elements_object.CopyToPosixTimestampWithFractionOfSecond()
         )
@@ -978,12 +969,24 @@ class TimeElementsTest(unittest.TestCase):
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        time_elements_object = time_elements.TimeElements(
+            time_elements_tuple=(2010, 8, 12, 20, 6, 31)
+        )
+        expected_serializable_dict = {
+            "__class_name__": "TimeElements",
+            "__type__": "DateTimeValues",
+            "time_elements_tuple": (2010, 8, 12, 20, 6, 31),
+        }
+        serializable_dict = time_elements_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         date_tuple = time_elements_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -997,7 +1000,6 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         date_with_time_of_day_tuple = time_elements_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -1013,7 +1015,6 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31)
         )
-
         time_of_day_tuple = time_elements_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 
@@ -1027,7 +1028,6 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             is_delta=True, time_elements_tuple=(1, 0, 0, 20, 6, 31)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)
@@ -1050,7 +1050,6 @@ class TimeElementsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElements(
             is_delta=True, time_elements_tuple=(1, 8, 12, 20, 6, 31)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndYear(2009)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)
@@ -1167,7 +1166,6 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
             "nanoseconds": 123456789,
             "time_zone_offset": 60,
         }
-
         time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
             precision=definitions.PRECISION_10_MILLISECONDS
         )
@@ -1179,7 +1177,6 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
         self.assertEqual(
             time_elements_object.fraction_of_second, decimal.Decimal("0.12")
         )
-
         time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
             precision=definitions.PRECISION_1_MILLISECOND
         )
@@ -1187,7 +1184,6 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
         self.assertEqual(
             time_elements_object.fraction_of_second, decimal.Decimal("0.123")
         )
-
         time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
             precision=definitions.PRECISION_100_MICROSECONDS
         )
@@ -1239,20 +1235,17 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
             precision=definitions.PRECISION_10_MILLISECONDS
         )
-
         expected_time_elements_tuple = (2010, 8, 12, 20, 6, 31)
         expected_fraction_of_second = decimal.Decimal("0.46")
         time_elements_object.CopyFromStringTuple(
             time_elements_tuple=("2010", "8", "12", "20", "6", "31", "0.46")
         )
-
         self.assertEqual(
             time_elements_object._time_elements_tuple, expected_time_elements_tuple
         )
         self.assertEqual(
             time_elements_object.fraction_of_second, expected_fraction_of_second
         )
-
         time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
             precision=definitions.PRECISION_100_MICROSECONDS
         )
@@ -1262,7 +1255,6 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
         self.assertEqual(
             time_elements_object.fraction_of_second, decimal.Decimal("0.4671")
         )
-
         with self.assertRaises(ValueError):
             time_elements_object.CopyFromStringTuple(
                 time_elements_tuple=("2010", "8", "12", "20", "6", "31")
@@ -1298,7 +1290,6 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
             precision=definitions.PRECISION_100_MICROSECONDS,
             time_elements_tuple=(2010, 8, 12, 20, 6, 31),
         )
-
         date_time_string = time_elements_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.8741")
 
@@ -1310,7 +1301,6 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
             precision=definitions.PRECISION_10_MILLISECONDS,
             time_elements_tuple=(1, 0, 0, 20, 6, 31),
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
         self.assertFalse(new_time_elements_object.is_delta)
         self.assertEqual(new_time_elements_object.year, 2010)
@@ -1319,11 +1309,9 @@ class TimeElementsWithFractionOfSeconds(unittest.TestCase):
         self.assertEqual(
             new_time_elements_object.fraction_of_second, decimal.Decimal("0.87")
         )
-
         time_elements_object = time_elements.TimeElementsWithFractionOfSecond(
             time_elements_tuple=(1, 0, 0, 20, 6, 31)
         )
-
         with self.assertRaises(ValueError):
             time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
 
@@ -1381,14 +1369,12 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.429"))
 
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429), time_zone_offset=60
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.429"))
 
@@ -1634,7 +1620,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.429")
 
@@ -1648,7 +1633,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31.429+00:00")
 
@@ -1657,7 +1641,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         posix_timestamp = time_elements_object.CopyToPosixTimestamp()
         self.assertEqual(posix_timestamp, 1281643591)
 
@@ -1671,7 +1654,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         posix_timestamp, fraction_of_second = (
             time_elements_object.CopyToPosixTimestampWithFractionOfSecond()
         )
@@ -1686,12 +1668,24 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        time_elements_object = time_elements.TimeElementsInMilliseconds(
+            time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
+        )
+        expected_serializable_dict = {
+            "__class_name__": "TimeElementsInMilliseconds",
+            "__type__": "DateTimeValues",
+            "time_elements_tuple": (2010, 8, 12, 20, 6, 31, 429),
+        }
+        serializable_dict = time_elements_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         date_tuple = time_elements_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -1705,7 +1699,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         date_with_time_of_day_tuple = time_elements_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -1721,7 +1714,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429)
         )
-
         time_of_day_tuple = time_elements_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 
@@ -1735,7 +1727,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             is_delta=True, time_elements_tuple=(1, 0, 0, 20, 6, 31, 429)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)
@@ -1759,7 +1750,6 @@ class TimeElementsInMillisecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMilliseconds(
             is_delta=True, time_elements_tuple=(1, 8, 12, 20, 6, 31, 429)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndYear(2009)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)
@@ -1812,14 +1802,12 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.429876"))
 
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876), time_zone_offset=60
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.429876"))
 
@@ -2065,7 +2053,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.429876")
 
@@ -2079,7 +2066,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31.429876+00:00")
 
@@ -2088,7 +2074,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         posix_timestamp = time_elements_object.CopyToPosixTimestamp()
         self.assertEqual(posix_timestamp, 1281643591)
 
@@ -2102,7 +2087,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         posix_timestamp, fraction_of_second = (
             time_elements_object.CopyToPosixTimestampWithFractionOfSecond()
         )
@@ -2117,12 +2101,24 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        time_elements_object = time_elements.TimeElementsInMicroseconds(
+            time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
+        )
+        expected_serializable_dict = {
+            "__class_name__": "TimeElementsInMicroseconds",
+            "__type__": "DateTimeValues",
+            "time_elements_tuple": (2010, 8, 12, 20, 6, 31, 429876),
+        }
+        serializable_dict = time_elements_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         date_tuple = time_elements_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -2136,7 +2132,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         date_with_time_of_day_tuple = time_elements_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -2152,7 +2147,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
         )
-
         time_of_day_tuple = time_elements_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 
@@ -2166,7 +2160,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             is_delta=True, time_elements_tuple=(1, 0, 0, 20, 6, 31, 429876)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)
@@ -2190,7 +2183,6 @@ class TimeElementsInMicrosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInMicroseconds(
             is_delta=True, time_elements_tuple=(1, 8, 12, 20, 6, 31, 429876)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndYear(2009)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)
@@ -2243,14 +2235,12 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.429876301"))
 
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301), time_zone_offset=60
         )
-
         normalized_timestamp = time_elements_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281639991.429876301"))
 
@@ -2506,7 +2496,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31.429876301")
 
@@ -2520,7 +2509,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         date_time_string = time_elements_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T20:06:31.429876301+00:00")
 
@@ -2529,7 +2517,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         posix_timestamp = time_elements_object.CopyToPosixTimestamp()
         self.assertEqual(posix_timestamp, 1281643591)
 
@@ -2543,7 +2530,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         posix_timestamp, fraction_of_second = (
             time_elements_object.CopyToPosixTimestampWithFractionOfSecond()
         )
@@ -2558,12 +2544,24 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        time_elements_object = time_elements.TimeElementsInNanoseconds(
+            time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
+        )
+        expected_serializable_dict = {
+            "__class_name__": "TimeElementsInNanoseconds",
+            "__type__": "DateTimeValues",
+            "time_elements_tuple": (2010, 8, 12, 20, 6, 31, 429876301),
+        }
+        serializable_dict = time_elements_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         date_tuple = time_elements_object.GetDate()
         self.assertEqual(date_tuple, (2010, 8, 12))
 
@@ -2577,7 +2575,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         date_with_time_of_day_tuple = time_elements_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
@@ -2593,7 +2590,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876301)
         )
-
         time_of_day_tuple = time_elements_object.GetTimeOfDay()
         self.assertEqual(time_of_day_tuple, (20, 6, 31))
 
@@ -2607,7 +2603,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             is_delta=True, time_elements_tuple=(1, 0, 0, 20, 6, 31, 429876301)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndDate(2009, 1, 12)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)
@@ -2631,7 +2626,6 @@ class TimeElementsInNanosecondsTest(unittest.TestCase):
         time_elements_object = time_elements.TimeElementsInNanoseconds(
             is_delta=True, time_elements_tuple=(1, 8, 12, 20, 6, 31, 429876301)
         )
-
         new_time_elements_object = time_elements_object.NewFromDeltaAndYear(2009)
         self.assertIsNotNone(new_time_elements_object)
         self.assertFalse(new_time_elements_object.is_delta)

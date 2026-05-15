@@ -49,6 +49,17 @@ class TestDateTimeValues(interface.DateTimeValues):
         """
         return None
 
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        return {
+            "__class_name__": type(self).__name__,
+            "__type__": "DateTimeValues",
+        }
+
 
 class FactoryTest(unittest.TestCase):
     """Tests the date and time values factory."""

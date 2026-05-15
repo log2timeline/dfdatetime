@@ -202,6 +202,21 @@ class GolangTest(unittest.TestCase):
         date_time_string = golang_time_object.CopyToDateTimeString()
         self.assertIsNone(date_time_string)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        golang_timestamp = bytes.fromhex("010000000eafffe8d121d95050ffff")
+        golang_time_object = golang_time.GolangTime(golang_timestamp=golang_timestamp)
+
+        expected_serializable_dict = {
+            "__class_name__": "GolangTime",
+            "__type__": "DateTimeValues",
+            "golang_timestamp": (
+                b"\x01\x00\x00\x00\x0e\xaf\xff\xe8\xd1\x21\xd9\x50\x50\xff\xff"
+            ),
+        }
+        serializable_dict = golang_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
 
 if __name__ == "__main__":
     unittest.main()

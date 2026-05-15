@@ -127,6 +127,18 @@ class FATDateTime(unittest.TestCase):
         date_time_string = fat_date_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T21:06:32+00:00")
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xA8D03D0C)
+
+        expected_serializable_dict = {
+            "__class_name__": "FATDateTime",
+            "__type__": "DateTimeValues",
+            "fat_date_time": 0xA8D03D0C,
+        }
+        serializable_dict = fat_date_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         fat_date_time_object = fat_date_time.FATDateTime(fat_date_time=0xA8D03D0C)
@@ -265,6 +277,18 @@ class FATTimestampTest(unittest.TestCase):
         )
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        fat_timestamp_object = fat_date_time.FATTimestamp(timestamp=131033589024)
+
+        expected_serializable_dict = {
+            "__class_name__": "FATTimestamp",
+            "__type__": "DateTimeValues",
+            "timestamp": 131033589024,
+        }
+        serializable_dict = fat_timestamp_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""

@@ -140,6 +140,18 @@ class InvalidTimeTest(unittest.TestCase):
         invalid_time_object = semantic_time.InvalidTime()
         self.assertEqual(invalid_time_object.string, "Invalid")
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        invalid_time_object = semantic_time.InvalidTime()
+
+        expected_serializable_dict = {
+            "__class_name__": "InvalidTime",
+            "__type__": "DateTimeValues",
+            "string": "Invalid",
+        }
+        serializable_dict = invalid_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
 
 class NeverTest(unittest.TestCase):
     """Tests for semantic time that represents never."""
@@ -199,6 +211,18 @@ class NeverTest(unittest.TestCase):
 
         self.assertTrue(never_time_object1 != 0.0)
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        never_time_object = semantic_time.Never()
+
+        expected_serializable_dict = {
+            "__class_name__": "Never",
+            "__type__": "DateTimeValues",
+            "string": "Never",
+        }
+        serializable_dict = never_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
 
 class NotSetTest(unittest.TestCase):
     """Tests for semantic time that represents not set."""
@@ -207,6 +231,18 @@ class NotSetTest(unittest.TestCase):
         """Tests the __init__ function."""
         not_set_time_object = semantic_time.NotSet()
         self.assertEqual(not_set_time_object.string, "Not set")
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        not_set_time_object = semantic_time.NotSet()
+
+        expected_serializable_dict = {
+            "__class_name__": "NotSet",
+            "__type__": "DateTimeValues",
+            "string": "Not set",
+        }
+        serializable_dict = not_set_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
 
 if __name__ == "__main__":

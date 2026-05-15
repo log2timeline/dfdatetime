@@ -39,7 +39,6 @@ class FiletimeTest(unittest.TestCase):
         filetime_object = filetime.Filetime(
             time_zone_offset=60, timestamp=0x01CB3A623D0A17CE
         )
-
         normalized_timestamp = filetime_object._GetNormalizedTimestamp()
         self.assertEqual(normalized_timestamp, decimal.Decimal("1281643591.546875"))
 
@@ -152,6 +151,18 @@ class FiletimeTest(unittest.TestCase):
         )
         self.assertIsNone(posix_timestamp)
         self.assertIsNone(fraction_of_second)
+
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        filetime_object = filetime.Filetime(timestamp=0x01CB3A623D0A17CE)
+
+        expected_serializable_dict = {
+            "__class_name__": "Filetime",
+            "__type__": "DateTimeValues",
+            "timestamp": 0x01CB3A623D0A17CE,
+        }
+        serializable_dict = filetime_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
 
     def testGetDate(self):
         """Tests the GetDate function."""

@@ -102,6 +102,19 @@ class FakeTimeTest(unittest.TestCase):
         date_time_string = fake_time_object.CopyToDateTimeStringISO8601()
         self.assertEqual(date_time_string, "2010-08-12T21:06:31.546875+00:00")
 
+    def testCopyToSerializableDict(self):
+        """Test the CopyToSerializableDict function."""
+        fake_time_object = fake_time.FakeTime()
+        fake_time_object.CopyFromDateTimeString("2010-08-12 21:06:31.546875")
+
+        expected_serializable_dict = {
+            "__class_name__": "FakeTime",
+            "__type__": "DateTimeValues",
+            "timestamp": 1281647191546875,
+        }
+        serializable_dict = fake_time_object.CopyToSerializableDict()
+        self.assertEqual(serializable_dict, expected_serializable_dict)
+
     def testGetDate(self):
         """Tests the GetDate function."""
         fake_time_object = fake_time.FakeTime()

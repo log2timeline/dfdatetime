@@ -182,6 +182,18 @@ class SemanticTime(interface.DateTimeValues):
         """
         return None
 
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        return {
+            "__class_name__": type(self).__name__,
+            "__type__": "DateTimeValues",
+            "string": self._string,
+        }
+
     def GetPlasoTimestamp(self):
         """Retrieves a timestamp that is compatible with plaso.
 

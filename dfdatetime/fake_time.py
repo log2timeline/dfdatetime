@@ -90,7 +90,6 @@ class FakeTime(interface.DateTimeValues):
         self._number_of_seconds = self._GetNumberOfSecondsFromElements(
             year, month, day_of_month, hours, minutes, seconds
         )
-
         if nanoseconds is None:
             self._microseconds = None
         else:
@@ -112,17 +111,29 @@ class FakeTime(interface.DateTimeValues):
         number_of_days, hours, minutes, seconds = self._GetTimeValues(
             self._number_of_seconds
         )
-
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH
         )
-
         date_time_string = (
             f"{year:04d}-{month:02d}-{day_of_month:02d} "
             f"{hours:02d}:{minutes:02d}:{seconds:02d}"
         )
-
         if self._microseconds is not None:
             date_time_string = ".".join([date_time_string, f"{self._microseconds:06d}"])
 
         return date_time_string
+
+    def CopyToSerializableDict(self):
+        """Copies the date time value to a serializable dictionary.
+
+        Returns:
+          dict[str, object]: serializable dictionary.
+        """
+        normalized_timestamp = self._GetNormalizedTimestamp()
+
+        serializable_dict = self._CreateSerializableDict()
+
+        serializable_dict["timestamp"] = int(
+            normalized_timestamp * definitions.MICROSECONDS_PER_SECOND
+        )
+        return serializable_dict

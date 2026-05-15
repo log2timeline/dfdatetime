@@ -24,4 +24,4 @@ from dfdatetime import uuid_time
 from dfdatetime import webkit_time
 
 
-__version__ = '20260513'
+__version__ = "20260513"

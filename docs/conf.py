@@ -15,7 +15,6 @@ import dfdatetime  # pylint: disable=wrong-import-position
 
 import utils.dependencies  # pylint: disable=wrong-import-position
 
-
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

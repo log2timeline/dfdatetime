@@ -8,7 +8,6 @@ sys.path.insert(0, ".")
 
 import utils.dependencies  # pylint: disable=wrong-import-position
 
-
 if __name__ == "__main__":
     dependency_helper = utils.dependencies.DependencyHelper()
 

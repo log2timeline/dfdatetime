@@ -28,5 +28,10 @@ line-length = 88
 target-version = ["py310"]
 include = "\\.pyi?$"
 
+[tool.docformatter]
+black = true
+non-cap = ["bytes:", "dfDateTime", "float:", "int:", "str:"]
+non-strict = true
+
 [tool.setuptools]
 package-dir = {"dfdatetime" = "dfdatetime"}

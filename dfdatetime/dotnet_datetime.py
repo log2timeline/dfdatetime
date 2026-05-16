@@ -18,9 +18,9 @@ class DotNetDateTimeEpoch(interface.DateTimeEpoch):
 class DotNetDateTime(interface.DateTimeValues):
     """.NET DateTime ticks.
 
-    The .NET DateTime timestamp is a 64-bit signed integer that contains the date
-    and time as the number of 100 nanoseconds since 12:00 AM January 1, year 1
-    A.D. in the proleptic Gregorian Calendar.
+    The .NET DateTime timestamp is a 64-bit signed integer that contains the date and
+    time as the number of 100 nanoseconds since 12:00 AM January 1, year 1 A.D. in the
+    proleptic Gregorian Calendar.
     """
 
     _EPOCH = DotNetDateTimeEpoch()
@@ -48,7 +48,7 @@ class DotNetDateTime(interface.DateTimeValues):
 
     @property
     def timestamp(self):
-        """integer: .NET DateTime timestamp or None if not set."""
+        """int: .NET DateTime timestamp or None if not set."""
         return self._timestamp
 
     def _GetNormalizedTimestamp(self):

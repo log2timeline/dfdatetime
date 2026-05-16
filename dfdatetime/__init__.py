@@ -1,7 +1,7 @@
 """Digital Forensics Date and Time (dfDateTime).
 
-dfDateTime, or Digital Forensics date and time, provides date and time objects
-to preserve accuracy and precision.
+dfDateTime, or Digital Forensics date and time, provides date and time objects to
+preserve accuracy and precision.
 """
 
 # Imports for date time values factory.

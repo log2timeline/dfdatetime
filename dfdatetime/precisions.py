@@ -10,8 +10,8 @@ class DateTimePrecisionHelper:
 
     This is the super class of different date and time precision helpers.
 
-    Time precision helpers provide functionality for converting date and time
-    values between different precisions.
+    Time precision helpers provide functionality for converting date and time values
+    between different precisions.
     """
 
     # pylint: disable=missing-raises-doc,redundant-returns-doc

@@ -38,8 +38,8 @@ sudo add-apt-repository ppa:gift/stable
 Update and install dfDateTime:
 
 ```bash
-sudo apt-get update
-sudo apt-get install python3-dfdatetime
+sudo apt update
+sudo apt install python3-dfdatetime
 ```
 
 ## Windows

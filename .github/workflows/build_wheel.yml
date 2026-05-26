@@ -25,7 +25,7 @@ jobs:
       with:
         name: cibw-sdist
         path: dist/*.tar.gz
-  build_sdist:
+  build_wheel:
     name: Build wheel
     runs-on: ubuntu-latest
     steps:
@@ -42,7 +42,7 @@ jobs:
         name: cibw-wheels
         path: dist/*.whl
   upload_test_pypi:
-    needs: [build_sdist, build_wheels]
+    needs: [build_sdist, build_wheel]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:

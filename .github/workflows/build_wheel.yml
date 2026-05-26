@@ -34,7 +34,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt -y install python3-build python3-wheel
-    - name: Build sdist
+    - name: Build wheel
       run: |
         python -m build --wheel
     - uses: actions/upload-artifact@v7

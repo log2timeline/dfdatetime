@@ -16,8 +16,9 @@ environment:
     TARGET: tests
 
 install:
-- cmd: "%PYTHON%\\python.exe -m pip install -U build pip setuptools"
 - ps: .\config\appveyor\install.ps1
+
+build: off
 
 test_script:
 - cmd: IF [%TARGET%]==[tests] (

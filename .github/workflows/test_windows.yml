@@ -16,6 +16,9 @@ jobs:
       uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        uv pip install -r pyproject.toml
     - name: Run tests
       run: |
         python run_tests.py

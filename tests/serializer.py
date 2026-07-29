@@ -222,6 +222,21 @@ class SerializerTest(unittest.TestCase):
         )
         self.assertEqual(json_dict, expected_json_dict)
 
+        time_elements_object = time_elements.TimeElementsInNanoseconds(
+            time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876543)
+        )
+
+        expected_json_dict = {
+            "__class_name__": "TimeElementsInNanoseconds",
+            "__type__": "DateTimeValues",
+            "time_elements_tuple": (2010, 8, 12, 20, 6, 31, 429876543),
+        }
+
+        json_dict = serializer.Serializer.ConvertDateTimeValuesToJSON(
+            time_elements_object
+        )
+        self.assertEqual(json_dict, expected_json_dict)
+
     def testConvertJSONToDateTimeValues(self):
         """Test ConvertJSONToDateTimeValues function."""
         json_dict = {
@@ -377,6 +392,19 @@ class SerializerTest(unittest.TestCase):
 
         expected_date_time_object = time_elements.TimeElementsInMicroseconds(
             time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876)
+        )
+
+        date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(json_dict)
+        self.assertEqual(date_time_object, expected_date_time_object)
+
+        json_dict = {
+            "__class_name__": "TimeElementsInNanoseconds",
+            "__type__": "DateTimeValues",
+            "time_elements_tuple": (2010, 8, 12, 20, 6, 31, 429876543),
+        }
+
+        expected_date_time_object = time_elements.TimeElementsInNanoseconds(
+            time_elements_tuple=(2010, 8, 12, 20, 6, 31, 429876543)
         )
 
         date_time_object = serializer.Serializer.ConvertJSONToDateTimeValues(json_dict)

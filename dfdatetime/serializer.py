@@ -121,6 +121,7 @@ class Serializer:
             "TimeElements",
             "TimeElementsInMilliseconds",
             "TimeElementsInMicroseconds",
+            "TimeElementsInNanoseconds",
         ):
             is_delta = json_dict.get("is_delta")
             if is_delta is not None:

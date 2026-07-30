@@ -14,7 +14,7 @@ cd dfdatetime_venv
 source ./bin/activate
 ```
 
-Upgrade pip and install dfDateTime dependencies:
+Upgrade pip and install dfDateTime:
 
 ```bash
 pip install --upgrade pip

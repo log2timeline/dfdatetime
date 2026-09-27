@@ -1,7 +1,7 @@
 # Date and time values
 ## Terminology
 
-**Calendar**: a system of organising days.
+**Calendar**: a system of organizing days.
 
 **Epoch**: a reference point from which time is measured.
 
@@ -255,7 +255,7 @@ Offset | Size | Description
 13 | 2 | time zone offset in minutes as a 16-bit big-endian signed integer.
 15 | 1 | time zone offset in seconds (only for version 2)
 
-A value of -1 is a special value when the Time instance is initialised as UTC
+A value of -1 is a special value when the Time instance is initialized as UTC
 (e.g. ```time.Date(1970, time.January, 1, 0, 0, 0, 0, time.UTC)```).
 
 ### Also see

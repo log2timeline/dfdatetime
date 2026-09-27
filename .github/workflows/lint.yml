@@ -43,6 +43,17 @@ jobs:
         LANG: en_US.UTF-8
       run: |
         tox -e pylint
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Install shellcheck
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y shellcheck
+    - name: Check format of bash scripts
+      run: |
+        find . -name "*.sh" -exec shellcheck {} +
   typos:
     runs-on: ubuntu-latest
     steps:

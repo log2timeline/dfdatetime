@@ -482,6 +482,26 @@ class DateTimeValuesTest(unittest.TestCase):
         self.assertEqual(month, 12)
         self.assertEqual(day_of_month, 31)
 
+        year, month, day_of_month = date_time_values._GetDateValues(-366, 1970, 1, 1)
+        self.assertEqual(year, 1968)
+        self.assertEqual(month, 12)
+        self.assertEqual(day_of_month, 31)
+
+        year, month, day_of_month = date_time_values._GetDateValues(-3000, 1970, 1, 1)
+        self.assertEqual(year, 1961)
+        self.assertEqual(month, 10)
+        self.assertEqual(day_of_month, 15)
+
+        year, month, day_of_month = date_time_values._GetDateValues(-3000, 2001, 1, 1)
+        self.assertEqual(year, 1992)
+        self.assertEqual(month, 10)
+        self.assertEqual(day_of_month, 15)
+
+        year, month, day_of_month = date_time_values._GetDateValues(-719162, 1970, 1, 1)
+        self.assertEqual(year, 1)
+        self.assertEqual(month, 1)
+        self.assertEqual(day_of_month, 1)
+
         year, month, day_of_month = date_time_values._GetDateValues(364, 1970, 1, 1)
         self.assertEqual(year, 1970)
         self.assertEqual(month, 12)

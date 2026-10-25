@@ -126,6 +126,11 @@ class UUIDTimeTest(unittest.TestCase):
         date_time_string = uuid_time_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2012-05-16 01:11:01.6544084")
 
+        uuid_time_object = uuid_time.UUIDTime(timestamp=13824000000000)
+
+        date_time_string = uuid_time_object.CopyToDateTimeString()
+        self.assertEqual(date_time_string, "1582-10-31 00:00:00.0000000")
+
         uuid_time_object = uuid_time.UUIDTime()
 
         date_time_string = uuid_time_object.CopyToDateTimeString()

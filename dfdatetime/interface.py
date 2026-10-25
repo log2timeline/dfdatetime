@@ -629,10 +629,14 @@ class DateTimeValues:
             number_of_days -= days_per_month
             days_per_month = self._GetDaysPerMonth(year, month)
 
+        # A remainder of 0 days represents the last day of the previous month.
         if number_of_days == 0:
-            number_of_days = 31
-            month = 12
-            year -= 1
+            month -= 1
+            if month == 0:
+                month = 12
+                year -= 1
+
+            number_of_days = self._GetDaysPerMonth(year, month)
 
         year += number_of_cycles * 400
         if year < 0:

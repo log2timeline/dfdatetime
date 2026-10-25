@@ -555,8 +555,8 @@ class DateTimeValues:
            tuple[int, int, int]: year, month, day of month.
 
         Raises:
-          ValueError: if the epoch year, month or day of month values are out
-              of bounds.
+          ValueError: if the epoch year, month or day of month values or
+              the resulting year value are out of bounds.
         """
         if epoch_year < 0:
             raise ValueError(f"Epoch year value: {epoch_year:d} out of bounds.")

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tests for the date and time interfaces."""
 
+import decimal
 import unittest
 
 from dfdatetime import definitions
@@ -724,6 +725,14 @@ class DateTimeValuesTest(unittest.TestCase):
         self.assertEqual(hours, 18)
         self.assertEqual(minutes, 56)
         self.assertEqual(seconds, 50)
+
+        days, hours, minutes, seconds = date_time_values._GetTimeValues(
+            decimal.Decimal("-0.5")
+        )
+        self.assertEqual(days, -1)
+        self.assertEqual(hours, 23)
+        self.assertEqual(minutes, 59)
+        self.assertEqual(seconds, 59)
 
         days, hours, minutes, seconds = date_time_values._GetTimeValues(-190990)
         self.assertEqual(days, -3)

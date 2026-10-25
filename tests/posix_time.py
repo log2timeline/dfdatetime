@@ -337,6 +337,11 @@ class PosixTimeInMillisecondsTest(unittest.TestCase):
         date_with_time_of_day_tuple = posix_time_object.GetDateWithTimeOfDay()
         self.assertEqual(date_with_time_of_day_tuple, (2010, 8, 12, 20, 6, 31))
 
+        posix_time_object = posix_time.PosixTimeInMilliseconds(timestamp=-500)
+
+        date_with_time_of_day_tuple = posix_time_object.GetDateWithTimeOfDay()
+        self.assertEqual(date_with_time_of_day_tuple, (1969, 12, 31, 23, 59, 59))
+
         posix_time_object = posix_time.PosixTimeInMilliseconds()
 
         date_with_time_of_day_tuple = posix_time_object.GetDateWithTimeOfDay()

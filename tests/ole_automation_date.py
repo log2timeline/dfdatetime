@@ -101,6 +101,12 @@ class OLEAutomationDateTest(unittest.TestCase):
         date_time_string = ole_automation_date_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2017-11-05 11:32:00.038400")
 
+        ole_automation_date_object = ole_automation_date.OLEAutomationDate(
+            timestamp=-0.000001
+        )
+        date_time_string = ole_automation_date_object.CopyToDateTimeString()
+        self.assertEqual(date_time_string, "1899-12-29 23:59:59.913600")
+
         ole_automation_date_object = ole_automation_date.OLEAutomationDate()
 
         date_time_string = ole_automation_date_object.CopyToDateTimeString()

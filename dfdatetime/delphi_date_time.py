@@ -1,6 +1,7 @@
 """Delphi TDateTime implementation."""
 
 import decimal
+import math
 
 from dfdatetime import definitions
 from dfdatetime import factory
@@ -129,7 +130,7 @@ class DelphiDateTime(interface.DateTimeValues):
         number_of_seconds = self._timestamp * definitions.SECONDS_PER_DAY
 
         number_of_days, hours, minutes, seconds = self._GetTimeValues(
-            int(number_of_seconds)
+            math.floor(number_of_seconds)
         )
         # The maximum date supported by TDateTime values is limited to:
         # 9999-12-31 23:59:59.999 (approximate 2958465 days since epoch).

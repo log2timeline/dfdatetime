@@ -138,6 +138,10 @@ class DelphiDateTimeTest(unittest.TestCase):
         date_time_string = delphi_date_time_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2013-06-18 19:50:00.553919")
 
+        delphi_date_time_object = delphi_date_time.DelphiDateTime(timestamp=-0.000001)
+        date_time_string = delphi_date_time_object.CopyToDateTimeString()
+        self.assertEqual(date_time_string, "1899-12-29 23:59:59.913600")
+
         delphi_date_time_object = delphi_date_time.DelphiDateTime()
 
         date_time_string = delphi_date_time_object.CopyToDateTimeString()

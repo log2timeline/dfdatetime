@@ -1,6 +1,7 @@
 """OLE automation date (or Floatingtime or Application time) implementation."""
 
 import decimal
+import math
 
 from dfdatetime import definitions
 from dfdatetime import factory
@@ -130,7 +131,9 @@ class OLEAutomationDate(interface.DateTimeValues):
 
         timestamp = self._timestamp * definitions.SECONDS_PER_DAY
 
-        number_of_days, hours, minutes, seconds = self._GetTimeValues(int(timestamp))
+        number_of_days, hours, minutes, seconds = self._GetTimeValues(
+            math.floor(timestamp)
+        )
 
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH

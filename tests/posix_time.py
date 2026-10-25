@@ -88,6 +88,11 @@ class PosixTimeTest(unittest.TestCase):
         date_time_string = posix_time_object.CopyToDateTimeString()
         self.assertEqual(date_time_string, "2010-08-12 20:06:31")
 
+        posix_time_object = posix_time.PosixTime(timestamp=-2208988801)
+
+        date_time_string = posix_time_object.CopyToDateTimeString()
+        self.assertEqual(date_time_string, "1899-12-31 23:59:59")
+
         posix_time_object = posix_time.PosixTime()
 
         date_time_string = posix_time_object.CopyToDateTimeString()

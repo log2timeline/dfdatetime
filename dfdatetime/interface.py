@@ -58,6 +58,9 @@ class DateTimeValues:
 
     _EPOCH_NORMALIZED_TIME = NormalizedTimeEpoch()
 
+    # The number of days in 400 years of the Gregorian calendar.
+    _DAYS_PER_GREGORIAN_CYCLE = 146097
+
     _100_MILLISECONDS_PER_SECOND = 10
     _10_MILLISECONDS_PER_SECOND = 100
     _1_MILLISECOND_PER_SECOND = 1000
@@ -552,8 +555,8 @@ class DateTimeValues:
            tuple[int, int, int]: year, month, day of month.
 
         Raises:
-          ValueError: if the epoch year, month or day of month values are out
-              of bounds.
+          ValueError: if the epoch year, month or day of month values or
+              the resulting year value are out of bounds.
         """
         if epoch_year < 0:
             raise ValueError(f"Epoch year value: {epoch_year:d} out of bounds.")
@@ -567,19 +570,19 @@ class DateTimeValues:
                 f"Epoch day of month value: {epoch_day_of_month:d} out of bounds."
             )
 
-        before_epoch = number_of_days < 0
+        # The Gregorian calendar repeats every 400 years (146097 days). A date
+        # before the epoch is determined from the corresponding date a multiple
+        # of 400 years later, so that the number of days is only counted forward.
+        number_of_cycles = 0
+        if number_of_days < 0:
+            number_of_cycles, number_of_days = divmod(
+                number_of_days, self._DAYS_PER_GREGORIAN_CYCLE
+            )
 
         year = epoch_year
         month = epoch_month
-        if before_epoch:
-            month -= 1
-            if month <= 0:
-                month = 12
-                year -= 1
 
         number_of_days += epoch_day_of_month
-        if before_epoch:
-            number_of_days *= -1
 
         # Align with the start of the year.
         while month > 1:
@@ -587,11 +590,7 @@ class DateTimeValues:
             if number_of_days < days_per_month:
                 break
 
-            if before_epoch:
-                month -= 1
-            else:
-                month += 1
-
+            month += 1
             if month > 12:
                 month = 1
                 year += 1
@@ -605,58 +604,43 @@ class DateTimeValues:
             if number_of_days < days_in_year:
                 break
 
-            if before_epoch:
-                year -= 1
-            else:
-                year += 1
-
+            year += 1
             number_of_days -= days_in_year
 
         days_in_century = self._GetNumberOfDaysInCentury(year)
         while number_of_days > days_in_century:
-            if before_epoch:
-                year -= 100
-            else:
-                year += 100
-
+            year += 100
             number_of_days -= days_in_century
             days_in_century = self._GetNumberOfDaysInCentury(year)
 
         days_in_year = self._GetNumberOfDaysInYear(year)
         while number_of_days > days_in_year:
-            if before_epoch:
-                year -= 1
-            else:
-                year += 1
-
+            year += 1
             number_of_days -= days_in_year
             days_in_year = self._GetNumberOfDaysInYear(year)
 
         days_per_month = self._GetDaysPerMonth(year, month)
         while number_of_days > days_per_month:
-            if before_epoch:
-                month -= 1
-            else:
-                month += 1
-
-            if month <= 0:
-                month = 12
-                year -= 1
-            elif month > 12:
+            month += 1
+            if month > 12:
                 month = 1
                 year += 1
 
             number_of_days -= days_per_month
             days_per_month = self._GetDaysPerMonth(year, month)
 
-        if before_epoch:
-            days_per_month = self._GetDaysPerMonth(year, month)
-            number_of_days = days_per_month - number_of_days
+        # A remainder of 0 days represents the last day of the previous month.
+        if number_of_days == 0:
+            month -= 1
+            if month == 0:
+                month = 12
+                year -= 1
 
-        elif number_of_days == 0:
-            number_of_days = 31
-            month = 12
-            year -= 1
+            number_of_days = self._GetDaysPerMonth(year, month)
+
+        year += number_of_cycles * 400
+        if year < 0:
+            raise ValueError(f"Year value: {year:d} out of bounds.")
 
         return year, month, number_of_days
 

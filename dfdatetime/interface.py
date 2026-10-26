@@ -2,6 +2,7 @@
 
 import abc
 import decimal
+import math
 
 from dfdatetime import definitions
 
@@ -875,7 +876,7 @@ class DateTimeValues:
         Returns:
            tuple[int, int, int, int]: days, hours, minutes, seconds.
         """
-        number_of_seconds = int(number_of_seconds)
+        number_of_seconds = math.floor(number_of_seconds)
         number_of_minutes, seconds = divmod(number_of_seconds, 60)
         number_of_hours, minutes = divmod(number_of_minutes, 60)
         number_of_days, hours = divmod(number_of_hours, 24)

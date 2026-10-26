@@ -1,6 +1,7 @@
 """Cocoa timestamp implementation."""
 
 import decimal
+import math
 
 from dfdatetime import definitions
 from dfdatetime import factory
@@ -121,7 +122,7 @@ class CocoaTime(interface.DateTimeValues):
             return None
 
         number_of_days, hours, minutes, seconds = self._GetTimeValues(
-            int(self._timestamp)
+            math.floor(self._timestamp)
         )
         year, month, day_of_month = self._GetDateValuesWithEpoch(
             number_of_days, self._EPOCH

@@ -101,6 +101,11 @@ class CocoaTimeTest(unittest.TestCase):
         date_time_string = cocoa_time_object.CopyToDateTimeString()
         self.assertIsNone(date_time_string)
 
+        cocoa_time_object = cocoa_time.CocoaTime(timestamp=-0.25)
+
+        date_time_string = cocoa_time_object.CopyToDateTimeString()
+        self.assertEqual(date_time_string, "2000-12-31 23:59:59.750000")
+
     def testCopyToDateTimeStringISO8601(self):
         """Tests the CopyToDateTimeStringISO8601 function."""
         cocoa_time_object = cocoa_time.CocoaTime(timestamp=395011845.546875)

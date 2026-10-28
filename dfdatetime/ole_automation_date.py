@@ -22,7 +22,9 @@ class OLEAutomationDate(interface.DateTimeValues):
     The OLE Automation date is a floating point value that contains the number of
     days since 1899-12-30 (also known as the OLE Automation date epoch), and the
     fractional part represents the fraction of a day since midnight. Negative
-    values represent date and times predating the OLE Automation date epoch.
+    values represent date and times predating the OLE Automation date epoch, where
+    the integral part counts the days before the epoch and the fractional part is
+    still the time of day, for example -1.25 is 1899-12-29 06:00.
 
     Also see:
       https://learn.microsoft.com/en-us/dotnet/api/system.datetime.tooadate?view=net-8.0
@@ -57,6 +59,40 @@ class OLEAutomationDate(interface.DateTimeValues):
         """float: OLE Automation date timestamp or None if not set."""
         return self._timestamp
 
+    @staticmethod
+    def _GetNumberOfDaysFromTimestamp(timestamp):
+        """Retrieves the number of days since the epoch from an OLE Automation date.
+
+        Args:
+          timestamp (decimal.Decimal|float): OLE Automation date.
+
+        Returns:
+          decimal.Decimal|float: number of days since the epoch, negative before the
+              epoch, where -1.25 becomes -0.75.
+        """
+        if timestamp >= 0:
+            return timestamp
+
+        number_of_days = math.ceil(timestamp)
+        return number_of_days - (timestamp - number_of_days)
+
+    @staticmethod
+    def _GetTimestampFromNumberOfDays(number_of_days):
+        """Retrieves an OLE Automation date from the number of days since the epoch.
+
+        Args:
+          number_of_days (float): number of days since the epoch, negative before the
+              epoch.
+
+        Returns:
+          float: OLE Automation date, where -0.75 becomes -1.25.
+        """
+        if number_of_days >= 0:
+            return number_of_days
+
+        whole_days = math.floor(number_of_days)
+        return whole_days - (number_of_days - whole_days)
+
     def _GetNormalizedTimestamp(self):
         """Retrieves the normalized timestamp.
 
@@ -69,7 +105,7 @@ class OLEAutomationDate(interface.DateTimeValues):
         if self._normalized_timestamp is None:
             if self._timestamp is not None:
                 self._normalized_timestamp = (
-                    decimal.Decimal(self._timestamp)
+                    self._GetNumberOfDaysFromTimestamp(decimal.Decimal(self._timestamp))
                     - self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
                 )
                 self._normalized_timestamp *= definitions.SECONDS_PER_DAY
@@ -116,7 +152,7 @@ class OLEAutomationDate(interface.DateTimeValues):
         timestamp += self._OLE_AUTOMATION_DATE_TO_POSIX_BASE
 
         self._normalized_timestamp = None
-        self._timestamp = timestamp
+        self._timestamp = self._GetTimestampFromNumberOfDays(timestamp)
         self._time_zone_offset = time_zone_offset
 
     def CopyToDateTimeString(self):
@@ -129,7 +165,10 @@ class OLEAutomationDate(interface.DateTimeValues):
         if self._timestamp is None:
             return None
 
-        timestamp = self._timestamp * definitions.SECONDS_PER_DAY
+        timestamp = (
+            self._GetNumberOfDaysFromTimestamp(self._timestamp)
+            * definitions.SECONDS_PER_DAY
+        )
 
         number_of_days, hours, minutes, seconds = self._GetTimeValues(
             math.floor(timestamp)

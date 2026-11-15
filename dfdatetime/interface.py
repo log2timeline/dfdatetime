@@ -965,14 +965,15 @@ class DateTimeValues:
             date_time_string = date_time_string.replace(" ", "T")
 
             if self._time_zone_offset is not None or not self.is_local_time:
-                time_zone_offset_hours, time_zone_offset_minutes = divmod(
-                    self._time_zone_offset or 0, 60
-                )
-                if time_zone_offset_hours >= 0:
+                time_zone_offset = self._time_zone_offset or 0
+                if time_zone_offset >= 0:
                     time_zone_offset_sign = "+"
                 else:
                     time_zone_offset_sign = "-"
-                    time_zone_offset_hours *= -1
+
+                time_zone_offset_hours, time_zone_offset_minutes = divmod(
+                    abs(time_zone_offset), 60
+                )
 
                 time_zone_string = (
                     f"{time_zone_offset_hours:02d}:{time_zone_offset_minutes:02d}"

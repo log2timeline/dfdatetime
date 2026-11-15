@@ -261,10 +261,9 @@ class RFC2579DateTime(interface.DateTimeValues):
         Returns:
           dict[str, object]: serializable dictionary.
         """
-        time_zone_hours, time_zone_minutes = divmod(self._time_zone_offset, 60)
+        time_zone_hours, time_zone_minutes = divmod(abs(self._time_zone_offset), 60)
         if self._time_zone_offset < 0:
             time_zone_sign = "-"
-            time_zone_hours *= -1
         else:
             time_zone_sign = "+"
 
